@@ -44,8 +44,8 @@ Show each step in your answer.
 \begin{enumerate}
 \item $\mathit{twice}~\mathit{inc}~0$ \percent{3}
 \item $\mathit{twice}~\mathit{twice}~\mathit{inc}~0$ \percent{3}
-\item $\mathit{twice}~(\mathit{twice}~\mathit{twice})~\mathit{inc}~0$ \percent{3}
-\item $\mathit{twice}~\mathit{twice}~\mathit{twice}~\mathit{inc}~0$ \percent{3}
+% \item $\mathit{twice}~(\mathit{twice}~\mathit{twice})~\mathit{inc}~0$ \percent{3}
+% \item $\mathit{twice}~\mathit{twice}~\mathit{twice}~\mathit{inc}~0$ \percent{3}
 \item $(\lambda x.~x)~(\lambda x.~x)$ \percent{3}
 \item $(\lambda x.~x~x)~(\lambda x.~x~x)$ \percent{3}
 \end{enumerate}
@@ -97,16 +97,38 @@ should be 2.\percent{4}
 
 
 \section{Why Functional Programming Matters}
-\percent{18}
-This part of the exercise aims to give you some experience of
-idiomatic functional programming. ``{\em Why Functional Programming
-  Matters}'' contains many suitable examples, but they are written in
-an informal notation, rather than Haskell. Your task now is to translate
-all the functions defined in sections 3 and 4 of the paper into
-Haskell, and test them using Hugs.
+\percent{18} This part of the exercise aims to give you some
+experience of idiomatic functional programming. ``{\em Why Functional
+  Programming Matters}'' contains many suitable examples, but they are
+written in an informal notation, rather than Haskell. Your task now is
+to read and understand as much of the paper as you can. Translate the
+functions defined in pages 1 to 6 (up to \texttt{summatrix}) into
+Haskell, and test them using Hugs. (If this is too easy for you you're
+encouraged to implement all of the paper!)
 
 Some tips:
 \begin{itemize}
+\item
+
+A lot of what is in the paper is also present in the Haskell ``Prelude''.
+We are not interested in using the prelude, we want to have an idea how
+to define it. To properly solve this exercise you must start your solution
+with: 
+
+\begin{verbatim}
+import Prelude (Num(..), Bool(..), Eq(..), Show(..))
+
+or True _ = True
+or _ True = True
+or _ _ = False
+
+and False _ = False
+and _ False = False
+and _ _ = True
+
+
+\end{verbatim}
+
 \item
 Section 3 of the paper defines a type of {\em labelled trees}:
 \begin{verbatim}
@@ -117,6 +139,8 @@ The corresponding definition in Haskell is
 data Tree x = Node x [Tree x]
   deriving Show
 \end{verbatim}
+Translate the list type in a similar way.
+
 The use of capital and lower-case letters is significant: in Haskell,
 all types and constructors begin with a capital letter, while
 variables, functions, and type variables begin with a lower-case
@@ -166,14 +190,33 @@ prime numbers up to the limit have been found.
 
 Write this algorithm in Haskell, as a function \verb!sieve! such that
 \verb!sieve [2..n]! returns a list of all the prime numbers in the
-range 2 to \verb!n!. ({\em Hint:} a list comprehension may be useful
-here). 
+range 2 to \verb!n!. 
 
-Really, the ``limit'' plays no r\^ole in Eratosthenes algorithm,
+Hints:
+\begin{itemize}
+\item You should first write a function that filters out the multiples
+  of a given number from a list. This function will take a list as input
+  and output an other list, that contain only the numbers that are not multiples.
+
+\item
+  You may also use list comprehensions if you master them.
+
+\item
+  Use the above function to write the sieve.
+\end{itemize}
+
+
+
+
+So far we have manipulated only finite lists. But maybe your algorithm works on
+infinite lists without modification!
+Indeed, the ``limit'' plays no r\^ole in Eratosthenes algorithm,
 except to ensure termination. Check that your \verb!sieve! function
 also works given the {\em infinite} list \verb![2..]!---the output
 should be the {\em infinite} list of all prime numbers. How would you
-find the first 100 prime numbers?
+find the first 100 prime numbers? 
+
+Hint: define a function that returns the $n$ first elements of a list.
 
 
 
