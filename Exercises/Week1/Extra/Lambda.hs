@@ -79,11 +79,13 @@ twice = Lam "f" $ Lam "x" $ (Var "f" @@ (Var "f" @@ Var "x"))
 
 inc = Con "(1 +)"
 zero = Con "0"
+id_ =  Lam "x" $ Var "x"
 
 ex1 = twice @@ inc @@ zero
 ex2 = twice @@ twice @@ inc @@ zero
 ex3 = twice @@ (twice @@ twice) @@ inc @@ zero
 ex4 = twice @@ twice @@ twice @@ inc @@ zero
+ex5 = id_ @@ id_
 
 
 
