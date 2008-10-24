@@ -7,10 +7,9 @@
 \maketitle
 
 \newcommand{\answer}[1]{\begin{quote}{\bf Answer:} #1\end{quote}}
-\newcommand{\percent}[1]{}
+\newcommand{\percent}[1]{\marginpar[l]{\bf [#1 points]}}
 
-\section{Starting Haskell}
-\percent{0}
+\section{Starting Haskell\protect\percent{0}}
 The Haskell implementation we will be using is Hugs. Type ``hugs''
 at the Linux shell to start the interpreter, and evaluate a few
 expressions. You can download a copy for your own computer from
@@ -31,8 +30,7 @@ which record
 lectures by Simon Peyton Jones---one of the best lecturers you will
 ever see.
 
-\section{The $\lambda$-calculus}
-\percent{22}
+\section{The $\lambda$-calculus\protect\percent{30}}
 \begin{enumerate}
 \item Use $\beta$-conversion to evaluate these $\lambda$-expressions
   to values, assuming that 
@@ -42,12 +40,12 @@ ever see.
 \end{eqnarray*}
 Show each step in your answer.
 \begin{enumerate}
-\item $\mathit{twice}~\mathit{inc}~0$ \percent{3}
-\item $\mathit{twice}~\mathit{twice}~\mathit{inc}~0$ \percent{3}
+\item $\mathit{twice}~\mathit{inc}~0$ \percent{2}
+\item $\mathit{twice}~\mathit{twice}~\mathit{inc}~0$ \percent{2}
 % \item $\mathit{twice}~(\mathit{twice}~\mathit{twice})~\mathit{inc}~0$ \percent{3}
 % \item $\mathit{twice}~\mathit{twice}~\mathit{twice}~\mathit{inc}~0$ \percent{3}
-\item $(\lambda x.~x)~(\lambda x.~x)$ \percent{3}
-\item $(\lambda x.~x~x)~(\lambda x.~x~x)$ \percent{3}
+\item $(\lambda x.~x)~(\lambda x.~x)$ \percent{2}
+\item $(\lambda x.~x~x)~(\lambda x.~x~x)$ \percent{2}
 \end{enumerate}
 In Haskell, the syntax for $\lambda x.e$ is \verb!\x -> e!. Use Hugs
 to check your answers to the questions above.
@@ -96,8 +94,8 @@ should be 2.\percent{4}
 \end{enumerate}
 
 
-\section{Why Functional Programming Matters}
-\percent{18} This part of the exercise aims to give you some
+\section{Why Functional Programming Matters\protect\percent{26}\protect\marginpar[r]{\bf [2/function]}}
+This part of the exercise aims to give you some
 experience of idiomatic functional programming. ``{\em Why Functional
   Programming Matters}'' contains many suitable examples, but they are
 written in an informal notation, rather than Haskell. Your task now is
@@ -126,7 +124,6 @@ and False _ = False
 and _ False = False
 and _ _ = True
 
-
 \end{verbatim}
 
 \item
@@ -141,32 +138,17 @@ data Tree x = Node x [Tree x]
 \end{verbatim}
 Translate the list type in a similar way.
 
+\item
 The use of capital and lower-case letters is significant: in Haskell,
 all types and constructors begin with a capital letter, while
 variables, functions, and type variables begin with a lower-case
 one. The ``deriving Show'' clause instructs the Haskell compiler to
 automatically generate code for converting Tree values to strings for
 display.
-\item
-The numerical examples use the operator \verb!a**b!, representing
-$a^b$. In Haskell, this is written \verb!a^b!.
-\item
-The paper contains some equations of the form
-\begin{verbatim}
-abs x = -x, if x < 0
-\end{verbatim}
-where the condition after the ``if'' is called a {\em guard}, and
-determines whether or not the equation is applicable. You can either
-translate these definitions into Haskell using {\bf if}--{\bf
-  then}--{\bf else}, or use Haskell's own notation for guards---which
-places the guard on the {\em left} hand side of the equation:
-\begin{verbatim}
-abs x | x < 0 = -x
-\end{verbatim}
+
 \end{itemize}
 
-\section{Programming with Lazy Lists}
-\percent{20}
+\section{Programming with Lazy Lists\protect\percent{44}}
 Lazy lists can be (potentially) infinite, although of course no
 program can evaluate {\em all} the elements of an infinite
 list. Nevertheless, using lazy lists can help us avoid building
@@ -196,13 +178,13 @@ Hints:
 \begin{itemize}
 \item You should first write a function that filters out the multiples
   of a given number from a list. This function will take a list as input
-  and output an other list, that contain only the numbers that are not multiples.
+  and output an other list, that contain only the numbers that are not multiples. \percent{11}
 
 \item
   You may also use list comprehensions if you master them.
 
 \item
-  Use the above function to write the sieve.
+  Use the above function to write the sieve. \percent{22}
 \end{itemize}
 
 
@@ -216,7 +198,7 @@ also works given the {\em infinite} list \verb![2..]!---the output
 should be the {\em infinite} list of all prime numbers. How would you
 find the first 100 prime numbers? 
 
-Hint: define a function that returns the $n$ first elements of a list.
+Hint: define a function that returns the $n$ first elements of a list. \percent{11}
 
 
 
