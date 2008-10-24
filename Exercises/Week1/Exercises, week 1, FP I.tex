@@ -1,0 +1,180 @@
+\documentclass{article}
+\begin{document}
+
+\title{Exercises, week 1: Functional Programming I\\
+  \large Programming Paradigms}
+\author{John Hughes}
+\maketitle
+
+\newcommand{\answer}[1]{\begin{quote}{\bf Answer:} #1\end{quote}}
+\newcommand{\percent}[1]{}
+
+\section{Starting Haskell}
+\percent{0}
+The Haskell implementation we will be using is Hugs. Type ``hugs''
+at the Linux shell to start the interpreter, and evaluate a few
+expressions. You can download a copy for your own computer from
+www.haskell.org/hugs.
+
+Hugs is an interpreter and therefore relatively slow. The fastest
+implementation of Haskell today is ghc (www.haskell.org/ghc). This is
+the compiler normally used for serious work. 
+
+The definitive source for all Haskell-related information is
+haskell.org, and section 2 (Learning Haskell) has a wealth of tutorial
+material. I particularly recommend the two ``A Taste of Haskell''
+videos on this page
+\begin{quote}
+\verb!http://haskell.org/haskellwiki/Video_presentations!
+\end{quote}
+which record
+lectures by Simon Peyton Jones---one of the best lecturers you will
+ever see.
+
+\section{The $\lambda$-calculus}
+\percent{22}
+\begin{enumerate}
+\item Use $\beta$-conversion to evaluate these $\lambda$-expressions
+  to values, assuming that 
+\begin{eqnarray*}
+\mathit{inc}&=&\lambda x.~x+1\\
+\mathit{twice}&=&\lambda f.~\lambda x.~f~(f~x)
+\end{eqnarray*}
+Show each step in your answer.
+\begin{enumerate}
+\item $\mathit{twice}~\mathit{inc}~0$ \percent{3}
+\item $\mathit{twice}~\mathit{twice}~\mathit{inc}~0$ \percent{3}
+\item $\mathit{twice}~(\mathit{twice}~\mathit{twice})~\mathit{inc}~0$ \percent{3}
+\item $\mathit{twice}~\mathit{twice}~\mathit{twice}~\mathit{inc}~0$ \percent{3}
+\item $(\lambda x.~x)~(\lambda x.~x)$ \percent{3}
+\item $(\lambda x.~x~x)~(\lambda x.~x~x)$ \percent{3}
+\end{enumerate}
+In Haskell, the syntax for $\lambda x.e$ is \verb!\x -> e!. Use Hugs
+to check your answers to the questions above.
+
+\item
+{\em Church numerals} are a way to represent positive integers in the
+pure $\lambda$-calculus, whereby the number $n$ is represented by the
+function $\lambda f.~\lambda x.~f^n(x)$, so that the {\it twice}
+function above represents the number 2.
+\begin{enumerate}
+\item
+What $\lambda$-expression represents the number 0? \percent{3}
+\item
+What $\lambda$-expression represents the number 1? \percent{3}
+\item 
+Define a Haskell function \verb!church!, which converts a positive
+integer into the corresponding Church numeral, and a function
+\verb!unChurch! which converts back again. In particular,
+\verb!unChurch twice! should be 2. \percent{3}
+\item 
+Define a Haskell function \verb!suc! which converts a Church numeral
+into its successor (i.e. the church numeral one greater). One possible
+solution is 
+\begin{verbatim}
+suc n = church (unChurch n + 1)
+\end{verbatim}
+of course, but the intention here (and in the rest of this question)
+is that you should {\em not} use built-in integer operations. We are
+trying to show that pure $\lambda$-calculus---by itself---can simulate
+arithmetic. \percent{3}
+\item 
+Define a Haskell function \verb!add! which takes two Church numerals,
+and returns their sum. \percent{3}
+\item 
+Define a Haskell function \verb!mul! which takes two Church numerals,
+and returns their product. \percent{3}
+\end{enumerate}
+\item 
+Can the $\lambda$-calculus model LISP? Suppose I tell you that
+\verb!cons! can be modelled by the $\lambda$-expression $\lambda
+x.~\lambda y.~\lambda f.~f~x~y$. Can you find $\lambda$-expressions
+that model \verb!car! and \verb!cdr!? Check your answers using
+Hugs---\verb!car (cons 1 2)! should be 1, and \verb!cdr (cons 1 2)!
+should be 2.\percent{4}
+
+\end{enumerate}
+
+
+\section{Why Functional Programming Matters}
+\percent{18}
+This part of the exercise aims to give you some experience of
+idiomatic functional programming. ``{\em Why Functional Programming
+  Matters}'' contains many suitable examples, but they are written in
+an informal notation, rather than Haskell. Your task now is to translate
+all the functions defined in sections 3 and 4 of the paper into
+Haskell, and test them using Hugs.
+
+Some tips:
+\begin{itemize}
+\item
+Section 3 of the paper defines a type of {\em labelled trees}:
+\begin{verbatim}
+treeof X ::= node X (listof (treeof X))
+\end{verbatim}
+The corresponding definition in Haskell is
+\begin{verbatim}
+data Tree x = Node x [Tree x]
+  deriving Show
+\end{verbatim}
+The use of capital and lower-case letters is significant: in Haskell,
+all types and constructors begin with a capital letter, while
+variables, functions, and type variables begin with a lower-case
+one. The ``deriving Show'' clause instructs the Haskell compiler to
+automatically generate code for converting Tree values to strings for
+display.
+\item
+The numerical examples use the operator \verb!a**b!, representing
+$a^b$. In Haskell, this is written \verb!a^b!.
+\item
+The paper contains some equations of the form
+\begin{verbatim}
+abs x = -x, if x < 0
+\end{verbatim}
+where the condition after the ``if'' is called a {\em guard}, and
+determines whether or not the equation is applicable. You can either
+translate these definitions into Haskell using {\bf if}--{\bf
+  then}--{\bf else}, or use Haskell's own notation for guards---which
+places the guard on the {\em left} hand side of the equation:
+\begin{verbatim}
+abs x | x < 0 = -x
+\end{verbatim}
+\end{itemize}
+
+\section{Programming with Lazy Lists}
+\percent{20}
+Lazy lists can be (potentially) infinite, although of course no
+program can evaluate {\em all} the elements of an infinite
+list. Nevertheless, using lazy lists can help us avoid building
+unnecessary limitations into our code.
+
+Eratosthenes' sieve is a method for finding prime numbers, dating from
+ancient Greece. We start by writing down all the numbers from 2 up to
+some limit, such as 100. Then we repeatedly do the following:
+\begin{itemize}
+\item
+The {\em first} number in the list is a prime. We generate it as an
+output.
+\item
+We {\em remove all multiples} of the first number from the
+list---including that number itself.
+\item
+Loop.
+\end{itemize}
+We terminate when no numbers remain in our list. At this point, all
+prime numbers up to the limit have been found.
+
+Write this algorithm in Haskell, as a function \verb!sieve! such that
+\verb!sieve [2..n]! returns a list of all the prime numbers in the
+range 2 to \verb!n!. ({\em Hint:} a list comprehension may be useful
+here). 
+
+Really, the ``limit'' plays no r\^ole in Eratosthenes algorithm,
+except to ensure termination. Check that your \verb!sieve! function
+also works given the {\em infinite} list \verb![2..]!---the output
+should be the {\em infinite} list of all prime numbers. How would you
+find the first 100 prime numbers?
+
+
+
+\end{document}
