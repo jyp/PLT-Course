@@ -12,7 +12,7 @@
 \setcounter{secnumdepth}{0}
 
 \title{Functional Programming Exercises, 1}
-
+\author{JP Bernardy and Gustav Munkby}
 \begin{document}
 \maketitle
 
@@ -34,6 +34,8 @@ when reasoning about lambda calculus or haskell expressions!
 \section{Lazy lists}
 \begin{code}
 
+import Prelude (Eq(..), Num(..), mod, print)
+
 nonMultiples p [] = []
 nonMultiples p (x:xs) = if x `mod` p == 0 
    then nonMultiples p xs 
@@ -42,9 +44,9 @@ nonMultiples p (x:xs) = if x `mod` p == 0
 sieve [] = []
 sieve (x:xs) = x : sieve (nonMultiples x xs)
 
-take' 0 _ = []
-take' n [] = []
-take' n (x:xs) = x : take' (n-1) xs
+take 0 _ = []
+take n [] = []
+take n (x:xs) = x : take (n-1) xs
 
 main = print (take 100 (sieve [2..]))
 \end{code}

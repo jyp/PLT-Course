@@ -4,30 +4,32 @@
 \begin{enumerate}
 \item{Beta-conversion}
 
+\begin{enumerate}
+\item
 \begin{code}
 twice inc 0
-(\f->\x->f (f x)) (1 +) 0
-(\x->(1 +) ((1 +) x)) 0
+(\f -> \x -> f (f x)) (1 +) 0
+(\x -> (1 +) ((1 +) x)) 0
 (1 +) ((1 +) 0)
 \end{code}
 
 \item
 \begin{code}
-(\f->\x->f (f x)) (\f->\x->f (f x)) (1 +) 0
-(\x->(\f->\x->f (f x)) ((\f->\x->f (f x)) x)) (1 +) 0
-(\f->\x->f (f x)) ((\f->\x->f (f x)) (1 +)) 0
-(\x->(\f->\x->f (f x)) (1 +) ((\f->\x->f (f x)) (1 +) x)) 0
-(\f->\x->f (f x)) (1 +) ((\f->\x->f (f x)) (1 +) 0)
-(\x->(1 +) ((1 +) x)) ((\f->\x->f (f x)) (1 +) 0)
-(1 +) ((1 +) ((\f->\x->f (f x)) (1 +) 0))
-(1 +) ((1 +) ((\x->(1 +) ((1 +) x)) 0))
+(\f -> \x -> f (f x)) (\f -> \x -> f (f x)) (1 +) 0
+(\x -> (\f -> \x -> f (f x)) ((\f -> \x -> f (f x)) x)) (1 +) 0
+(\f -> \x -> f (f x)) ((\f -> \x -> f (f x)) (1 +)) 0
+(\x -> (\f -> \x -> f (f x)) (1 +) ((\f -> \x -> f (f x)) (1 +) x)) 0
+(\f -> \x -> f (f x)) (1 +) ((\f -> \x -> f (f x)) (1 +) 0)
+(\x -> (1 +) ((1 +) x)) ((\f -> \x -> f (f x)) (1 +) 0)
+(1 +) ((1 +) ((\f -> \x -> f (f x)) (1 +) 0))
+(1 +) ((1 +) ((\x -> (1 +) ((1 +) x)) 0))
 (1 +) ((1 +) ((1 +) ((1 +) 0)))
 \end{code}
 
 \item
 \begin{code}
-(\x-> x) (\x-> x)
-(\x-> x)
+(\x ->  x) (\x ->  x)
+(\x ->  x)
 \end{code}
 
 \item
@@ -36,8 +38,10 @@ twice inc 0
 (\x-> x x) (\x-> x x)       
 \end{code}
 (reduces to the same thing)
+\end{enumerate}
 
 \item{Church numerals}
+\begin{enumerate}
 \begin{code}
 
 zero = \f -> \x -> x
@@ -76,4 +80,5 @@ cdr c = c (\_ x -> x)
 Extra remark:
 
 What is $x$ equal to in $c_x = c_m (c_n)$? 
+
 
