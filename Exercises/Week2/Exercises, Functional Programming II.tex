@@ -1,0 +1,167 @@
+\documentclass{article}
+\begin{document}
+
+\title{Exercises on Functional Programming II\\
+  \large Programming Paradigms}
+\author{John Hughes}
+\maketitle
+
+\newcommand{\answer}[1]{} %{\begin{quote}{\bf Answer:} #1\end{quote}}
+\newcommand{\percent}[1]{} %{\marginpar{\bf Value: #1\%}}
+\section{Extending the Calculator}
+\percent{20}
+In this section, you will extend both the calculator application and
+the parsing library. The code written in the lecture has been tidied
+up, separated into two modules (\verb!ParserLibrary! and
+\verb!Calculator!), and uploaded to the course home page.
+
+\paragraph{Note:} this parsing library illustrates some fundamental
+principles of functional programming, but is far from ``production
+quality'' code. Not only is the interface it provides rather minimal,
+it suffers also from severe inefficiencies, and produces appalling
+diagnostics when it encounters a syntax error---parsing libraries
+have, in fact, been the subject of many research papers, which have
+shown how to develop libraries with a similar interface, but very good
+performance and usability. The most widely used library today is
+called Parsec. You can read about it here
+\begin{quote}
+\verb!http://legacy.cs.uu.nl/daan/parsec.html!
+\end{quote}
+but this is not necessary to solve this exercise.
+
+\begin{enumerate}
+\item
+Now that the code written in the lecture has been divided into a
+library and an application, of course none of the code in the
+application (\verb!Calculator.hs!) should depend on the {\em
+  representation} of parsers. We should be able to replace the type of
+parsers by an abstract type, without modifying any of the code in the
+application. However, the definition of \verb!digit! {\em does} depend
+on the representation type. Rewrite this definition so that it only
+depends on operations exported from \verb!ParserLibrary.hs!.
+\percent{4}
+
+\item
+The simple calculator function we developed only supports two
+arithmetic operations: addition and multiplication. Extend the
+calculator code so that it also handles subtraction.
+\percent{4}
+
+\item
+The parser developed in the lecture only allows a {\em single}
+addition in an expression: ``1+2'' is allowed, but not
+``1+2+3''. Extend the parser to allow any number of additions and
+subtractions in an \verb!expr!, and any number of multiplications in a
+\verb!term!. Check that expressions such as ``1-2-3'' are evaluated to
+the correct result (which is -4 in this case).
+\percent{3}
+
+Can you refactor your code to produce a generally useful function that
+could be added to the parsing library?
+\percent{1}
+
+\item
+The parser developed in the lecture does not accept white space in the
+strings it parses. Extend the parsing library with an operation
+\verb!white p!, which ignores white space before parsing a
+\verb!p!. (You will find the standard function \verb!isSpace!,
+exported by in module \verb!Char!, useful for recognising white-space
+characters). Make use of the new operation to modify the calculator so
+that white space is accepted between any pair of symbols.
+\percent{4}
+
+\item
+The \verb!many p! function developed in the lecture parses any number
+of \verb!p!s---but may happily parse zero \verb!p!s, even if several
+are present. For example, the \verb!number! parser (which uses
+\verb!some digit!) can parse the input ``123'' either as 123, or as 12
+followed by ``3'', or as 1 followed by ``23''. Usually, the {\em
+longest} possible parse is the one we want. Thus we might like to
+insist that after parsing \verb!many p!, then \verb!p! {\em must fail}
+on the remaining input!
+
+Define a parser \verb!fails p! that succeeds {\em only} if \verb!p!
+fails on the same input. Use it to define a version of \verb!many!
+that always parses the {\em longest} possible sequence of \verb!p!s.
+\percent{4}
+
+\end{enumerate}
+
+\section{LISP S-Expressions}
+\percent{20}
+LISP S-expressions can be represented in Haskell by the following
+type:
+\begin{verbatim}
+data SExp = Numb Int | Atom String | Cons SExp SExp
+  deriving (Show,Eq)
+\end{verbatim}
+This declares a new type \verb!SExp! with three constructors,
+\verb!Numb!, \verb!Atom!, and \verb!Cons!, with arguments of the types
+given. The ``deriving'' clause instructs the compiler to generate code
+to display \verb!SExp! values (convert them to strings), and compare
+them for equality using \verb!==!.
+
+\begin{enumerate}
+\item
+The default way of displaying values of this type is rather ugly,
+however. S-expressions are displayed as the Haskell source code that
+constructs them, so for example:
+\begin{verbatim}
+Lisp> Cons (Numb 1) (Cons (Numb 2) (Atom "nil"))
+Cons (Numb 1) (Cons (Numb 2) (Atom "nil"))
+\end{verbatim}
+A LISP interpreter would display the corresponding value as
+``\verb!(1 2)!''. Define a Haskell function \verb!string! which
+converts a Haskell \verb!SExp! to the string that a LISP system would
+print for it. For example,
+\begin{verbatim}
+Lisp> string (Cons (Numb 1) (Cons (Numb 2) (Atom "nil")))
+"(1 2)"
+\end{verbatim}
+\percent{5}
+\item
+A LISP interpreter also contains parsing functions to convert strings
+such as ``(1 2)'' into the corresponding internal representation. Use
+the parsing library developed in the lecture---with the improvements
+you made above---to write a parser for S-expressions. For example,
+\begin{verbatim}
+Lisp> parse sexp "(1 2)"
+[Cons (Numb 1) (Cons (Numb 2) (Atom "nil"))]
+\end{verbatim}
+
+You will need to test your code, and you can use your ``printer''
+(\verb!string!) to test your parser. Add the following code to the
+beginning of your module, which uses Haskell's test tool QuickCheck to
+test that converting any S-expression to a string, and back again,
+results in the same data-structure. (Cut and paste from this
+document, making sure that the layout is preserved).
+\begin{verbatim}
+import Test.QuickCheck
+import Monad
+
+instance Arbitrary Char where
+  arbitrary = elements (['a'..'z']++['0'..'9'])
+
+instance Arbitrary SExp where
+  arbitrary = sized arb
+    where arb 0 = oneof [liftM Numb arbitrary, 
+                         liftM Atom (liftM2 (:) (elements ['a'..'z'])
+                                                arbitrary)]
+          arb n = oneof [arb 0, 
+                         liftM (foldr Cons (Atom "nil")) 
+                               (resize (n `div` 3) arbitrary)]
+
+prop_sexp_string s = take 1 (parse sexp (string s)) == [s]
+\end{verbatim}
+You can then test your code using
+\begin{verbatim}
+Lisp> quickCheck prop_sexp_string
+OK, passed 100 tests.
+\end{verbatim}
+If you see the output above, repeatedly, then your code probably works!
+\percent{15}
+\end{enumerate}
+
+
+
+\end{document}
