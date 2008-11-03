@@ -18,11 +18,25 @@
 
 \section{General Remarks}
 
+\begin{itemize}
+\item
+A \emph{redex} is an expression of the form:
+|(\x -> ...) e|. Substitute |x| by |e| in the ellipsis
+to apply the $\beta$ rule.
+
+\item
 Function application binds on the left!
 
 Therefore, in general, you {\em can not} use the rule
 |a b c = a (b c)|
 when reasoning about lambda calculus or haskell expressions!
+
+\item
+In particular, in |a (\x -> ...) c|, |(\x -> ...) c| is not a redex.
+The redex is always on the left of a series of applications.
+\end{itemize}
+
+
 
 \section{Lambda Calculus}
 
