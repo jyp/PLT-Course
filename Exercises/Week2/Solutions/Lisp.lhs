@@ -15,7 +15,7 @@ Make sure the code works for this examples...
 
 sample0 = Cons (Numb 2) (Atom "nil")
 sample1 = Cons (Numb 1) (Cons (Numb 2) (Atom "nil"))
-sample2 = Cons (Cons (Numb 2) (Atom "nil")) (Cons ((Numb 1)  (Atom "nil"))
+sample2 = Cons (Cons (Numb 2) (Atom "nil")) (Cons ((Numb 1)  (Atom "nil")))
 
 -- 1.
 stringP p (Numb i) = show i

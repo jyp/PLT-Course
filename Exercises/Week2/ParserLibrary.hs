@@ -1,4 +1,4 @@
-module ParserLibrary(  -- we specify the exported functions
+module ParserLibrary(  -- we specify the exported functions!
 	value,
 	satisfy,
 	exactly,
@@ -15,12 +15,8 @@ import List
 infixl 5 |||
 infixl 6 @@, ##
 
--- Parsers are represented by functions according to the following
--- type definition:
 
 type Parser a = String -> [(a,String)]
-
--- These functions *depend on the representation of Parsers*
 
 value :: a -> Parser a
 value x s = [(x,s)]
@@ -44,20 +40,12 @@ exactly tok s =
 parse :: Parser a -> String -> [a]
 parse p s = [x | (x,"") <- p s]
 
--- From this point on, the code *does not* depend on the representation
--- of Parsers--so if it is changed, then the code below should still work.
-
 (##) :: Parser a -> Parser b -> Parser a
 p ## q = value const @@ p @@ q
 
 many :: Parser a -> Parser [a]
 many p = some p
-     ||| value [] -- ## fails p
+     ||| value []
 
 some :: Parser a -> Parser [a]
 some p = value (:) @@ p @@ many p
-
-fails p s =
-  case p s of
-    [] -> [((),s)]
-    _ -> []

@@ -1,4 +1,13 @@
 \documentclass{article}
+\newcommand{\percents}[1]{\protect \marginpar[l]{\bf [#1 points]}}
+\newcounter{question}
+\newcommand{\question}[2]{
+  \addtocounter{question}{1}
+  \paragraph{Exercise~\arabic{question}  \percents{#1}}
+   #2
+  \vfil
+ }
+
 \begin{document}
 
 \title{Exercises on Functional Programming II\\
@@ -15,88 +24,117 @@ the parsing library. The code written in the lecture has been tidied
 up, separated into two modules (\verb!ParserLibrary! and
 \verb!Calculator!), and uploaded to the course home page.
 
-\paragraph{Note:} this parsing library illustrates some fundamental
-principles of functional programming, but is far from ``production
-quality'' code. Not only is the interface it provides rather minimal,
-it suffers also from severe inefficiencies, and produces appalling
-diagnostics when it encounters a syntax error---parsing libraries
-have, in fact, been the subject of many research papers, which have
-shown how to develop libraries with a similar interface, but very good
-performance and usability. The most widely used library today is
-called Parsec. You can read about it here
-\begin{quote}
-\verb!http://legacy.cs.uu.nl/daan/parsec.html!
-\end{quote}
-but this is not necessary to solve this exercise.
-
-\begin{enumerate}
-\item
 Now that the code written in the lecture has been divided into a
 library and an application, of course none of the code in the
 application (\verb!Calculator.hs!) should depend on the {\em
   representation} of parsers. We should be able to replace the type of
 parsers by an abstract type, without modifying any of the code in the
 application. However, the definition of \verb!digit! {\em does} depend
-on the representation type. Rewrite this definition so that it only
-depends on operations exported from \verb!ParserLibrary.hs!.
-\percent{4}
+on the representation type. 
 
-\item
+\question{1}{What is the representation of a parser? Give the type and an
+intution of its meaning.}
+
+\question{1}{List the operations (functions) that depend on the parser representation.
+In other words, which functions will have to be changed if the representation
+changes?}
+
+\question{1}{
+Rewrite the definition of \texttt{digit} so that it only
+depends on operations exported from \texttt{ParserLibrary.hs}.
+}
+
+\question{1}{
 The simple calculator function we developed only supports two
 arithmetic operations: addition and multiplication. Extend the
-calculator code so that it also handles subtraction.
-\percent{4}
+calculator code so that it also handles exponentiation: \texttt{2\^{}3}. (Use the
+standard operator \texttt{\^{}} for the semantics)
+  }
 
-\item
+\question{1}{
 The parser developed in the lecture only allows a {\em single}
 addition in an expression: ``1+2'' is allowed, but not
-``1+2+3''. Extend the parser to allow any number of additions and
-subtractions in an \verb!expr!, and any number of multiplications in a
-\verb!term!. Check that expressions such as ``1-2-3'' are evaluated to
-the correct result (which is -4 in this case).
-\percent{3}
+``1+2+3''. Extend the parser to allow any number of multiplications, additions and
+exponentiations.
+}
 
-Can you refactor your code to produce a generally useful function that
-could be added to the parsing library?
-\percent{1}
 
-\item
-The parser developed in the lecture does not accept white space in the
-strings it parses. Extend the parsing library with an operation
-\verb!white p!, which ignores white space before parsing a
-\verb!p!. (You will find the standard function \verb!isSpace!,
-exported by in module \verb!Char!, useful for recognising white-space
-characters). Make use of the new operation to modify the calculator so
+\question{1} {
+What is the associativity of the the exponent operator you provided?
+(You can test it by parsing and calculating ``\texttt{2\^{}2\^{}2}'')}
+
+
+\question{1} {
+Explain why your parser behaves like this.
+}
+
+\question{0} { Add support for subtraction, with left associativity. Can you
+write a generic library function for supporting left-associative functions?
+(Advanced question)}
+
+
+\paragraph{Note:} The parser developed in the lecture does not accept white space in the
+strings it parses. 
+
+\question{1} {
+Extend the parsing library with an operation
+\texttt{white p}, which ignores white space and then parses a
+\texttt{p}. (You will find the standard function \texttt{isSpace},
+exported by in module \texttt{Char}, useful for recognising white-space
+characters). Note that the function \texttt{white} transforms a parser
+into another parser. i.e. it has \emph{type} \texttt{white :: Parser a -> Parser a}
+}
+
+\question{1} {
+Make use of the new operation to modify the calculator so
 that white space is accepted between any pair of symbols.
 \percent{4}
+}
 
-\item
-The \verb!many p! function developed in the lecture parses any number
-of \verb!p!s---but may happily parse zero \verb!p!s, even if several
-are present. For example, the \verb!number! parser (which uses
-\verb!some digit!) can parse the input ``123'' either as 123, or as 12
+The \texttt{many p} function developed in the lecture parses any number
+of \texttt{p}s---but may happily parse zero \texttt{p}s, even if several
+are present. For example, the \texttt{number} parser (which uses
+\texttt{some digit}) can parse the input ``123'' either as 123, or as 12
 followed by ``3'', or as 1 followed by ``23''. Usually, the {\em
 longest} possible parse is the one we want. Thus we might like to
-insist that after parsing \verb!many p!, then \verb!p! {\em must fail}
+insist that after parsing \texttt{many p}, then \texttt{p} {\em must fail}
 on the remaining input!
 
-Define a parser \verb!fails p! that succeeds {\em only} if \verb!p!
-fails on the same input. Use it to define a version of \verb!many!
-that always parses the {\em longest} possible sequence of \verb!p!s.
-\percent{4}
+\question{1} { Define a parser \texttt{fails p} that succeeds {\em only} if
+\texttt{p} fails when presented with the same input. \texttt{fails p} should not
+consume any input though. }
 
-\end{enumerate}
+\question{1} {
+Use it to define a version of \texttt{many}
+that always parses the {\em longest} possible sequence of \texttt{p}s.
+}
+
+
+\paragraph{Note:} This parsing library illustrates some fundamental
+principles of functional programming, but is far from ``production
+quality'' code. Not only is the interface it provides rather minimal,
+it suffers also from severe inefficiencies, and produces appalling
+diagnostics when it encounters a syntax error---parsing libraries
+have, in fact, been the subject of many research papers, which have
+shown how to develop libraries with a similar interface, but very good
+performance and usability. A widely used library today is
+called Parsec. You can read about it here
+\begin{quote}
+\texttt{http://legacy.cs.uu.nl/daan/parsec.html}
+\end{quote}
+but this is not necessary to solve this exercise.
+
 
 \section{LISP S-Expressions}
-\percent{20}
+\percents{0}
 LISP S-expressions can be represented in Haskell by the following
 type:
 \begin{verbatim}
 data SExp = Numb Int | Atom String | Cons SExp SExp
   deriving (Show,Eq)
 \end{verbatim}
-This declares a new type \verb!SExp! with three constructors,
-\verb!Numb!, \verb!Atom!, and \verb!Cons!, with arguments of the types
+This declares a new type \texttt{SExp} with three constructors,
+\texttt{Numb}, \verb!Atom!, and \verb!Cons!, with arguments of the types
 given. The ``deriving'' clause instructs the compiler to generate code
 to display \verb!SExp! values (convert them to strings), and compare
 them for equality using \verb!==!.
