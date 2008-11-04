@@ -139,6 +139,8 @@ given. The ``deriving'' clause instructs the compiler to generate code
 to display \verb!SExp! values (convert them to strings), and compare
 them for equality using \verb!==!.
 
+The code to get started with this exercise is provided in the file \texttt{Lisp.hs}.
+
 \begin{enumerate}
 \item
 The default way of displaying values of this type is rather ugly,
@@ -149,14 +151,14 @@ Lisp> Cons (Numb 1) (Cons (Numb 2) (Atom "nil"))
 Cons (Numb 1) (Cons (Numb 2) (Atom "nil"))
 \end{verbatim}
 A LISP interpreter would display the corresponding value as
-``\verb!(1 2)!''. Define a Haskell function \verb!string! which
+``\verb!(1 2)!''. We defined a Haskell function \verb!string! which
 converts a Haskell \verb!SExp! to the string that a LISP system would
 print for it. For example,
 \begin{verbatim}
 Lisp> string (Cons (Numb 1) (Cons (Numb 2) (Atom "nil")))
 "(1 2)"
 \end{verbatim}
-\percent{5}
+\question{0}{Read the function and understand it.}
 \item
 A LISP interpreter also contains parsing functions to convert strings
 such as ``(1 2)'' into the corresponding internal representation. Use
@@ -167,26 +169,24 @@ Lisp> parse sexp "(1 2)"
 [Cons (Numb 1) (Cons (Numb 2) (Atom "nil"))]
 \end{verbatim}
 
-\question{1}{Write a parser for atoms}
-\question{1}{Write a parser for numbers}
-\question{3}{Write a parser for SExpressions using the above two parsers}
+\question{1}{Write a parser for atoms.}
+\question{1}{Write a parser for numbers.}
+\question{3}{Write a parser for SExpressions using the above two parsers.}
 
 You will need to test your code, and you can use the ``printer''
-(\verb!string!) to test your parser. Add the following code to the
-beginning of your module, which uses Haskell's test tool QuickCheck to
+(\verb!string!) to test your parser. 
+
+The provided \verb!Lisp.lhs! uses Haskell's test tool QuickCheck to
 test that converting any S-expression to a string, and back again,
 results in the same data-structure. 
 
-If you start with the \verb!Lisp.lhs! file, you can you can then test your code using
-
+If you start with the \verb!Lisp.lhs! file, you can you can then test your code
+using:
 \begin{verbatim}
 Lisp> quickCheck prop_sexp_string
 OK, passed 100 tests.
 \end{verbatim}
 If you see the output above, repeatedly, then your code probably works!
-\percent{15}
 \end{enumerate}
-
-
 
 \end{document}
