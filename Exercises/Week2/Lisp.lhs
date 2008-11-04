@@ -16,7 +16,7 @@ Make sure the code works for this examples...
 
 sample0 = Cons (Numb 2) (Atom "nil")
 sample1 = Cons (Numb 1) (Cons (Numb 2) (Atom "nil"))
--- sample2 = Cons (Cons (Numb 2) (Atom "nil")) (Cons ((Numb 1)  (Atom "nil")))
+sample2 = Cons (Cons (Numb 2) (Atom "nil")) (Cons ((Numb 1)  (Atom "nil")))
 
 -- 1.
 stringP p (Numb i) = show i
@@ -30,24 +30,6 @@ stringP p (Cons h t) = (if p then paren else id) (string h ++ " " ++ stringP Fal
 string = stringP True
 
 paren x = "(" ++ x ++ ")"
-
--- 2.
-signed = value negate ## symbol "-" ||| value id
-
-sexp :: Parser SExp
-sexp = symbol "(" $$ value (foldr Cons (Atom "nil")) @@ many' sexp ## symbol ")" 
-       ||| value Numb @@ (signed @@ number)
-       ||| value Atom @@ atom
-
-atom = white $ value (:) @@ satisfy (`elem` ['a'..'z']) @@ many' alpha
-
-alpha = satisfy (`elem` ['a'..'z']++['0'..'9'])
-
-number = white $ value (foldl combine 0) @@ some digit
-combine x y = 10*x + y
-digit = value digitval @@ satisfy isDigit
-digitval d = ord d - ord '0'
-
 
 
 ----------
