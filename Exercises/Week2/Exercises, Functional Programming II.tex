@@ -32,16 +32,18 @@ parsers by an abstract type, without modifying any of the code in the
 application. However, the definition of \verb!digit! {\em does} depend
 on the representation type. 
 
-\question{1}{What is the representation of a parser? Give the type and an
-intution of its meaning.}
+\question{1}{What is the representation of a parser from the parser
+library? Give the type and explain its meaning.}
 
-\question{1}{List the operations (functions) that depend on the parser representation.
+\question{1}{List the operations (functions) that depend on the parser
+representation (in \texttt{ParserLibrary.hs}).
 In other words, which functions will have to be changed if the representation
 changes?}
 
 \question{1}{
-Rewrite the definition of \texttt{digit} so that it only
-depends on operations exported from \texttt{ParserLibrary.hs}.
+Rewrite the definition of \texttt{digit} so that it does not depend
+on the parser representation, i.e. it should use only \texttt{digitval}
+and operations exported from \texttt{ParserLibrary.hs}.
 }
 
 \question{1}{
@@ -61,7 +63,7 @@ exponentiations.
 
 \question{1} {
 What is the associativity of the the exponent operator you provided?
-(You can test it by parsing and calculating ``\texttt{2\^{}2\^{}2}'')}
+(You can test it by parsing and calculating ``\texttt{3\^{}3\^{}3}'')}
 
 
 \question{1} {
@@ -169,14 +171,14 @@ Lisp> parse sexp "(1 2)"
 [Cons (Numb 1) (Cons (Numb 2) (Atom "nil"))]
 \end{verbatim}
 
-\question{1}{Write a parser for atoms.}
-\question{1}{Write a parser for numbers.}
+\question{1}{Write a parser for LISP atoms.}
+\question{1}{Write a parser for (possibly negative) numbers.}
 \question{3}{Write a parser for SExpressions using the above two parsers.}
 
 You will need to test your code, and you can use the ``printer''
 (\verb!string!) to test your parser. 
 
-The provided \verb!Lisp.lhs! uses Haskell's test tool QuickCheck to
+The provided \verb!Lisp.hs! uses Haskell's test tool QuickCheck to
 test that converting any S-expression to a string, and back again,
 results in the same data-structure. 
 
@@ -188,5 +190,7 @@ OK, passed 100 tests.
 \end{verbatim}
 If you see the output above, repeatedly, then your code probably works!
 \end{enumerate}
+
+\vfill
 
 \end{document}
