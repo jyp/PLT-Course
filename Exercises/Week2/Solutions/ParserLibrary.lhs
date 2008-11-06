@@ -14,7 +14,8 @@ module ParserLibrary(  -- we specify the exported functions
 	some,
 	many',
 	some',
-        white
+        white,
+        symbol
   ) where
 
 import List
@@ -74,6 +75,8 @@ p $$ q = value (\x y->y) @@ p @@ q
 
 white p = many (satisfy isSpace) $$ p
 
+-- Q 10
+symbol tok = white (exactly tok)
 
 -- Q 11
 fails :: Parser a -> Parser ()

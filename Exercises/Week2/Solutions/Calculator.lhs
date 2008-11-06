@@ -6,7 +6,6 @@ import ParserLibrary
 calc = parse expr
 
 -- Q10: exactly -> symbol; number -> white number
-symbol tok = white (exactly tok)
 
 -- Q5: make the 2nd call a recursive call.
 expr = value (+) @@ term ## symbol "+" @@ expr

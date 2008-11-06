@@ -1,0 +1,296 @@
+% -*- Latex -*-
+\documentclass{article}
+%% ODER: format ==         = "\mathrel{==}"
+%% ODER: format /=         = "\neq "
+%
+%
+\makeatletter
+\@ifundefined{lhs2tex.lhs2tex.sty.read}%
+  {\@namedef{lhs2tex.lhs2tex.sty.read}{}%
+   \newcommand\SkipToFmtEnd{}%
+   \newcommand\EndFmtInput{}%
+   \long\def\SkipToFmtEnd#1\EndFmtInput{}%
+  }\SkipToFmtEnd
+
+\newcommand\ReadOnlyOnce[1]{\@ifundefined{#1}{\@namedef{#1}{}}\SkipToFmtEnd}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\DeclareFontFamily{OT1}{cmtex}{}
+\DeclareFontShape{OT1}{cmtex}{m}{n}
+  {<5><6><7><8>cmtex8
+   <9>cmtex9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmtex10}{}
+\DeclareFontShape{OT1}{cmtex}{m}{it}
+  {<-> ssub * cmtt/m/it}{}
+\newcommand{\texfamily}{\fontfamily{cmtex}\selectfont}
+\DeclareFontShape{OT1}{cmtt}{bx}{n}
+  {<5><6><7><8>cmtt8
+   <9>cmbtt9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmbtt10}{}
+\DeclareFontShape{OT1}{cmtex}{bx}{n}
+  {<-> ssub * cmtt/bx/n}{}
+\newcommand{\tex}[1]{\text{\texfamily#1}}	% NEU
+
+\newcommand{\Sp}{\hskip.33334em\relax}
+
+
+\newcommand{\Conid}[1]{\mathit{#1}}
+\newcommand{\Varid}[1]{\mathit{#1}}
+\newcommand{\anonymous}{\kern0.06em \vbox{\hrule\@width.5em}}
+\newcommand{\plus}{\mathbin{+\!\!\!+}}
+\newcommand{\bind}{\mathbin{>\!\!\!>\mkern-6.7mu=}}
+\newcommand{\rbind}{\mathbin{=\mkern-6.7mu<\!\!\!<}}% suggested by Neil Mitchell
+\newcommand{\sequ}{\mathbin{>\!\!\!>}}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\usepackage{polytable}
+
+%mathindent has to be defined
+\@ifundefined{mathindent}%
+  {\newdimen\mathindent\mathindent\leftmargini}%
+  {}%
+
+\def\resethooks{%
+  \global\let\SaveRestoreHook\empty
+  \global\let\ColumnHook\empty}
+\newcommand*{\savecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\savecolumns[#1]}}
+\newcommand*{\restorecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\restorecolumns[#1]}}
+\newcommand*{\aligncolumn}[2]%
+  {\g@addto@macro\ColumnHook{\column{#1}{#2}}}
+
+\resethooks
+
+\newcommand{\onelinecommentchars}{\quad-{}- }
+\newcommand{\commentbeginchars}{\enskip\{-}
+\newcommand{\commentendchars}{-\}\enskip}
+
+\newcommand{\visiblecomments}{%
+  \let\onelinecomment=\onelinecommentchars
+  \let\commentbegin=\commentbeginchars
+  \let\commentend=\commentendchars}
+
+\newcommand{\invisiblecomments}{%
+  \let\onelinecomment=\empty
+  \let\commentbegin=\empty
+  \let\commentend=\empty}
+
+\visiblecomments
+
+\newlength{\blanklineskip}
+\setlength{\blanklineskip}{0.66084ex}
+
+\newcommand{\hsindent}[1]{\quad}% default is fixed indentation
+\let\hspre\empty
+\let\hspost\empty
+\newcommand{\NB}{\textbf{NB}}
+\newcommand{\Todo}[1]{$\langle$\textbf{To do:}~#1$\rangle$}
+
+\EndFmtInput
+\makeatother
+%
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\newcommand{\percents}[1]{\protect \marginpar[l]{\bf [#1 points]}}
+\newcounter{question}
+\newcommand{\answer}[1]{
+  \addtocounter{question}{1}
+   \textbf{Exercise~\arabic{question}:}  \percents{#1}
+ }
+
+
+\setcounter{secnumdepth}{0}
+
+\title{Functional Programming Exercises, 1}
+\author{JP Bernardy and Gustav Munkby}
+\begin{document}
+\maketitle
+
+
+\answer{1}
+The type is:
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{type}\;\Conid{Parser}\;\Varid{a}\mathrel{=}\Conid{String}\to [\mskip1.5mu (\Varid{a},\Conid{String})\mskip1.5mu]{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+This type represents a tranformation from input (to be parsed) to list of all possible
+results paired with the remaining of the input.
+
+\answer{1}
+
+These operations depend on the representation:
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{value},\Varid{satisfy},\Varid{exactly},(\mathbin{|||}),(\mathbin{@@}),\Varid{parse},(\Varid{digit}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+These don't:
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}(\mathbin{\#\#}),\Varid{many},\Varid{some}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+
+\answer{1}
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{digit}\mathrel{=}\Varid{value}\;\Varid{digitval}\mathbin{@@}\Varid{satisfy}\;\Varid{isDigit}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\answer{1}
+
+Rename factor to atom and add
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{factor}\mathrel{=}\Varid{value}\;(\mathbin{\uparrow})\mathbin{@@}\Varid{atom}\mathbin{\#\#}\Varid{symbol}\;\text{\tt \char34 \char94 \char34}\mathbin{@@}\Varid{atom}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\mathbin{|||}\Varid{atom}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\answer{1} 
+Make the 2nd call a recursive call in each term, factor, expr.
+
+\answer{1}
+The parser is right-associative.
+
+\answer{1}
+This happens because we do a right-recursive call.
+If we try to do left-recursion it will loop!
+
+\answer{0}
+See later.
+
+\answer{1}
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}(\mathbin{\$\$})\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;\Varid{b}\to \Conid{Parser}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{p}\mathbin{\$\$}\Varid{q}\mathrel{=}\Varid{value}\;(\lambda \Varid{x}\;\Varid{y}\to \Varid{y})\mathbin{@@}\Varid{p}\mathbin{@@}\Varid{q}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{white}\;\Varid{p}\mathrel{=}\Varid{many}\;(\Varid{satisfy}\;\Varid{isSpace})\mathbin{\$\$}\Varid{p}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\answer{1}
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{symbol}\;\Varid{tok}\mathrel{=}\Varid{white}\;(\Varid{exactly}\;\Varid{tok}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+Exactly $\rightarrow$ symbol; number $\rightarrow$ white number
+
+\answer{1}
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{23}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{fails}\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;(){}\<[E]%
+\\
+\>[B]{}\Varid{fails}\;\Varid{p}\mathrel{=}\lambda \Varid{input}\to \mathbf{case}\;\Varid{p}\;\Varid{input}\;\mathbf{of}{}\<[E]%
+\\
+\>[B]{}\hsindent{23}{}\<[23]%
+\>[23]{}[\mskip1.5mu \mskip1.5mu]\to \Varid{value}\;()\;\Varid{input}{}\<[E]%
+\\
+\>[B]{}\hsindent{23}{}\<[23]%
+\>[23]{}\anonymous \to [\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+\answer{1}
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{some'}\;\Varid{p}\mathrel{=}\Varid{value}\;(\mathbin{:})\mathbin{@@}\Varid{p}\mathbin{@@}\Varid{many'}\;\Varid{p}{}\<[E]%
+\\
+\>[B]{}\Varid{many'}\;\Varid{p}\mathrel{=}(\Varid{value}\;[\mskip1.5mu \mskip1.5mu]\mathbin{\#\#}\Varid{fails}\;\Varid{p})\mathbin{|||}\Varid{some'}\;\Varid{p}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\answer{0}
+Questions?
+
+\answer{1}
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{atom}\mathrel{=}\Varid{white}\mathbin{\$}\Varid{value}\;(\mathbin{:})\mathbin{@@}\Varid{satisfy}\;(\in [\mskip1.5mu \text{\tt 'a'}\mathinner{\ldotp\ldotp}\text{\tt 'z'}\mskip1.5mu])\mathbin{@@}\Varid{many'}\;\Varid{alpha}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{alpha}\mathrel{=}\Varid{satisfy}\;(\in [\mskip1.5mu \text{\tt 'a'}\mathinner{\ldotp\ldotp}\text{\tt 'z'}\mskip1.5mu]\plus [\mskip1.5mu \text{\tt '0'}\mathinner{\ldotp\ldotp}\text{\tt '9'}\mskip1.5mu]){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\answer{1}
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{number}\mathrel{=}\Varid{white}\mathbin{\$}\Varid{value}\;(\Varid{foldl}\;\Varid{combine}\;\mathrm{0})\mathbin{@@}\Varid{some}\;\Varid{digit}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\answer{3}
+(One point per term in the disjunction)
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{8}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{sexp}\mathbin{::}\Conid{Parser}\;\Conid{SExp}{}\<[E]%
+\\
+\>[B]{}\Varid{sexp}\mathrel{=}\Varid{symbol}\;\text{\tt \char34 (\char34}\mathbin{\$\$}\Varid{value}\;(\Varid{foldr}\;\Conid{Cons}\;(\Conid{Atom}\;\text{\tt \char34 nil\char34}))\mathbin{@@}\Varid{many'}\;\Varid{sexp}\mathbin{\#\#}\Varid{symbol}\;\text{\tt \char34 )\char34}{}\<[E]%
+\\
+\>[B]{}\hsindent{8}{}\<[8]%
+\>[8]{}\mathbin{|||}\Varid{value}\;\Conid{Numb}\mathbin{@@}(\Varid{signed}\mathbin{@@}\Varid{number}){}\<[E]%
+\\
+\>[B]{}\hsindent{8}{}\<[8]%
+\>[8]{}\mathbin{|||}\Varid{value}\;\Conid{Atom}\mathbin{@@}\Varid{atom}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+
+\end{document}
