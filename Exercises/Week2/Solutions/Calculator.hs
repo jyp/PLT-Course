@@ -1,26 +1,21 @@
-\begin{code}
 module Calculator where
 import Char
 import ParserLibrary
 
 calc = parse expr
 
--- Q10: exactly -> symbol; number -> white number
-symbol tok = white (exactly tok)
-
--- Q5: make the 2nd call a recursive call.
-expr = value (+) @@ term ## symbol "+" @@ expr
+expr = value (+) @@ term ## exactly "+" @@ term
    ||| term
 
-term = value (*) @@ factor ## symbol "*" @@ term
+term = value (*) @@ factor ## exactly "*" @@ factor
    ||| factor
 
 -- Q4 (old factor becomes atom)
-factor = value (^) @@ atom ## symbol "^" @@ factor
+factor = value (^) @@ atom ## exactly "^" @@ atom
    ||| atom
 
-atom = white number 
-     ||| value id ## symbol "(" @@ expr ## symbol ")"
+atom = number 
+     ||| value id ## exactly "(" @@ expr ## exactly ")"
 
 number = value (foldl combine 0) @@ some digit
 
@@ -32,4 +27,3 @@ numval s = foldl combine 0 [digitval d | d <- s]
 -- Q3
 digit = value digitval @@ satisfy isDigit
 -- digit s = [(digitval d,s') | (d,s') <- satisfy isDigit s]
-\end{code}
