@@ -1,6 +1,5 @@
 \begin{code}
 import ParserLibrary
--- import Calculator hiding (symbol)
 import Test.QuickCheck
 import Monad
 import Data.Char

@@ -14,7 +14,8 @@ module ParserLibrary(  -- we specify the exported functions
 	some,
 	many',
 	some',
-        white
+        white,
+        symbol
   ) where
 
 import List
@@ -74,6 +75,8 @@ p $$ q = value (\x y->y) @@ p @@ q
 
 white p = many (satisfy isSpace) $$ p
 
+-- Q 10
+symbol tok = white (exactly tok)
 
 -- Q 11
 fails :: Parser a -> Parser ()
@@ -84,6 +87,14 @@ fails p = \input -> case p input of
 -- Q 12
 some' p = value (:) @@ p @@ many' p
 many' p = (value [] ## fails p) ||| some' p
+
+-- Q 8
+f <$> p = value f @@ p
+
+-- The idea is to put the resulf of the parsing in a list and use
+-- foldl to apply the operator with left associativity
+chainl1 :: Parser b -> (a -> a -> a) -> Parser a -> Parser a
+chainl1 parseOp op el = foldl1 op <$> ((:) <$> el @@ many (parseOp $$ el))
 
 \end{code}
 
