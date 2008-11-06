@@ -14,8 +14,7 @@ module ParserLibrary(  -- we specify the exported functions
 	some,
 	many',
 	some',
-        white,
-        symbol
+        white
   ) where
 
 import List
@@ -69,21 +68,20 @@ some p = value (:) @@ p @@ many p
 ---------
 
 
--- 4.
+-- Q 9
 ($$) :: Parser a -> Parser b -> Parser b
 p $$ q = value (\x y->y) @@ p @@ q
 
 white p = many (satisfy isSpace) $$ p
 
-symbol = white . exactly
 
--- 5.a
+-- Q 11
 fails :: Parser a -> Parser ()
 fails p = \input -> case p input of
                       [] -> value () input
                       _ -> []
 
--- 5.b
+-- Q 12
 some' p = value (:) @@ p @@ many' p
 many' p = (value [] ## fails p) ||| some' p
 
