@@ -24,7 +24,7 @@ type Parser a = String -> [(a,String)]
 \end{code}
 
 This type represents a tranformation from input (to be parsed) to list of all possible
-results paired with the remaining of the input.
+results paired with the remainder of the input.
 
 \answer{1}
 
