@@ -30,5 +30,5 @@ numval s = foldl combine 0 [digitval d | d <- s]
 
 -- Q3
 digit = value digitval @@ satisfy isDigit
--- digit s = [(digitval d,s') | (d,s') <- satisfy isDigit s]
+
 \end{code}

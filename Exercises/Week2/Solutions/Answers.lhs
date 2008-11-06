@@ -23,6 +23,7 @@
 \begin{document}
 \maketitle
 
+\section{Answers to exercises}
 
 \answer{1}
 The type is:
@@ -126,5 +127,15 @@ sexp = symbol "(" $$ value (foldr Cons (Atom "nil")) @@ many' sexp ## symbol ")"
        ||| value Atom @@ atom
 \end{code}
 
+\section{Full code}
+
+\subsection{Library}
+%include ParserLibrary.lhs
+
+\subsection{Calculator}
+%include Calculator.lhs
+
+\subsection{Lisp}
+%include Lisp.lhs
 
 \end{document}

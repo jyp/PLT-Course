@@ -88,6 +88,14 @@ fails p = \input -> case p input of
 some' p = value (:) @@ p @@ many' p
 many' p = (value [] ## fails p) ||| some' p
 
+-- Q 8
+f <$> p = value f @@ p
+
+-- The idea is to put the resulf of the parsing in a list and use
+-- foldl to apply the operator with left associativity
+chainl1 :: Parser b -> (a -> a -> a) -> Parser a -> Parser a
+chainl1 parseOp op el = foldl1 op <$> ((:) <$> el @@ many (parseOp $$ el))
+
 \end{code}
 
 
