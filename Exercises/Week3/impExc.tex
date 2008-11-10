@@ -1,0 +1,465 @@
+\documentclass{article}
+
+\input{header}
+
+
+\begin{document}
+\title{Programming Paradigms 
+\\
+Ex. 3: Imperative Programming}
+\author{\courseinfo}
+\date{}
+
+\maketitle
+\mycomment{
+\paragraph{Submission}
+XXX
+We will use the  Fire lab report system (\textsf{http://fire.cs.chalmers.se}) 
+for
+handling submissions and grades. Before you can submit your answers,
+you need to register in the Fire system: team up with one more student and 
+register your  group (see ``Documentation for students'' on
+the webpage of Fire). Note that the system is not yet accessible for
+our course, but is expected to be so later next week.
+
+
+Submit your answers (one per pair of students)
+electronically before the deadline.
+%
+\textit{To pass the course, you must pass 25\% of all problems on \textbf{this}
+sheet and 50\% of all problems total. For some problems, you may earn
+extra points.}
+
+\begin{center}
+\fbox{Deadline: Thursday, Nov. 8, 2007 XXX, midnight (Swedish time).}
+\end{center}
+%
+The deadline is not extensible. 
+
+\paragraph{Academic integrity} is important. If you submit solutions that
+are not your own, we hand the case over to the Chalmers officials, as specified
+here 
+\begin{center}
+\textsf{http://www.chalmers.se/en/sections/education/current\_students/}\\
+\textsf{\-joint\_rules\_and\_dire/rules\_of\_discipline} (English) 
+%
+and \\
+%
+\textsf{http://www.chalmers.se/sections/ar\_student/regler\_och\_riktlinje/disciplinstadga}(Swedish).
+\end{center}
+
+\paragraph{Help} Don't hesitate to ask for help!
+The course assistants are 
+Gustav Munkby and Jean-Philippe Bernardy.
+You can reach them at the following email addresses:
+%
+\begin{center} 
+\textsf{gustav.munkby-at-chalmers.se}  and 
+\textsf{bernardy-at-chalmers.se} 
+\end{center} 
+%
+(replace ``-'' by  ``.'', and ``at'' by the at-sign).
+
+
+\newpage
+}
+
+\section{Hello, Fortress [25p]}
+Among the recent languages is the language 
+ \textsf{Fortress}, developed by Sun within
+the \textsf{High Productivity Computer Systems (HPCS)} competition
+by the US goverment.
+It is a general-purpose language but has features---built-in support
+for parallelism, for example---that make it interesting for 
+ scientific computing and high-performance computations.
+Although \textsf{Fortress} has been around for a few years, its 
+specification (v.1.0) has been published only this year.
+The purpose of this exercise is to expose you to language
+specifications (and the challenges of language development).
+As example, we use  a 
+method from one of the
+Fortress tutorials for computing the conjugate gradient: 
+%
+
+
+\begin{java}
+//Fortress Programming Language Tutorial, PLDI, 11 June 2006 31 
+// © 2006 Sun Microsystems, Inc. All rights reserved. 
+// Simple Example: NAS CG Kernel (ASCII) 
+conjGrad[\Elt extends Number, nat N,Mat extends Matrix[\Elt,N BY N\],
+          Vec extends Vector[\Elt,N\]\](A: Mat, x: Vec): (Vec, Elt) = do
+   cgit_max = 25
+   z: Vec = 0
+   r: Vec = x
+   p: Vec = r
+   rho: Elt = r^T r
+   for j <- seq(1:cgit_max) do
+     q = A p
+     alpha = rho / p^T q
+     z := z + alpha p
+     r := r - alpha q
+     rho0 = rho
+     rho := r^T r
+     beta = rho / rho0
+     p := r + beta p
+   end
+  (z, ||x - A z||)
+end
+
+(z,norm) = conjGrad(A,x) 
+\end{java}
+
+Download the current language specification and answer the
+following questions:
+\begin{enumerate}
+\item What is the difference between the \textit{reach} and the
+\textit{scope} of a declaration? Look up the language specification, then give
+a definition in your own words. Use the \textsf{conjGrad}
+example above to illustrate the
+two terms.
+
+\item Explain the difference of the following five variable
+declarations in terms of mutability and initialization and, again,
+use the \textsf{conjGrad} example above for illustration:
+\[
+\begin{array}{l}
+x = e \\
+x: T = e  \\
+\mbox{var\ } x: T = e\\
+\mbox{var?\ } x: T := e\\
+(x,y) = (e,f)
+\end{array}
+\]
+
+\mycomment{
+\[
+\begin{array}{l}
+\pi = 3.14 \\
+\rho: \mbox{Float} = r^\pi  \\
+\mbox{var\ } x: \mbox{Double} = 5.555 \\
+\mbox{var?\ } x: \mbox{Double} := 5.555\\
+(x,y) = (1,2)
+\end{array}
+\]
+}
+\item Consider the signature of the method \textsf{conjGrad}, which
+consists of 3 parameter lists, namely [...], (..), and (..). Which part
+refers to program parameters that can be passed at run time?
+Which parameter-passing mechanism(s) does \textsf{Fortress}
+support, and if there is more than one,  which one applies here?
+Back your answer with a reference to the language specification
+so that we know that you are not just guessing. 
+
+\item For-loops in Fortress are specified as follows (13.5):
+\begin{quote}
+A \textsf{for} loop consists of \textsf{for} followed by a generator 
+clause list (discussed in Section 13.14), followed by a non-parallel 
+do expression (the loop body; see Section 13.11). 
+Parallelism in \textsf{for} loops is specified by the generators 
+used (see Section 13.14); in general the programmer must assume that 
+each loop iteration will occur independently 
+in parallel unless every generator is explicitly sequential. 
+For each iteration, the body expression is evaluated in the 
+scope of the values bound by the generators. The value and type of a 
+\textsf{for} loop is () . 
+
+\end{quote}
+Explain how the \textsf{for}-loop in the \textsf{conjGrad} method
+works: what is the ``generator clause list''; what is the generator;
+what does it mean that ``the body expression is evaluated in the scope of
+the values bound by the generators''; and in which
+order are values generated? 
+
+
+
+%http://projectfortress.sun.com/Projects/Community/wiki/FortressLanguageSpecificationErrata
+\end{enumerate}
+
+Hint: for most answers, you should consult part II of the language specification (``Fortress for application programmers'').
+
+\paragraph{Further reading}
+\begin{itemize}
+\item The main project page: \\
+\url{http://projectfortress.sun.com/Projects/Community}
+\item The language specification:
+\url{
+http://projectfortress.sun.com/Projects/Community/browser/trunk/Specification/fortress.1.0.pdf}
+\end{itemize}
+
+\newpage
+\section{Parameter passing [25p]}
+\begin{enumerate}
+\item For each mechanism of parameter passing, determine the final
+values of the array \textsf{A} after the call to \textsf{f}. 
+
+\begin{java}
+void f(int x, int y) {
+    x = 1;
+    y = 3;
+}
+
+int[] A = new int[2];
+A[0] = 0;
+A[1] = 2;
+f(A[0],A[A[0]]);
+\end{java}
+\item An important question of call-by-result, which was not discussed in
+class, is the question \textit{when} the lvalue of the actual parameter is 
+computed. One might expect that this happens before the callee executes,
+but that is not necessarily the case---since the value of the actual
+parameter is not needed until the 
+callee returns, its computation could be delayed until the value is needed.
+Ada, for example,  supports early lvalue-computation, while Algol-W implements
+late lvalue-computation.
+
+Use the snippet below to explain the difference between early and late
+lvalue-computation.
+\begin{java}
+void f(int [] A) {
+   int i = 0;
+   g(i, A[i]);
+}
+void g(by-reference int i, by-result int j) {
+   j = 2;
+   i = 1;
+   j = 3;
+}
+\end{java}
+
+% When does C\# perform the lvalue-computation for its by-result parameters?
+
+\item Another important detail of call-by-result and call-by-value-result concerns
+the order in which the final values of the formal parameter are written back
+to the actual parameters. For a binary method \textsf{f(x,y)}, for
+example, either (the value of) \textsf{x} or (the value of) 
+\textsf{y} is written back
+first; this order might make a difference. 
+
+Write two methods \textsf{f,g} (in pseudo-code,
+if you wish) that demonstrate the difference.
+\end{enumerate}
+
+\newpage
+\section{Activation records and scoping [25p]}
+The \textit{scope} of a variable declaration refers to the range of
+statements in which the variable can be referenced. 
+\begin{itemize}
+\item In \textit{static scoping}, the use of a variable $y$ in
+a subprogram $f$ refers to the declaration of $y$ at the beginning of $f$ 
+or, if not
+declared there, to the declaration of $y$ in the subprogram $g$ 
+whose declaration
+contains the declaration of $f$, and so on. The static scope, thus,
+is a property of the program text and can be determined at compile time.
+\item In \textit{dynamic scoping}, on the other hand, 
+the scope depends on the call sequence of
+subroutines: the use of a variable refers to the declaration in 
+the nearest caller (``dynamic parent'').
+\end{itemize}
+Java, C, \Cpp, C\#, and most other
+ languages support static scoping. The language Perl is special
+since it gives the user control over  scoping: 
+variables declared as \textsf{`my'} are statically scoped, 
+variables declared as \textsf{'local'} are dynamically scoped.  
+
+\mycomment{
+In this exercise, the question is: given a particular  use of
+a variable, how does the run-time system know which declaration that 
+variable refers to? As discussed in class, activation records contain
+only two kinds of internal information: the return address and the previous
+activation record. This does not suffice for languages with
+static scoping and \textit{non-local variable references}.
+}
+
+\begin{enumerate}
+\item What is the effect of static and dynamic scoping?
+Consider the Perl program below and vary  between 
+\textsf{my} and \textsf{local}
+for the three
+declarations of $x$. When, if at all, does the value $x=2$ get printed?
+When $x=4.14$ or $x=56$ (if at all)? 
+(Hint: Perl is installed on (almost) all machines; you can run
+the program.)
+\item In dynamic scoping, it is easy for the run-time system
+to determine which declaration
+the use of a variable refers to. Explain. (Hint: run-time
+stack)
+\item \textbf{[3 Bonuspoints]} Static scoping with non-local references, on the other hand,
+is not so easy to implement. In particular, the kind of 
+activation records discussed in class (which contain
+only two kinds of internal information: the return address and the previous
+activation record) does not suffice. 
+%
+
+What information would be necessary and where could it be stored? 
+Make a suggestion  and 
+sketch a (simple) algorithm that takes a run-time stack and an activation record,
+and returns the ``right'' reference (or at least its activation record).
+How expensive is your algorithm? Determine the parameters on which its
+cost depends and give the cost of the algorithm.
+\end{enumerate}
+
+
+\begin{perl}
+ sub outer {
+   my $x = 0;
+
+   sub r(){
+       $x = $x + 1; 
+       print("In subroutine r, x = ", $x);
+   }
+   sub q() {
+      my $x = 3.14; 
+      &r;      # call outer's subroutine r
+   }
+   sub p() {
+      my $x = 55; 
+      &q;      # call outer's subroutine q
+   } 
+   &p;         # call subroutine p
+}
+
+&outer;
+\end{perl}
+
+\newpage
+\section{Duff's device [25p]}
+Duff's device is an optimization idiom for serial copies 
+in the language C. The fragment below lists first the original code,
+then Duff's optimization.
+\begin{cplus}
+/* (Almost) original code */
+int main() {
+   register short *to, *from;
+   register int count;	
+   ... 
+   {
+     /* pre: count > 0 */		
+     do
+	  *to++ = *from++;		
+     while(--count>0);	
+   }
+   return 0; 
+}
+
+\end{cplus}
+
+\begin{cplus}
+/* Duff's transformation */
+int main() {
+  register short *to, *from;
+  register int count;	
+  ...
+  {
+     /* pre: count > 0 */		
+     int n = (count + 7) / 8;
+     switch(count % 8){
+       case 0:	do{	*to++ = *from++;
+       case 7:	        *to++ = *from++;
+       case 6:	        *to++ = *from++;
+       case 5:	        *to++ = *from++;
+       case 4:	        *to++ = *from++;
+       case 3:	        *to++ = *from++;
+       case 2:	        *to++ = *from++;
+       case 1:	        *to++ = *from++;
+                } while (--n > 0);
+     }
+  }
+  return 0;
+}
+\end{cplus}
+Your task
+\begin{enumerate}
+%\item Explain pointer variables in terms of r-values and l-values: what is the r-value of a pointer?
+\item What happens in the assignment ``\textsf{*to++ = *from++;}''?  Explain. 
+\item Look up the storage class \textsf{register}. Furthermore, 
+look up what the   \textsf{switch} statement does (preferably
+in the language specification) and briefly
+explain the second program.
+\item Why did Duff expect the second program to be faster? Speculate and
+give a brief answer.
+\end{enumerate}
+
+\paragraph{Further reading}
+\begin{itemize}
+\item For the original email in which Tom Duff presented his ``device'',
+see 
+
+\textsf{http://www.lysator.liu.se/c/duffs-device.html}
+\item The specification of the C language is available at 
+
+\textsf{http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf}
+\item Check the generated code yourself: compile it
+with \textsf{gcc -S $<$filename$>$}.
+\end{itemize}
+\end{document}
+\section{Answers (sketches)}
+
+
+
+\section*{Fortress}
+\begin{enumerate}
+\item Reach vs. scope: language spec, section 7.3
+\item Variable declarations: 8.2
+\item Parameter passing: call-by-value, 13.6
+\item For-loops: 13.4
+\end{enumerate}
+
+\section*{Parameter passing}
+\begin{enumerate}
+\item Elements in A
+
+\begin{tabular}{lll}
+               & A[0] & A[1] \\
+ by-reference  & 3    & 2    \\
+by-value        & 0   & 2   \\
+by-result      &  3 (1) & 2 (3);  depends on order, see next problem \\
+by-value-result & 1 & 3 \\
+by-name      & 1 & 3  \\
+\end{tabular}
+\item Early/late:
+
+\begin{tabular}{lll}
+               & A[0] & A[1] \\
+early          & 3    & ? \\
+late       & ?   & 3   \\
+middle     &    & \\
+\end{tabular}
+\item Order:
+\begin{java}
+int f(int x, int y) {
+    x = 4;
+    y = 5;
+}
+int a=3;
+p(a,a); 
+\end{java}
+
+\end{enumerate}
+
+\section*{Scoping}
+\begin{enumerate}
+\item Scoping declaration in outer/p/q
+\begin{itemize}
+\item my/my/my  or local/my/my -$>$ x=1
+\item local/local/local or local/my/local -$>$ x =4.14
+\item local/local/my -$>$ x=55
+\end{itemize}
+\item Traverse the run-time stack, take the first declaration encountered.
+\item (Not-constant solution:) Include in the activation record a 
+``static link'' (a.k.a. access links), then follow the link to the
+static parent. For a solution in constant time: compute the
+``static distance'' between a variable definition and a variable
+reference; jump to the definition in constant time.
+\end{enumerate}
+
+\section*{Duff's device}
+\begin{enumerate}
+\item A pointer is variable whose r-value is a l-value
+\item ``register'' is implementation-dependent; the switch statement
+is infamous because only an explicit ``break'' returns from the 
+switch. Without ``break'', execution continues through all remaining cases.
+\item Suspected optimization: loop unrolling 
+\end{enumerate}
+
+\end{document}
