@@ -1,5 +1,4 @@
 import ParserLibrary
--- import Calculator hiding (symbol)
 import Test.QuickCheck
 import Monad
 import Data.Char
@@ -24,9 +23,13 @@ string = stringP True
 
 paren x = "(" ++ x ++ ")"
 
--- QC
+-- Parser:
 
-sexp = error "fill this is"
+sexp = error "fill this"
+
+
+-- Tests
+
 
 arbitraryChar = elements (['a'..'z']++['0'..'9'])
 arbitraryString = oneof [return [], liftM2 (:) arbitraryChar arbitraryString]
