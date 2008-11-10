@@ -125,8 +125,9 @@ The type is:
 \end{pboxed}
 \)\par\noindent\endgroup\resethooks
 
-This type represents a tranformation from input (to be parsed) to list of all possible
-results paired with the remaining of the input.
+This type represents a transformation from input (to be parsed) to list of all possible
+parses, where each parse is described by a tuple containing the transformed value of the
+initial part paired with the remaining input.
 
 \answer{1}
 
@@ -458,6 +459,18 @@ Questions?
 \>[B]{}\Varid{some'}\;\Varid{p}\mathrel{=}\Varid{value}\;(\mathbin{:})\mathbin{@@}\Varid{p}\mathbin{@@}\Varid{many'}\;\Varid{p}{}\<[E]%
 \\
 \>[B]{}\Varid{many'}\;\Varid{p}\mathrel{=}(\Varid{value}\;[\mskip1.5mu \mskip1.5mu]\mathbin{\#\#}\Varid{fails}\;\Varid{p})\mathbin{|||}\Varid{some'}\;\Varid{p}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mbox{\onelinecomment  Q 8}{}\<[E]%
+\\
+\>[B]{}\Varid{f}\mathbin{<\$>}\Varid{p}\mathrel{=}\Varid{value}\;\Varid{f}\mathbin{@@}\Varid{p}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mbox{\onelinecomment  The idea is to put the resulf of the parsing in a list and use}{}\<[E]%
+\\
+\>[B]{}\mbox{\onelinecomment  foldl to apply the operator with left associativity}{}\<[E]%
+\\
+\>[B]{}\Varid{chainl1}\mathbin{::}\Conid{Parser}\;\Varid{b}\to (\Varid{a}\to \Varid{a}\to \Varid{a})\to \Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{chainl1}\;\Varid{parseOp}\;\Varid{op}\;\Varid{el}\mathrel{=}\Varid{foldl1}\;\Varid{op}\mathbin{<\$>}((\mathbin{:})\mathbin{<\$>}\Varid{el}\mathbin{@@}\Varid{many}\;(\Varid{parseOp}\mathbin{\$\$}\Varid{el})){}\<[E]%
 \ColumnHook
 \end{pboxed}
 \)\par\noindent\endgroup\resethooks

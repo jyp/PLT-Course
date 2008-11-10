@@ -31,8 +31,9 @@ The type is:
 type Parser a = String -> [(a,String)]
 \end{code}
 
-This type represents a tranformation from input (to be parsed) to list of all possible
-results paired with the remainder of the input.
+This type represents a transformation from input (to be parsed) to list of all possible
+parses, where each parse is described by a tuple containing the transformed value of the
+initial part paired with the remaining input.
 
 \answer{1}
 
