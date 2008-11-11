@@ -1,0 +1,274 @@
+\documentclass{article}
+\usepackage{fancyvrb,hyperref,listings}
+
+\newcommand{\Cpp}{C\kern-0.05em\texttt{+\kern-0.03em+}}
+\newcommand{\cpp}{\Cpp}
+\newcommand{\mycomment}[1]{}
+
+\lstset{language=java,basicstyle=\small}
+\lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
+\lstnewenvironment{java}
+    {\lstset{language=java,frame=tb}}
+    {}
+\lstnewenvironment{java2}
+    {\lstset{language=java}}
+    {}
+\lstnewenvironment{cplus}
+    {\lstset{language=c++,frame=tb}}
+    {}
+\lstnewenvironment{cplus2}
+    {\lstset{language=c++}}
+    {}
+\lstnewenvironment{perl}
+    {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip,frame=tb}}
+    {}
+
+\newcommand{\percent}[1]{\protect \marginpar[l]{\bf [#1 points]}}
+\newcounter{question}
+\newenvironment{question}[1]{
+  \addtocounter{question}{1}
+  \paragraph{Exercise~\arabic{question}  \percent{#1}}
+}{
+  \vfil
+}
+
+\begin{document}
+
+\title{Exercises on Imperative Programming\\
+  \large Programming Paradigms}
+\author{Sibylle Schupp}
+\maketitle
+
+
+\section{Parameter passing \percent{25}}
+
+\begin{question}{X}{
+For each of the six parameter passing mechanisms discussed in class,
+determine the final values of the array \textsf{A} after the call
+to \textsf{f}. 
+
+\vfil\noindent\begin{minipage}[b]{0.5\linewidth}
+\begin{java}
+void f(int x, int y) {
+    x = 1;
+    y = 3;
+}
+\end{java}%
+\end{minipage}%
+\begin{minipage}[b]{0.5\linewidth}
+\begin{java}
+int[] A = new int[2];
+A[0] = 0;
+A[1] = 2;
+f(A[0],A[A[0]]);
+\end{java}%
+\end{minipage}%
+\end{question}
+
+\begin{question}{X}{
+An important question of call-by-result, which was not discussed in
+class, is the question \textit{when} the lvalue of the actual parameter is 
+computed. One might expect that this happens before the callee executes,
+but that is not necessarily the case---since the value of the actual
+parameter is not needed until the 
+callee returns, its computation could be delayed until the value is needed.
+Ada, for example,  supports early lvalue-computation, while Algol-W implements
+late lvalue-computation.
+
+Use the snippet below to explain the difference between early and late
+lvalue-computation.
+\vfil\noindent\begin{minipage}[b]{0.45\linewidth}
+\begin{java}
+void f(int [] A) {
+   int i = 0;
+   g(i, A[i]);
+   // What happens to i and A?
+}
+
+\end{java}%
+\end{minipage}%
+\begin{minipage}[b]{0.55\linewidth}
+\begin{java}
+void g(by-reference int i, by-result int j) {
+   j = 2;
+   i = 1;
+   j = 3;
+}
+\end{java}%
+\end{minipage}%
+\end{question}
+
+%\begin{question}{X}{
+% When does C\# perform the lvalue-computation for its by-result parameters?
+%\end{question}
+
+\begin{question}{X}{
+Another important detail of call-by-result and call-by-value-result concerns
+the order in which the final values of the formal parameter are written back
+to the actual parameters. For a binary method \textsf{f(x,y)}, for
+example, either (the value of) \textsf{x} or (the value of) 
+\textsf{y} is written back
+first; this order might make a difference. 
+
+Write two methods \textsf{f,g} (in pseudo-code,
+if you wish) that demonstrate the difference.
+\end{question}
+
+
+\section{Activation records and scoping \percent{25}}
+The \textit{scope} of a variable declaration refers to the range of
+statements in which the variable can be referenced. 
+\begin{itemize}
+\item In \textit{static scoping}, the use of a variable $y$ in
+a subprogram $f$ refers to the declaration of $y$ at the beginning of $f$ 
+or, if not
+declared there, to the declaration of $y$ in the subprogram $g$ 
+whose declaration
+contains the declaration of $f$, and so on. The static scope, thus,
+is a property of the program text and can be determined at compile time.
+\item In \textit{dynamic scoping}, on the other hand, 
+the scope depends on the call sequence of
+subroutines: the use of a variable refers to the declaration in 
+the nearest caller (``dynamic parent'').
+\end{itemize}
+Java, C, \Cpp, C\#, and most other
+ languages support static scoping. The language Perl is special
+since it gives the user control: 
+variables declared as \textsf{`my'} are statically scoped, 
+variables declared as \textsf{'local'} are dynamically scoped.  
+
+\mycomment{
+In this exercise, the question is: given a particular  use of
+a variable, how does the run-time system know which declaration that 
+variable refers to? As discussed in class, activation records contain
+only two kinds of internal information: the return address and the previous
+activation record. This does not suffice for languages with
+static scoping and \textit{non-local variable references}.
+}
+
+\begin{question}{X}
+  What is the effect of static and dynamic scoping? Consider the Perl
+  program below and vary between \textsf{my} and \textsf{local} for the
+  three declarations of $x$. When, if at all, does the value $x=2$ get
+  printed? When $x=4.14$ or $x=56$ (if at all)?
+\end{question}
+
+\paragraph{Hint:}
+Perl is installed on (almost) all machines; you can run the program.
+
+\begin{question}{X}
+  In dynamic scoping, it is easy for the run-time system to determine
+  which declaration the use of a variable refers to. Explain using the
+  run-time stack.  
+\end{question}
+
+\mycomment{
+Static scoping with non-local references, on the other hand,
+is not so easy to implement. In particular, the kind of 
+activation records discussed in class (which contain
+only two kinds of internal information: the return address and the previous
+activation record) does not suffice. 
+%
+
+What information would be necessary and where could it be stored? 
+Make a suggestion  and 
+sketch a (simple) algorithm that takes a run-time stack and an activation record,
+and returns the ``right'' reference (or at least its activation record).
+How expensive is your algorithm? Determine the parameters on which its
+cost depends and give the cost of the algorithm.
+}
+
+\begin{perl}
+ sub outer {
+   my $x = 0;
+
+   sub r(){
+       $x = $x + 1; 
+       print("In subroutine r, x = ", $x);
+   }
+   sub q() {
+      my $x = 3.14; 
+      &r;      # call outer's subroutine r
+   }
+   sub p() {
+      my $x = 55; 
+      &q;      # call outer's subroutine q
+   } 
+   &p;         # call subroutine p
+}
+&outer;
+\end{perl}
+\newpage 
+\section{Duff's device [25p]}
+Duff's device is an optimization idiom for serial copies 
+in the language C. The fragment below lists first the original code,
+then Duff's optimization.
+\begin{cplus}
+/* (Almost) original code */
+int main() {
+   register short *to, *from;
+   register int count;	
+   ... 
+   {
+     /* pre: count > 0 */		
+     do
+	  *to++ = *from++;		
+     while(--count>0);	
+   }
+   return 0; 
+}
+
+\end{cplus}
+
+\begin{cplus}
+/* Duff's transformation */
+int main() {
+  register short *to, *from;
+  register int count;	
+  ...
+  {
+     /* pre: count > 0 */		
+     int n = (count + 7) / 8;
+     switch(count % 8){
+       case 0:	do{	*to++ = *from++;
+       case 7:	        *to++ = *from++;
+       case 6:	        *to++ = *from++;
+       case 5:	        *to++ = *from++;
+       case 4:	        *to++ = *from++;
+       case 3:	        *to++ = *from++;
+       case 2:	        *to++ = *from++;
+       case 1:	        *to++ = *from++;
+                } while (--n > 0);
+     }
+  }
+  return 0;
+}
+\end{cplus}
+Your task
+\begin{enumerate}
+%\item Explain pointer variables in terms of r-values and l-values: what is the r-value of a pointer?
+\item What happens in the assignment ``\textsf{*to++ = *from++;}''?  Explain. 
+\item Look up the storage class \textsf{register}. Furthermore, 
+look up what the   \textsf{switch} statement does (preferably
+in the language specification) and briefly
+explain the second program.
+\item Why did Duff expect the second program to be faster? Speculate and
+give a brief answer.
+\end{enumerate}
+
+\paragraph{Further reading}
+\begin{itemize}
+\item For the original email in which Tom Duff presented his ``device'',
+see 
+
+\textsf{http://www.lysator.liu.se/c/duffs-device.html}
+\item The specification of the C language is available at 
+
+\textsf{http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf}
+\item Check the generated code yourself: compile it
+with \textsf{gcc -S $<$filename$>$}.
+\end{itemize}
+
+\vfill
+
+\end{document}
