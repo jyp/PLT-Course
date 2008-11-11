@@ -49,9 +49,13 @@
 \section{Parameter passing \percent{25}}
 
 \begin{question}{X}
-For each of the six parameter passing mechanisms discussed in class,
+For each of the following parameter passing mechanisms,
 determine the final values of the array \textsf{A} after the call
 to \textsf{f}. 
+
+Types: call-by-value, call-by-name, call-by-reference, call-by-result,
+call-by-value-result. Assume left to right evaluation of parameters
+and early lvalue computation.
 
 \vfil\noindent\begin{minipage}[b]{0.5\linewidth}
 \begin{java}
@@ -72,7 +76,6 @@ f(A[0],A[A[0]]);
 \end{minipage}
 \end{question}
 
-\begin{question}{X}
 An important question of call-by-result, which was not discussed in
 class, is the question \textit{when} the lvalue of the actual parameter is 
 computed. One might expect that this happens before the callee executes,
@@ -82,6 +85,7 @@ callee returns, its computation could be delayed until the value is needed.
 Ada, for example,  supports early lvalue-computation, while Algol-W implements
 late lvalue-computation.
 
+\begin{question}{X}
 Use the snippet below to explain the difference between early and late
 lvalue-computation.
 \vfil\noindent\begin{minipage}[b]{0.45\linewidth}
@@ -109,7 +113,6 @@ void g(by-reference int i, by-result int j) {
 % When does C\# perform the lvalue-computation for its by-result parameters?
 %\end{question}
 
-\begin{question}{X}
 Another important detail of call-by-result and call-by-value-result concerns
 the order in which the final values of the formal parameter are written back
 to the actual parameters. For a binary method \textsf{f(x,y)}, for
@@ -117,6 +120,7 @@ example, either (the value of) \textsf{x} or (the value of)
 \textsf{y} is written back
 first; this order might make a difference. 
 
+\begin{question}{X}
 Write two methods \textsf{f,g} (in pseudo-code,
 if you wish) that demonstrate the difference.
 \end{question}
@@ -153,7 +157,7 @@ activation record. This does not suffice for languages with
 static scoping and \textit{non-local variable references}.
 }
 
-\begin{question}{X}
+\begin{question}{0}
   What is the effect of static and dynamic scoping? Consider the Perl
   program below and vary between \textsf{my} and \textsf{local} for the
   three declarations of $x$. When, if at all, will $2$, $4.14$, and $56$
@@ -353,15 +357,18 @@ following questions:
 \begin{question}{X}
   What is the difference between the \textit{reach} and the
   \textit{scope} of a declaration? Look up the language specification, then give
-  a definition in your own words. Use the \textsf{conjGrad}
+  a definition in your own words (no more than 40 words). Use the \textsf{conjGrad}
   example above to illustrate the
   two terms.
-  
+\answer{
+The reach is the lexically enclosing block.
+The scope is where the declared entity can actually be used.
+  }
 \end{question}
 
 \begin{question}{X}
   
-Explain the difference of the following five variable
+Explain the difference of the following variable
 declarations in terms of mutability and initialization and, again,
 use the \textsf{conjGrad} example above for illustration:
 \[
@@ -369,19 +376,21 @@ use the \textsf{conjGrad} example above for illustration:
 x = e \\
 x: T = e  \\
 \mbox{var\ } x: T = e\\
+x: T := e\\
 (x,y) = (e,f)
 \end{array}
 \]
+
 \end{question}
 
 \begin{question}{X}
 Consider the signature of the method \textsf{conjGrad}, which
 consists of 3 parameter lists, namely [...], (..), and (..). Which part
-refers to program parameters that can be passed at run time?
+refers to program parameters that must be passed at run time?
 Which parameter-passing mechanism(s) does \textsf{Fortress}
 support, and if there is more than one,  which one applies here?
-Back your answer with a reference to the language specification
-so that we know that you are not just guessing. 
+Back your answer with a reference to the language specification.
+% so that we know that you are not just guessing, you brats.
 \end{question}
 
 \begin{question}{X}
