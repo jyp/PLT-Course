@@ -244,17 +244,29 @@ int main() {
   return 0;
 }
 \end{cplus}
-Your task
-\begin{enumerate}
-%\item Explain pointer variables in terms of r-values and l-values: what is the r-value of a pointer?
-\item What happens in the assignment ``\textsf{*to++ = *from++;}''?  Explain. 
-\item Look up the storage class \textsf{register}. Furthermore, 
-look up what the   \textsf{switch} statement does (preferably
-in the language specification) and briefly
-explain the second program.
-\item Why did Duff expect the second program to be faster? Speculate and
-give a brief answer.
-\end{enumerate}
+% Explain pointer variables in terms of r-values and l-values: what is the r-value of a pointer?
+
+\begin{question}{X}
+What happens in the assignment ``\textsf{*to++ = *from++;}''?  Explain in
+terms of pointers and values pointed to. Draw a picture if necessary.
+\end{question}
+
+Look up the storage class \textsf{register}. Furthermore, look up what
+the \textsf{switch} statement does (preferably in the language
+specification). Why isthe second program is equivalent to the first?
+
+\begin{question}{X}
+Show that the instruction \texttt{*to++ = *from++} will be executed 
+\texttt{count} times in the second program.
+\end{question}
+
+Why did Duff expect the second program to be faster?
+
+\begin{question}{X}
+  What are the instructions that are executed in the first program but
+  not in the second?
+\end{question}
+
 
 \paragraph{Further reading}
 \begin{itemize}
