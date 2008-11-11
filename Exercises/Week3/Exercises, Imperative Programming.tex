@@ -206,8 +206,8 @@ then Duff's optimization.
 \begin{cplus}
 /* (Almost) original code */
 int main() {
-   register short *to, *from;
-   register int count;	
+   short *to, *from;
+   int count;	
    ... 
    {
      /* pre: count > 0 */		
@@ -223,8 +223,8 @@ int main() {
 \begin{cplus}
 /* Duff's transformation */
 int main() {
-  register short *to, *from;
-  register int count;	
+  short *to, *from;
+  int count;	
   ...
   {
      /* pre: count > 0 */		
@@ -251,7 +251,7 @@ What happens in the assignment ``\textsf{*to++ = *from++;}''?  Explain in
 terms of pointers and values pointed to. Draw a picture if necessary.
 \end{question}
 
-Look up the storage class \textsf{register}. Furthermore, look up what
+Furthermore, look up what
 the \textsf{switch} statement does (preferably in the language
 specification). Why isthe second program is equivalent to the first?
 
