@@ -29,8 +29,12 @@
   \addtocounter{question}{1}
   \paragraph{Exercise~\arabic{question}  \percent{#1}}
 }{
-  \vfil
+  \vskip1em
 }
+\newcommand{\answer}[1]{
+  \paragraph{Answer~\arabic{question} } #1
+}
+  
 
 \begin{document}
 
@@ -249,22 +253,38 @@ int main() {
 \begin{question}{X}
 What happens in the assignment ``\textsf{*to++ = *from++;}''?  Explain in
 terms of pointers and values pointed to. Draw a picture if necessary.
+\answer{It is equivalent to \texttt{*to = from*; to++; from++;}.
+In other words, the memory pointed by \texttt{from} is copied to the memory pointed by \texttt{to}, then the pointers are incremented.
 \end{question}
 
 Furthermore, look up what
 the \textsf{switch} statement does (preferably in the language
 specification). Why isthe second program is equivalent to the first?
 
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+
 \begin{question}{X}
 Show that the instruction \texttt{*to++ = *from++} will be executed 
 \texttt{count} times in the second program.
+\answer{The while loop will be executed $\floor{(count + 7) / 8}$ times.
+Since each iteration executes the instruction 8 times, we expect the
+program to run it $8 \times \floor{(count + 7) / 8}$ times in total, which
+is up to 7 times more than count. 
+
+However, the \texttt{switch} instruction is there to skip 
+$count \bmod 8$ instructions in \emph{the first iteration}, to
+make the count exact.
+ }
 \end{question}
 
 Why did Duff expect the second program to be faster?
 
 \begin{question}{X}
   What are the instructions that are executed in the first program but
-  not in the second?
+  not in the second?  
+  
+  \answer{The jump instructions are executed only $1/8^{th}$ of the
+    time on average.}
 \end{question}
 
 
