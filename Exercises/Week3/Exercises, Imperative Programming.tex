@@ -23,13 +23,15 @@
     {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip,frame=tb}}
     {}
 
+\include{fortify-macros}
+
 \newcommand{\percent}[1]{\protect \marginpar[l]{\bf [#1 points]}}
 \newcounter{question}
-\newenvironment{question}[1]{
-  \addtocounter{question}{1}
-  \paragraph{Exercise~\arabic{question}  \percent{#1}}
-}{
-  \vskip1em
+\newenvironment{question}[1]{%
+  \addtocounter{question}{1}%
+  \paragraph{Exercise~\arabic{question}  \percent{#1}}%
+}{%
+  \vskip1em%
 }
 \newcommand{\answer}[1]{
   \paragraph{Answer~\arabic{question} } #1
@@ -46,7 +48,7 @@
 
 \section{Parameter passing \percent{25}}
 
-\begin{question}{X}{
+\begin{question}{X}
 For each of the six parameter passing mechanisms discussed in class,
 determine the final values of the array \textsf{A} after the call
 to \textsf{f}. 
@@ -57,19 +59,20 @@ void f(int x, int y) {
     x = 1;
     y = 3;
 }
-\end{java}%
-\end{minipage}%
+\end{java}
+\end{minipage}
+
 \begin{minipage}[b]{0.5\linewidth}
 \begin{java}
 int[] A = new int[2];
 A[0] = 0;
 A[1] = 2;
 f(A[0],A[A[0]]);
-\end{java}%
-\end{minipage}%
+\end{java}
+\end{minipage}
 \end{question}
 
-\begin{question}{X}{
+\begin{question}{X}
 An important question of call-by-result, which was not discussed in
 class, is the question \textit{when} the lvalue of the actual parameter is 
 computed. One might expect that this happens before the callee executes,
@@ -106,7 +109,7 @@ void g(by-reference int i, by-result int j) {
 % When does C\# perform the lvalue-computation for its by-result parameters?
 %\end{question}
 
-\begin{question}{X}{
+\begin{question}{X}
 Another important detail of call-by-result and call-by-value-result concerns
 the order in which the final values of the formal parameter are written back
 to the actual parameters. For a binary method \textsf{f(x,y)}, for
@@ -153,12 +156,33 @@ static scoping and \textit{non-local variable references}.
 \begin{question}{X}
   What is the effect of static and dynamic scoping? Consider the Perl
   program below and vary between \textsf{my} and \textsf{local} for the
-  three declarations of $x$. When, if at all, does the value $x=2$ get
-  printed? When $x=4.14$ or $x=56$ (if at all)?
+  three declarations of $x$. When, if at all, will $2$, $4.14$, and $56$
+  be printed? Explain how each value is obtained and why?
 \end{question}
 
 \paragraph{Hint:}
 Perl is installed on (almost) all machines; you can run the program.
+
+\begin{perl}
+ sub outer {
+   my $x = 0;
+
+   sub r(){
+       $x = $x + 1; 
+       print("In subroutine r, x = ", $x);
+   }
+   sub q() {
+      my $x = 3.14; 
+      &r;      # call outer's subroutine r
+   }
+   sub p() {
+      my $x = 55; 
+      &q;      # call outer's subroutine q
+   } 
+   &p;         # call subroutine p
+}
+&outer;
+\end{perl}
 
 \begin{question}{X}
   In dynamic scoping, it is easy for the run-time system to determine
@@ -182,26 +206,7 @@ How expensive is your algorithm? Determine the parameters on which its
 cost depends and give the cost of the algorithm.
 }
 
-\begin{perl}
- sub outer {
-   my $x = 0;
 
-   sub r(){
-       $x = $x + 1; 
-       print("In subroutine r, x = ", $x);
-   }
-   sub q() {
-      my $x = 3.14; 
-      &r;      # call outer's subroutine r
-   }
-   sub p() {
-      my $x = 55; 
-      &q;      # call outer's subroutine q
-   } 
-   &p;         # call subroutine p
-}
-&outer;
-\end{perl}
 \newpage 
 \section{Duff's device [25p]}
 Duff's device is an optimization idiom for serial copies 
@@ -253,8 +258,10 @@ int main() {
 \begin{question}{X}
 What happens in the assignment ``\textsf{*to++ = *from++;}''?  Explain in
 terms of pointers and values pointed to. Draw a picture if necessary.
-\answer{It is equivalent to \texttt{*to = from*; to++; from++;}.
-In other words, the memory pointed by \texttt{from} is copied to the memory pointed by \texttt{to}, then the pointers are incremented.
+\answer{
+  It is equivalent to \texttt{*to = from*; to++; from++;}.
+  In other words, the memory pointed by \texttt{from} is copied to the memory pointed by \texttt{to}, then the pointers are incremented.
+}
 \end{question}
 
 Furthermore, look up what
@@ -300,6 +307,105 @@ see
 \item Check the generated code yourself: compile it
 with \textsf{gcc -S $<$filename$>$}.
 \end{itemize}
+
+
+\section{Hello, Fortress \percent{25}}
+Among the recent languages is the language \textsf{Fortress}, developed
+by Sun within the \textsf{High Productivity Computer Systems (HPCS)}
+competition by the US goverment. It is a general-purpose language but has
+features---built-in support for parallelism, for example---that make it
+interesting for scientific computing and high-performance computations.
+Although \textsf{Fortress} has been around for a few years, its
+specification (v.1.0) has been published only this year. The purpose of
+this exercise is to expose you to language specifications (and the
+challenges of language development). As example, we use a method from one
+of the Fortress tutorials for computing the conjugate gradient:
+%
+
+\begin{Fortress}
+\(\VAR{conjGrad}\llbracket\,\null\)\pushtabs\=\+\(\TYP{Elt} \KWD{extends}\:\TYP{Number}, \KWD{nat}\:N,\)\\
+\(          \TYP{Vec} \KWD{extends}\:\TYP{Vector}\llbracket\TYP{Elt},N\rrbracket,\)\\
+\(          \TYP{Mat} \KWD{extends}\:\TYP{Matrix}\llbracket\TYP{Elt},N,N\rrbracket\rrbracket\)\-\\\poptabs
+{\tt~~~~~~~~}\pushtabs\=\+\(        (A\COLON \TYP{Mat}, x\COLON \TYP{Vec})\COLON (\TYP{Vec}, \TYP{Elt}) = \;\KWD{do}\)\-\\\poptabs
+{\tt~~}\pushtabs\=\+\(  \VAR{cgit{\tt\_}max} = 25\)\\
+\(  z\COLON \TYP{Vec} \ASSIGN x.\VAR{replica}\llbracket\TYP{Elt}\rrbracket().\VAR{fill}(0)\)\\
+\(  r\COLON \TYP{Vec} \ASSIGN x\)\\
+\(  p\COLON \TYP{Vec} \ASSIGN r\)\\
+\(  \rho{}\COLON \TYP{Elt} \ASSIGN r \cdot r\)\\
+\(  \KWD{for}\:j \leftarrow \VAR{seq}(1\mathinner{\hbox{\tt\char'43}}\VAR{cgit{\tt\_}max}) \KWD{do}\)\\
+{\tt~~}\pushtabs\=\+\(    q = A\:p\)\\
+\(    \alpha{} = \rho{} / (p \cdot q)\)\\
+\(    z \mathrel{+}= \alpha{}\:p\)\\
+\(    \rho{}_{0} = \rho{}\)\\
+\(    r \mathrel{-}= \alpha{}\:q\)\\
+\(    \rho{} \ASSIGN r \cdot r\)\\
+\(    \beta{} = \rho{} / \rho{}_{0}\)\\
+\(    p \ASSIGN r + \beta{}\:p\)\\
+\(    \VAR{println}(\hbox{\rm``\STR{Iter~}''}\;\;j\;\;\hbox{\rm``\STR{~alpha~=~}''}\;\;\alpha{} //\;\;\hbox{\rm``\STR{z}''}\;\;z)\)\-\\\poptabs
+\(  \KWD{end}\)\\
+\(  (z, \left\|x - A\:z\right\|)\)\-\\\poptabs
+\(\KWD{end}\)
+\end{Fortress}
+
+
+Download the current language specification and answer the
+following questions:
+\begin{question}{X}
+  What is the difference between the \textit{reach} and the
+  \textit{scope} of a declaration? Look up the language specification, then give
+  a definition in your own words. Use the \textsf{conjGrad}
+  example above to illustrate the
+  two terms.
+  
+\end{question}
+
+\begin{question}{X}
+  
+Explain the difference of the following five variable
+declarations in terms of mutability and initialization and, again,
+use the \textsf{conjGrad} example above for illustration:
+\[
+\begin{array}{l}
+x = e \\
+x: T = e  \\
+\mbox{var\ } x: T = e\\
+(x,y) = (e,f)
+\end{array}
+\]
+\end{question}
+
+\begin{question}{X}
+Consider the signature of the method \textsf{conjGrad}, which
+consists of 3 parameter lists, namely [...], (..), and (..). Which part
+refers to program parameters that can be passed at run time?
+Which parameter-passing mechanism(s) does \textsf{Fortress}
+support, and if there is more than one,  which one applies here?
+Back your answer with a reference to the language specification
+so that we know that you are not just guessing. 
+\end{question}
+
+\begin{question}{X}
+For-loops in Fortress are specified as follows (13.5):
+\begin{quote}
+A \textsf{for} loop consists of \textsf{for} followed by a generator 
+clause list (discussed in Section 13.14), followed by a non-parallel 
+do expression (the loop body; see Section 13.11). 
+Parallelism in \textsf{for} loops is specified by the generators 
+used (see Section 13.14); in general the programmer must assume that 
+each loop iteration will occur independently 
+in parallel unless every generator is explicitly sequential. 
+For each iteration, the body expression is evaluated in the 
+scope of the values bound by the generators. The value and type of a 
+\textsf{for} loop is () . 
+
+\end{quote}
+Explain how the \textsf{for}-loop in the \textsf{conjGrad} method
+works: what is the ``generator clause list''; what is the generator;
+what does it mean that ``the body expression is evaluated in the scope of
+the values bound by the generators''; and in which
+order are values generated? 
+
+\end{question}
 
 \vfill
 
