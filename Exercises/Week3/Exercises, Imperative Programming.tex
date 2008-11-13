@@ -27,7 +27,7 @@
 }
 \newcommand{\answer}[1]{
   % Only for solution...
-  % \paragraph{Answer~\arabic{question} } #1
+  \paragraph{Answer~\arabic{question} } #1
 }
   
 
@@ -350,14 +350,25 @@ Explain the difference of the following variable
 declarations in terms of mutability and initialization and, again,
 use the \textsf{conjGrad} example above for illustration:
 \[
-\begin{array}{c}
+\begin{tabular}{c}
 x = e \\
 x: T = e  \\
 \mbox{var\ } x: T = e\\
 x: T := e\\
 (x,y) = (e,f)
-\end{array}
+\end{tabular}
 \]
+\answer{
+  \begin{tabular}{ll}
+    mutable & initial value \\
+    \hline
+    no      & e             \\
+    no      & e             \\
+    yes     & e             \\
+    yes     & e             \\
+    no      & respectively e f
+  \end{tabular}
+}
 \end{question}
 
 \begin{question}{1}
@@ -365,12 +376,17 @@ Consider the signature of the method \textsf{conjGrad}, which consists of
 three parameter lists, namely $\llbracket\ldots\rrbracket$, $(\ldots)$,
 and $(\ldots)$. Which part refers to program parameters that must be
 passed at run time?
+\answer{($A$:Mat, $x$:Vec)}
+
 \end{question}
 
 \begin{question}{1}
 Which parameter-passing mechanism(s) does \textsf{Fortress} support, and
 if there is more than one, which one applies here? Back your answer with
 a reference to the language specification.
+\answer{
+call-by-value, 13.6
+}
 \end{question}
 
 For-loops in Fortress are specified as follows (13.5):
@@ -393,7 +409,19 @@ works: what is the ``generator clause list''; what is the generator;
 what does it mean that ``the body expression is evaluated in the scope of
 the values bound by the generators''; and in which
 order are values generated? 
-
+\answer{
+Reading section 13.15.
+\begin{itemize}
+\item Generator clause list: $j \leftarrow seq(1 \# mbox{\
+    cgit\_max})$ (there is only one generator in the list in this
+  case).
+  \item Generator: $j \leftarrow seq(1\#\mbox{cgit\_max})$
+  \item ``The body expression is evaluated in the scope of the values
+    bound by the generators'' means that $j$ can be used in the body of
+    the loop.
+  \item In which order are values generated? Sequentially. See the $seq$ (explained in 13.14).
+\end{itemize}
+}
 \end{question}
 
 \paragraph{Further reading}
