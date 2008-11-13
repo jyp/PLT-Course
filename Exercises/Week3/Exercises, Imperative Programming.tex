@@ -25,10 +25,8 @@
 }{%
   \vskip1em%
 }
-\newcommand{\answer}[1]{
-  % Only for solution...
-  % \paragraph{Answer~\arabic{question} } #1
-}
+\newenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
+\newcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
   
 
 \begin{document}
@@ -64,6 +62,16 @@ A[1] = 2;
 f(A[0],A[A[0]]);
 \end{java}%
 \end{minipage}%
+\answer{
+  \begin{tabular}[t]{lll}
+                   & A[0] & A[1] \\
+   by-reference    & 3    & 2    \\
+   by-value        & 0    & 2    \\
+   by-result       & 3    & 2    \\
+   by-value-result & 1    & 3    \\
+   by-name         & 1    & 3    \\
+  \end{tabular}
+}%
 \end{question}
 
 An important question of call-by-result, which was not discussed in
@@ -97,6 +105,13 @@ void g(by-reference int i, by-result int j) {
 }
 \end{java}%
 \end{minipage}%
+\answer{
+  \begin{tabular}[t]{lll}
+            & A[0] & A[1] \\
+    early   & 3    & ?    \\
+    late    & ?    & 3    \\
+  \end{tabular}
+}%
 \end{question}
 
 %\begin{question}{X}{
@@ -113,6 +128,25 @@ first; this order might make a difference.
 \begin{question}{2}
 Write (in pseudo-code, if you wish) a function \textsf{f} that calls a
 function \textsf{g} to demonstrate the difference.
+\begin{longanswer}
+See the following example:\\
+\vfil\noindent\begin{minipage}[b]{0.5\linewidth}
+\begin{java}
+void f(int x, int y) {
+  x = 4;
+  y = 5;
+}
+\end{java}%
+\end{minipage}%
+\begin{minipage}[b]{0.5\linewidth}%
+\begin{java}
+void g() {
+  int a=3;
+  f(a,a); 
+}
+\end{java}%
+\end{minipage}%
+\end{longanswer}%
 \end{question}
 
 
@@ -136,7 +170,10 @@ the nearest caller (``dynamic parent'').
 \begin{question}{3}
   In dynamic scoping, it is easy for the run-time system to determine
   which declaration the use of a variable refers to. Explain using the
-  run-time stack.  
+  run-time stack.
+\answer{
+  Traverse the run-time stack, take the first matching declaration encountered.
+}
 \end{question}
 
 Static scoping with non-local references, on the other hand, is not so
@@ -150,6 +187,14 @@ What additional information is necessary and where could it be stored?
 Make a suggestion and sketch a (simple) algorithm that takes a
 run-time stack and an activation record, and returns the ``right''
 reference (or at least its activation record).
+\answer{
+Include in the activation record a  ``static link'' (a.k.a. access links),
+then follow the link to the static parent, and find a matching declaration
+as in the dynamic case.
+
+For a solution in constant time: compute the ``static distance'' between
+a variable definition and a variable reference.
+}%
 \end{question}
 
 Java, C, \Cpp, C\#, and most other languages support static scoping. The
@@ -162,6 +207,16 @@ declared as \textsf{`my'} are statically scoped, variables declared as
   program below and vary between \textsf{my} and \textsf{local} for the
   three declarations of $x$. When, if at all, will $2$, $4.14$, and $56$
   be printed? Explain how each value is obtained and why?
+\answer{
+  Pattern matching on the modifiers:\\
+  \begin{tabular}{ll}
+    outer/p/q      & result   \\ \hline
+    */my/my        & $x=1$    \\
+    local/*/local  & $x=4.14$ \\
+    local/local/my & $x=55$   \\
+    */*/*          & error
+  \end{tabular}
+}
 \end{question}
 
 \paragraph{Hint:}
@@ -251,14 +306,14 @@ Furthermore, look up what the \textsf{switch} statement does (preferably
 in the language specification). Why is the second program is equivalent
 to the first?
 
-\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
 
 \begin{question}{2}
 Show that the instruction ``\texttt{*to++ = *from++}'' will be executed 
 \texttt{count} times in the second program.
-\answer{The while loop will be executed $\ceil{count / 8}$ times.
+\answer{The while loop will be executed $\floor{(count + 7) / 8}$ times.
 Since each iteration executes the instruction 8 times, we expect the
-program to run it $8 \times \ceil{count / 8}$ times in total, which
+program to run it $8 \times \floor{(count + 7)/ 8}$ times in total, which
 is up to 7 times more than count. 
 
 However, the \texttt{switch} instruction is there to skip 
@@ -273,8 +328,8 @@ Why did Duff expect the second program to be faster?
   What instructions are executed in the first program but
   not in the second?  
   
-  \answer{The jump instructions are executed only $1/8^{th}$ of the
-    time on average.}
+  \answer{The jump instructions are executed only $\floor{(count + 7) / 8}$ times instead of $count$,
+          which about $1/8$ of the time.}
 \end{question}
 
 
