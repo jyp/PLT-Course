@@ -2,6 +2,7 @@
 \usepackage{fancyvrb,hyperref,listings}
 
 \newcommand{\Cpp}{C\kern-0.05em\texttt{+\kern-0.03em+}}
+\newcommand{\jp}[1]{ \footnote{#1}}
 
 \lstset{language=java,basicstyle=\small}
 \lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
@@ -104,9 +105,8 @@ A textbook-like specification may support the following operations:
 \end{tabular}
 \end{center}
 
-
-\begin{enumerate}
-\item Write an algebraic specification of this stack: provide a full signature
+\begin{question}{0}
+Write an algebraic specification of this stack: provide a full signature
 and define its semantics through appropriate axioms. 
 
 In your specification,
@@ -114,29 +114,43 @@ make reasonable assumptions about what a stack (informally) is; you
 may ``import'' other specifications. Make explicit which operations
 you consider as \textit{constructors} and informally argue why your
 set of axioms is complete.
-\item Now turn to the Java class \textsf{Stack}. As it is easy to see,
+\end{question}
+
+Now turn to the Java class \textsf{Stack}. As it is easy to see,
 this class is not an implementation of your algebraic specification 
 in part 1---its signature and semantics simply differs. 
-Adjust your algebraic specification from 1. so that \textsf{java.util.Stack}
-can be considered an implementation.
 
-\begin{enumerate}
-\item Decide how you want to handle Java exceptions.
-\item Change, and extend, the signature from part 1 so that it ``fits''
-the Java stack. Summarize and briefly justify all changes.
-\item Provide axioms for the \textsf{search} operation. Revise the
+Decide how you want to handle Java exceptions. \jp{We should decide for students here. I have no idea what this means}
+
+\begin{question}{0}
+Adjust your algebraic specification from 1. so that \textsf{java.util.Stack}
+can be considered an implementation. Change, and extend, the signature from part 1 so that it ``fits'' the Java stack. Summarize and briefly justify all changes.
+\end{question}
+
+
+\begin{question}{0}
+Provide axioms for the \textsf{search} operation. Revise the
 axioms for \textsf{empty, push, peek} as necessary; briefly justify.
-\item  Read the API for the \textsf{pop} method and explain the problem
-for the corresponding operation in the algebraic specification 
-(1-2 sentences).\\
- \textbf{Optional [3 Bonuspoints]:} provide axioms for \textsf{pop} that reflect the
+\end{question}
+
+
+\begin{question}{0}
+Read the API for the \textsf{pop} method and explain the
+problem for the corresponding operation in the algebraic specification (1-2
+sentences).
+\end{question}
+
+\begin{question}{Optional 0} 
+provide axioms for \textsf{pop} that reflect the
 Java semantics. We will accept partial answers, i.e., axioms that 
 do not entirely capture that semantics, but you need to be specific
 what is, and what isn't, captured. 
+\end{question}
 
-\item Complete the algebraic specification. 
-\end{enumerate}
-\end{enumerate}
+\begin{question}{0}
+Complete the algebraic specification. 
+\end{question}
+
 
 Further material:
 \begin{itemize}
@@ -182,10 +196,16 @@ Compilation failed: 2 error(s), 0 warnings
 
 \end{java}
 %
+
 Your task:
 \begin{enumerate}
-\item Briefly recap: what is a \textit{monoid}, mathematically? Give two examples
-of data types that can be considered monoids.
+
+\item Briefly recap: what is a \textit{monoid}, mathematically? 
+
+\begin{question}{0} Give two examples
+of data types that can be considered monoids, together with the monoidal operation and its identity.
+\end{question}
+ 
 \item The C\#-code above does not compile. Explain the error message
 in terms of co-/contra-/nonvariance.
 \item What if the method \textsf{op} \textit{would} compile? 
