@@ -202,18 +202,43 @@ Your task:
 
 \item Briefly recap: what is a \textit{monoid}, mathematically? 
 
-\begin{question}{0} Give two examples
-of data types that can be considered monoids, together with the monoidal operation and its identity.
+\begin{question}{0} 
+Give two examples of data types that can be considered monoids, together with
+the monoidal operation and its identity.
+\end{question}
+
+Note that the monoid class we defined does not match the mathematical
+definition of a monoid! 
+
+\begin{question}{0} 
+What is the difference?
 \end{question}
  
-\item The C\#-code above does not compile. Explain the error message
-in terms of co-/contra-/nonvariance.
-\item What if the method \textsf{op} \textit{would} compile? 
-Introduce instances \textsf{a,b} of appropriate types so that
-\textsf{a.op(b)}, if compiled, would result in a run-time error.
-What if the method 
-\textsf{id} would compile? Could you construct a similar run-time
-error? 
+
+\item The C\#-code above does not compile. 
+
+\begin{question}{0} 
+Explain the error message in terms of co-/contra-/nonvariance.
+\end{question}
+
+
+\item What if the method \textsf{op} \textit{would} compile? (Imagine for the
+purpose of the next question that the compiler is run with the type checker
+disabled.)
+
+\begin{question}{0}
+Introduce values \textsf{a,b} of appropriate types so that
+\textsf{a.op(b)}, if run would result in a run-time error.
+\end{question}
+
+\item What if the method \textsf{id} would compile? 
+
+\begin{question}{0}
+Can you introduce a value \textsf{a} of appropriate type so that
+\textsf{a.id()}, if run, would result in a run-time error?
+
+\end{question}
+
 \mycomment{
 \item Show that the C\# type system would be \textit{unsound} if 
 the code would compile without error (i.e., one could get a type error at
@@ -223,12 +248,19 @@ a (necessarily) different signature for the methods \textsf{op} and
 \textsf{id}; call \textsf{IntegerAdditiveMonoid.op()} with an object that
 will cause a run-time error.
 }
-%
-\item The corresponding program in Java behaves differently. Briefly
-explain how, consult the Java Language Specification (JLS), and back your answer
+
+
+\item The corresponding program in Java behaves differently, in conformance
+with the Java Language Specification (JLS).
+
+\begin{question}{0}
+Briefly explain how Java deals with the problem, and back your answer
 with the appropriate clause(s) in the JLS.
+\end{question}
+
 \item Suppose you changed the code so that 
 the (current) C\#-compiler accepts it. What is the problem then? 
+\jp{This is extremely fuzzy, I wouldn't know what to answer}
 %\item How can you change the code so that it compiles? Is your workaround type-safe? 
 \end{enumerate}
 
@@ -239,8 +271,7 @@ at
 
 \textsf{http://www.mono-project.com/CSharp\_Compiler}
 
-\item JLS is available on-line 
- at 
+\item JLS is available on-line at 
 \url{http://java.sun.com/docs/books/jls/third_edition/html/j3TOC.html}
 
 \end{itemize}
