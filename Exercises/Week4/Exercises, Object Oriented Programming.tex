@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{fancyvrb,hyperref,listings}
+
+\newcommand{\Cpp}{C\kern-0.05em\texttt{+\kern-0.03em+}}
+
+\lstset{language=java,basicstyle=\small}
+\lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
+\lstnewenvironment{java}
+    {\lstset{language=java,frame=tb}}
+    {}
+\lstnewenvironment{cplus}
+    {\lstset{language=c++,frame=tb}}
+    {}
+\lstnewenvironment{perl}
+    {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip,frame=tb}}
+    {}
+
+\include{fortify-macros}
+
+\newcommand{\percent}[1]{\protect \marginpar[l]{\bf [#1 points]}}
+\newcounter{question}
+\newenvironment{question}[1]{%
+  \addtocounter{question}{1}%
+  \paragraph{Exercise~\arabic{question}  \percent{#1}}%
+}{%
+  \vskip1em%
+}
+
+\newenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
+\newcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
+  
+
+\begin{document}
+
+
+
+\end{document}
