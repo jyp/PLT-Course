@@ -69,7 +69,7 @@ f(A[0],A[A[0]]);
    by-reference    & 3    & 2    \\
    by-value        & 0    & 2    \\
    by-result       & 3    & 2    \\
-   by-value-result & 1    & 3    \\
+   by-value-result & 3    & 2    \\
    by-name         & 1    & 3    \\
   \end{tabular}
 }%
@@ -206,7 +206,7 @@ declared as \textsf{`my'} are statically scoped, variables declared as
 \begin{question}{1}
   What is the effect of static and dynamic scoping? Consider the Perl
   program below and vary between \textsf{my} and \textsf{local} for the
-  three declarations of $x$. When, if at all, will $2$, $4.14$, and $56$
+  three declarations of $x$. When, if at all, will $1$, $4.14$, and $56$
   be printed? Explain how each value is obtained and why?
 \answer{
   Pattern matching on the modifiers:\\
@@ -214,7 +214,7 @@ declared as \textsf{`my'} are statically scoped, variables declared as
     outer/p/q      & result   \\ \hline
     */my/my        & $x=1$    \\
     local/*/local  & $x=4.14$ \\
-    local/local/my & $x=55$   \\
+    local/local/my & $x=56$   \\
     */*/*          & error
   \end{tabular}
 }
@@ -270,7 +270,7 @@ int main() {
 What happens in the assignment ``\textsf{*to++ = *from++;}''?  Explain in
 terms of pointers and values pointed to. Draw a picture if necessary.
 \answer{
-  It is equivalent to \texttt{*to = from*; to++; from++;}.
+  It is equivalent to \texttt{*to = *from; to++; from++;}.
   In other words, the memory pointed by \texttt{from} is copied to the memory pointed by \texttt{to}, then the pointers are incremented.
 }
 \end{question}
@@ -329,7 +329,7 @@ Why did Duff expect the second program to be faster?
   What instructions are executed in the first program but
   not in the second?  
   
-  \answer{The jump instructions are executed only $\floor{(count + 7) / 8}$ times instead of $count$,
+  \answer{The test and jump instructions are executed only $\floor{(count + 7) / 8}$ times instead of $count$,
           which about $1/8$ of the time.}
 \end{question}
 
