@@ -5,6 +5,8 @@ _darcs
 # Ignore loads of file types.
 
 *#
+*.class
+*.exe
 *.aux
 *.beam
 *.dvi
