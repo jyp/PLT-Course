@@ -93,6 +93,14 @@ You can reach them at the following email addresses:
 
 \section{Algebraic specification [25~points]}
 
+
+
+
+% References:
+%  http://scom.hud.ac.uk/scomtlm/book/node221.html
+%www.cs.colorado.edu/~kena/classes/5828/s00/lectures/lecture12.pdf
+
+
 A standard example in algebraic specification is the data type \textit{stack}.
 A textbook-like specification may support the following operations:
 \begin{center}
@@ -112,45 +120,86 @@ and define its semantics through appropriate axioms.
 In your specification,
 make reasonable assumptions about what a stack (informally) is; you
 may ``import'' other specifications. Make explicit which operations
-you consider as \textit{constructors} and informally argue why your
+you consider as \textit{generators} (constructors) and informally argue why your
 set of axioms is complete.
+\begin{longanswer}
+\begin{verbatim}
+sort stack imports bool, element
+operations:
+   new:   stack
+   push:  element × stack -> stack
+   pop:   stack -> stack
+   top:   stack -> element
+   empty: stack -> bool
+variables:
+   s: stack, e: element
+axioms:
+   pop(push(e,s)) = s
+   top(push(e,s)) = e
+   empty(new()) = true
+   empty(push(e,s)) = false
+\end{verbatim}
+new, push are the two generators.
+\end{longanswer}
 \end{question}
 
 Now turn to the Java class \textsf{Stack}. As it is easy to see,
 this class is not an implementation of your algebraic specification 
-in part 1---its signature and semantics simply differs. 
+in part 1---its signature and semantics simply differ. 
 
-Decide how you want to handle Java exceptions. \jp{We should decide for students here. I have no idea what this means}
+\begin{enumerate}
+    \item In Java, semantics are defined in all cases. Java never gets stuck,
+    but returns an exception.
+    \item pop both returns a value and modifies its implicit parameter.
+    \item search is an additional operation.
+\end{enumerate}
 
-\begin{question}{0}
-Adjust your algebraic specification from 1. so that \textsf{java.util.Stack}
-can be considered an implementation. Change, and extend, the signature from part 1 so that it ``fits'' the Java stack. Summarize and briefly justify all changes.
-\end{question}
 
-
-\begin{question}{0}
-Provide axioms for the \textsf{search} operation. Revise the
-axioms for \textsf{empty, push, peek} as necessary; briefly justify.
-\end{question}
-
+The goal of the following exercises is to adjust your algebraic specification
+from 1. so that \textsf{java.util.Stack} can be considered a reasonable
+implementation. 
 
 \begin{question}{0}
-Read the API for the \textsf{pop} method and explain the
-problem for the corresponding operation in the algebraic specification (1-2
-sentences).
-\end{question}
-
-\begin{question}{Optional 0} 
-provide axioms for \textsf{pop} that reflect the
-Java semantics. We will accept partial answers, i.e., axioms that 
-do not entirely capture that semantics, but you need to be specific
-what is, and what isn't, captured. 
+Provide axioms that reflect better the behaviour of Java in case exceptions.
+You can consider that \textsf{error} is a member of all sorts. 
 \end{question}
 
 \begin{question}{0}
-Complete the algebraic specification. 
+Change \textsf{pop} to return a pair of result and updated stack. Adapt the axioms.
 \end{question}
 
+\begin{question}{0}
+Add signature and axioms for search. You can assume the semantics for integers.
+
+
+\begin{longanswer}
+\begin{verbatim}
+sort Stack imports Vector, E, Object, boolean, int, EmptyStackException
+operations:
+   new:   Stack
+   push:  Stack × E -> Stack
+
+   pop:   Stack -> Stack × E
+   peek:  Stack -> E
+   empty: Stack -> Stack × boolean
+   search: Stack × Object -> Stack × int
+variables:
+   s: Stack, e: element, o: Object, error: EmptyStackException
+axioms:
+   pop(push(s,e)) = s , e
+   pop(new) = error
+
+   peek(push(s,e)) = e
+   peek(new) = error
+
+   empty(push(s,e)) = false 
+   empty(new) = true
+
+   search(push(s,o),o) = 1
+   search(push(s,e),o) = if o == e then 1 else 1 + search(s,o)
+\end{verbatim}
+\end{longanswer}
+\end{question}
 
 Further material:
 \begin{itemize}
@@ -200,43 +249,65 @@ Compilation failed: 2 error(s), 0 warnings
 Your task:
 \begin{enumerate}
 
-\item Briefly recap: what is a \textit{monoid}, mathematically? 
+\item What is a \textit{monoid}, mathematically? 
 
 \begin{question}{0} 
 Give two examples of data types that can be considered monoids, together with
 the monoidal operation and its identity.
+
+\answer{
+(int,+,0), (int,*,1), (float, +,0), (list, append, emptyList), (string, concat, emptyString)
+\ldots}
+
 \end{question}
 
 Note that the monoid class we defined does not match the mathematical
 definition of a monoid! 
 
 \begin{question}{0} 
-What is the difference?
+What is the main difference?
 \end{question}
  
 
 \item The C\#-code above does not compile. 
 
 \begin{question}{0} 
-Explain the error message in terms of co-/contra-/nonvariance.
+Explain the error messages in terms of co-/contra-/nonvariance.
+\answer{
+    \textsf{op}'s parameter type is covariant. C\# requires nonvariance.
+    \textsf{id}'s return type is covariant. C\# requires nonvariance.
+}
 \end{question}
 
 
-\item What if the method \textsf{op} \textit{would} compile? (Imagine for the
-purpose of the next question that the compiler is run with the type checker
-disabled.)
+\item What if the method \textsf{op} \emph{would} compile? 
+(Imagine for the purpose of the next question that the compiler did not raise the error
+message about \textsf{op}.)
 
-\begin{question}{0}
-Introduce values \textsf{a,b} of appropriate types so that
-\textsf{a.op(b)}, if run would result in a run-time error.
+\begin{question}{0} 
+
+Introduce another class that implements the \textsf{Monoid} interface. Write a
+piece of code (3 lines), using \textsf{a.op(b)}, that results in a runtime
+error.
+\begin{longanswer}
+\begin{java}
+    class StringConcatenative
+         ...
+    Monoid a = new StringConcatenative(...);
+    Monoid b = new IntegerAdditiveMonoid(...);
+    Monoid c = a.op(b);
+\end{java}
+\end{longanswer}
 \end{question}
 
 \item What if the method \textsf{id} would compile? 
 
 \begin{question}{0}
-Can you introduce a value \textsf{a} of appropriate type so that
-\textsf{a.id()}, if run, would result in a run-time error?
-
+If you replace the call to op by a call to id in your code from the previous question, can
+that lead to a runtime error?
+\answer{
+No error possible. 
+}
 \end{question}
 
 \mycomment{
@@ -256,12 +327,16 @@ with the Java Language Specification (JLS).
 \begin{question}{0}
 Briefly explain how Java deals with the problem, and back your answer
 with the appropriate clause(s) in the JLS.
+\answer{
+    
+}
 \end{question}
-
+\mycomment{
 \item Suppose you changed the code so that 
 the (current) C\#-compiler accepts it. What is the problem then? 
 \jp{This is extremely fuzzy, I wouldn't know what to answer}
 %\item How can you change the code so that it compiles? Is your workaround type-safe? 
+}
 \end{enumerate}
 
 \paragraph{Further reading}
@@ -275,6 +350,7 @@ at
 \url{http://java.sun.com/docs/books/jls/third_edition/html/j3TOC.html}
 
 \end{itemize}
+
 
 \newpage
 \section{Dynamic dispatching \& the visitor [25 points]}
@@ -479,102 +555,6 @@ tutorial for Java programmers:
 \end{itemize}
 \end{document}
 
-\section*{Answers (sketches)}
-
-\section*{Algebraic specification}
-\begin{enumerate}
-\item ADT stack 
-\begin{verbatim}
-sort stack imports bool, element
-operations:
-   new:   -> stack
-   push:  element x stack -> stack
-   pop:   stack -> stack
-   top:   stack -> element
-   empty: stack -> bool
-variables:
-   s: stack, e: element
-axioms:
-   pop(push(e,s)) = s
-   top(push(e,s)) = e
-   empty(new()) = true
-   empty(push(e,s)) = false
-\end{verbatim}
-Assume that new, push are the two generators (constructors). Which axioms do you need
-for pop, top, empty? 
-\begin{itemize} 
-\item pop: the first axiom ( pop(push(e,s)) = s ) defines
-what pop does on a stack generated via push. What about the other constructor,
-new? If the stack has been
-created via new, there is no element that pop could remove---thus, pop
-can be undefined. Since there are no generators other than push and create,
-there are no further axioms for pop.
-\item top: argue as with pop
-\item empty: we need to define what empty does on each of the two generators.
-Rest  follows directly from the
-informal specification. 
-\end{itemize}
-
-
-\item Abstraction from the Java stack class
-\begin{verbatim}
-sort Stack imports Vector, E, Object, boolean, int, EmptyStackException
-operations:
-   Stack:   -> Stack
-   push:  Stack x E -> Stack
-   pop:   Stack -> E
-   peek:  Stack -> E
-   empty: Stack -> boolean
-   search: Stack x Object -> int
-variables:
-   s: Stack, e: element, o: Object, error: EmptyStackException
-axioms:
-   pop(push(s,e)) = e
-   pop(Stack) = error
-   peek(push(s,e)) = e
-   peek(Stack) = error
-   empty(Stack) = true
-   empty(push(s,e)) = false
-   search(push(s,o),o) = 1
-   search(push(s,e),o) = 1 + search(s,o)
-   search((push(Stack,e)),o) = -1
-\end{verbatim}
-\begin{itemize}
-\item Exceptions could be modelled just as  sorts.
-\item Changes to the signature: we assume the ``this'' object as
-first parameter (even though it is not explicit in Javadoc), which
-means that the previous signature of ``push'' needs to swap its
-two arguments. Other changes: different sort names (E instead of element, 
-boolean instead of bool), different operation names.
- Big change: ``pop'' changes its return
-parameter.
-\item The problem of ``pop'': how to express the destructive
-update? (Another problem is that, without further steps, 
-``pop'' and ``top'' become indistinguishable.)
-\item Changes to the axioms: we still have two generators. But
-``pop'' and ``peek'' must now be defined for empty stacks, so
-there is one additional axiom each (which specifies the error state). 
-The axioms for ``search'' assume the semantics of ``+.''
-\item How to deal with destructive updates? Eiffel's or JML's take
-is to introduce a helper function (or variable) that reflects the
-change to the stack, for example a ``size'' function.
-\begin{verbatim}
-sort Stack:
-operations:
-   size: Stack -> int
-axioms:
-   size(pop(s,e)) = size - 1
-\end{verbatim}
-There are two problems, though: for one, ``size'' (or related functions)
-don't specify which element gets deleted; second, if they
-are helper functions (or internal variables), they should not be visible.
-\end{itemize}
-\end{enumerate}
-
-%  http://scom.hud.ac.uk/scomtlm/book/node221.html
-%www.cs.colorado.edu/~kena/classes/5828/s00/lectures/lecture12.pdf
-
-
 
 \section*{Squeak}
 
@@ -636,10 +616,6 @@ See last year.
 %http://c2.com/cgi/wiki?LanguageTypeErrors
 %Java generics
 \begin{enumerate}
-\item The set of strings form a monoid under 
-concatenation, with the empty string as identity. 
-Other monoids (int,+,0), (int,*,1), (float, +,0), (list, append, emptyList),
-\ldots 
 \item Error: C\# requires invariance both for argument types and for
 the return types. That's why we get an error for each method.
 
