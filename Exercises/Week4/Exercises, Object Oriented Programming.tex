@@ -19,8 +19,6 @@
     {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip,frame=tb}}
     {}
 
-\include{fortify-macros}
-
 \newcommand{\courseinfo}{ Sibylle Schupp \\ Programming Paradigms 2008 }
 \newcommand{\percent}[1]{\protect \marginpar[l]{\bf [#1 points]}}
 \newcommand{\mycomment}[1]{}
@@ -44,52 +42,6 @@ Object-Oriented Programming}
 \author{\courseinfo}
 \date{}
 \maketitle
-\mycomment{
-\paragraph{Submission}
-Submit your answers (one per pair of students)
-electronically through the Fire system before the deadline.
-If you haven't registered yet with Fire 
-do so as soon as possible 
-(\textsf{https://fire.cs.chalmers.se:8042/cgi/Fire-prgprd}).
-
-
-%
-\textit{To pass the course, you must pass 25\% of all problems on \textbf{this}
-sheet and 50\% of all problems total. For some problems, you may earn
-extra points.}
-
-\begin{center}
-\fbox{Deadline: Thursday, Nov. 15, 2007 XXX, midnight (Swedish time).}
-\end{center}
-%
-The deadline is not extensible. 
-
-\paragraph{Academic integrity} is important. If you submit solutions that
-are not your own, we hand the case over to the Chalmers officials, as specified
-here 
-\begin{center}
-\textsf{http://www.chalmers.se/en/sections/education/current\_students/}\\
-\textsf{\-joint\_rules\_and\_dire/rules\_of\_discipline} (English) 
-%
-and \\
-%
-\textsf{http://www.chalmers.se/sections/ar\_student/regler\_och\_riktlinje/disciplinstadga}(Swedish).
-\end{center}
-
-\paragraph{Help} Don't hesitate to ask for help!
-The course assistants are 
-Gustav Munkby and Jean-Philippe Bernardy.
-You can reach them at the following email addresses:
-%
-\begin{center} 
-\textsf{munkby-at-cs-chalmers.se}  and 
-\textsf{bernardy-at-chalmers.se} 
-\end{center} 
-%
-(replace ``-'' by  ``.'', and ``at'' by the at-sign)
-
-\newpage
-}
 
 \section{Algebraic specification [25~points]}
 
@@ -148,9 +100,10 @@ this class is not an implementation of your algebraic specification
 in part 1---its signature and semantics simply differ. 
 
 \begin{enumerate}
+    \item top is called peek.
     \item In Java, semantics are defined in all cases. Java never gets stuck,
     but returns an exception.
-    \item pop both returns a value and modifies its implicit parameter.
+    \item pop both returns a value in addition to modifying the stack.
     \item search is an additional operation.
 \end{enumerate}
 
@@ -161,7 +114,8 @@ implementation.
 
 \begin{question}{0}
 Provide axioms that reflect better the behaviour of Java in case exceptions.
-You can consider that \textsf{error} is a member of all sorts. 
+Consider that \textsf{error} is a member of all sorts, which you can use to
+represent a raised exception. 
 \end{question}
 
 \begin{question}{0}
@@ -186,7 +140,7 @@ operations:
 variables:
    s: Stack, e: element, o: Object, error: EmptyStackException
 axioms:
-   pop(push(s,e)) = s , e
+   pop(push(s,e)) = (s,e)
    pop(new) = error
 
    peek(push(s,e)) = e
@@ -195,8 +149,26 @@ axioms:
    empty(push(s,e)) = false 
    empty(new) = true
 
+   search(new,o) = -1
    search(push(s,o),o) = 1
-   search(push(s,e),o) = if o == e then 1 else 1 + search(s,o)
+   search(push(s,e),o) =
+     if search(s,o) == -1
+       then -1
+       else 1 + search(s,o)
+
+   ---
+
+   has(new,o) = false
+   has(push(s,o),o) = true
+   has(push(s,e),o) = has(s,o)
+
+   searchAccDepth(new,o,d) = -1
+   searchAccDepth(push(s,o),o,d) = d
+   searchAccDepth(push(s,e),o,d) = searchAccDepth(s,o,d+1)
+
+   search(s,o) = searchAccDepth(s,o,1)
+
+
 \end{verbatim}
 \end{longanswer}
 \end{question}
@@ -246,12 +218,8 @@ Compilation failed: 2 error(s), 0 warnings
 \end{java}
 %
 
-Your task:
-\begin{enumerate}
-
-\item What is a \textit{monoid}, mathematically? 
-
 \begin{question}{0} 
+What is a \textit{monoid}, mathematically? 
 Give two examples of data types that can be considered monoids, together with
 the monoidal operation and its identity.
 
@@ -261,17 +229,18 @@ the monoidal operation and its identity.
 
 \end{question}
 
-Note that the monoid class we defined does not match the mathematical
-definition of a monoid! 
-
 \begin{question}{0} 
-What is the main difference?
+Note that the \textsf{Monoid} class we defined does not match the mathematical
+definition of a monoid! What is the main difference?
+\answer{
+   The \textsf{Monoid} class makes no distinction between the \textsf{Monoid}
+   itself and the data-type upon which it operates.
+}
+
 \end{question}
- 
-
-\item The C\#-code above does not compile. 
 
 \begin{question}{0} 
+The C\#-code above does not compile. 
 Explain the error messages in terms of co-/contra-/nonvariance.
 \answer{
     \textsf{op}'s parameter type is covariant. C\# requires nonvariance.
@@ -280,16 +249,16 @@ Explain the error messages in terms of co-/contra-/nonvariance.
 \end{question}
 
 
-\item What if the method \textsf{op} \emph{would} compile? 
-(Imagine for the purpose of the next question that the compiler did not raise the error
-message about \textsf{op}.)
-
 \begin{question}{0} 
+Imagine for the purpose of this question that the compiler did not raise the
+error message about \textsf{op} and demonstrate that the C\# type system
+would be \textit{unsound} if  the code would compile without error (i.e., one
+could get a type error at run time).
 
 Introduce another class that implements the \textsf{Monoid} interface. Write a
 piece of code (3 lines), using \textsf{a.op(b)}, that results in a runtime
 error.
-\begin{longanswer}
+\begin{longanswer}\\
 \begin{java}
     class StringConcatenative
          ...
@@ -300,8 +269,6 @@ error.
 \end{longanswer}
 \end{question}
 
-\item What if the method \textsf{id} would compile? 
-
 \begin{question}{0}
 If you replace the call to op by a call to id in your code from the previous question, can
 that lead to a runtime error?
@@ -310,34 +277,18 @@ No error possible.
 }
 \end{question}
 
-\mycomment{
-\item Show that the C\# type system would be \textit{unsound} if 
-the code would compile without error (i.e., one could get a type error at
-run time). Hint: define a second implementation of the 
-\textsf{Monoid} interface, with
-a (necessarily) different signature for the methods \textsf{op} and 
-\textsf{id}; call \textsf{IntegerAdditiveMonoid.op()} with an object that
-will cause a run-time error.
-}
-
-
-\item The corresponding program in Java behaves differently, in conformance
-with the Java Language Specification (JLS).
-
 \begin{question}{0}
-Briefly explain how Java deals with the problem, and back your answer
-with the appropriate clause(s) in the JLS.
+Compiling the corresponding Java program would produce different results.
+Briefly explain how Java handles parameter and return-type variance differently
+in the example above. Be sure to back your answer with the appropriate clause(s)
+in the JLS.
 \answer{
-    
+    Java is covariant in the return type (JLS, 8,4,8.3). Therefore,
+Java would only flag an error for the method op() (since it doesn't implement
+the interface); the method id(), on the other hand, would be considered
+an implementation.
 }
 \end{question}
-\mycomment{
-\item Suppose you changed the code so that 
-the (current) C\#-compiler accepts it. What is the problem then? 
-\jp{This is extremely fuzzy, I wouldn't know what to answer}
-%\item How can you change the code so that it compiles? Is your workaround type-safe? 
-}
-\end{enumerate}
 
 \paragraph{Further reading}
 \begin{itemize}
@@ -356,58 +307,86 @@ at
 \section{Dynamic dispatching \& the visitor [25 points]}
 
 Suppose the three classes \textsf{Shape}, \textsf{Rectangle}, and 
-\textsf{Circle}, and the appropriate inheritance relation between them.
+\textsf{Circle}, where \textsf{Shape} is an abstract base class
+for \textsf{Circle} and \textsf{Shape}.
 Further assume a method \textsf{intersect()} that can determine whether two
 shapes overlap. Obviously, the implementation of \textsf{intersect()} 
-depends on the actual shapes involved. 
+depends on the actual shapes involved, and your task is to experiment with
+different means of selecting the right implementation.
 
-\begin{enumerate}
-\item Pick an object-oriented language with single-dispatch mechanism 
+\paragraph{Note}
+The actual intersection algorithms, and their results, are not of interest.
+Just leave these algorithms out, and focus on how the correct implementation
+is selected.
+
+\begin{question}{0}
+Pick an object-oriented language with single-dispatch mechanism 
 and design  the 3 classes so that all possible intersections
 of shapes can be properly handled. 
-What is the problem with single dispatching? Name at least 2 issues.
-\item The following Java snippet redesigns the
+Also, name at least 2 issues with single dispatching.
+
+\begin{longanswer}
+Issues with single-dispatch...
+\begin{itemize}
+\item Loss of static type safety.
+\item Adding a new subclass requires updating all existing classes.
+\item Run-time overhead due to explicity type-check and cast.
+\end{itemize}
+\begin{java}
+abstract class Shape {
+    public abstract boolean intersect(Shape s);
+}
+
+class Rectangle extends Shape {
+    public boolean intersect(Shape s) {
+        if (s instanceof Rectangle) 
+            return ...;
+        else if (s instanceof Circle)
+            return ...; 
+        else
+            throw ...;
+   }
+}
+
+// Same for Circle
+\end{java}
+\end{longanswer}
+\end{question}
+
+\begin{question}{0}
+The following Java snippet redesigns the
 class hierarchy using \textit{double dispatch}. 
 Explain how double dispatching works by
 giving the sequence of calls for the line marked (*) in \textsf{Main}.
-Name two problems
-with double dispatching.
+Also name at least two problems with double dispatching.
 
-\textbf{Optional}: the corresponding code in C\# would not 
-compile. Look up the visibility rules for \textsf{protected} members
-and explain which (compile-time) error one would get. 
 \begin{java}
-class Shape {
-    public  boolean intersect(Shape s) {
-         return s.intersectShape(this);
-    }
-    protected  boolean intersectShape(Shape s) {
-        // intersect Shape x Shape
-    }
-    protected  boolean intersectRectangle(Rectangle r) {
-        // no special code for Shape x Rectangle
-        return intersectShape(r);
-    }
-    protected  boolean intersectCircle(Circle c) {
-        return intersectShape(c);
-   }
+abstract class Shape {
+    public abstract boolean intersect(Shape s);
+    protected abstract boolean intersectRectangle(Rectangle r);
+    protected abstract boolean intersectCircle(Circle c);
 }
 class Rectangle extends Shape {
-    public  boolean intersect(Shape s) {
+    public boolean intersect(Shape s) {
         return s.intersectRectangle(this);  
     }
-    protected  boolean intersectRectangle(Rectangle r) {
-        // Rectangle x Rectangle
-        ..
+    protected boolean intersectRectangle(Rectangle r) {
+        ...
+    }
+    protected boolean intersectCircle(Circle c) {
+        ...
     }
 }
 class Circle extends Shape {
     public  boolean intersect(Shape s) {
         return s.intersectCircle(this);  
     }
-    protected  boolean intersectCircle(Circle c) {
-        // Circle x Circle 
-   }   
+    protected boolean intersectRectangle(Rectangle r) {
+        ...
+    }
+    protected boolean intersectCircle(Circle c) {
+        ... 
+    }
 }
 
 class Intersect {
@@ -418,10 +397,22 @@ class Intersect {
    }
 }
 \end{java}
-\item The \textit{Visitor pattern} provides an alternative workaround,
+
+\answer{
+Issues with double dispatch:
+\begin{itemize}
+\item Root class needs to be modified each time a new class is added.
+\item Run-time overhead due to multiple method calls.
+\end{itemize}
+
+Executed methods are:
+  \textsf{Circle\#intersect(Shape)}, \textsf{Rectangle\#intersectCircle(Circle)}
+}
+\end{question}
+
+\noindent The \textit{Visitor pattern} provides an alternative workaround,
 also based on double dispatching. In difference
-to the solution above, the pattern 
-introduces two hierarchies, the visited
+to the solution above, the pattern introduces two hierarchies, the visited
 hierarchy and the visitor hierarchy. In the example,
  \textsf{Shape, Rectangle, Circle}
 form the visited hierarchy, \textsf{IntersectVisitor} and its two
@@ -430,43 +421,68 @@ form the visiting hierarchy. The visited classes are
 augmented with a method \textsf{accept}, which uses double dispatching
 to call the appropriate ShapeVisitor (and to invoke the
 right computation). 
-\\
-Your task
-\begin{itemize}
-\item Complete the code for the two class hierarchies and the client.
-\item Name two problems of the visitor approach.
-\end{itemize}
+
+\begin{question}{0}
+Complete the code for the two class hierarchies by implementing
+the classes \textsf{Rectangle}, \textsf{Circle}, \textsf{RectangleVisitor},
+and \textsf{CircleVisitor}.
+Once again name at least two problems of the visitor approach.
 
 \begin{java2}
-class Shape {
-    public void accept(IntersectVisitor v) {
-	v.visitShape(this);
+abstract class Shape {
+    public abstract void accept(IntersectVisitor v);
+
+    public abstract IntersectVisitor getIntersectVisitor();
+
+    public boolean intersect (Shape s) {
+	IntersectVisitor v = getIntersectVisitor();
+	s.accept(v);
+	return v.intersects;
     }
-}
-class Rectangle extends Shape {
-public  void accept(IntersectVisitor v) { 
-        // your job
-    }
-}
-class Circle extends Shape {
-   // your job
 }
  
-// visitor hierarchy
 abstract class IntersectVisitor { 
     boolean intersects; 
-    public abstract void visitShape(Shape s);
     public abstract void visitRectangle(Rectangle r); 
     public abstract void visitCircle(Circle c); 
 } 
-
-// client code
-  Shape s1 = new ..
-  IntersectVisitor v = new RectangleIntersectVisitor();
-  s1.accept(v);
-  if (v.intersects) ...
 \end{java2}
-\end{enumerate}
+
+\begin{longanswer}
+Problems with the visitor: 
+\begin{itemize}
+\item Arguments and return type have to be passed in a convoluted way.
+\item One has to create a different (visitor) class for things that ``should'' be methods.
+\item Code for handling visits is spread out over various classes.
+\end{itemize}
+
+\begin{java2}
+class Circle extends Shape {
+    public void accept(IntersectVisitor v) {
+        v.visitCircle(this);
+    }
+
+    public IntersectVisitor getIntersectVisitor() {
+        return new CircleIntersectVisitor(this);
+    }
+}
+
+class CircleIntersectVisitor extends IntersectVisitor {
+    public CircleIntersectVisitor(Circle left) {
+        this.left = left;
+    }
+    public void visitCircle(Circle c) {
+        // ...
+    }
+    public void visitRectangle(Rectangle r) {
+        // ...
+    }
+}
+
+// ... Same for Rectangle and RectangleIntersectVisitor
+\end{java2}
+\end{longanswer}
+\end{question}
 
 \paragraph{Further reading}
 \begin{itemize}
@@ -481,8 +497,9 @@ document no N2216=07-0076 by the standardization committee:
 \end{itemize}
 \newpage
 \section{A Glimpse of Squeak [25~points]}
-\begin{enumerate}
-\item For each of the following expressions determine
+
+\begin{question}{0}
+For each of the following expressions determine
 the message(s), and for each message determine the receiver object and all 
 argument object(s). 
 \begin{java}
@@ -493,8 +510,28 @@ anArray at: 1 put: 'hej'
 10 negated raisedTo: 2 + 3
 2 * 3 + 4      
 \end{java}
-\item The following snippet contains a fragment of the class \textsf{Count} with the methods \textsf{initialize},
+\answer{
+\begin{tabular}[t]{l|lll}
+           & Mesg & Receiver               & Args  \\ \hline
+Date today & today & Date                  & none   \\
+2 + 3      & +     & 2                        & 3   \\
+anArray at: 1 put: 'hej' & at:put: & anArray & 1, 'hej'  \\
+10 raisedTo: 2 + 3       & +           & 2  & 3 \\
+                         & raisedTo:    & 10 & 5  \\
+10 negated raisedTo: 2 + 3 & negated   & 10 & none \\
+                           & raisedTo:  & -10 & 5 \\
+                           & +         & 2   & 3 \\
+2 * 3 + 4                  & *         & 2   & 3 \\
+                           & +         & 6   & 4 \\
+\end{tabular}
+}
+\end{question}
+
+\begin{question}{0}
+The following snippet contains a fragment of the class
+\textsf{Count} with the methods \textsf{initialize},
  \textsf{value},  \textsf{increment1}, and \textsf{increment2}:
+
 \begin{java}
 initialize
     value := 0.
@@ -506,10 +543,21 @@ increment1
 increment2
     value := self value + 1
 \end{java}
-\begin{enumerate}
-\item Compare the two increment
-methods from a design point of view: which one would you prefer?  Why?
-\item What is the meaning of the semicolon (``;''), thus  the value of \textsf{aCounter} at the end of  the following program (1 sentence)?
+
+Explain the difference between the two increment methods.
+What are the benefits of the \textsf{increment2} solution?
+\answer{
+Note the overloading of ``value'': increment1 uses the instance
+variable ``value'' directly, while increment2 sends the ``value'' message
+to ``self.'' Thus, increment1
+establishes a direct dependence on the implementation of the class, which
+could be considered a disadvantage from a maintenance point of view. 
+}
+\end{question}
+
+\begin{question}{0}
+What is the meaning of the semicolon (``;''), thus the value
+of \textsf{aCounter} at the end of  the following program (1 sentence)?
 
 \begin{java}
 |aCounter|
@@ -517,12 +565,20 @@ aCounter := Count new.
 aCounter initialize.
 aCounter increment1; increment2.
 \end{java}
-(Hint: open the ``Browser'', implement the class \textsf{Count}, enter the
+\answer{
+    The semicolon means ``cascading'', which means that \textsf{increment1}
+    and \textsf{increment2} are sent to the same target. Thus, the counter
+    obtains the value ``2.''
+}
+\end{question}
+
+\paragraph{Hint}
+open the ``Browser'', implement the class \textsf{Count}, enter the
  program below in 
 the ``Workspace'',
-run the program, and ``inspect'' the counter variable.)
-\end{enumerate}
-\item Consider the following block expression
+run the program, and ``inspect'' the counter variable.
+
+\noindent Consider the following block expression:
 \begin{java}
 |anArray sum|
 sum := 0
@@ -530,14 +586,31 @@ anArray := #(4 55 19 23).
 anArray do: [:item | sum := sum + item].
 ^sum
 \end{java}
-\begin{enumerate}
-\item Rewrite the block in Java (or a Java-like language). (This is just
-a sanity check; don't make it too complicated!)
-\item Rewrite the block using \textsf{inject:into}.
-%\item Rewrite the block using explicit array indexing (via the method \textsf{at:}) to access array elements. 
-\end{enumerate}
-\end{enumerate}
-Further material
+
+\paragraph{Hint}
+You might want to rewrite the summation in Java (or a Java-like language)
+as a sanity check.
+
+\begin{question}{0}
+Rewrite the block using \textsf{inject:into}.
+
+\begin{longanswer}
+The resulting block looks something like this:
+\begin{java}
+|xs sum|
+sum := xs inject: 0 into: [:a :x | a + x]
+^sum
+\end{java}
+
+Note the similarity to the formulation of sum using reduce from the Haskell exercises:
+\begin{verbatim}
+sum xs = reduce (\a x -> a + x) 0 xs
+\end{verbatim}
+\end{longanswer}
+
+\end{question}
+
+\noindent Further material
 \begin{itemize}
 \item By default, Squeak is not installed on the machines in the department,
 but you can easily install it yourself at home or in your account at
@@ -555,272 +628,3 @@ tutorial for Java programmers:
 \end{itemize}
 \end{document}
 
-
-\section*{Squeak}
-
-\begin{enumerate}
-\item Expressions
-
-\begin{tabular}[t]{l|lll}
-           & Mesg & Receiver               & Args  \\ \hline
-Date today & today & Date                  & no   \\
-2 + 3      & +     & 2                        & 3   \\
-anArray at: 1 put: 'hej' & at:put & anArray & 1, 'hej'  \\
-10 raisedTo: 2 + 3       & +           & 2  & 3 \\
-                         & raisedTo    & 10 & 5  \\
-10 negated raisedTo: 2 + 3 & negated   & 10 & value of (raisedTo: 2 + 3) \\
-                           & raisedTo  & -10 & value of (2+3) \\
-                           & +         & 2   & 3 \\
-2 * 3 + 4                  & *         & 2   & value of (3+4) \\
-\end{tabular}
-\item Counter: the semicolon means ``cascading'', so the value is ``2.'' 
-Note the overloading of ``value'': increment1 updates the instance
-variable ``value'' directly, while increment2 sends the ``value'' message
-to ``self.'' Thus, increment1
-establishes a direct dependence on the implementation of the class, which
-could be considered a disadvantage from the maintenance point of view. 
-\item 
-\begin{verbatim}
-// Java
-class Sum {
-    public static void main(String[] s) {
-        int[] anArray = {4,55,19,23};
-        int sum = 0;
-        for (int item: anArray){
-            sum += item;
-        }
-        System.out.println(sum);
-    }
-}
-
-"back to Smalltalk: the version with inject:into:"
-|anArray accum|
-anArray := #(4 55 19 23).
-anArray inject: 0 into: [:accum :elt | accum + elt]
-^accum
-
-"the same in the Workspace (without local variables)"
-accum := 0.
-accum := anArray inject: 0 into: [:accum :elt | accum + elt].
-^accum.
-\end{verbatim}
-\end{enumerate}
-
-\section*{Other exercises}
-See last year.
-
-\end{document}
-\section*{Co/contra/nonvariance}
-%http://archives.cs.iastate.edu/documents/disk0/00/00/02/53/00000253-00/tr01-10.pdf
-%http://ece.colorado.edu/~siek/pubs/pubs/2005/siek05\_thesis.pdf
-%http://c2.com/cgi/wiki?LanguageTypeErrors
-%Java generics
-\begin{enumerate}
-\item Error: C\# requires invariance both for argument types and for
-the return types. That's why we get an error for each method.
-
-\item If C\# would allow covariance in the argument type,  one
-could substitute siblings for another and that way cause a run-time
-error. In the example below, the method
-a.op() expects an IntegerAdditiveMonoid, but gets a RealAdditiveMonoid.
-\begin{java}
-struct RealAdditiveMonoid: Monoid  {
-    public RealAdditiveMonoid(double x) {
-         elt = x;
-    }
-    public RealAdditiveMonoid op(Monoid second) {
-         return new RealAdditiveMonoid(
-             elt + ((RealAdditiveMonoid)second).elt);
-    }
-    public RealAdditiveMonoid id(){
-         return new RealAdditiveMonoid(0.0);
-    }
-    double elt;
-};
-
-
-class Main {
-   public static void main(string[] args) {
-      Monoid a = new IntegerAdditiveMonoid(7);
-      Monoid b = new RealAdditiveMonoid(2.3);
-      b = a.op(b);
-   }
-}
-
-\end{java}
-\item Java is covariant in the return type (JLS, 8,4,8.3). Therefore,
-Java would only flag an error for the method op() (since it doesn't implement
-the interface); the method id(), on the other hand, would be considered
-an implementation. 
-\item The typical workaround: use the requested signature, but then
-cast the argument to the desired type (IntegerAdditiveMonoid),
-and from there back to Monoid. Obviously, the first cast isn't safe. 
-\begin{java}
-    public Monoid op(Monoid second) { 
-         return new IntegerAdditiveMonoid(
-              elt + ((IntegerAdditiveMonoid)second).elt);
-    }
-
-    public Monoid id(){ 
-         return new IntegerAdditiveMonoid(0);
-    }
-    int elt;
-\end{java}
-\end{enumerate}
-
-\section*{Dispatch}
-%http://www.disi.unige.it/person/ZuccaE/Didattica/Dottorato02/MultiJavaSlides.pdf
-%http://www.itu.dk/courses/VOP/F2006/4_Slides.pdf
-%http://blogs.msdn.com/devdev/archive/2005/08/29/457798.aspx
-\begin{enumerate}
-\item Problems of single dispatch: 1. Extensibility (if a new class is
-derived from Shape, Rectangle and Circle have to change their implementation).
-2. Run-time overhead due to type cast 3. Loss of static type safety
-\begin{java}
-class Shape {
-    public boolean intersect(Shape s) {
-        // intersect Shape x Shape
-        return false;
-    }
-}
-class Rectangle extends Shape {
-    public  boolean intersect(Shape s) {
-        if (s instanceof Rectangle) {
-           // intersect Rectangle x Rectangle
-        }
-        else {
-	    // intersect Rectangle x Shape
-             return super.intersect(s);
-        }
-        return false;
-    }
-}
-class Circle extends Shape {
-   public boolean intersect(Shape s) {
-         if (s instanceof Circle) {
-           // intersect Circle x Circle
-        }
-        else {
-             return super.intersect(s);
-        }
-	 return false;
-    }
-}
-\end{java}
-\item Problems with  double dispatch: 1.  Root class needs to be modified
-each time a new class is added; 2. lots of code to write
-
-C\# has different access rules: within a subclass, one can access 
-protected members of the superclass only through  instances of the
-subclass. Double-dispatching, however, wants to return control to 
-the superclass, thus needs to take a superclass object. For C\#, 
-it follows that the doubly-dispatched methods must be public. 
-\begin{java}
-class Shape {
-    public  boolean intersect(Shape s) {
-         return s.intersectShape(this);
-    }
-    protected  boolean intersectShape(Shape s) {
-        // intersect Shape x Shape
-        return true;
-    }
-    protected  boolean intersectRectangle(Rectangle r) {
-        // no special code for Shape x Rectangle
-        return intersectShape(r);
-    }
-    protected  boolean intersectCircle(Circle c) {
-        return intersectShape(c);
-   }
-}
-class Rectangle extends Shape {
-    public  boolean intersect(Shape s) {
-        return s.intersectRectangle(this);  
-    }
-    protected  boolean intersectRectangle(Rectangle r) {
-        // specialized code for two rectangles
-        return false; 
-    }
-}
-class Circle extends Shape { 
-    public  boolean intersect(Shape s) {
-        return s.intersectCircle(this);  
-    }
-    protected  boolean intersectCircle(Circle c) {
-        return false;
-   }      
-  
-}
-\end{java}
-\item Problems with the visitor: 1. Needs to be anticipated at class
-design time (of Shape). 2. Doesn't work so smoothly if one has to pass
-additional parameters.
-\begin{java}
-class Shape {
-    public void accept(IntersectVisitor v) {
-	v.visitShape(this);
-    }
-}
-class Rectangle extends Shape {
-    public  void accept(IntersectVisitor v) { 
-      v.visitRectangle(this);
-    }
-}
-class Circle extends Shape {
-    public  void accept(IntersectVisitor v) { 
-      v.visitCircle(this); } 
-}
- 
-// visitor hierarchy
-abstract class IntersectVisitor { 
-    boolean intersects; 
-    public abstract void visitShape(Shape s);
-    public abstract void visitRectangle(Rectangle r); 
-    public abstract void visitCircle(Circle c); 
-} 
-class RectangleIntersectVisitor extends IntersectVisitor {
-    public  void visitShape(Shape s) {
-       // set intersects
-   }
-   public  void visitRectangle(Rectangle r) {
-       // set intersects
-   }
-    public  void visitCircle(Circle r) {
-       // set intersects
-   }
-}
-class CircleIntersectVisitor extends IntersectVisitor { 
-   public  void visitShape(Shape s) {
-       // set intersects
-   }
-    public  void visitCircle(Circle r) {
-       // set intersects
-   }
-   public  void visitRectangle(Rectangle r) {
-       // set intersects
-   }
-}
-
-
-class Intersect {
-   public static void Main() {
-      Shape s1 = new Rectangle(); 
-      Shape s2 = new Circle();
-      /* 
-      boolean b = s2.intersect(s1);
-      b = s1.intersect(s1);
-      b = s2.intersect(s1);
-      */
-      IntersectVisitor v = new RectangleIntersectVisitor();
-      s1.accept(v);
-      if (v.intersects) {
-          ; 
-      }
-   }
-}
-\end{java}
-
-\end{enumerate}
-
-
-
-\end{document}
