@@ -111,6 +111,10 @@ Explain the error messages in terms of co-/contra-/nonvariance.
 \answer{
     \textsf{op}'s parameter type is covariant. C\# requires nonvariance.
     \textsf{id}'s return type is covariant. C\# requires nonvariance.
+    C\# language spec 3.0 says in 10.6.4:
+      ``For an override method M [...] the overridden base method
+                                 [...] has the same signature as M''
+      and ``[they] have the same return type''. 
 }
 \end{question}
 
