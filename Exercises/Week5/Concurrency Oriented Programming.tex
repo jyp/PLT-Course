@@ -36,8 +36,8 @@
 \newcommand{\answer}[1]{}
 
 % Uncomment to show answers
-%\renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
-%\renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
+\renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
+\renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
   
 
 \begin{document}
@@ -112,6 +112,7 @@ Last message: about_to_kill_2
     Write a logger module with the API defined above. For maximum points
     there should be at most one logger process running at a time. Also,
     do not use the functions \textsf{put} and \textsf{get}.
+\newpage
 \begin{longanswer}
 \begin{verbatim}
 -module(logger).
@@ -198,7 +199,7 @@ during the short interval between the main server crashing, and the
 backup server taking over its work).
 
 You should achieve this only by changes in the generic server
-module—the callback modules ought to be entirely unaffected by this
+module -- the callback modules ought to be entirely unaffected by this
 extension. You can start from the module in \textsf{server1.erl} in
 the course handouts.
 
@@ -212,7 +213,7 @@ transaction is a sequence of requests which appear to be atomic to
 other processes. Thus, if we start a transaction, perform a sequence
 of requests, and then end the transaction, then other clients of the
 same server should only see server states before the transaction
-starts, or after it ends—no intermediate state should ever be visible
+starts, or after it ends -- no intermediate state should ever be visible
 to another client.
 
 One way to achieve this would be to “lock the server”, and simply
@@ -269,10 +270,10 @@ code -- the callback modules should be entirely unaffected. In this way,
 transactions can be added to any server at all, without changing the
 callback code in the slightest.
 
-Note
+\paragraph{Note}
 
 A very useful extension is to allow transactions to span over multiple
-servers—so that a client can, for example, withdraw money from one
+servers -- so that a client can, for example, withdraw money from one
 bank account, and deposit it into another, all as part of the same
 transaction, to guarantee that either both effects happen, or neither
 does. This can be implemented via a two-phase commit, where the client
