@@ -36,8 +36,8 @@
 \newcommand{\answer}[1]{}
 
 % Uncomment to show answers
-%\renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
-%\renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
+\renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
+\renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
   
 
 \begin{document}
@@ -446,8 +446,8 @@ operations:
 
    pop:   Stack -> Stack × E
    peek:  Stack -> E
-   empty: Stack -> Stack × boolean
-   search: Stack × Object -> Stack × int
+   empty: Stack -> boolean
+   search: Stack × Object -> int
 variables:
    s: Stack, e: element, o: Object, error: EmptyStackException
 axioms:
