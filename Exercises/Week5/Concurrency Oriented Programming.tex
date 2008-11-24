@@ -63,11 +63,11 @@ crashes.
 
 The API you should implement consists of three functions:
 
-\begin{itemize}
-\item[logger:start()] which starts the logger process,
-\item[logger:stop()], which stops it,
-\item[logger:log(Event)], which sends the Event to the logger, and informs it that the sending process should be monitored.
-\end{itemize}
+\begin{description}
+\item[logger:start()]  starts the logger process;
+\item[logger:stop()]   stops it;
+\item[logger:log(Event)]  sends the \textsf{Event} to the logger, and informs it that the sending process should be monitored.
+\end{description}
 
 For example, the following program uses the logger to report the exit reasons of two processes:
 \begin{verbatim}
@@ -133,16 +133,55 @@ extension. You can start from the module in \textsf{server1.erl} in
 the course handouts.
 
 \section{Transactional Servers}
-In the lecture, we saw how to build a generic server with transactional semantics, in that crashing requests simply leave the server state unchanged. More generally, we might want to perform a sequence of requests to the server in one “transaction”. In general, a transaction is a sequence of requests which appear to be atomic to other processes. Thus, if we start a transaction, perform a sequence of requests, and then end the transaction, then other clients of the same server should only see server states before the transaction starts, or after it ends—no intermediate state should ever be visible to another client.
 
-One way to achieve this would be to “lock the server”, and simply queue up requests from other clients until the entire transaction is over.  But since a transaction may run for quite a long time, then this could restrict concurrency dramatically. Instead, transactions are usually implemented using optimistic concurrency—which mean that two or more are allowed to proceed in parallel, but at the end of a transaction, a check is made to see whether or not any interference actually occurred, and if so, then the transaction is aborted.
+In the lecture, we saw how to build a generic server with
+transactional semantics, in that crashing requests simply leave the
+server state unchanged. More generally, we might want to perform a
+sequence of requests to the server in one “transaction”. In general, a
+transaction is a sequence of requests which appear to be atomic to
+other processes. Thus, if we start a transaction, perform a sequence
+of requests, and then end the transaction, then other clients of the
+same server should only see server states before the transaction
+starts, or after it ends—no intermediate state should ever be visible
+to another client.
 
-While a transaction is running, then its effects must not be visible to other clients, which means that the server must copy the server state when the transaction starts, and then perform the requests that make up the transaction on this copy, instead of on the main server state. In this way, other clients will see no state changes while the transaction is running.
+One way to achieve this would be to “lock the server”, and simply
+queue up requests from other clients until the entire transaction is
+over.  But since a transaction may run for quite a long time, then
+this could restrict concurrency dramatically. Instead, transactions
+are usually implemented using optimistic concurrency—which mean that
+two or more are allowed to proceed in parallel, but at the end of a
+transaction, a check is made to see whether or not any interference
+actually occurred, and if so, then the transaction is aborted.
+
+While a transaction is running, then its effects must not be visible
+to other clients, which means that the server must copy the server
+state when the transaction starts, and then perform the requests that
+make up the transaction on this copy, instead of on the main server
+state. In this way, other clients will see no state changes while the
+transaction is running.
 
 
-When a transaction ends, then the copied state cannot simply replace the main state, because other operations may have changed the main state in the meantime. Instead, we must apply the requests in the transaction to the main state at this point—which we do atomically, thus guaranteeing that other clients see the state either before or after the entire transaction.  Thus the server needs to record the requests that make up a transaction, so that they can be replayed when the transaction ends.
+When a transaction ends, then the copied state cannot simply replace
+the main state, because other operations may have changed the main
+state in the meantime. Instead, we must apply the requests in the
+transaction to the main state at this point—which we do atomically,
+thus guaranteeing that other clients see the state either before or
+after the entire transaction.  Thus the server needs to record the
+requests that make up a transaction, so that they can be replayed when
+the transaction ends.
 
-There is a problem, though. If another client has changed the server state while a transaction was running, then it’s possible that replaying the requests will generate different replies from those that have already been sent to the transaction client. If this happens, then the transaction cannot be completed, because the transaction client has already seen replies that differ from those that would be generated by performing the transaction atomically—so there is no way to make the transaction as a whole appear to be atomic. Instead, the transaction is aborted, and the client is informed. Usually, clients perform transactions in a loop, so that if the transaction aborts, then it is just repeated—perhaps after a delay.
+There is a problem, though. If another client has changed the server
+state while a transaction was running, then it’s possible that
+replaying the requests will generate different replies from those that
+have already been sent to the transaction client. If this happens,
+then the transaction cannot be completed, because the transaction
+client has already seen replies that differ from those that would be
+generated by performing the transaction atomically—so there is no way
+to make the transaction as a whole appear to be atomic. Instead, the
+transaction is aborted, and the client is informed. Usually, clients
+perform transactions in a loop, so that if the transaction aborts,
+then it is just repeated—perhaps after a delay.
 
 Your task is to modify the generic server in \textsf{server1.erl} to support
 two new requests: \textsf{start\_transaction}, and
@@ -155,9 +194,22 @@ should be applied atomically to the main server state, provided there
 are no conflicts, and a Boolean returned to indicate whether or not
 the transaction succeeded.
 
-Once again, your changes should be made only to the generic server code—the callback modules should be entirely unaffected. In this way, transactions can be added to any server at all, without changing the callback code in the slightest.
+Once again, your changes should be made only to the generic server
+code -- the callback modules should be entirely unaffected. In this way,
+transactions can be added to any server at all, without changing the
+callback code in the slightest.
 
 Note
-A very useful extension is to allow transactions to span over multiple servers—so that a client can, for example, withdraw money from one bank account, and deposit it into another, all as part of the same transaction, to guarantee that either both effects happen, or neither does. This can be implemented via a two-phase commit, where the client first asks each server whether it can commit the transaction, then if all reply positively, instructs each server to actually do so. If any server cannot complete the transaction, then the client instructs all of them to abort it. Why not implement this too, if you have time to spare?
+
+A very useful extension is to allow transactions to span over multiple
+servers—so that a client can, for example, withdraw money from one
+bank account, and deposit it into another, all as part of the same
+transaction, to guarantee that either both effects happen, or neither
+does. This can be implemented via a two-phase commit, where the client
+first asks each server whether it can commit the transaction, then if
+all reply positively, instructs each server to actually do so. If any
+server cannot complete the transaction, then the client instructs all
+of them to abort it. Why not implement this too, if you have time to
+spare?
 
 \end{document}
