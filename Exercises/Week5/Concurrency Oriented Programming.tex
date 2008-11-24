@@ -4,19 +4,9 @@
 \newcommand{\Cpp}{C\kern-0.05em\texttt{+\kern-0.03em+}}
 \newcommand{\jp}[1]{ \footnote{#1}}
 
-\lstset{language=java,basicstyle=\small}
 \lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
-\lstnewenvironment{java}
-    {\lstset{language=java,frame=tb}}
-    {}
-\lstnewenvironment{java2}
-    {\lstset{language=java,frame=tb}}
-    {}
-\lstnewenvironment{cplus}
-    {\lstset{language=c++,frame=tb}}
-    {}
-\lstnewenvironment{perl}
-    {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip,frame=tb}}
+\lstnewenvironment{erlang}
+    {\lstset{language=erlang,frame=tb}}
     {}
 
 \newcommand{\courseinfo}{ John Hughes \\ Programming Paradigms 2008 }
@@ -63,14 +53,14 @@ crashes.
 
 The API you should implement consists of three functions:
 
-\begin{itemize}
+\begin{description}
 \item[logger:start()] which starts the logger process,
 \item[logger:stop()], which stops it,
 \item[logger:log(Event)], which sends the Event to the logger, and informs it that the sending process should be monitored.
-\end{itemize}
+\end{description}
 
 For example, the following program uses the logger to report the exit reasons of two processes:
-\begin{verbatim}
+\begin{erlang}
 test() ->
     spawn(fun() ->
 	  logger:log(starting_1),
@@ -88,7 +78,7 @@ test() ->
 	  logger:log(stopping_1),
 	  exit(done)
 	end).
-\end{verbatim}
+\end{erlang}
 The output when this program is run should be something  like this:
 \begin{verbatim}
 25> logger:test().
