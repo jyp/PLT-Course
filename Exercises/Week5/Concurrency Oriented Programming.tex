@@ -26,8 +26,8 @@
 \newcommand{\answer}[1]{}
 
 % Uncomment to show answers
-%\renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
-%\renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
+\renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
+\renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
   
 
 \begin{document}
@@ -40,7 +40,12 @@ Concurrency Oriented Programming—Exercises}
 
 \section{Running Erlang}
 
-You can start an Erlang interpreter using the command \verb!erl!. You can also install Erlang on your own computer: downloads are available from erlang.org. Whether you use the version installed at Chalmers, or install your own, you will need the Erlang documentation. This is available at \url{http://erlang.org/doc/} (and is also installed along with the Erlang system when you download a copy to your own computer).
+You can start an Erlang interpreter using the command \verb!erl!. You
+can also install Erlang on your own computer: downloads are available
+from erlang.org. Whether you use the version installed at Chalmers, or
+install your own, you will need the Erlang documentation. This is
+available at \url{http://erlang.org/doc/} (and is also installed along
+with the Erlang system when you download a copy to your own computer).
 
 
 \section{Building a logger}
@@ -54,9 +59,10 @@ crashes.
 The API you should implement consists of three functions:
 
 \begin{description}
-\item[logger:start()]  starts the logger process;
-\item[logger:stop()]   stops it;
-\item[logger:log(Event)]  sends the \textsf{Event} to the logger, and informs it that the sending process should be monitored.
+\item[\textsf{logger:start()}]  starts the logger process;
+\item[\textsf{logger:stop()}]   stops it;
+\item[\textsf{logger:log(Event)}] sends the \textsf{Event} to the logger, and
+  informs it that the sending process should be monitored.
 \end{description}
 
 For example, the following program uses the logger to report the exit reasons of two processes:
@@ -92,6 +98,71 @@ Last message: about_to_kill_2
 
 (Try removing the calls to sleep, and see the effect on the output).
 
+\begin{question}{25}
+    Write a logger module with the API defined above. For maximum points
+    there should be at most one logger process running at a time. Also,
+    do not use the functions \textsf{put} and \textsf{get}.
+\newpage
+\begin{longanswer}
+\begin{verbatim}
+-module(logger).
+
+-export([start/0, stop/0, log/1, test/0]).
+
+start() ->
+    Pid = spawn (fun() -> process_flag(trap_exit, true),
+			  logging([])
+		 end),
+    % note that registering the process outside the spawn ensures that
+    % the process is registered as the start function exits.
+    register (logger_process, Pid).
+						
+
+stop() ->
+    exit (whereis (logger_process), stopping),
+    unregister (logger_process).
+
+log(Event)
+    link (whereis (logger_process)),
+    logger_process ! {self(), Event}.
+    
+	
+logging (Messages) ->
+    receive
+	{Pid, Event} ->	    
+	    logging ([{Pid, Event} | Messages]); 
+	    % all the messages are accumulated, instead we might want
+	    % to keep only the last message per process. (using
+	    % keyreplace)
+	{'EXIT', Pid, _} -> 	    
+	    {value,{Pid, Message}} = lists:keysearch (Pid, 1, Messages),
+	    io:format ("Exited: ~w with ~w~n", [Pid, Message]),
+	    logging (Messages)
+    end.
+
+		   
+test() ->
+    spawn(fun() ->
+            logger:log(starting_1),
+            Pid = spawn_link(fun() ->
+                                 logger:log(starting_2),
+                                 timer:sleep(1000),
+                                 logger:log(stopping_2),
+                                 1/0
+                       end),
+            logger:log(started_2),
+            timer:sleep(100),
+            logger:log(about_to_kill_2),
+            exit(Pid,reason),
+            timer:sleep(100),
+            logger:log(stopping_1),
+            exit(done)
+          end).
+
+\end{verbatim}
+\end{longanswer}
+\end{question}
+
 \section{Fault-tolerance by Replication}
 
 Sooner or later, every computer crashes. Fault-tolerant systems should
@@ -118,7 +189,7 @@ during the short interval between the main server crashing, and the
 backup server taking over its work).
 
 You should achieve this only by changes in the generic server
-module—the callback modules ought to be entirely unaffected by this
+module -- the callback modules ought to be entirely unaffected by this
 extension. You can start from the module in \textsf{server1.erl} in
 the course handouts.
 
@@ -132,7 +203,7 @@ transaction is a sequence of requests which appear to be atomic to
 other processes. Thus, if we start a transaction, perform a sequence
 of requests, and then end the transaction, then other clients of the
 same server should only see server states before the transaction
-starts, or after it ends—no intermediate state should ever be visible
+starts, or after it ends -- no intermediate state should ever be visible
 to another client.
 
 One way to achieve this would be to “lock the server”, and simply
@@ -189,10 +260,10 @@ code -- the callback modules should be entirely unaffected. In this way,
 transactions can be added to any server at all, without changing the
 callback code in the slightest.
 
-Note
+\paragraph{Note}
 
 A very useful extension is to allow transactions to span over multiple
-servers—so that a client can, for example, withdraw money from one
+servers -- so that a client can, for example, withdraw money from one
 bank account, and deposit it into another, all as part of the same
 transaction, to guarantee that either both effects happen, or neither
 does. This can be implemented via a two-phase commit, where the client
