@@ -50,7 +50,12 @@ Concurrency Oriented Programming—Exercises}
 
 \section{Running Erlang}
 
-You can start an Erlang interpreter using the command \verb!erl!. You can also install Erlang on your own computer: downloads are available from erlang.org. Whether you use the version installed at Chalmers, or install your own, you will need the Erlang documentation. This is available at \url{http://erlang.org/doc/} (and is also installed along with the Erlang system when you download a copy to your own computer).
+You can start an Erlang interpreter using the command \verb!erl!. You
+can also install Erlang on your own computer: downloads are available
+from erlang.org. Whether you use the version installed at Chalmers, or
+install your own, you will need the Erlang documentation. This is
+available at \url{http://erlang.org/doc/} (and is also installed along
+with the Erlang system when you download a copy to your own computer).
 
 
 \section{Building a logger}
@@ -64,9 +69,10 @@ crashes.
 The API you should implement consists of three functions:
 
 \begin{description}
-\item[logger:start()]  starts the logger process;
-\item[logger:stop()]   stops it;
-\item[logger:log(Event)]  sends the \textsf{Event} to the logger, and informs it that the sending process should be monitored.
+\item[\textsf{logger:start()}]  starts the logger process;
+\item[\textsf{logger:stop()}]   stops it;
+\item[\textsf{logger:log(Event)}] sends the \textsf{Event} to the logger, and
+  informs it that the sending process should be monitored.
 \end{description}
 
 For example, the following program uses the logger to report the exit reasons of two processes:
@@ -101,6 +107,70 @@ Last message: about_to_kill_2
 \end{verbatim}
 
 (Try removing the calls to sleep, and see the effect on the output).
+
+\begin{question}{25}
+    Write a logger module with the API defined above. For maximum points
+    there should be at most one logger process running at a time. Also,
+    do not use the functions \textsf{put} and \textsf{get}.
+\begin{longanswer}
+\begin{verbatim}
+-module(logger).
+
+-export([start/0, stop/0, log/1, test/0]).
+
+start() ->
+    Pid = spawn (fun() -> process_flag(trap_exit, true),
+			  logging([])
+		 end),
+    % note that registering the process outside the spawn ensures that
+    % the process is registered as the start function exits.
+    register (logger_process, Pid).
+						
+
+stop() ->
+    exit (whereis (logger_process), stopping),
+    unregister (logger_process).
+
+log(Event)
+    link (whereis (logger_process)),
+    logger_process ! {self(), Event}.
+    
+	
+logging (Messages) ->
+    receive
+	{Pid, Event} ->	    
+	    logging ([{Pid, Event} | Messages]); 
+	    % all the messages are accumulated, instead we might want
+	    % to keep only the last message per process. (using
+	    % keyreplace)
+	{'EXIT', Pid, _} -> 	    
+	    {value,{Pid, Message}} = lists:keysearch (Pid, 1, Messages),
+	    io:format ("Exited: ~w with ~w~n", [Pid, Message]),
+	    logging (Messages)
+    end.
+
+		   
+test() ->
+    spawn(fun() ->
+            logger:log(starting_1),
+            Pid = spawn_link(fun() ->
+                                 logger:log(starting_2),
+                                 timer:sleep(1000),
+                                 logger:log(stopping_2),
+                                 1/0
+                       end),
+            logger:log(started_2),
+            timer:sleep(100),
+            logger:log(about_to_kill_2),
+            exit(Pid,reason),
+            timer:sleep(100),
+            logger:log(stopping_1),
+            exit(done)
+          end).
+
+\end{verbatim}
+\end{longanswer}
+\end{question}
 
 \section{Fault-tolerance by Replication}
 
