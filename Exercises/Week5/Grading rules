@@ -1,0 +1,22 @@
+Q1
+could you do it with only one logger process? -2
+could you do it without using rpc, on_exit? -5
+can you do it without using put/get? -10
+logger process should be registered -5
+logger process should be able to track multiple processes -10
+use register instead of get for global access to a process -5
+
+
+Q2
+Backup is registered under same name -15
+the backup server should also process the requests -10
+your backup server does not “become” main, but “spawns” main again. -5
+backup server should not send replies -5
+
+
+Q3
+You should not need to split the state into variables if you follow the method described in the question -25
+the server should reply immediately, even in a transaction -30
+your server does not replay queries -25
+your server does not test if replaying queries provides same replies -15
+transaction should not fail even if the state has changed -5
