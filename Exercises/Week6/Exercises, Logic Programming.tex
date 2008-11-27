@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{fancyvrb,hyperref,listings,verbatim}
+
+\newcommand{\Cpp}{C\kern-0.05em\texttt{+\kern-0.03em+}}
+\newcommand{\jp}[1]{ \footnote{#1}}
+
+\lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
+\lstnewenvironment{erlang}
+    {\lstset{language=erlang,frame=tb}}
+    {}
+
+\newcommand{\courseinfo}{ John Hughes \\ Programming Paradigms 2008 }
+\newcommand{\percent}[1]{\protect \marginpar[l]{\bf [#1 points]}}
+\newcommand{\mycomment}[1]{}
+
+\newcounter{question}
+\newenvironment{question}[1]{%
+  \addtocounter{question}{1}%
+  \paragraph{Exercise~\arabic{question}  \percent{#1}}%
+}{%
+  \vskip1em%
+}
+
+\let\longanswer=\comment
+\let\endlonganswer=\endcomment
+\newcommand{\answer}[1]{}
+
+% Uncomment to show answers
+\renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
+\renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
+  
+
+\begin{document}
+\title{Ex. 5: Programming Paradigms 
+\\
+Concurrency Oriented Programming—Exercises}
+\author{\courseinfo}
+\date{}
+\maketitle
+
+\end{document}
