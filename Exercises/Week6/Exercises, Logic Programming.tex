@@ -132,8 +132,9 @@ that are not elements in list \textsf{B}.
 
 \begin{longanswer}
 \begin{verbatim}
-diff([],Ys,[]).                                                                                 diff([X|Xs],Ys,Zs)     :- elem(X,Ys),       diff(Xs,Ys,Zs).
-diff([X|Xs],Ys,[X|Zs]) :- neg(elem(X,Ys)),  diff(Xs,Ys,Zs).                                    
+diff([],Ys,[]).                                                                          
+diff([X|Xs],Ys,Zs)     :- elem(X,Ys),       diff(Xs,Ys,Zs).
+diff([X|Xs],Ys,[X|Zs]) :- neg(elem(X,Ys)),  diff(Xs,Ys,Zs).                                 
 \end{verbatim}
 \end{longanswer}
 \end{question}
