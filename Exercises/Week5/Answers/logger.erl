@@ -15,7 +15,7 @@ stop() ->
     exit (whereis (logger_process), stopping),
     unregister (logger_process).
 
-log(Event)
+log(Event) ->
     link (whereis (logger_process)),
     logger_process ! {self(), Event}.
     

@@ -63,7 +63,7 @@ server(Name,Mod,State,Pending) ->
 				{'EXIT',Reason} ->
 				    reply(Name,Pid,{crash,Reason}),
 				    server(Name,Mod,State,Pending);
-				{Reserply,NewState} ->
+				{Reply,NewState} ->
 				    reply(Name,Pid,{ok,Reply}),
 				    server(Name,Mod,NewState,Pending)
 			    end
