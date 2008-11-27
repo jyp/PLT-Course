@@ -140,8 +140,8 @@ diff([X|Xs],Ys,[X|Zs]) :- neg(elem(X,Ys)),  diff(Xs,Ys,Zs).
 \begin{question}{1} Rewrite the above predicate using cut directly.
 \end{question}
 
-\section{Unification}
 
+\section{Unification}
 
 A difference list is a special structure that can support efficient
 concatenation. It uses unification in a clever way to that end.
@@ -167,7 +167,8 @@ Write a predicate toList/2 to get back to the normal list representation.
 \end{question}
 
 \begin{question}{3}
-Write a predicate concat/3 to concatenate two difference lists.
+Write a predicate concat/3 to concatenate two difference lists, without
+using the direct representation.
 
 \begin{verbatim}
 concat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
@@ -179,7 +180,15 @@ should produce:
 Final = 1:2:3:4:5:[].
 \end{verbatim}
 
+
+
 \end{question}
+
+
+\begin{question}{1}
+What happens when you concatenate a difference list with itself?
+\end{question}
+
 
 
 \end{document}
