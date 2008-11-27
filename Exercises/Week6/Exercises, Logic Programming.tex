@@ -106,8 +106,6 @@ N = [-5,-1,-9].
 }
 \end{question}
 
-\section{Unification}
-
 \section{Negation}
 
 You can express the negation of an expression by using cut and failure:
@@ -141,5 +139,47 @@ diff([X|Xs],Ys,[X|Zs]) :- neg(elem(X,Ys)),  diff(Xs,Ys,Zs).
 
 \begin{question}{1} Rewrite the above predicate using cut directly.
 \end{question}
+
+\section{Unification}
+
+
+A difference list is a special structure that can support efficient
+concatenation. It uses unification in a clever way to that end.
+
+The difference-list representation for a list can be obtained as follows:
+
+\begin{verbatim}
+fromList([],d(X,X)).
+fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
+\end{verbatim}
+
+
+A structure of the form \textsf{d(Out,In)} will represent the list 
+\textsf{L} if \textsf{Out} unifies with \textsf{L} concatenated with \textsf{In}.
+
+You can check how fromList works by testing it: 
+\begin{verbatim}
+fromList([1,2,3],X).
+\end{verbatim}
+
+\begin{question}{1}
+Write a predicate toList/2 to get back to the normal list representation.
+\end{question}
+
+\begin{question}{3}
+Write a predicate concat/3 to concatenate two difference lists.
+
+\begin{verbatim}
+concat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
+\end{verbatim}
+
+should produce:
+
+\begin{verbatim}
+Final = 1:2:3:4:5:[].
+\end{verbatim}
+
+\end{question}
+
 
 \end{document}
