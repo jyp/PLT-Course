@@ -31,11 +31,73 @@
   
 
 \begin{document}
-\title{Ex. 5: Programming Paradigms 
+\title{Ex. 6: Programming Paradigms 
 \\
-Concurrency Oriented Programming—Exercises}
+Logic Oriented Programming --- Exercises}
 \author{\courseinfo}
 \date{}
 \maketitle
+
+\section{Prolog}
+We advise you to use SWI-Prolog to test your solutions.
+You can find it here:
+\url{http://www.swi-prolog.org/}
+
+This page will help you getting started:
+
+\url{http://gollem.science.uva.nl/SWI-Prolog/Manual/quickstart.html}
+
+\section{Reversibility}
+
+
+Consider a predicate split/3, that splits a list of integers into two lists: one containing the positive ones (and zero), the other containing the negative ones.
+
+\begin{verbatim}
+split([3,4,-5,-1,0,4,-9],P,N)
+\end{verbatim}
+
+should return:
+
+\begin{verbatim}
+P = [3,4,0,4]
+N = [-5,-1,-9].
+\end{verbatim}
+
+
+\begin{question}{1}
+    Write the predicate split/3. Make sure that it is \emph{reversible}. That is,
+    you can recover the original list if you pass it the split lists.
+\end{question}    
+
+\begin{question}{1}
+    What are the lists that are returned by split/3 when used in reverse?
+\end{question}
+
+
+\section{Cut}
+
+\begin{question}{1}
+    Explain what the following program does:
+
+        class(Number,positive) :- Number > 0.
+        class(0,zero).
+        class(Number, negative) :- Number < 0.
+\end{question}
+
+\begin{question}{1}
+    Improve the previous program by adding green cuts.
+\end{question}
+
+
+\begin{question}{1}
+    Improve the program split/3 by adding green cuts. Don't worry about reversibility now.
+\end{question}
+
+\begin{question}{1}
+    What if you try to use your new split/3 in reverse?
+\end{question}
+
+
+\section{Failure}
 
 \end{document}
