@@ -47,6 +47,8 @@ This page will help you getting started:
 
 \url{http://gollem.science.uva.nl/SWI-Prolog/Manual/quickstart.html}
 
+Also, we found that version 5.6.47 was buggy, but 5.6.55 was ok.
+
 \section{Reversibility}
 
 
@@ -82,19 +84,26 @@ N = [-5,-1,-9].
         class(Number,positive) :- Number > 0.
         class(0,zero).
         class(Number, negative) :- Number < 0.
+\answer{
+\textsf{class(N,C)} relates number with their class, positive, negative or otherwise.
+}
 \end{question}
 
 \begin{question}{1}
-    Improve the previous program by adding green cuts.
+  Improve the previous program by adding green cuts.
 \end{question}
 
 
 \begin{question}{1}
-    Improve the program split/3 by adding green cuts. Don't worry about reversibility now.
+  Improve the program split/3 by adding cuts. Don't worry about reversibility now.
 \end{question}
 
 \begin{question}{1}
-    What if you try to use your new split/3 in reverse?
+  What if you try to use your new split/3 in reverse?
+
+\answer{
+  It still works OK, as long as no condition has been removed.      
+}
 \end{question}
 
 
