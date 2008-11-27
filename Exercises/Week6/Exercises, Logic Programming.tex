@@ -107,6 +107,34 @@ N = [-5,-1,-9].
 \end{question}
 
 
-\section{Failure}
+\section{Negation}
+
+You can express the negation of an expression by using cut and failure:
+
+\begin{verbatim}
+neg(Goal) :- Goal,!,fail.
+neg(Goal).
+\end{verbatim}
+
+\textsf{elem} can be used to test if an element belongs to a list:
+
+\begin{verbatim}
+elem(X,[X|Xs]).                                                                                 elem(X,[Y|Xs]) :- elem(X,Xs).                                                                  
+\end{verbatim}
+
+
+\begin{question}{1} Using \textsf{neg} and \textsf{elem}, write a predicate
+\textsf{diff(A,B,C)} such that C is a list that contains all the elements in
+list A that are not elements in list B.
+\begin{longanswer}
+\begin{verbatim}
+diff([],Ys,[]).                                                                                 diff([X|Xs],Ys,Zs)     :- elem(X,Ys),       diff(Xs,Ys,Zs).
+diff([X|Xs],Ys,[X|Zs]) :- neg(elem(X,Ys)),  diff(Xs,Ys,Zs).                                    
+\end{verbatim}
+\end{longanswer}
+\end{question}
+
+\begin{question}{1} Rewrite the above predicate using cut directly.
+\end{question}
 
 \end{document}
