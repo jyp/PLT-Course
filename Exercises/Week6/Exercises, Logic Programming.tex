@@ -5,11 +5,11 @@
 \newcommand{\jp}[1]{ \footnote{#1}}
 
 \lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
-\lstnewenvironment{erlang}
-    {\lstset{language=erlang,frame=tb}}
+\lstnewenvironment{prolog}
+    {\lstset{language=prolog,frame=tb}}
     {}
 
-\newcommand{\courseinfo}{ JP Bernardy \and Gustav Munkby \\ Programming Paradigms 2008 }
+\newcommand{\courseinfo}{ JP Bernardy \and Gustav Munkby}
 \newcommand{\percent}[1]{\protect \marginpar[l]{\bf [#1 points]}}
 \newcommand{\mycomment}[1]{}
 
@@ -26,7 +26,7 @@
 \newcommand{\answer}[1]{}
 
 % Uncomment to show answers
-\renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}}{}
+\renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}\ }{}
 \renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
   
 
@@ -35,7 +35,7 @@
 \\
 Logic Oriented Programming --- Exercises}
 \author{\courseinfo}
-\date{}
+\date{Programming Paradigms 2008}
 \maketitle
 
 \section{Prolog}
@@ -46,6 +46,36 @@ This page will help you getting started:
 \url{http://gollem.science.uva.nl/SWI-Prolog/Manual/quickstart.html}
 
 Also, we found that version 5.6.47 was buggy, but 5.6.55 was ok.
+
+\section{Unification}
+
+\begin{question}{2}
+What is the result of the following unifications? 
+Try to come up with the result without using the prolog interpreter!
+
+\begin{tabular}{c}
+a(X,Y) = a(b,c) \\
+a(X,Y) = a(Z,Z) \\
+a(X,X) = a(b,c) \\
+a(X) = a(b,b) \\
+a(X,X,Y) = a(Z,W,W) \\
+\end{tabular}
+
+\begin{longanswer}
+
+\begin{tabular}{c}
+X = b, Y = c \\
+X = Y = Z \\
+fail \\
+fail \\
+X = Y = Z = W \\
+\end{tabular}
+    
+\end{longanswer}
+
+\end{question}
+
+
 
 \section{Reversibility}
 
@@ -67,10 +97,19 @@ N = [-5,-1,-9].
 \begin{question}{1}
     Write the predicate \textsf{split/3}. Make sure that it is \emph{reversible}. That is,
     you can recover the original list if you pass it the split lists.
+\begin{longanswer}\ 
+\begin{prolog}
+split([],[],[]).
+split([X|A],[X|P],N) :- X >= 0, split(A,P,N).
+split([X|A],P,[X|N]) :- X <  0, split(A,P,N).
+\end{prolog}
+\end{longanswer}
 \end{question}    
 
 \begin{question}{1}
     What are the lists that are returned by \textsf{split/3} when used in reverse?
+\answer{All the possible interleavings of the inputs. If a number of the wrong class is
+in either of the inputs, it will fail.}
 \end{question}
 
 
@@ -79,11 +118,11 @@ N = [-5,-1,-9].
 \begin{question}{1}
     Explain what the following program does:
 
-\begin{verbatim}
+\begin{prolog}
         class(Number,positive) :- Number > 0.
         class(0,zero).
         class(Number, negative) :- Number < 0.
-\end{verbatim}
+\end{prolog}
 \answer{
 \textsf{class(N,C)} relates number with their class, positive, negative or otherwise.
 }
@@ -91,11 +130,38 @@ N = [-5,-1,-9].
 
 \begin{question}{1}
   Improve the previous program by adding green cuts.
+\begin{longanswer}\ 
+\begin{prolog}
+        class(Number,positive) :- Number > 0, !.
+        class(0,zero) :- !.
+        class(Number, negative) :- Number < 0, !.
+\end{prolog}
+\end{longanswer}
+\end{question}
+
+\begin{question}{1}
+  ``Optimize'' the above program. (Transform some green cuts into red cuts).
+\begin{longanswer}\ 
+\begin{prolog}
+        class(Number,positive) :- Number > 0, !.
+        class(0,zero) :- !.
+        class(Number, negative) :- !.
+\end{prolog}
+\end{longanswer}
 \end{question}
 
 
 \begin{question}{1}
   Improve the predicate \textsf{split/3} by adding cuts. Don't worry about reversibility now.
+
+\begin{longanswer}\ 
+\begin{prolog}
+split([],[],[]) :- !.
+split([X|A],[X|P],N)  :-  X  >=  0,  !, split(A,P,N).
+split([X|A],P,[X|N])  :-  X  <   0,  !, split(A,P,N).
+\end{prolog}
+\end{longanswer}
+
 \end{question}
 
 \begin{question}{1}
@@ -110,16 +176,53 @@ N = [-5,-1,-9].
 
 You can express the negation of an expression by using cut and failure:
 
-\begin{verbatim}
+\begin{prolog}
 neg(Goal) :- Goal,!,fail.
 neg(Goal).
-\end{verbatim}
+\end{prolog}
+
+
+We want to define a predicate that will tell us which students like which
+programming paradigm. Let's say Sven likes all programming languages \emph{except}
+prolog.
+We could model this as such:
+
+\begin{prolog}
+like(sven,haskell).
+like(sven,java).
+like(sven,fortress).
+like(sven,erlang).
+...
+\end{prolog}
+
+That is fine as long as we can enumerate all languages: we can just leave prolog out.
+(But it is also very tedious). 
+
+
+\begin{question}{1}
+With the help of the \textsf{neg} predicate,
+can you express the same idea using just one clause?
+
+\begin{longanswer}
+\begin{prolog}
+like(sven,Language) :- neg(Language = prolog).
+\end{prolog}
+\end{longanswer}
+\end{question}
+
+\begin{question}{1}
+This new predicate is not reversible. Why?
+
+\answer{Because Prolog works by backtracking, it has no way to know the
+universe of programming languages.}
+
+\end{question}
 
 \textsf{elem} can be used to test if an element belongs to a list:
 
-\begin{verbatim}
+\begin{prolog}
 elem(X,[X|Xs]).                                                                                 elem(X,[Y|Xs]) :- elem(X,Xs).                                                                  
-\end{verbatim}
+\end{prolog}
 
 
 \begin{question}{1} 
@@ -129,50 +232,66 @@ such that \textsf{C} is a list that contains all the elements in list \textsf{A}
 that are not elements in list \textsf{B}.
 
 \begin{longanswer}
-\begin{verbatim}
+\begin{prolog}
 diff([],Ys,[]).                                                                          
 diff([X|Xs],Ys,Zs)     :- elem(X,Ys),       diff(Xs,Ys,Zs).
 diff([X|Xs],Ys,[X|Zs]) :- neg(elem(X,Ys)),  diff(Xs,Ys,Zs).                                 
-\end{verbatim}
+\end{prolog}
 \end{longanswer}
 \end{question}
 
-\begin{question}{1} Rewrite the above predicate using cut directly.
-\end{question}
 
-
-\section{Unification}
+\section{Applying Unification}
 
 A difference list is a special structure that can support efficient
 concatenation. It uses unification in a clever way to that end.
 
 The difference-list representation for a list can be obtained as follows:
 
-\begin{verbatim}
+\begin{prolog}
 fromList([],d(X,X)).
 fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
-\end{verbatim}
+\end{prolog}
 
 
 A structure of the form \textsf{d(Out,In)} will represent the list 
 \textsf{L} if \textsf{Out} unifies with \textsf{L} concatenated with \textsf{In}.
 
 You can check how fromList works by testing it: 
-\begin{verbatim}
+\begin{prolog}
 fromList([1,2,3],X).
-\end{verbatim}
+\end{prolog}
+
+Note that the same metavariable (G271 in my implementation) is present twice in
+the result. Note that we can get the original result back by unifying this
+metavariable with the empty list.
 
 \begin{question}{1}
 Write a predicate toList/2 to get back to the normal list representation.
+\begin{longanswer}
+\begin{prolog}
+toList(d(X,[]),X).
+\end{prolog}
+or
+\begin{prolog}
+toList(d(Out,In),Result) :- Result = Out, In = [].
+\end{prolog}
+\end{longanswer}
+
 \end{question}
 
-\begin{question}{3}
-Write a predicate concat/3 to concatenate two difference lists, without
+Given that representation for lists, it is possible to perform concatenation by
+doing unification only!
+
+\begin{question}{1}
+Write a predicate dconcat/3 to concatenate two difference lists, without
 using the direct representation.
 
-\begin{verbatim}
-concat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
-\end{verbatim}
+\begin{prolog}
+dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
+\end{prolog}
+
+
 
 should produce:
 
@@ -180,6 +299,18 @@ should produce:
 Final = 1:2:3:4:5:[].
 \end{verbatim}
 
+\begin{longanswer}
+\begin{prolog}
+dconcat(d(Out2,In2),d(Out1,In1),d(Out,In)) :- Out = Out2, In2 = Out1, In = In1.
+\end{prolog}
+
+or
+
+\begin{prolog}
+dconcat(d(Out,Intermediate),d(Intermediate,In),d(Out,In)).
+\end{prolog}
+
+\end{longanswer}
 
 
 \end{question}
@@ -187,6 +318,7 @@ Final = 1:2:3:4:5:[].
 
 \begin{question}{1}
 What happens when you concatenate a difference list with itself?
+\answer{The difference list will contain circular, infinite lists.}
 \end{question}
 
 
