@@ -4,6 +4,7 @@
 
 start() ->
     Pid = spawn (fun() -> process_flag(trap_exit, true),
+                          % ensures that we get exit from other processes
 			  logging([])
 		 end),
     % note that registering the process outside the spawn ensures that
@@ -33,6 +34,12 @@ logging (Messages) ->
 	    logging (Messages)
     end.
 
+%  -5  uses more than one logger process
+%  -5  uses the functions rpc, on_exit
+%  -5  logger process is not registered
+% -10  logger process can track only one process
+%  -5  uses get instead of register for global access to a process
+% -10  uses put/get for the logging data
 		   
 test() ->
     spawn(fun() ->

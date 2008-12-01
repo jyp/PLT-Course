@@ -15,6 +15,7 @@ replay(Mod,State, [Q|Qs]) ->
     {R,FinalState} = Mod:handle(Q,State2),
     {FinalState, [R|Rs]}.
     
+% type Pending = [{ClientPid,StateForThatClient,[{Query,Reply}]}]
 
 server(Name,Mod,State,Pending) ->
     io:format ("Server state is now: ~w Pending: ~w~n",[State,Pending]),
@@ -35,7 +36,7 @@ server(Name,Mod,State,Pending) ->
 			    io:format ("Trying to commit... ~w, ~w, ~w~n", 
 				       [Queries, Replies, replay(Mod,State,Queries)]),
 			    case catch replay(Mod,State,Queries) of
-				{NewState,Replies} -> 
+				{NewState,Replies} -> % note that Replies is already bound 
 				    reply(Name,Pid,{ok,true}),
 				    server(Name,Mod,NewState,lists:keydelete(Pid,1,Pending));
 				_ -> 
@@ -86,3 +87,8 @@ reply(Name,Pid,Reply) ->
     io:format ("Server replies: ~w~n",[Reply]),
     Pid ! {Name,Reply}.
 
+% -25 The state is split into individual variables 
+% -30 The server does not reply immediately in a transaction 
+% -25 The server does not replay queries 
+% -15 The server does not test if replaying queries provides same replies 
+% -5  Transaction fails if the state has changed
