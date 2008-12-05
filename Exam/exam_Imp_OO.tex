@@ -42,7 +42,12 @@ in each of the cases
 \item Call-by-reference
 \item Call-by-value
 \item Call-by-result
-\item Call-by-value-result
+\item Call-by-value-result; if the return address is computed...
+\begin{enumerate}\itemsep=0.0cm
+\item early (beginning of the call)
+\item for x an y separately (before and after i++)
+\item late (when the call returns)
+\end{enumerate}
 \end{enumerate}
  (\textbf{2p.})
 \item Consider the following definition of the 
@@ -82,7 +87,7 @@ language is specified as follows:
 \begin{quote}
 (JLS, 15.18.1) String Concatenation Operator +
 
-``If only one operand expression is of type String, then string conversion is performed on the other operand to produce a string at run time. The result is a reference to a String object (newly created) that is the concatenation of the two operand strings. The characters of the left-hand operand precede the characters of the right-hand operand in the newly created string. If an operand of type String is null, then the string "null" is used instead of that operand.''
+``If only one operand expression is of type String, then string conversion is performed on the other operand to produce a string at run time. The result is a reference to a String object (newly created) that is the concatenation of the two operand strings. The characters of the left-hand operand precede the characters of the right-hand operand in the newly created string. If an operand of type String is null, then the string ``null" is used instead of that operand.''
 \end{quote}
 
  Given the following class 
@@ -105,8 +110,8 @@ class GoodMorning
 \end{verbatim}
 }
 \begin{enumerate}
-\item For the specification of the string concatentation operator, it
-matters that the Java String class is \textit{immutable}. Read the
+The specification of the string concatentation operator allows 
+the Java String class to be \textit{immutable}. Read the
 specification above carefully and determine \textit{where} in the specification
 immutability comes into play. Give the  phrase(s) literally, as used in 
 the wording of the specification. (\textbf{2p.})
@@ -126,7 +131,7 @@ Assume a for-statement in a Java-like language, that is, of the form
 \begin{center}
   \textbf{for} (ForInit; Expression; ForUpdate) Statement.
 \end{center}
-Further assume the  scope of a local variable declared in the 
+Further assume the scope of a local variable declared in the 
 \textit{ForInit} part of a 
 for-statement includes all of the following:
 \begin{itemize}
@@ -202,7 +207,7 @@ self do: [:c | c == cr ifTrue: [count := count + 1]].      "(4)"
 }
 \begin{enumerate}
 \item What do the bars in line (1) and the period (in lines 2-4) 
-mean? Give the technical term each. (\textbf{1p}.)
+mean? Give the technical term for each. (\textbf{1p}.)
 \item In lines (3) and (4): determine all messages, and 
 for each message determine the receiver object and all 
 argument object(s). For readability,
@@ -223,9 +228,9 @@ succ, add, and is-zero. Consider zero and succ as constructors.
 %is-zero as observer.
 \begin{enumerate}
 \item Provide an appropriate signature. (\textbf{2p}.)
-\item Provide the appropriate axioms  that capture the intuitive 
+\item Provide the appropriate axioms that capture the intuitive 
 understanding of zero, succ, addition, and is-zero for natural numbers.
-Your  axioms should allow one to show the identity
+Your axioms should allow one to show the identity
 
 \begin{center}
 {add(succ(succ(zero)), succ(zero)) = succ(succ(succ(zero)))}.
@@ -261,13 +266,12 @@ int main() {
       b.h();
       a = b;
       a.h(); 
-   }
 }
 \end{verbatim}
 }
 \begin{enumerate}
-\item What gets printed if a,b are value types?  (\textbf{2p}.)
-\item What gets printed if a,b are reference types?  (\textbf{2p}.)
+\item What gets printed if a,b have value types?  (\textbf{2p}.)
+\item What gets printed if a,b have reference types?  (\textbf{2p}.)
 \end{enumerate}
 \end{enumerate}
 
@@ -299,10 +303,10 @@ int main() {
 \begin{enumerate}
   \item It's one phrase, used twice: ``newly created'' (the immutable
         string cannot be update in-place). 
-   \item It prints ``Good.''
+   \item It prints ``Good\_''
          Activation records: when ``+'' is invoked, s and t both reference 
-         the constant string ``Good.'' When ``+'' returns, t no longer
-         aliases s but refers to the anonymous object ``t + 'Morning''          
+         the constant string ``Good\_'' When ``+'' returns, $t$ no longer
+         aliases $s$ but refers to the anonymous object ``t + 'Morning' ''          
    \end{enumerate}
 
 
