@@ -1,5 +1,4 @@
 -module(logger).
-
 -export([start/0, stop/0, log/1, test/0]).
 
 start() ->
@@ -9,8 +8,7 @@ start() ->
 		 end),
     % note that registering the process outside the spawn ensures that
     % the process is registered as the start function exits.
-    register (logger_process, Pid).
-						
+    register (logger_process, Pid).				
 
 stop() ->
     exit (whereis (logger_process), stopping),

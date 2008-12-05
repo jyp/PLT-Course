@@ -1,0 +1,397 @@
+\documentclass{article}
+
+
+
+\begin{document}
+
+\section{Imperative Programming [12 points]}
+
+\begin{enumerate}
+\item (Parameter passing.) 
+\hfill{\textbf{[4 points]}}
+\begin{enumerate}
+\item Given  the following program:
+
+{\small
+\begin{verbatim}
+int i;
+int a[2];
+void p(int x, int y) {
+    x++;
+    i++;
+    y++;
+}
+int main () {
+    a[0] := 1;
+    a[1] := 1;
+    i := 0;
+    p(a[i],a[i]);
+    print ("a[0] = ", a[0]);
+    print ("a[1] = ", a[1]);
+    return 0;
+}
+\end{verbatim}
+}
+
+For each of the following methods of parameter passing,
+draw the activation record of the subroutine \texttt{p} at the time when
+the parameters are passed. Also give the output of above program
+in each of the cases
+
+\begin{enumerate}\itemsep=0.0cm
+\item Call-by-reference
+\item Call-by-value
+\item Call-by-result
+\item Call-by-value-result
+\end{enumerate}
+ (\textbf{2p.})
+\item Consider the following definition of the 
+subroutine \texttt{sum}: 
+
+{\small 
+\begin{verbatim}
+int sum (by-name int a, by-name int index, int size)
+{
+    int tmp = 0;
+    for (index = 0; index < size; index++)
+    {
+        tmp +=a;
+    }
+    return tmp;
+}
+int x[10];
+...
+int result =  sum(?,?,10);              //  (*)   
+\end{verbatim}
+}
+ Assume the integer array \texttt{x[10]}, of size 10, is appropriately
+initialized. Demonstrate the use of \textit{call-by-name} in the invocation of
+\texttt{sum} (see the line marked (*)) by filling in the
+proper actual arguments so that the call to \texttt{sum} computes
+the sum of all elements from \texttt{x[0]} to \texttt{x[9]}. 
+Introduce auxiliary variables where necessary. (\textbf{2p.})
+\\
+\end{enumerate} 
+
+\item (Immutability.) \hfill{\textbf{[4 points]}}
+\\
+The \texttt{String} concatentation operator \texttt{+} in the Java
+language is specified as follows:
+
+
+\begin{quote}
+(JLS, 15.18.1) String Concatenation Operator +
+
+``If only one operand expression is of type String, then string conversion is performed on the other operand to produce a string at run time. The result is a reference to a String object (newly created) that is the concatenation of the two operand strings. The characters of the left-hand operand precede the characters of the right-hand operand in the newly created string. If an operand of type String is null, then the string "null" is used instead of that operand.''
+\end{quote}
+
+ Given the following class 
+in the Java language: 
+{\small 
+\begin{verbatim}
+class GoodMorning 
+{
+   public static void appendMorning (String t)
+   {
+       t = t + "Morning";
+   }
+   public static void main(String [] args)
+   {
+       String s = "Good ";
+       appendMorning(s);
+       System.out.println(s);
+   }
+}
+\end{verbatim}
+}
+\begin{enumerate}
+\item For the specification of the string concatentation operator, it
+matters that the Java String class is \textit{immutable}. Read the
+specification above carefully and determine \textit{where} in the specification
+immutability comes into play. Give the  phrase(s) literally, as used in 
+the wording of the specification. (\textbf{2p.})
+\item What does the program print? 
+Draw a snapshot of the stack of activation records (``run-time stack'')
+when the string concatenation operator \texttt{+} is invoked and the parameter is passed;
+draw another snapshot directly after \texttt{+} has returned. 
+Use the snapshots to explain. (\textbf{2p.})
+\end{enumerate}
+
+
+\item (Scoping.)
+\hfill{\textbf{[4 points]}}
+\\
+Assume a for-statement in a Java-like language, that is, of the form
+ 
+\begin{center}
+  \textbf{for} (ForInit; Expression; ForUpdate) Statement.
+\end{center}
+Further assume the  scope of a local variable declared in the 
+\textit{ForInit} part of a 
+for-statement includes all of the following:
+\begin{itemize}
+    \item Its own initializer.
+    \item Any further declarators to the right in the \textit{ForInit} 
+          part of the for-statement.
+    \item The \textit{Expression} and \textit{ForUpdate} parts of the 
+          for-statement.
+    \item The contained \textit{Statement}. 
+\end{itemize}
+
+Your task:
+\begin{enumerate}
+\item There are other scopes besides for-loops. Give the names of two
+additional examples of scopes. 
+(\textbf{1p.})
+\item Consider the following three snippets of for-loops. For each snippet, 
+determine whether it compiles or fails with a scoping-related error
+(make no additional assumptions about the variable \texttt{i}). In case
+of an error, mark its position in the snippet and give a useful error message
+that a compiler could provide. (\textbf{3p.})
+{\small
+\begin{verbatim}
+//  Snippet 1
+for (int i = 0; i < 10; i++) {
+      ... 
+}
+i = 5;      
+
+//  Snippet 2 
+int i = 5;
+for (int i = 0; i < 10; i++) {   
+    ...
+}
+    
+// Snippet 3
+for (int i = 0; i < 10; i++) {
+    ...
+}
+
+for (int i = 0; i < 10; i++) { 
+    ...
+}
+    
+\end{verbatim}
+}
+
+
+\end{enumerate}
+\end{enumerate}
+
+\newpage
+\section{Object-Oriented Programming [12 points]}
+
+\begin{enumerate}
+\item (Smalltalk.) 
+\hfill{\textbf{[4 points]}}
+\\
+Consider the message \texttt{lineCount} in the Smalltalk class \texttt{String}.
+
+{\small 
+\begin{verbatim}
+lineCount 
+"Answer the number of lines represented by the receiver, where 
+every cr adds one line." 
+| cr count |                                               "(1)"
+cr := Character cr.                                        "(2)"
+count := 1 min: self size.                                 "(3)"
+self do: [:c | c == cr ifTrue: [count := count + 1]].      "(4)"
+^ count                                                    "(5)"
+
+\end{verbatim}
+}
+\begin{enumerate}
+\item What do the bars in line (1) and the period (in lines 2-4) 
+mean? Give the technical term each. (\textbf{1p}.)
+\item In lines (3) and (4): determine all messages, and 
+for each message determine the receiver object and all 
+argument object(s). For readability,
+provide your answers in tabular form
+\begin{center}
+\begin{tabular}{lll}
+Message & Receiver & Argument(s) \\ \hline
+...     & ...      & ...     \\
+\end{tabular}
+\end{center}   (\textbf{3p}.)
+\end{enumerate} 
+
+\item (Algebraic specification.)  \hfill{\textbf{[4 points]}}
+\\
+Assume an abstract data type Natural with 4 
+operations: zero,
+succ, add, and is-zero. Consider zero and succ as constructors.
+%is-zero as observer.
+\begin{enumerate}
+\item Provide an appropriate signature. (\textbf{2p}.)
+\item Provide the appropriate axioms  that capture the intuitive 
+understanding of zero, succ, addition, and is-zero for natural numbers.
+Your  axioms should allow one to show the identity
+
+\begin{center}
+{add(succ(succ(zero)), succ(zero)) = succ(succ(succ(zero)))}.
+\end{center} 
+(\textbf{2p.})
+\end{enumerate}
+\newpage
+\item (Polymorphic methods, static and dynamic binding.)
+\hfill{\textbf{[4 points]}}
+\\
+Many object-oriented languages provide keywords with which  
+users can control whether a method gets bound dynamically or
+statically; in the pseudo language used below, \texttt{virtual}
+indicates dynamic binding. 
+
+{\small 
+\begin{verbatim}
+class A {
+     public non-virtual void f() { print( "A.f "); }
+     public virtual void g()     { print( "A.g "); }
+     public non-virtual void h() { f(); g(); }
+    
+}
+class B inherits A {
+     public non-virtual void f() { print( "B.f "); }
+     public virtual void g()     { print( "B.g "); }
+}
+int main() {
+      A a;
+      B b;
+      // initialization of a,b
+      a.h();
+      b.h();
+      a = b;
+      a.h(); 
+   }
+}
+\end{verbatim}
+}
+\begin{enumerate}
+\item What gets printed if a,b are value types?  (\textbf{2p}.)
+\item What gets printed if a,b are reference types?  (\textbf{2p}.)
+\end{enumerate}
+\end{enumerate}
+
+\newpage
+\section*{Answers}
+\section*{Imperative Programming}
+\begin{enumerate}
+
+\item Parameter passing
+\begin{enumerate}
+  \item Call-by-reference/value/result/value-result:
+  \begin{enumerate}
+    \item by-reference: 3,1
+     \item by-value: 1,1
+     \item by-result: garbage, garbage
+     \item by-value-result: 2,1 if the return address is calculated early;
+          1,2 if it is calculated late (upon return); 
+          2,2 if it is calculated for x,y separately, once before and once
+          after ``i++'''
+   \end{enumerate}
+  \item Call-by-name:
+     \begin{verbatim}
+      int x[10];
+      int i;     // additional variable
+      int result = sum(x[i],i,10);
+      \end{verbatim}
+\end{enumerate}
+\item Immutability
+\begin{enumerate}
+  \item It's one phrase, used twice: ``newly created'' (the immutable
+        string cannot be update in-place). 
+   \item It prints ``Good.''
+         Activation records: when ``+'' is invoked, s and t both reference 
+         the constant string ``Good.'' When ``+'' returns, t no longer
+         aliases s but refers to the anonymous object ``t + 'Morning''          
+   \end{enumerate}
+
+
+\item Scoping
+{\small
+\begin{verbatim}
+//  Snippet 1
+for (int i = 0; i < 10; i++) {
+    ...
+}
+i = 5;            // Error, "i out of scope" or "i used but not defined" 
+
+//  Snippet 2 
+int i = 5;
+for (int i = 0; i < 10; i++) {  // Error,  "i redeclared"
+    ...
+}
+    
+// Snippet 3
+for (int i = 0; i < 10; i++) {
+    ...
+}
+for (int i = 0; i < 10; i++) {   // OK: the previous i is out of scope
+    ...
+}
+\end{verbatim}
+}
+\end{enumerate}
+\section*{Object-Oriented Programming}
+\begin{enumerate}
+\item Smalltalk
+% SYB, p. 57
+\begin{enumerate}
+\item The bar indicates the declaration of local variables, the period the
+concatenation of expressions.
+\item 
+
+\begin{tabular}{lll}
+Message & Receiver & Arguments \\ \hline
+size    & self     & none \\
+min:    & 1        & (self size) \\
+do:     & self     & outer block \\
+==      & c        & cr \\
+ifTrue: & (c == cr) & ([count := count + 1]) \\
++       & count     & 1 \\
+\end{tabular}
+\end{enumerate}
+\item Algebraic specification
+\begin{verbatim}
+sort Nat imports boolean
+operations:
+  zero: Nat
+  succ: Nat -> Nat
+  add: Nat x Nat -> Nat
+  is-zero: Nat -> boolean
+variables:
+  n, m: Nat
+axioms:
+  add(zero,n)    = n
+  add(succ(n),m) = succ(add(n,m))
+
+  is-zero(zero)    = true
+  is-zero(succ(n)) = false
+\end{verbatim}
+\item Polymorphic methods
+\begin{enumerate}
+\item Value variables
+{\small
+\begin{verbatim}
+A.f
+A.g
+A.f
+B.g
+A.f
+A.g
+\end{verbatim}
+}
+\item Reference variables (``polymorphic'' variables)
+{\small
+\begin{verbatim}
+A.f
+A.g
+A.f
+B.g
+A.f
+B.g
+\end{verbatim}
+}
+\end{enumerate} 
+\end{enumerate}
+\end{document}
+
