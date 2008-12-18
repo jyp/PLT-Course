@@ -671,7 +671,8 @@ solutions. Which query can fall into an infinite loop?
 The second (\verb!reverse(Xs,[1,2,3])!) will loop endlessly, because
 the code only specifies that \verb!Xs1! should be unified with \verb![X|Xs2]!,
 and that \verb!Ys! should be unified with \verb![1,2,3]!. The recursive
-use of \verb!reverse! then performs a similar pattern matching.
+use of \verb!reverse! then performs a similar unification, without making
+progress.
 \item
 Using no more than three clauses, give a definition of the
 \verb!reverse! predicate which does not fall into a loop in either of
