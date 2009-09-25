@@ -1,0 +1,45 @@
+%\providecommand{\cpp}{C\kern-0.05em\texttt{+\kern-0.03em+}\xspace}
+\providecommand{\cpp}{C\kern-0.05em\texttt{+\kern-0.03em+} }
+\providecommand{\Cpp}{\cpp}
+
+\usepackage{moreverb}
+\usepackage{fancyvrb,listings}[2000/08/23]
+\usepackage{graphicx}
+\usepackage{subfigure,tabularx,xspace}
+\usepackage{%
+  fancyvrb,graphicx,syntax,subfigure,amssymb,url,tabularx,xspace}
+
+%\usepackage{program}
+
+\newcommand{\mycomment}[1]{}
+
+
+\lstnewenvironment{cplus2}{\lstset{%xleftmargin=10pt,%
+breaklines=true,language=C++,basicstyle=\scriptsize\ttfamily,keywordstyle=\bfseries\scriptsize\ttfamily,lineskip=0\baselineskip,%
+literate={=}{{\eq}}1{==}{{\ee}}2{++}{{\pp}}2{--}{{\mm}}2{->}{{$\rightarrow$}}1}}{}%{>}{{$\rangle$}}1{<}{{$\langle$}}1}}{}%
+%numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=4pt}}{}
+
+\lstnewenvironment{cplus}
+    {\lstset{language=c++,basicstyle=\scriptsize,frame=tb}}
+    {}
+
+
+\lstnewenvironment{cplus3}
+    {\lstset{language=c++,basicstyle=\scriptsize\ttfamily,keywordstyle=\bfseries\scriptsize\ttfamily,lineskip=0\baselineskip}}
+    {}
+
+
+\lstnewenvironment{eiffel}
+    {\lstset{language=eiffel,basicstyle=\scriptsize\ttfamily,keywordstyle=\bfseries\scriptsize\ttfamily,lineskip=0\baselineskip}}
+    {}
+
+\lstnewenvironment{smalltalk}
+    {\lstset{language=smalltalk,basicstyle=\scriptsize\ttfamily,keywordstyle=\bfseries\scriptsize\ttfamily,lineskip=0\baselineskip}}
+    {}
+
+\lstnewenvironment{java}
+    {\lstset{language=java,basicstyle=\scriptsize,frame=tb}}
+    {}
+
+
+
