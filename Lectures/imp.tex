@@ -58,8 +58,9 @@
 %{Presentation Subtitle} % (optional)
 
 
-\author[Sibylle Schupp] % (optional, use only with lots of authors)
-{Sibylle Schupp\inst{1}}
+\author[Jean-Philippe Bernardy] % (optional, use only with lots of authors)
+{Sibylle Schupp\inst{2} \\
+Jean-Philippe Bernardy\inst{1}}
 % - Use the \inst{?} command only if the authors have different
 %   affiliation.
 
@@ -68,7 +69,10 @@
 {
   \inst{1}%
   Department of Computing Science\\
-  Chalmers University of Technology
+  Chalmers University of Technology\\
+  \inst{2}%
+  Institute for Software Systems\\
+  Hamburg University of Technology
 }
 % - Use the \inst command only if there are several affiliations.
 % - Keep it simple, no one is interested in your street address.
@@ -351,7 +355,7 @@ Variables are bound to memory.
 \end{itemize}
 \end{frame}
 
-\subsection{L-values and r-values}
+\subsection{L-values and R-values}
 \begin{frame}[fragile]
 \frametitle{Storage model}
 \framesubtitle{}
@@ -458,16 +462,22 @@ stored storable value
 \begin{frame}[fragile]
 \frametitle{L-values and R-values}
 \framesubtitle{}
-Any von Neumann language  (implicitly) distinguishes between
-the address of a variable and the value stored there. 
-\begin{itemize}
-\item The address is also called the \textit{l-value} of a variable,
-the content its \textit{r-value} (due to its position
-in an assignment).
+In any von Neumann language, a variable is (both)
+\begin{itemize} 
+    \item A memory location                 (if used on the left of :=)
+    \item The value stored at such location  (if used on the right of :=)
+\end{itemize}
+
+Example:
 \begin{cplus3}
      x := x + 1;
 \end{cplus3}
-\item Most languages do not make the distinction explicit.
+
+The notion can be generalized to expressions (C, \cpp, ...):
+\begin{itemize}
+\item an expression is an l-value $\Leftrightarrow$ it can be used on the left of :=
+% \item Some languages have a different syntax for l-values 
+\item (sometimes): r-value: expression which is not an l-value
 %
 \mycomment{
 \begin{itemize}
@@ -478,7 +488,7 @@ in an assignment).
 \end{cplus3}
 \end{itemize}
 }
-\item Most languages do not permit explicit access to the l-value
+\item Most languages prevent observation of the address of an l-value
 \begin{itemize}
 \item Exception: the address-of operator in C/\cpp
 \begin{cplus3}
