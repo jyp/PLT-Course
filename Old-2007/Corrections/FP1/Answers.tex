@@ -1,0 +1,1002 @@
+% -*- Latex -*-
+\documentclass{article}
+%% ODER: format ==         = "\mathrel{==}"
+%% ODER: format /=         = "\neq "
+%
+%
+\makeatletter
+\@ifundefined{lhs2tex.lhs2tex.sty.read}%
+  {\@namedef{lhs2tex.lhs2tex.sty.read}{}%
+   \newcommand\SkipToFmtEnd{}%
+   \newcommand\EndFmtInput{}%
+   \long\def\SkipToFmtEnd#1\EndFmtInput{}%
+  }\SkipToFmtEnd
+
+\newcommand\ReadOnlyOnce[1]{\@ifundefined{#1}{\@namedef{#1}{}}\SkipToFmtEnd}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\DeclareFontFamily{OT1}{cmtex}{}
+\DeclareFontShape{OT1}{cmtex}{m}{n}
+  {<5><6><7><8>cmtex8
+   <9>cmtex9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmtex10}{}
+\DeclareFontShape{OT1}{cmtex}{m}{it}
+  {<-> ssub * cmtt/m/it}{}
+\newcommand{\texfamily}{\fontfamily{cmtex}\selectfont}
+\DeclareFontShape{OT1}{cmtt}{bx}{n}
+  {<5><6><7><8>cmtt8
+   <9>cmbtt9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmbtt10}{}
+\DeclareFontShape{OT1}{cmtex}{bx}{n}
+  {<-> ssub * cmtt/bx/n}{}
+\newcommand{\tex}[1]{\text{\texfamily#1}}	% NEU
+
+\newcommand{\Sp}{\hskip.33334em\relax}
+
+
+\newcommand{\Conid}[1]{\mathit{#1}}
+\newcommand{\Varid}[1]{\mathit{#1}}
+\newcommand{\anonymous}{\kern0.06em \vbox{\hrule\@width.5em}}
+\newcommand{\plus}{\mathbin{+\!\!\!+}}
+\newcommand{\bind}{\mathbin{>\!\!\!>\mkern-6.7mu=}}
+\newcommand{\rbind}{\mathbin{=\mkern-6.7mu<\!\!\!<}}% suggested by Neil Mitchell
+\newcommand{\sequ}{\mathbin{>\!\!\!>}}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\usepackage{polytable}
+
+%mathindent has to be defined
+\@ifundefined{mathindent}%
+  {\newdimen\mathindent\mathindent\leftmargini}%
+  {}%
+
+\def\resethooks{%
+  \global\let\SaveRestoreHook\empty
+  \global\let\ColumnHook\empty}
+\newcommand*{\savecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\savecolumns[#1]}}
+\newcommand*{\restorecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\restorecolumns[#1]}}
+\newcommand*{\aligncolumn}[2]%
+  {\g@addto@macro\ColumnHook{\column{#1}{#2}}}
+
+\resethooks
+
+\newcommand{\onelinecommentchars}{\quad-{}- }
+\newcommand{\commentbeginchars}{\enskip\{-}
+\newcommand{\commentendchars}{-\}\enskip}
+
+\newcommand{\visiblecomments}{%
+  \let\onelinecomment=\onelinecommentchars
+  \let\commentbegin=\commentbeginchars
+  \let\commentend=\commentendchars}
+
+\newcommand{\invisiblecomments}{%
+  \let\onelinecomment=\empty
+  \let\commentbegin=\empty
+  \let\commentend=\empty}
+
+\visiblecomments
+
+\newlength{\blanklineskip}
+\setlength{\blanklineskip}{1mm}
+
+\newcommand{\hsindent}[1]{\quad}% default is fixed indentation
+\let\hspre\empty
+\let\hspost\empty
+\newcommand{\NB}{\textbf{NB}}
+\newcommand{\Todo}[1]{$\langle$\textbf{To do:}~#1$\rangle$}
+
+\EndFmtInput
+\makeatother
+%
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+
+\setcounter{secnumdepth}{0}
+
+\title{Functional Programming Exercises, 1}
+
+\begin{document}
+\maketitle
+
+\section{General Remarks}
+
+Function application binds on the left!
+
+Therefore, in general, you {\em can not} use the rule
+\ensuremath{\Varid{a}\;\Varid{b}\;\Varid{c}\mathrel{=}\Varid{a}\;(\Varid{b}\;\Varid{c})}
+when reasoning about lambda calculus or haskell expressions!
+
+\section{Lambda Calculus}
+
+% -*- Latex -*-
+% Literate-Haskell
+
+\begin{enumerate}
+\item{Beta-conversion}
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{6}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{let}\;{}\<[6]%
+\>[6]{}\Varid{t}\mathrel{=}\Varid{twice}{}\<[E]%
+\\
+\>[6]{}\Varid{i}\mathrel{=}\Varid{inc}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+By using $\beta$ reduction we find that, 
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{t}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\mathrel{=}(\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{f}\;(\Varid{f}\;(\Varid{x})))\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\mathrel{=}(\lambda \Varid{x}\to \Varid{a}\;(\Varid{a}\;(\Varid{x})))\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\mathrel{=}{}\<[4]%
+\>[4]{}\Varid{a}\;(\Varid{a}\;(\Varid{b})){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+We will use this rule many times in the following; always applying it to the leftmost \ensuremath{\Varid{t}}.
+
+\begin{enumerate}
+\item
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{twice}\;\Varid{inc}\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}(\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{f}\;(\Varid{f}\;\Varid{x}))\;\Varid{inc}\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}(\lambda \Varid{x}\to \Varid{f}\;(\Varid{f}\;\Varid{x}))\;[\mskip1.5mu \Varid{f}\mathbin{:=}\Varid{inc}\mskip1.5mu]\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}(\lambda \Varid{x}\to \Varid{inc}\;(\Varid{inc}\;\Varid{x}))\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}(\Varid{inc}\;(\Varid{inc}\;\Varid{x}))\;[\mskip1.5mu \Varid{x}\mathbin{:=}\mathrm{0}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{inc}\;(\Varid{inc}\;\mathrm{0}){}\<[E]%
+\\
+\>[B]{}(\lambda \Varid{x}\to \Varid{x}\mathbin{+}\mathrm{1})\;(\Varid{inc}\;\mathrm{0}){}\<[E]%
+\\
+\>[B]{}(\Varid{x}\mathbin{+}\mathrm{1})\;[\mskip1.5mu \Varid{x}\mathbin{:=}\Varid{inc}\;\mathrm{0}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{inc}\;\mathrm{0}\mathbin{+}\mathrm{1}{}\<[E]%
+\\
+\>[B]{}(\lambda \Varid{x}\to \Varid{x}\mathbin{+}\mathrm{1})\;\mathrm{0}\mathbin{+}\mathrm{1}{}\<[E]%
+\\
+\>[B]{}(\Varid{x}\mathbin{+}\mathrm{1})\;[\mskip1.5mu \Varid{x}\mathbin{:=}\mathrm{0}\mskip1.5mu]\mathbin{+}\mathrm{1}{}\<[E]%
+\\
+\>[B]{}(\mathrm{0}\mathbin{+}\mathrm{1})\mathbin{+}\mathrm{1}{}\<[E]%
+\\
+\>[B]{}\mathrm{2}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+or using the above rule:
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{t}\;\Varid{i}\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;\mathrm{0}){}\<[E]%
+\\
+\>[B]{}\mathrm{2}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\item
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{t}\;\Varid{t}\;\Varid{i}\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}\Varid{t}\;(\Varid{t}\;\Varid{i})\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}\Varid{t}\;\Varid{i}\;(\Varid{t}\;\Varid{i}\;\mathrm{0}){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{t}\;\Varid{i}\;\mathrm{0}){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;\mathrm{0}))){}\<[E]%
+\\
+\>[B]{}\mathrm{4}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+
+\item
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{t}\;(\Varid{t}\;\Varid{t})\;\Varid{i}\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}\Varid{t}\;\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}\Varid{t}\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i}))\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0}){}\<[E]%
+\\
+\>[B]{}(\Varid{t}\;\Varid{t})\;\Varid{i}\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0})){}\<[E]%
+\\
+\>[B]{}\Varid{t}\;(\Varid{t}\;\Varid{i})\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0})){}\<[E]%
+\\
+\>[B]{}\Varid{t}\;\Varid{i}\;(\Varid{t}\;\Varid{i}\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0}))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{t}\;\Varid{i}\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0})))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0}))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;(\Varid{t}\;\Varid{i})\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0}))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;\Varid{i}\;(\Varid{t}\;\Varid{i}\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0})))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;\Varid{i}\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0}))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;((\Varid{t}\;\Varid{t})\;\Varid{i})\;\mathrm{0})))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;\mathrm{0}))))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;(\Varid{t}\;\Varid{i})\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;\mathrm{0}))))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;\Varid{i}\;(\Varid{t}\;\Varid{i}\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;\mathrm{0})))))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;\Varid{i}\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;\mathrm{0}))))))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;((\Varid{t}\;\Varid{t})\;\Varid{i}\;\mathrm{0})))))))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;(\Varid{t}\;\Varid{i})\;\mathrm{0})))))))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;\Varid{i}\;(\Varid{t}\;\Varid{i}\;\mathrm{0}))))))))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{t}\;\Varid{i}\;\mathrm{0})))))))))))))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;(\Varid{i}\;\mathrm{0}))))))))))))))){}\<[E]%
+\\
+\>[B]{}\mathrm{16}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\item
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{t}\;\Varid{t}\;\Varid{t}\;\Varid{i}\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}\Varid{t}\;(\Varid{t}\;\Varid{t})\;\Varid{i}\;\mathrm{0}\mbox{\onelinecomment  applying the above}{}\<[E]%
+\\
+\>[B]{}\mathrm{16}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\item
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}(\lambda \Varid{x}\to \Varid{x})\;(\lambda \Varid{x}\to \Varid{x}){}\<[E]%
+\\
+\>[B]{}(\lambda \Varid{x}\to \Varid{x}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\item
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}(\lambda \Varid{x}\to \Varid{x}\;\Varid{x})\;(\lambda \Varid{x}\to \Varid{x}\;\Varid{x}){}\<[E]%
+\\
+\>[B]{}(\lambda \Varid{x}\to \Varid{x}\;\Varid{x})\;(\lambda \Varid{x}\to \Varid{x}\;\Varid{x}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+(reduces to the same thing)
+
+\item{Church numerals}
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{inc}\mathrel{=}\lambda \Varid{x}\to \Varid{x}\mathbin{+}\mathrm{1}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{twice}\mathrel{=}\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{f}\;(\Varid{f}\;\Varid{x}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{zero}\mathrel{=}\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{x}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{one}\mathrel{=}\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{f}\;\Varid{x}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{unChurch}\;\Varid{f}\mathrel{=}\Varid{f}\;\Varid{inc}\;\mathrm{0}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{church}\;\mathrm{0}\mathrel{=}\Varid{zero}{}\<[E]%
+\\
+\>[B]{}\Varid{church}\;\Varid{n}\mathrel{=}\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{f}\;(\Varid{church}\;(\Varid{n}\mathbin{-}\mathrm{1})\;\Varid{f}\;\Varid{x}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{suc}\;\Varid{n}\mathrel{=}\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{f}\;(\Varid{n}\;\Varid{f}\;\Varid{x}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+or
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{suc}\;\Varid{n}\mathrel{=}\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{n}\;\Varid{f}\;(\Varid{f}\;\Varid{x}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{add}\;\Varid{n}\;\Varid{m}\mathrel{=}\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{n}\;\Varid{f}\;(\Varid{m}\;\Varid{f}\;\Varid{x}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{mul}\;\Varid{n}\;\Varid{m}\mathrel{=}\lambda \Varid{f}\to \lambda \Varid{x}\to \Varid{n}\;(\Varid{m}\;\Varid{f})\;\Varid{x}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\end{enumerate}
+
+\item{LISP}
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{cons}\;\Varid{x}\;\Varid{y}\;\Varid{f}\mathrel{=}\Varid{f}\;\Varid{x}\;\Varid{y}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{car}\;\Varid{c}\mathrel{=}\Varid{c}\;(\lambda \Varid{x}\;\anonymous \to \Varid{x}){}\<[E]%
+\\
+\>[B]{}\Varid{cdr}\;\Varid{c}\mathrel{=}\Varid{c}\;(\lambda \anonymous \;\Varid{x}\to \Varid{x}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\end{enumerate}
+
+The above calculation of \ensuremath{\Varid{twice}\;(\Varid{twice}\;\Varid{twice})\;\Varid{inc}\;\mathrm{0}} was somewhat
+tiresome... Can you find a very quick way to do it using church numerals? 
+
+Hints: 
+If $c_n$ is the nth church numeral, what is $n$ in $c_n = twice$?
+What is $x$ equal to in $c_x = c_m (c_n)$? 
+
+
+\section{Why Functional Programming Matters}
+% -*- Literate-Haskell -*-
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{import}\;\Conid{Prelude}\;\Varid{hiding}\;(\Varid{map},\Varid{sum},\Varid{repeat},\Varid{zip}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mathbf{data}\;\Conid{ListOf}\;\Varid{a}\mathrel{=}\Conid{Nil}\mid \Conid{Cons}\;\Varid{a}\;(\Conid{ListOf}\;\Varid{a}){}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mathbf{deriving}\;(\Conid{Eq},\Conid{Show}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mathbf{infixr}\;\mathrm{5}\mathbin{`\Conid{Cons}`}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+convert between Haskell native lists and our list:
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{17}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{convert}\mathbin{::}[\mskip1.5mu \Varid{a}\mskip1.5mu]\to \Conid{ListOf}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{convert}\;[\mskip1.5mu \mskip1.5mu]{}\<[17]%
+\>[17]{}\mathrel{=}\Conid{Nil}{}\<[E]%
+\\
+\>[B]{}\Varid{convert}\;(\Varid{x}\mathbin{:}\Varid{xs}){}\<[17]%
+\>[17]{}\mathrel{=}\Conid{Cons}\;\Varid{x}\;(\Varid{convert}\;\Varid{xs}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+Ugly sum:
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{20}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{sum}\;\Conid{Nil}{}\<[20]%
+\>[20]{}\mathrel{=}\mathrm{0}{}\<[E]%
+\\
+\>[B]{}\Varid{sum}\;(\Conid{Cons}\;\Varid{x}\;\Varid{list}){}\<[20]%
+\>[20]{}\mathrel{=}\Varid{x}\mathbin{+}\Varid{sum}\;\Varid{list}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{17}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{24}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{sum}\mathrel{=}\Varid{reduce}\;(\mathbin{+})\;\mathrm{0}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{reduce}\;\Varid{f}\;\Varid{x}\;\Conid{Nil}{}\<[24]%
+\>[24]{}\mathrel{=}\Varid{x}{}\<[E]%
+\\
+\>[B]{}\Varid{reduce}\;\Varid{f}\;\Varid{x}\;(\Conid{Cons}\;\Varid{a}\;\Varid{l}){}\<[24]%
+\>[24]{}\mathrel{=}\Varid{f}\;\Varid{a}\;(\Varid{reduce}\;\Varid{f}\;\Varid{x}\;\Varid{l}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{product}\mathrel{=}\Varid{reduce}\;(\mathbin{*})\;\mathrm{1}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{anyTrue}\mathrel{=}\Varid{reduce}\;(\mathrel{\vee})\;\Conid{False}{}\<[E]%
+\\
+\>[B]{}\Varid{allTrue}\mathrel{=}\Varid{reduce}\;(\mathrel{\wedge})\;\Conid{True}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{append}\;\Varid{a}\;\Varid{b}\mathrel{=}\Varid{reduce}\;\Conid{Cons}\;\Varid{b}\;\Varid{a}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{doubleall}\mathrel{=}\Varid{reduce}\;(\Conid{Cons}\mathbin{\circ}(\mathrm{2}\mathbin{*}))\;\Conid{Nil}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{doubleall'}\mathrel{=}\Varid{reduce}\;\Varid{doubleandcons'}\;\Conid{Nil}{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mathbf{where}\;\Varid{doubleandcons'}\;\Varid{num}\;\Varid{list}\mathrel{=}\Conid{Cons}\;(\mathrm{2}\mathbin{*}\Varid{num})\;\Varid{list}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{doubleall''}\mathrel{=}\Varid{map}\;(\mathrm{2}\mathbin{*}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{doubleandcons}\mathrel{=}\Varid{fandcons'}\;\Varid{double}{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mathbf{where}{}\<[E]%
+\\
+\>[9]{}\hsindent{8}{}\<[17]%
+\>[17]{}\Varid{double}\;\Varid{n}\mathrel{=}\mathrm{2}\mathbin{*}\Varid{n}{}\<[E]%
+\\
+\>[9]{}\hsindent{8}{}\<[17]%
+\>[17]{}\Varid{fandcons'}\;\Varid{f}\;\Varid{el}\;\Varid{list}\mathrel{=}\Conid{Cons}\;(\Varid{f}\;\Varid{el})\;\Varid{list}{}\<[E]%
+\\
+\>[9]{}\hsindent{8}{}\<[17]%
+\>[17]{}\Varid{fandcons}\;\Varid{f}\mathrel{=}\Conid{Cons}\mathbin{\circ}\Varid{f}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{map}\;\Varid{f}\mathrel{=}\Varid{reduce}\;(\Conid{Cons}\mathbin{\circ}\Varid{f})\;\Conid{Nil}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{summatrix}\mathrel{=}\Varid{sum}\mathbin{\circ}\Varid{map}\;\Varid{sum}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mathbf{data}\;\Conid{Tree}\;\Varid{x}\mathrel{=}\Conid{Node}\;\Varid{x}\;(\Conid{ListOf}\;(\Conid{Tree}\;\Varid{x})){}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mathbf{deriving}\;\Conid{Show}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{redtree}\;\Varid{f}\;\Varid{g}\;\Varid{a}\;(\Conid{Node}\;\Varid{label}\;\Varid{subtrees})\mathrel{=}\Varid{f}\;\Varid{label}\;(\Varid{redtree'}\;\Varid{f}\;\Varid{g}\;\Varid{a}\;\Varid{subtrees}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{redtree'}\;\Varid{f}\;\Varid{g}\;\Varid{a}\;(\Conid{Cons}\;\Varid{subtree}\;\Varid{rest})\mathrel{=}\Varid{g}\;(\Varid{redtree}\;\Varid{f}\;\Varid{g}\;\Varid{a}\;\Varid{subtree})\;(\Varid{redtree'}\;\Varid{f}\;\Varid{g}\;\Varid{a}\;\Varid{rest}){}\<[E]%
+\\
+\>[B]{}\Varid{redtree'}\;\Varid{f}\;\Varid{g}\;\Varid{a}\;\Conid{Nil}\mathrel{=}\Varid{a}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{sumtree}\mathrel{=}\Varid{redtree}\;(\mathbin{+})\;(\mathbin{+})\;\mathrm{0}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{labels}\mathrel{=}\Varid{redtree}\;\Conid{Cons}\;\Varid{append}\;\Conid{Nil}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{maptree}\;\Varid{f}\mathrel{=}\Varid{redtree}\;(\Conid{Node}\mathbin{\circ}\Varid{f})\;\Conid{Cons}\;\Conid{Nil}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+Newton-Raphson Square Roots
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{next}\;\Varid{n}\;\Varid{x}\mathrel{=}(\Varid{x}\mathbin{+}\Varid{n}\mathbin{/}\Varid{x})\mathbin{/}\mathrm{2}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{repeat}\;\Varid{f}\;\Varid{a}\mathrel{=}\Varid{a}\mathbin{`\Conid{Cons}`}(\Varid{repeat}\;\Varid{f}\;(\Varid{f}\;\Varid{a})){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{abs}\;\Varid{x}\mid \Varid{x}\mathbin{<}\mathrm{0}\mathrel{=}\mathbin{-}\Varid{x}{}\<[E]%
+\\
+\>[B]{}\Varid{abs}\;\Varid{x}\mid \Varid{x}\geq \mathrm{0}\mathrel{=}\Varid{x}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{within}\;\Varid{eps}\;(\Varid{a}\mathbin{`\Conid{Cons}`}(\Varid{b}\mathbin{`\Conid{Cons}`}\Varid{rest})){}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mid \Varid{abs}\;(\Varid{a}\mathbin{-}\Varid{b})\leq \Varid{eps}\mathrel{=}\Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mid \Varid{otherwise}\mathrel{=}\Varid{within}\;\Varid{eps}\;(\Varid{b}\mathbin{`\Conid{Cons}`}\Varid{rest}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{squareroot}\;\Varid{a0}\;\Varid{eps}\;\Varid{n}\mathrel{=}\Varid{within}\;\Varid{eps}\;(\Varid{repeat}\;(\Varid{next}\;\Varid{n})\;\Varid{a0}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{relative}\;\Varid{eps}\;(\Varid{a}\mathbin{`\Conid{Cons}`}(\Varid{b}\mathbin{`\Conid{Cons}`}\Varid{rest})){}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mid \Varid{abs}\;(\Varid{a}\mathbin{-}\Varid{b})\leq \Varid{eps}\mathbin{*}(\Varid{abs}\;\Varid{b})\mathrel{=}\Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mid \Varid{otherwise}\mathrel{=}\Varid{relative}\;\Varid{eps}\;(\Varid{b}\mathbin{`\Conid{Cons}`}\Varid{rest}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{relativesqrt}\;\Varid{a0}\;\Varid{eps}\;\Varid{n}\mathrel{=}\Varid{relative}\;\Varid{eps}\;(\Varid{repeat}\;(\Varid{next}\;\Varid{n})\;\Varid{a0}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+Numerical Differentiation
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{easydiff}\;\Varid{f}\;\Varid{x}\;\Varid{h}\mathrel{=}(\Varid{f}\;(\Varid{x}\mathbin{+}\Varid{h})\mathbin{-}\Varid{f}\;\Varid{x})\mathbin{/}\Varid{h}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{differentiate}\;\Varid{h0}\;\Varid{f}\;\Varid{x}\mathrel{=}\Varid{map}\;(\Varid{easydiff}\;\Varid{f}\;\Varid{x})\;(\Varid{repeat}\;\Varid{halve}\;\Varid{h0}){}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mathbf{where}\;\Varid{halve}\;\Varid{x}\mathrel{=}\Varid{x}\mathbin{/}\mathrm{2}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{derivative}\;\Varid{h0}\;\Varid{f}\;\Varid{x}\;\Varid{eps}\mathrel{=}\Varid{within}\;\Varid{eps}\;(\Varid{differentiate}\;\Varid{h0}\;\Varid{f}\;\Varid{x}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{elimerror}\;\Varid{n}\;(\Varid{a}\mathbin{`\Conid{Cons}`}(\Varid{b}\mathbin{`\Conid{Cons}`}\Varid{rest}))\mathrel{=}((\Varid{b}\mathbin{*}(\mathrm{2}\mathbin{\uparrow}\Varid{n})\mathbin{-}\Varid{a})\mathbin{/}(\mathrm{2}\mathbin{\uparrow}\Varid{n}\mathbin{-}\mathrm{1}))\mathbin{`\Conid{Cons}`}(\Varid{elimerror}\;\Varid{n}\;(\Varid{b}\mathbin{`\Conid{Cons}`}\Varid{rest})){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{order}\;(\Varid{a}\mathbin{`\Conid{Cons}`}(\Varid{b}\mathbin{`\Conid{Cons}`}(\Varid{c}\mathbin{`\Conid{Cons}`}\Varid{rest})))\mathrel{=}\Varid{round}\;(\Varid{log}\;((\Varid{a}\mathbin{-}\Varid{c})\mathbin{/}(\Varid{b}\mathbin{-}\Varid{c})\mathbin{-}\mathrm{1})){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{improve}\;\Varid{s}\mathrel{=}\Varid{elimerror}\;(\Varid{order}\;\Varid{s})\;\Varid{s}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{differentiate'}\;\Varid{h0}\;\Varid{f}\;\Varid{x}\;\Varid{eps}\mathrel{=}\Varid{within}\;\Varid{eps}\;(\Varid{improve}\;(\Varid{differentiate}\;\Varid{h0}\;\Varid{f}\;\Varid{x})){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{differentiate''}\;\Varid{h0}\;\Varid{f}\;\Varid{x}\;\Varid{eps}\mathrel{=}\Varid{within}\;\Varid{eps}\;(\Varid{improve}\;(\Varid{improve}\;(\Varid{improve}\;(\Varid{differentiate}\;\Varid{h0}\;\Varid{f}\;\Varid{x})))){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{super}\;\Varid{s}\mathrel{=}\Varid{map}\;\Varid{second}\;(\Varid{repeat}\;\Varid{improve}\;\Varid{s}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{second}\;(\Varid{a}\mathbin{`\Conid{Cons}`}\Varid{b}\mathbin{`\Conid{Cons}`}\Varid{rest})\mathrel{=}\Varid{b}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{superdiff}\;\Varid{h0}\;\Varid{f}\;\Varid{x}\;\Varid{eps}\mathrel{=}\Varid{within}\;\Varid{eps}\;(\Varid{super}\;(\Varid{differentiate}\;\Varid{h0}\;\Varid{f}\;\Varid{x})){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+Numerical Integration
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{15}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{16}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{20}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{22}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{33}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{easyintegrate}\;\Varid{f}\;\Varid{a}\;\Varid{b}\mathrel{=}(\Varid{f}\;\Varid{a}\mathbin{+}\Varid{f}\;\Varid{b})\mathbin{*}(\Varid{b}\mathbin{-}\Varid{a})\mathbin{/}\mathrm{2}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{zip}\;(\Conid{Cons}\;\Varid{a}\;\Varid{s})\;(\Conid{Cons}\;\Varid{b}\;\Varid{t})\mathrel{=}\Conid{Cons}\;(\Varid{a},\Varid{b})\;(\Varid{zip}\;\Varid{s}\;\Varid{t}){}\<[E]%
+\\
+\>[B]{}\Varid{zip}\;\Conid{Nil}\;\anonymous \mathrel{=}\Conid{Nil}{}\<[E]%
+\\
+\>[B]{}\Varid{zip}\;\anonymous \;\Conid{Nil}\mathrel{=}\Conid{Nil}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{integrate}\;\Varid{f}\;\Varid{a}\;\Varid{b}\mathrel{=}{}\<[20]%
+\>[20]{}(\Varid{easyintegrate}\;\Varid{f}\;\Varid{a}\;\Varid{b})\mathbin{`\Conid{Cons}`}{}\<[E]%
+\\
+\>[20]{}(\Varid{map}\;\Varid{addpair}\;(\Varid{zip}\;(\Varid{integrate}\;\Varid{f}\;\Varid{a}\;\Varid{mid})\;(\Varid{integrate}\;\Varid{f}\;\Varid{mid}\;\Varid{b}))){}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mathbf{where}\;\Varid{mid}\mathrel{=}(\Varid{a}\mathbin{+}\Varid{b})\mathbin{/}\mathrm{2}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{addpair}\;(\Varid{a},\Varid{b})\mathrel{=}\Varid{a}\mathbin{+}\Varid{b}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{integrate'}\;\Varid{f}\;\Varid{a}\;\Varid{b}\mathrel{=}\Varid{integ}\;\Varid{f}\;\Varid{a}\;\Varid{b}\;(\Varid{f}\;\Varid{a})\;(\Varid{f}\;\Varid{b}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{integ}\;\Varid{f}\;\Varid{a}\;\Varid{b}\;\Varid{fa}\;\Varid{fb}\mathrel{=}{}\<[22]%
+\>[22]{}((\Varid{fa}\mathbin{+}\Varid{fb})\mathbin{*}(\Varid{b}\mathbin{-}\Varid{a})\mathbin{/}\mathrm{2})\mathbin{`\Conid{Cons}`}{}\<[E]%
+\\
+\>[22]{}(\Varid{map}\;\Varid{addpair}\;(\Varid{zip}\;(\Varid{integ}\;\Varid{f}\;\Varid{a}\;\Varid{m}\;\Varid{fa}\;\Varid{fm})\;(\Varid{integ}\;\Varid{f}\;\Varid{m}\;\Varid{b}\;\Varid{fm}\;\Varid{fb}))){}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\mathbf{where}\;{}\<[16]%
+\>[16]{}\Varid{m}\mathrel{=}(\Varid{a}\mathbin{+}\Varid{b})\mathbin{/}\mathrm{2}{}\<[E]%
+\\
+\>[16]{}\Varid{fm}\mathrel{=}\Varid{f}\;\Varid{m}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{integrate''}\;{}\<[15]%
+\>[15]{}\Varid{f}\;\Varid{a}\;\Varid{b}\;\Varid{eps}{}\<[33]%
+\>[33]{}\mathrel{=}\Varid{within}\;\Varid{eps}\;(\Varid{integrate'}\;\Varid{f}\;\Varid{a}\;\Varid{b}){}\<[E]%
+\\
+\>[B]{}\Varid{integrate'''}\;{}\<[15]%
+\>[15]{}\Varid{f}\;\Varid{a}\;\Varid{b}\;\Varid{eps}{}\<[33]%
+\>[33]{}\mathrel{=}\Varid{relative}\;\Varid{eps}\;(\Varid{integrate'}\;\Varid{f}\;\Varid{a}\;\Varid{b}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{test}\mathrel{=}\Varid{super}\;(\Varid{integrate}\;\Varid{sin}\;\mathrm{0}\;\mathrm{4}){}\<[E]%
+\\
+\>[B]{}\Varid{test2}\mathrel{=}\Varid{improve}\;(\Varid{integrate}\;\Varid{f}\;\mathrm{0}\;\mathrm{1}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathbf{where}\;\Varid{f}\;\Varid{x}\mathrel{=}\mathrm{1}\mathbin{/}(\mathrm{1}\mathbin{+}\Varid{x}\mathbin{*}\Varid{x}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+
+
+\section{Lazy lists}
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{sieve}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{sieve}\;(\Varid{x}\mathbin{:}\Varid{xs})\mathrel{=}\Varid{x}\mathbin{:}\Varid{sieve}\;[\mskip1.5mu \Varid{y}\mid \Varid{y}\leftarrow \Varid{xs},\Varid{mod}\;\Varid{y}\;\Varid{x}\not\equiv \mathrm{0}\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{main}\mathrel{=}\Varid{print}\;(\Varid{take}\;\mathrm{100}\;(\Varid{sieve}\;[\mskip1.5mu \mathrm{2}\mathinner{\ldotp\ldotp}\mskip1.5mu])){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\section{Calculator}
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{6}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{17}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{23}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{24}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{module}\;\Conid{ParserLibrary}\;({}\<[24]%
+\>[24]{}\mbox{\onelinecomment  we specify the exported functions}{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Conid{Parser},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{value},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{satisfy},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{exactly},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}(\mathbin{|||}),{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}(\mathbin{@@}),{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{parse},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}(\mathbin{\#\#}),{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}(\mathbin{\$\$}),{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{many},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{some},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{many'},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{some'},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{white},{}\<[E]%
+\\
+\>[B]{}\hsindent{9}{}\<[9]%
+\>[9]{}\Varid{symbol}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{})\;\mathbf{where}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mathbf{import}\;\Conid{List}{}\<[E]%
+\\
+\>[B]{}\mathbf{import}\;\Conid{\Conid{Data}.Char}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mathbf{infixl}\;\mathrm{5}\mathbin{|||}{}\<[E]%
+\\
+\>[B]{}\mathbf{infixl}\;\mathrm{6}\mathbin{@@},\mathbin{\#\#}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment  Parsers are represented by functions according to the following}{}\<[E]%
+\\
+\>[B]{}\mbox{\onelinecomment  type definition:}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mathbf{type}\;\Conid{Parser}\;\Varid{a}\mathrel{=}\Conid{String}\to [\mskip1.5mu (\Varid{a},\Conid{String})\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment  These functions *depend on the representation of Parsers*}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{value}\mathbin{::}\Varid{a}\to \Conid{Parser}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{value}\;\Varid{x}\;\Varid{s}\mathrel{=}[\mskip1.5mu (\Varid{x},\Varid{s})\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{satisfy}\mathbin{::}(\Conid{Char}\to \Conid{Bool})\to \Conid{Parser}\;\Conid{Char}{}\<[E]%
+\\
+\>[B]{}\Varid{satisfy}\;\Varid{p}\;(\Varid{x}\mathbin{:}\Varid{xs})\mathrel{=}[\mskip1.5mu (\Varid{x},\Varid{xs})\mid \Varid{p}\;\Varid{x}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{satisfy}\;\Varid{p}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{exactly}\mathbin{::}\Conid{String}\to \Conid{Parser}\;\Conid{String}{}\<[E]%
+\\
+\>[B]{}\Varid{exactly}\;\Varid{tok}\;\Varid{s}\mathrel{=}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}[\mskip1.5mu (\Varid{tok},\Varid{drop}\;(\Varid{length}\;\Varid{tok})\;\Varid{s})\mid \Varid{tok}\mathbin{`\Varid{isPrefixOf}`}\Varid{s}\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}(\mathbin{|||})\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}(\Varid{p}\mathbin{|||}\Varid{q})\;\Varid{s}\mathrel{=}\Varid{p}\;\Varid{s}\plus \Varid{q}\;\Varid{s}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}(\mathbin{@@})\mathbin{::}\Conid{Parser}\;(\Varid{a}\to \Varid{b})\to \Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}(\Varid{p}\mathbin{@@}\Varid{q})\;\Varid{s}\mathrel{=}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}[\mskip1.5mu (\Varid{f}\;\Varid{x},\Varid{s''})\mid {}\<[17]%
+\>[17]{}(\Varid{f},\Varid{s'})\leftarrow \Varid{p}\;\Varid{s},{}\<[E]%
+\\
+\>[17]{}(\Varid{x},\Varid{s''})\leftarrow \Varid{q}\;\Varid{s'}\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{parse}\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{String}\to [\mskip1.5mu \Varid{a}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{parse}\;\Varid{p}\;\Varid{s}\mathrel{=}[\mskip1.5mu \Varid{x}\mid (\Varid{x},\text{\tt \char34 \char34})\leftarrow \Varid{p}\;\Varid{s}\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment  From this point on, the code *does not* depend on the representation}{}\<[E]%
+\\
+\>[B]{}\mbox{\onelinecomment  of Parsers--so if it is changed, then the code below should still work.}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}(\mathbin{\#\#})\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;\Varid{b}\to \Conid{Parser}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{p}\mathbin{\#\#}\Varid{q}\mathrel{=}\Varid{value}\;\Varid{const}\mathbin{@@}\Varid{p}\mathbin{@@}\Varid{q}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{many}\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;[\mskip1.5mu \Varid{a}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{many}\;\Varid{p}\mathrel{=}\Varid{some}\;\Varid{p}{}\<[E]%
+\\
+\>[B]{}\hsindent{6}{}\<[6]%
+\>[6]{}\mathbin{|||}\Varid{value}\;[\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{some}\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;[\mskip1.5mu \Varid{a}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{some}\;\Varid{p}\mathrel{=}\Varid{value}\;(\mathbin{:})\mathbin{@@}\Varid{p}\mathbin{@@}\Varid{many}\;\Varid{p}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment }{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment  4.}{}\<[E]%
+\\
+\>[B]{}(\mathbin{\$\$})\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;\Varid{b}\to \Conid{Parser}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{p}\mathbin{\$\$}\Varid{q}\mathrel{=}\Varid{value}\;(\lambda \Varid{x}\;\Varid{y}\to \Varid{y})\mathbin{@@}\Varid{p}\mathbin{@@}\Varid{q}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{white}\;\Varid{p}\mathrel{=}\Varid{many}\;(\Varid{satisfy}\;\Varid{isSpace})\mathbin{\$\$}\Varid{p}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{symbol}\mathrel{=}\Varid{white}\mathbin{\circ}\Varid{exactly}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment  5.a}{}\<[E]%
+\\
+\>[B]{}\Varid{fails}\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;(){}\<[E]%
+\\
+\>[B]{}\Varid{fails}\;\Varid{p}\mathrel{=}\lambda \Varid{input}\to \mathbf{case}\;\Varid{p}\;\Varid{input}\;\mathbf{of}{}\<[E]%
+\\
+\>[B]{}\hsindent{23}{}\<[23]%
+\>[23]{}[\mskip1.5mu \mskip1.5mu]\to \Varid{value}\;()\;\Varid{input}{}\<[E]%
+\\
+\>[B]{}\hsindent{23}{}\<[23]%
+\>[23]{}\anonymous \to [\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment  5.b}{}\<[E]%
+\\
+\>[B]{}\Varid{some'}\;\Varid{p}\mathrel{=}\Varid{value}\;(\mathbin{:})\mathbin{@@}\Varid{p}\mathbin{@@}\Varid{many'}\;\Varid{p}{}\<[E]%
+\\
+\>[B]{}\Varid{many'}\;\Varid{p}\mathrel{=}(\Varid{value}\;[\mskip1.5mu \mskip1.5mu]\mathbin{\#\#}\Varid{fails}\;\Varid{p})\mathbin{|||}\Varid{some'}\;\Varid{p}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{6}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{8}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{module}\;\Conid{Calculator}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\mathbf{import}\;\Conid{Char}{}\<[E]%
+\\
+\>[B]{}\mathbf{import}\;\Conid{ParserLibrary}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{expr}\mathrel{=}\Varid{term}\mathbin{<**>}\Varid{exprRemainder}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{sign}\mathrel{=}\Varid{value}\;(\mathbin{+})\mathbin{\#\#}\Varid{symbol}\;\text{\tt \char34 +\char34}{}\<[E]%
+\\
+\>[B]{}\hsindent{8}{}\<[8]%
+\>[8]{}\mathbin{|||}\Varid{value}\;(\Varid{flip}\;(\mathbin{-}))\mathbin{\#\#}\Varid{symbol}\;\text{\tt \char34 -\char34}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{exprRemainder}\mathrel{=}\Varid{chainr}\;(\Varid{value}\;(\mathbin{\circ}))\;(\Varid{sign}\mathbin{@@}\Varid{term})\;(\Varid{value}\;\Varid{id}){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{chainr}\mathbin{::}\Conid{Parser}\;(\Varid{a}\to \Varid{a}\to \Varid{a})\to \Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{chainr}\;\Varid{op}\;\Varid{p}\;\Varid{b}\mathrel{=}\Varid{op}\mathbin{@@}\Varid{p}\mathbin{@@}\Varid{chainr}\;\Varid{op}\;\Varid{p}\;\Varid{b}\mathbin{|||}\Varid{b}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{term}\mathrel{=}\Varid{value}\;(\mathbin{*})\mathbin{@@}\Varid{factor}\mathbin{\#\#}\Varid{symbol}\;\text{\tt \char34 *\char34}\mathbin{@@}\Varid{factor}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\mathbin{|||}\Varid{factor}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{factor}\mathrel{=}\Varid{number}{}\<[E]%
+\\
+\>[B]{}\hsindent{6}{}\<[6]%
+\>[6]{}\mathbin{|||}\Varid{value}\;\Varid{id}\mathbin{\#\#}\Varid{symbol}\;\text{\tt \char34 (\char34}\mathbin{@@}\Varid{expr}\mathbin{\#\#}\Varid{symbol}\;\text{\tt \char34 )\char34}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{number}\mathrel{=}\Varid{white}\mathbin{\$}\Varid{value}\;(\Varid{foldl}\;\Varid{combine}\;\mathrm{0})\mathbin{@@}\Varid{some}\;\Varid{digit}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{combine}\;\Varid{x}\;\Varid{y}\mathrel{=}\mathrm{10}\mathbin{*}\Varid{x}\mathbin{+}\Varid{y}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{digitval}\;\Varid{d}\mathrel{=}\Varid{ord}\;\Varid{d}\mathbin{-}\Varid{ord}\;\text{\tt '0'}{}\<[E]%
+\\
+\>[B]{}\Varid{numval}\;\Varid{s}\mathrel{=}\Varid{foldl}\;\Varid{combine}\;\mathrm{0}\;[\mskip1.5mu \Varid{digitval}\;\Varid{d}\mid \Varid{d}\leftarrow \Varid{s}\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{digit}\mathrel{=}\Varid{value}\;\Varid{digitval}\mathbin{@@}\Varid{satisfy}\;\Varid{isDigit}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mathbf{infixl}\;\mathrm{6}\mathbin{<**>}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}(\mathbin{<**>})\mathbin{::}\Conid{Parser}\;\Varid{a}\to \Conid{Parser}\;(\Varid{a}\to \Varid{b})\to \Conid{Parser}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{k}\mathbin{<**>}\Varid{f}\mathrel{=}\Varid{value}\;(\lambda \Varid{x}\;\Varid{g}\to \Varid{g}\;\Varid{x})\mathbin{@@}\Varid{k}\mathbin{@@}\Varid{f}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{symbol}\mathrel{=}\Varid{white}\mathbin{\circ}\Varid{exactly}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\section{LISP}
+
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{11}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{import}\;\Conid{ParserLibrary}{}\<[E]%
+\\
+\>[B]{}\mathbf{import}\;\Conid{Calculator}{}\<[E]%
+\\
+\>[B]{}\mathbf{import}\;\Conid{\Conid{Test}.QuickCheck}{}\<[E]%
+\\
+\>[B]{}\mathbf{import}\;\Conid{Monad}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mathbf{data}\;\Conid{SExp}\mathrel{=}\Conid{Numb}\;\Conid{Int}{}\<[E]%
+\\
+\>[B]{}\hsindent{11}{}\<[11]%
+\>[11]{}\mid \Conid{Atom}\;\Conid{String}{}\<[E]%
+\\
+\>[B]{}\hsindent{11}{}\<[11]%
+\>[11]{}\mid \Conid{Cons}\;\Conid{SExp}\;\Conid{SExp}{}\<[E]%
+\\
+\>[11]{}\hsindent{2}{}\<[13]%
+\>[13]{}\mathbf{deriving}\;(\Conid{Show},\Conid{Eq}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+Make sure the code works for this examples...
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{62}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{sample0}\mathrel{=}\Conid{Cons}\;(\Conid{Numb}\;\mathrm{2})\;(\Conid{Atom}\;\text{\tt \char34 nil\char34}){}\<[E]%
+\\
+\>[B]{}\Varid{sample1}\mathrel{=}\Conid{Cons}\;(\Conid{Numb}\;\mathrm{1})\;(\Conid{Cons}\;(\Conid{Numb}\;\mathrm{2})\;(\Conid{Atom}\;\text{\tt \char34 nil\char34})){}\<[E]%
+\\
+\>[B]{}\Varid{sample2}\mathrel{=}\Conid{Cons}\;(\Conid{Cons}\;(\Conid{Numb}\;\mathrm{2})\;(\Conid{Atom}\;\text{\tt \char34 nil\char34}))\;(\Conid{Cons}\;((\Conid{Numb}\;\mathrm{1})\;{}\<[62]%
+\>[62]{}(\Conid{Atom}\;\text{\tt \char34 nil\char34})){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment  1.}{}\<[E]%
+\\
+\>[B]{}\Varid{stringP}\;\Varid{p}\;(\Conid{Numb}\;\Varid{i})\mathrel{=}\Varid{show}\;\Varid{i}{}\<[E]%
+\\
+\>[B]{}\Varid{stringP}\;\Varid{p}\;(\Conid{Atom}\;\Varid{s})\mathrel{=}\Varid{s}{}\<[E]%
+\\
+\>[B]{}\Varid{stringP}\;\Varid{p}\;(\Conid{Cons}\;\Varid{h}\;(\Conid{Atom}\;\text{\tt \char34 nil\char34}))\mathrel{=}(\mathbf{if}\;\Varid{p}\;\mathbf{then}\;\Varid{paren}\;\mathbf{else}\;\Varid{id})\;(\Varid{string}\;\Varid{h}){}\<[E]%
+\\
+\>[B]{}\Varid{stringP}\;\Varid{p}\;(\Conid{Cons}\;\Varid{h}\;\Varid{t})\mathrel{=}(\mathbf{if}\;\Varid{p}\;\mathbf{then}\;\Varid{paren}\;\mathbf{else}\;\Varid{id})\;(\Varid{string}\;\Varid{h}\plus \text{\tt \char34 ~\char34}\plus \Varid{stringP}\;\Conid{False}\;\Varid{t}){}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+ Note that the \ensuremath{\Varid{p}} parameter takes different values on left or right of \ensuremath{\Conid{Cons}}.
+\begingroup\par\noindent\advance\leftskip\mathindent\(
+\begin{pboxed}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{8}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{11}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{26}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{33}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{string}\mathrel{=}\Varid{stringP}\;\Conid{True}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{paren}\;\Varid{x}\mathrel{=}\text{\tt \char34 (\char34}\plus \Varid{x}\plus \text{\tt \char34 )\char34}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment  2.}{}\<[E]%
+\\
+\>[B]{}\Varid{signed}\mathrel{=}\Varid{value}\;\Varid{negate}\mathbin{\#\#}\Varid{symbol}\;\text{\tt \char34 -\char34}\mathbin{|||}\Varid{value}\;\Varid{id}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{sexp}\mathbin{::}\Conid{Parser}\;\Conid{SExp}{}\<[E]%
+\\
+\>[B]{}\Varid{sexp}\mathrel{=}\Varid{symbol}\;\text{\tt \char34 (\char34}\mathbin{\$\$}\Varid{value}\;(\Varid{foldr}\;\Conid{Cons}\;(\Conid{Atom}\;\text{\tt \char34 nil\char34}))\mathbin{@@}\Varid{many'}\;\Varid{sexp}\mathbin{\#\#}\Varid{symbol}\;\text{\tt \char34 )\char34}{}\<[E]%
+\\
+\>[B]{}\hsindent{8}{}\<[8]%
+\>[8]{}\mathbin{|||}\Varid{value}\;\Conid{Numb}\mathbin{@@}(\Varid{signed}\mathbin{@@}\Varid{number}){}\<[E]%
+\\
+\>[B]{}\hsindent{8}{}\<[8]%
+\>[8]{}\mathbin{|||}\Varid{value}\;\Conid{Atom}\mathbin{@@}\Varid{atom}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{atom}\mathrel{=}\Varid{white}\mathbin{\$}\Varid{value}\;(\mathbin{:})\mathbin{@@}\Varid{satisfy}\;(\in [\mskip1.5mu \text{\tt 'a'}\mathinner{\ldotp\ldotp}\text{\tt 'z'}\mskip1.5mu])\mathbin{@@}\Varid{many'}\;\Varid{alpha}{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{alpha}\mathrel{=}\Varid{satisfy}\;(\in [\mskip1.5mu \text{\tt 'a'}\mathinner{\ldotp\ldotp}\text{\tt 'z'}\mskip1.5mu]\plus [\mskip1.5mu \text{\tt '0'}\mathinner{\ldotp\ldotp}\text{\tt '9'}\mskip1.5mu]){}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mbox{\onelinecomment }{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{arbitraryChar}\mathrel{=}\Varid{elements}\;([\mskip1.5mu \text{\tt 'a'}\mathinner{\ldotp\ldotp}\text{\tt 'z'}\mskip1.5mu]\plus [\mskip1.5mu \text{\tt '0'}\mathinner{\ldotp\ldotp}\text{\tt '9'}\mskip1.5mu]){}\<[E]%
+\\
+\>[B]{}\Varid{arbitraryString}\mathrel{=}\Varid{oneof}\;[\mskip1.5mu \Varid{return}\;[\mskip1.5mu \mskip1.5mu],\Varid{liftM2}\;(\mathbin{:})\;\Varid{arbitraryChar}\;\Varid{arbitraryString}\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\mathbf{instance}\;\Conid{Arbitrary}\;\Conid{SExp}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{arbitrary}\mathrel{=}\Varid{sized}\;\Varid{arb}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\mathbf{where}\;\Varid{arb}\;\mathrm{0}\mathrel{=}\Varid{oneof}\;[\mskip1.5mu \Varid{liftM}\;\Conid{Numb}\;\Varid{arbitrary},{}\<[E]%
+\\
+\>[5]{}\hsindent{21}{}\<[26]%
+\>[26]{}\Varid{liftM}\;\Conid{Atom}\;(\Varid{liftM2}\;(\mathbin{:})\;(\Varid{elements}\;[\mskip1.5mu \text{\tt 'a'}\mathinner{\ldotp\ldotp}\text{\tt 'z'}\mskip1.5mu])\;\Varid{arbitraryString})\mskip1.5mu]{}\<[E]%
+\\
+\>[5]{}\hsindent{6}{}\<[11]%
+\>[11]{}\Varid{arb}\;\Varid{n}\mathrel{=}\Varid{oneof}\;[\mskip1.5mu \Varid{arb}\;\mathrm{0},{}\<[E]%
+\\
+\>[11]{}\hsindent{15}{}\<[26]%
+\>[26]{}\Varid{liftM}\;(\Varid{foldr}\;\Conid{Cons}\;(\Conid{Atom}\;\text{\tt \char34 nil\char34}))\;{}\<[E]%
+\\
+\>[26]{}\hsindent{7}{}\<[33]%
+\>[33]{}(\Varid{resize}\;(\Varid{n}\mathbin{\Varid{`div`}}\mathrm{3})\;\Varid{arbitrary})\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{prop\char95 sexp\char95 string}\;\Varid{s}\mathrel{=}\Varid{take}\;\mathrm{1}\;(\Varid{parse}\;\Varid{sexp}\;(\Varid{string}\;\Varid{s}))\equiv [\mskip1.5mu \Varid{s}\mskip1.5mu]{}\<[E]%
+\\[\blanklineskip]
+\>[B]{}\Varid{main}\mathrel{=}\Varid{quickCheck}\;\Varid{prop\char95 sexp\char95 string}{}\<[E]%
+\ColumnHook
+\end{pboxed}
+\)\par\noindent\endgroup\resethooks
+
+\section{Acknowledgements}
+
+Thanks to Staffan Björnesjö and Ann Lillieström for letting us use their ``WhyFP'' material.
+
+\end{document}
