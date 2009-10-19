@@ -38,7 +38,7 @@
 \usepackage[english]{babel}
 % or whatever
 
-\usepackage[latin1]{inputenc}
+\usepackage[utf8x]{inputenc}
 % or whatever
 
 \usepackage{times}
@@ -209,19 +209,19 @@ Successors
 \item Pascal (1970), Modula (1975), Oberon('88): Wirth at ETH 
 \item C (1971-89), Kerninghan \& Richie AT\&T;  Ada (1979-85)
 \end{itemize}
+Most modern languages support the imperative paradigm!
 \end{frame}
 
 \begin{frame}[fragile]
 %\frametitle{}
-\frametitle{von Neumann Architecture}
+\frametitle{Von Neumann model of computing}
 The von Neumann machine consists of memory (data and instructions),
 a CPU, and an I/O unit.
 \begin{itemize}
 \item CPU takes instruction from memory.
       Fetches data from memory, manipulates it, writes update 
       back to memory. 
-\item Instructions result in changes in the state of the machine.
-The chances are represented in memory.
+\item State = Memory × PC
 \end{itemize}
 \begin{tabular}{ll}
 \begin{minipage}{4.6cm}
