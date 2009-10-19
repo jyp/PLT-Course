@@ -123,9 +123,11 @@ Jean-Philippe Bernardy\inst{1}}
 }
 
 \begin{document}
+
 \begin{frame}
   \titlepage
 \end{frame}
+
 
 \begin{frame}[fragile]
 \frametitle{References}
@@ -305,6 +307,7 @@ Imperative languages: also called
 \end{cplus3}
 \end{frame}
 
+\mycomment{
 \begin{frame}[fragile]
 \frametitle{An example in COBOL}
 \url{http://www.engin.umd.umich.edu/CIS/course.des/cis400/cobol/seccob.html}
@@ -314,6 +317,7 @@ Imperative languages: also called
 000100 ID DIVISION.000200 PROGRAM-ID.  ACCEPT1.000300 DATA DIVISION.000400 WORKING-STORAGE  SECTION.000500 01  WS-FIRST-NUMBER      PIC 9(3).000600 01  WS-SECOND-NUMBER     PIC 9(3).000700 01  WS-TOTAL             PIC ZZZ9.000800*000900 PROCEDURE DIVISION.001000 0000-MAINLINE.001100     DISPLAY 'ENTER A NUMBER: '.001200     ACCEPT WS-FIRST-NUMBER.001300*001400     DISPLAY 'ANOTHER NUMBER: '.001500     ACCEPT WS-SECOND-NUMBER.001600*001700     COMPUTE WS-TOTAL = WS-FIRST-NUMBER + WS-SECOND-NUMBER.001800     DISPLAY 'THE TOTAL IS: ', WS-TOTAL.001900     STOP RUN.
 \end{cplus3}
 \end{frame}
+}
 
 \begin{frame}[fragile]
 \frametitle{An example in Algol}
@@ -373,7 +377,27 @@ An abstract store is a collection of cells. A cell is either
 \textit{allocated} or not
 allocated, its content is either defined or undefined.
 
+{\small 
+\center
+\begin{tikzpicture}
 
+\tikzstyle{cell}=[rectangle,draw,minimum width=1cm,minimum height=0.5cm]
+
+\draw[blue] ( 0,2) node [cell] {?} ;
+\draw[blue] ( 0,1.5) node [cell] {1} ;
+\draw (-1,1) node {x} ;
+\draw ( 0,1) node [cell] {?} ;
+\draw (-1,0.5) node {y} ;
+\draw ( 0,0.5) node [cell] {2} ;
+
+
+
+\end{tikzpicture}
+}
+
+
+
+\mycomment{
 
 \bigskip
  
@@ -385,7 +409,7 @@ Simple vs.compound:
 \begin{minipage}{6cm}
 \begin{itemize}
 \item Simple (primitive):
-\\ contains one storable value
+    \\ contains one storable value
 \item Compound: 
 \\ contains multiple, contiguously
 stored storable value
@@ -419,7 +443,7 @@ stored storable value
 \end{tabular}
 \end{tabular}
 
-
+}
 
 
 \end{frame}
@@ -444,25 +468,23 @@ stored storable value
 \begin{tabular}{l}
 {\small 
 \begin{tikzpicture}
-\draw[blue] (0,0)  rectangle (1.2,0.5);
-%\pgftext[at={\pgfpoint{0.65cm}{0.3cm}}]{} ;
-\pgftext[at={\pgfpoint{2.5cm}{0.3cm}}]{de-allocated} ;
+
+\draw[blue] ( 0,2)     node [rectangle, draw,minimum width=1cm] {?} ;
+
+\draw (-1,1)     node [minimum width=1cm]                 {n} ;
+\draw ( 0,1)     node [rectangle, draw,minimum width=1cm] {?} ;
 
 
-\draw (0,1.0)  rectangle (1.2,1.5);
-\pgftext[at={\pgfpoint{0.5cm}{1.25cm}}]{n:1} ;
+\draw (-1,0)     node [minimum width=1cm]                 {n} ;
+\draw ( 0,0)     node [rectangle, draw,minimum width=1cm] {0} ;
 
-%\draw[red] (0,1.5)  rectangle (1.2,2.0);
-%\pgftext[at={\pgfpoint{0.5cm}{1.75cm}}]{n:  } ;
 
-\draw (0,2.0)  rectangle (1.2,2.5);
-\pgftext[at={\pgfpoint{0.5cm}{2.25cm}}]{n:0 } ;
+\draw (-1,-1.0)     node [minimum width=1cm]                 {n} ;
+\draw ( 0,-1.0)     node [rectangle, draw,minimum width=1cm] {1} ;
 
-\draw (0,3.0)  rectangle (1.2,3.5);
-\pgftext[at={\pgfpoint{0.5cm}{3.2cm}}]{n: ? } ;
+\draw[blue] ( 0,-2)     node [rectangle, draw,minimum width=1cm] {1} ;
 
-\draw[blue] (0,4.0)  rectangle (1.2,4.5);
-\pgftext[at={\pgfpoint{2.5cm}{4.3cm}}]{not allocated} ;
+
 \end{tikzpicture}
 }
 \end{tabular}
@@ -512,94 +534,104 @@ The notion can be generalized to expressions (C, \cpp, ...):
 
 
 
-\begin{frame}[fragile]
+\begin{frame}
 \frametitle{Copy semantics and reference semantics}
 \framesubtitle{Semantics of assignment}
-Assume the assignment $    x : = y; $
+Assume:
+{\small 
+\begin{tikzpicture}
+
+\tikzstyle{cell}=[rectangle,draw,minimum width=1cm,minimum height=0.5cm]
+
+\draw (-1,1) node {x} ;
+\draw ( 0,1) node [cell] {1} ;
+\draw (-1,0.5) node {y} ;
+\draw ( 0,0.5) node [cell] {2} ;
+
+
+
+\end{tikzpicture}
+}and consider the assignment $    x : = y; $
 
 
 \begin{itemize}
-\item Copy semantics:  the fields of $y$ are copied to the
-corresponding fields of $x$.
-\item Reference semantics:  the reference is copied; $x$ and $y$
-become \textit{aliases} of another. 
+\item Copy semantics:  the contents of $y$ are copied to $x$.
+{\small 
+\begin{tikzpicture}
+
+\tikzstyle{cell}=[rectangle,draw,minimum width=1cm,minimum height=0.5cm]
+
+\draw (-1,1) node {x} ;
+\draw ( 0,1) node [cell] {1} ;
+\draw (-1,0.5) node {y} ;
+\draw ( 0,0.5) node [cell] {2} ;
+
+
+
+\end{tikzpicture}
+}
+\item Reference semantics: use location of $y$ as the location for $x$.
+(They become \textit{aliases} of one another)
+{\small 
+\begin{tikzpicture}
+
+\tikzstyle{cell}=[rectangle,draw,minimum width=1cm,minimum height=0.5cm]
+
+\draw ( 0,1) node [cell] {1} ;
+\draw (-1,0.5) node {x y} ;
+\draw ( 0,0.5) node [cell] {2} ;
+
+
+
+\end{tikzpicture}
+}
+
 \end{itemize}
+\end{frame}
 
-Copy semantics:
-\begin{tabular}{ll}
-\begin{minipage}{2cm}
 
-\end{minipage}
-& 
-\begin{tabular}{l}
+\begin{frame}
+\frametitle{Reference semantics, take 2.}
+\framesubtitle{Explicit references in the storage model.}
+
+One can also make references explicitly in the model (as arrows here.)
+
 {\small 
 \begin{tikzpicture}
 
-\draw (0,0.5)  rectangle (1.2,1.0);
-\pgftext[at={\pgfpoint{0.5cm}{0.75cm}}]{c: 3 } ;
+\tikzstyle{cell}=[rectangle,draw,minimum width=1cm,minimum height=0.5cm]
 
-
-\draw (0,0.0)  rectangle (1.2,0.5);
-\pgftext[at={\pgfpoint{0.5cm}{0.25cm}}]{d: 4} ;
-
-
-
-% right one 
-\draw (3,0)  rectangle (4.2,0.5);
-\pgftext[at={\pgfpoint{3.5cm}{0.25cm}}]{a: 10} ;
-\draw[->] (2.9, 0.25) -- (0.8, 0.25);
-
-\draw (3,0.5)  rectangle (4.2,1.0);
-\pgftext[at={\pgfpoint{3.5cm}{0.75cm}}]{b: 11} ;
-\draw[->] (3.0, 0.75) -- (0.8, 0.75);
+\node       (x)  at  (-1,1) {x} ;
+\node[cell] (c1) at  ( 0,1) {1} ;
+\node       (y)  at (-1,0.5) {y} ;
+\node[cell] (c2) at (0,0.5) {2} ;
+\draw [->] (x) -- (c1);
+\draw [->] (y) -- (c2);
 
 \end{tikzpicture}
 }
-\end{tabular}
-\end{tabular}
-
-\bigskip
-
-Reference semantics:
-\begin{tabular}{ll}
-\begin{minipage}[t]{4cm}
-
-\end{minipage}
-& 
-\begin{tabular}{l}
+$x := y;$
 {\small 
 \begin{tikzpicture}
 
-\draw (0,0.5)  rectangle (1.2,1.0);
-\pgftext[at={\pgfpoint{0.5cm}{0.75cm}}]{} ;
-\draw[->] (1.0, 0.6) -- (2.9, 0.6);
+\tikzstyle{cell}=[rectangle,draw,minimum width=1cm,minimum height=0.5cm]
 
+\node       (x)  at  (-1,1) {x} ;
+\node[cell] (c1) at  ( 0,1) {1} ;
+\node       (y)  at (-1,0.5) {y} ;
+\node[cell] (c2) at (0,0.5) {2} ;
+\draw [->] (x.east) -- (c2.west);
+\draw [->] (y) -- (c2);
 
-
-
-\draw (0,2.0)  rectangle (1.2,2.5);
-\pgftext[at={\pgfpoint{0.5cm}{2.25cm}}]{} ;
-\draw[->] (1.0, 2.1) -- (2.9, 2.1);
-
-% right one 
-\draw (3,0)  rectangle (4.2,0.5);
-\pgftext[at={\pgfpoint{3.5cm}{0.25cm}}]{a: 10} ;
-
-\draw (3,0.5)  rectangle (4.2,1.0);
-\pgftext[at={\pgfpoint{3.5cm}{0.75cm}}]{b: 11} ;
-
-\draw (3,1.5)  rectangle (4.2,2.0);
-\pgftext[at={\pgfpoint{3.5cm}{1.75cm}}]{d: 4 } ;
-
-\draw (3,2.0)  rectangle (4.2,2.5);
-\pgftext[at={\pgfpoint{3.5cm}{2.25cm}}]{c: 3 } ;
 \end{tikzpicture}
 }
-\end{tabular}
-\end{tabular}
 
+You can think of the assignment as ``the reference is copied''.
 
 \end{frame}
+
+
+
 
 \begin{frame}[fragile]
 \frametitle{Copy semantics in \Cpp}
@@ -843,7 +875,7 @@ user cannot fully control.
 
 
 
-\subsection{Stack-based languages}
+\subsection{The Need for A Stack}
 \begin{frame}[fragile]
 \frametitle{Activation records}
 \framesubtitle{}
@@ -910,34 +942,33 @@ Static allocation is simple:
 
 \end{minipage}
 & 
-\begin{tabular}{l}
+\begin{minipage}{6cm}
 {\small 
 \begin{tikzpicture}
-\draw (0,0)  rectangle (1.7,0.5);
-\pgftext[at={\pgfpoint{0.65cm}{0.3cm}}]{AVG} ;
 
-\draw (0,0.5)  rectangle (1.7,1.0);
-\pgftext[at={\pgfpoint{0.65cm}{0.75cm}}]{SUM} ;
+\tikzstyle{cell}=[rectangle,draw,minimum width=2cm,minimum height=0.5cm]
 
+\node       (N)   at  (-2,  1) {N} ;
+\node       (ARR) at  (-2,0.5) {ARR} ;
+\node       (ret) at  (-2,  0) {ret} ;
+\node       (I)   at  (-2,-.5) {I} ;
+\node       (SUM) at  (-2, -1) {SUM} ;
+\node       (AVG) at  (-2,-1.5) {AVG} ;
 
+\node[cell] (c1) at (0,1) {<ref>} ;
+\node[cell] (c2) at (0,0.5) {<ref>} ;
+\node[cell] (c2) at (0,0)   {<old PC>} ;
+\node[cell] (c2) at (0,-.5)   {?} ;
+\node[cell] (c2) at (0,-1)   {?} ;
+\node[cell] (c2) at (0,-1.5)   {?} ;
 
-\draw (0,1.0)  rectangle (1.7,1.5);
-\pgftext[at={\pgfpoint{0.65cm}{1.25cm}}]{I } ;
-
-\draw (0,1.5)  rectangle (1.7,2.0);
-\pgftext[at={\pgfpoint{0.65cm}{1.75cm}}]{ret} ;
-
-
-\draw (0,2.0)  rectangle (1.7,2.5);
-\pgftext[at={\pgfpoint{0.8cm}{2.25cm}}]{addr(ARR)} ;
-
-\draw (0,2.5)  rectangle (1.7,3.0);
-\pgftext[at={\pgfpoint{0.8cm}{2.75cm}}]{addr(N)} ;
+% \draw [->] (x) -- (c1);
+% \draw [->] (y) -- (c2);
 
 
 \end{tikzpicture}
 }
-\end{tabular}
+\end{minipage}
 \end{tabular}
 \end{itemize}
 
@@ -2513,7 +2544,9 @@ differently (``unification'').
 
 \end{frame}
 
+
 \end{document}
+
 \section{Commands}
 
 \begin{frame}[fragile]
@@ -2832,8 +2865,4 @@ for x: int in set[int]$elements(coll) do
 \end{itemize}
 \end{frame}
 \end{document}
-
-
-
-
 
