@@ -50,6 +50,16 @@
 
 \usepackage{tikz}
 \usepackage{pgflibrarysnakes}
+\usepackage{url}
+
+%% Define a new 'leo' style for the package that will use a smaller font.
+\makeatletter
+\def\url@leostyle{%
+  \def\UrlFont{\sf\small}}
+\makeatother
+%% Now actually use the newly defined style.
+\urlstyle{leo}
+
 
 \title[]
 {Imperative Programming}
@@ -125,10 +135,10 @@ Material:
 \item 
 A. Webbster, Modern Programming Languages, A Practical Approach
 
-\textsf{
+\url{
 http://www.webber-labs.com/mpl/lectures/pdf-slides/12.pdf} 
 
-\textsf{
+\url{
 http://www.webber-labs.com/mpl/lectures/pdf-slides/18.pdf}
 
 \end{itemize}
@@ -137,12 +147,12 @@ Additional reading:
 \begin{itemize}
 \item M. Scott, Univ. Rochester
 
-\textsf{
+\url{
 http://www.cs.rochester.edu/u/scott/254/notes/08-subroutines}
 
 \item P. Sestoft, ITU Copenhagen
 
-\textsf{http://www.it-c.dk/courses/PFOO/F2003/6.pdf}
+\url{http://www.it-c.dk/courses/PFOO/F2003/6.pdf}
 \end{itemize}
 \end{frame}
 
@@ -167,7 +177,7 @@ Procedural programming
 
 \begin{frame}[fragile]
 \frametitle{History}
-\framesubtitle{http://www.oreilly.com/pub/a/oreilly/news/languageposter_0504.html}
+\url{http://www.oreilly.com/pub/a/oreilly/news/languageposter_0504.html}
 
 First generation:
 \begin{itemize}
@@ -297,7 +307,7 @@ Imperative languages: also called
 
 \begin{frame}[fragile]
 \frametitle{An example in COBOL}
-\framesubtitle{http://www.engin.umd.umich.edu/CIS/course.des/cis400/cobol/seccob.html}
+\url{http://www.engin.umd.umich.edu/CIS/course.des/cis400/cobol/seccob.html}
 
 \begin{cplus3}
 
@@ -307,7 +317,7 @@ Imperative languages: also called
 
 \begin{frame}[fragile]
 \frametitle{An example in Algol}
-\framesubtitle{http://www.engin.umd.umich.edu/CIS/course.des/cis400/algol/average.html}
+\url{http://www.engin.umd.umich.edu/CIS/course.des/cis400/algol/average.html}
 \begin{cplus3}
 // the main program (this is a comment)begin  integer N;  Read Int(N);  begin    real array Data[1:N];    real sum, avg;    integer i;    sum:=0;    for i:=1 step 1 until N do      begin real val;        Read Real(val);        Data[i]:=if val<0 then -val else val      end;    for i:=1 step 1 until N do      sum:=sum + Data[i];    avg:=sum/N;    Print Real(avg)  endend	
 \end{cplus3}
@@ -1821,7 +1831,7 @@ class list {
 };
 \end{cplus3}
 \end{itemize} 
-http://blogs.msdn.com/jmstall/archive/2005/03/06/386064.aspx
+\url{http://blogs.msdn.com/jmstall/archive/2005/03/06/386064.aspx}
 \end{frame}
 
 
@@ -2805,8 +2815,9 @@ functionality and purpose varies greatly.
 \begin{itemize}
 \item CLU
 
+\url{http://www.lcs.mit.edu/publications/pubs/pdf/MIT-LCS-TR-561.pdf}
 \begin{java}
-// http://www.lcs.mit.edu/publications/pubs/pdf/MIT-LCS-TR-561.pdf
+// 
 produces all the elements in set s, but it yields them one at a time. 
 elements = iter (s: set[t]) yields (t)
 
