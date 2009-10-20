@@ -983,21 +983,16 @@ Q: when are those assumptions not valid?
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Dynamic stacks of activation records}
-\framesubtitle{Run-time stack}
+\frametitle{Dynamic chain of activation records}
+
 Languages that support recursion must provide one AR per
-activation of a function (not: per function).
+activation of a function (\emph{not} per function).
 
 \begin{itemize}
 \item ARs must be allocated dynamically.
-\item In most languages, (dynamically allocated) ARs form
-a stack. This stack is called the \textit{run-time stack};
-the ARs are sometimes called \textit{stack frames}. 
 \begin{itemize}
-\item When the function is called, a new AR is created and
-pushed onto the run-time stack. 
-\item When the function returns, its AR is popped.
-%\item In that context, ARs are sometimes called \textit{stack frames}.
+\item When the function is called, a new AR is allocated.
+\item When the function returns, its AR released.
 \end{itemize}
 \item AR must include additional information, to enable the dynamic
 allocation (of ARs): 
@@ -1005,6 +1000,30 @@ allocation (of ARs):
 \item Address of previous AR (why?)
 \end{itemize}
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Stack}
+
+
+\begin{itemize}
+\item In typical imperative languages, ARs are allocated LIFO. (Why?)
+\item An easy way to implement allocation/deallocation is to use a \emph{stack}.
+\end{itemize}
+
+In such a context:
+\begin{itemize}
+
+\item ARs are sometimes called \textit{stack frames}. 
+
+\item The computer architecture may support this natively. (Hence ``The System Stack'')
+
+\item Do you still need address of previous AR?
+
+\end{itemize}
+
+The rest of the lecture assumes a LIFO allocation policy.
+
 \end{frame}
 
 \begin{frame}[fragile]
@@ -1357,7 +1376,9 @@ popped off the run-time stack.
 
 
 
+\mycomment{
 
+Stack-based language now refer to Forth, and so on.
 
 \begin{frame}[fragile]
 \frametitle{Stack-based languages}
@@ -1393,6 +1414,13 @@ f1() {
 
 \end{frame}
 
+}
+
+\mycomment {
+
+I think the below is confusing: one may keep references to AR even in imperative lang. like C.
+(The runtime will just be reckless an deallocate anyway!)
+
 \begin{frame}[fragile]
 \frametitle{Functions as parameters}
 In \textit{functional} languages, functions are first-class
@@ -1409,6 +1437,7 @@ has returned.
 
 \end{frame}
 
+}
 
 \begin{frame}[fragile]
 \frametitle{Organization of memory}
@@ -1440,28 +1469,24 @@ it might not give users control.
 
 \begin{frame}[fragile]
 \frametitle{Comparison}
-\framesubtitle{}
-Heap-based variables 
-\begin{itemize}
-\item most expensive (allocation + access costs)
-\item can grow dynamically 
-\end{itemize}
-%In \cpp, heap-based variables must be deallocated by hand. 
 
-Stack-based variables
-\begin{itemize}
-\item cheaper to allocate than heap-based
-ones (part of it can be done at compile time) and directly accessible 
-\item size has to be known at compile time
-\item always deallocated automatically
-\end{itemize}
-Static variables:
-\begin{itemize}
-\item no allocation costs
-\item  might waste space
-(since they cannot be deallocated) 
-\item size has to be known at compile time
-\end{itemize}
+{\small
+\begin{tabular}{lcccc}
+Region & Access        & Allocation policy & Allocation operation      & Comment \\
+\hline 
+Static & fixed address & At startup & Ask OS & Rigid and cheap \\
+Stack  & AR + fixed address & LIFO & Bump stack pointer by fixed amount & Cheap (Local) \\
+Heap   & Through any pointer & See below & See below & Flexible, but maybe expensive \\
+\hline 
+\end{tabular}
+}
+
+There are many representations for the Heap. Major distinction: GC or not.
+
+Remark:Some language also have ``Bump stack pointer by dynamic amount'' allocation operation.
+
+Exercise: work out the other column and think about the tradeoffs.
+
 \end{frame}
 
 \begin{frame}[fragile]
@@ -1484,8 +1509,8 @@ Decision criteria are lifetime, costs, and size.
 \begin{frame}[fragile]
 \frametitle{Pointers}
 \framesubtitle{}
-For a pointer type, the r-value of an instance is 
-either an l-value or a special
+For a pointer type, the value of an instance is 
+either a location in memory or a special
 value (e.g., null). 
 \bigskip
 

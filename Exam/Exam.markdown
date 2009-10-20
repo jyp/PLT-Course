@@ -48,7 +48,7 @@ x, y: integer
 print (f (x, y) + x)
 
 
-Translate the function and its call to a language that does not support
+Translate the function `f` and its call to a language that does not support
 references, by using pointers. You are not allowed to change the "algorithm". 
 
 
@@ -63,8 +63,13 @@ copies of the activation record of `f`.
 
 Write `P`, satisfying the above conditions. (2pts)
 
-Draw the 3 activation records at the point considered above. Do not forget the return address! (2pts)
+Draw the 3 activation records at the point considered above. (x pts)
 
+Do not forget the return address! Indicate the return address with an arrow pointing in the
+source code.(2pts)
+
+
+Q4. When/why do you need a pointer to the previous AR?
 
 OO
 ===
@@ -106,3 +111,4 @@ in terms of mutability.
 
 State such a side condition. (3 pts)
 
+Q3. 
