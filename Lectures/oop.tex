@@ -38,8 +38,8 @@
 \usepackage[english]{babel}
 % or whatever
 
-\usepackage[latin1]{inputenc}
-% or whatever
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
 
 \usepackage{times}
 \usepackage[T1]{fontenc}
@@ -50,6 +50,15 @@
 
 \usepackage{tikz}
 \usepackage{pgflibrarysnakes}
+\usepackage{url}
+
+%% Define a new 'leo' style for the package that will use a smaller font.
+\makeatletter
+\def\url@leostyle{%
+  \def\UrlFont{\sf\footnotesize}}
+\makeatother
+%% Now actually use the newly defined style.
+\urlstyle{leo}
 
 \title[OOP]
 {Object-Oriented Programming}
@@ -58,8 +67,9 @@
 %{OOP} % (optional)
 
 
-\author[Sibylle Schupp] % (optional, use only with lots of authors)
-{Sibylle Schupp\inst{1}}
+\author[Jean-Philippe Bernardy] % (optional, use only with lots of authors)
+{Sibylle Schupp\inst{2} \\
+Jean-Philippe Bernardy\inst{1}}
 % - Use the \inst{?} command only if the authors have different
 %   affiliation.
 
@@ -68,7 +78,10 @@
 {
   \inst{1}%
   Department of Computing Science\\
-  Chalmers University of Technology
+  Chalmers University of Technology\\
+  \inst{2}%
+  Institute for Software Systems\\
+  Hamburg University of Technology
 }
 % - Use the \inst command only if there are several affiliations.
 % - Keep it simple, no one is interested in your street address.
@@ -86,7 +99,7 @@
 % is a graphic format that can be processed by latex or pdflatex,
 % resp., then you can add a logo as follows:
 
-\pgfdeclareimage[height=0.5cm]{university-logo}{logo-chalmers-L}
+\pgfdeclareimage[height=0.5cm]{university-logo}{../../../project/gitroot/clipart/ChalmGUmarke.pdf}
  \logo{\pgfuseimage{university-logo}}
 
 
@@ -119,7 +132,7 @@ References:
 \begin{itemize}
 \item M. Scott, Programming Language Pragmatics
 
-\textsf{http://www.cs.rochester.edu/u/scott/254/notes/09-objects}
+\url{http://www.cs.rochester.edu/u/scott/254/notes/09-objects}
 \item K. Loudon, Programming Languages---Principles and Practice
 (not on-line available)
 \end{itemize}
@@ -127,16 +140,17 @@ References:
 Additional reading:
 \begin{itemize}
 \item B. Ryders, Univ. Rutgers
-\textsf{
+\url{
 http://remus.rutgers.edu/cs314/s2004/ryder/lectures/adt-15Newest-2up.pdf
 }
 %
 \item K. Bruce, Williams College
-\textsf{
+\url{
 http://www.cs.williams.edu/~kim/cs334/s00/Lectures/Lec13/Lec13.html}
 \end{itemize}
 \end{frame}
 
+\mycomment {
 \begin{frame}[fragile]
 \frametitle{Premier (academic) conferences}
 \framesubtitle{}
@@ -145,14 +159,14 @@ OOPSLA
 \begin{itemize}
 \item Object-Oriented Programming, Systems, Languages, and Applications
 \item 2007: 21th Conference (ACM)
-\item http://www.oopsla.org
+\item \url{http://www.oopsla.org}
 \end{itemize}
 
 ECOOP
 \begin{itemize}
 \item European Conference on Object-Oriented Programming
 \item 2007: 22nd Conference (ACM)
-\item http://www.ecoop.org
+\item \url{http://www.ecoop.org}
 \end{itemize}
 
 Turing award
@@ -161,10 +175,11 @@ Turing award
 \item Alan Kay (Smalltalk), 2003
 \end{itemize}
 \end{frame}
+}
 
 \begin{frame}[fragile]
 \frametitle{A short history}
-\framesubtitle{http://heim.ifi.uio.no/~kristen/FORSKNINGSDOK_MAPPE/F_OO_start.html}
+\url{http://heim.ifi.uio.no/~kristen/FORSKNINGSDOK_MAPPE/F_OO_start.html}
 %Scott, p.788
 First generation
 \begin{itemize}
@@ -218,7 +233,12 @@ C\# (2000-03)
 
 \begin{frame}[fragile]
 \frametitle{Smalltalk}
-\framesubtitle{http://www.squeak.org/Smalltalk}
+Material:
+\begin{itemize}
+  \item \url{http://www.squeak.org/Smalltalk}
+  \item \url{http://squeakbyexample.org/SBE.pdf}
+\end{itemize}
+
 Principles
 \begin{itemize}
 \item Everything is an object.
@@ -232,15 +252,11 @@ Principles
 \end{itemize}
 
 
-Language simple
-\begin{itemize}
-\item Syntax fits on ``one postcard.''
-\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Smalltalk syntax}
-\framesubtitle{http://www.mucow.com/squeak-qref.html}
+% \url{http://www.mucow.com/squeak-qref.html} -- down
 \begin{itemize}
 \item Assignment
 \begin{cplus3}
@@ -256,17 +272,17 @@ foo := 100 factorial.
 Color yellow
 \end{cplus3}
 
-\item Binary
+\item Infix syntax (``Binary'')
 \begin{cplus3}
 3 + 4
 1 <= 10
 3 + 4 * 2
 \end{cplus3}
 
-\item Keyword 
+\item Named Arguments (``Keywords'')
 \begin{cplus3}
 nums := Array newFrom: (1 to: 5)
-nums at: 1 put: $a
+nums at: 1 put: \$a
 nums at: 2 put: 3 + 4
 \end{cplus3}
 \end{itemize}
@@ -274,11 +290,10 @@ nums at: 2 put: 3 + 4
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Squeak}
-\framesubtitle{http://squeakbyexample.org/SBE.pdf}
+\frametitle{Blocks}
 %http://daitanmarks.sourceforge.net/or/squeak/squeak_tutorial.html
 Blocks %(a.k.a. block closure) 
-correspond to anonymous functions.
+correspond to anonymous functions. 
 
 \begin{itemize}
 \item They are objects (instances of \texttt{BlockContext}) and
@@ -295,8 +310,8 @@ typically receive the message \texttt{value:}.
 [:x :y |  |z| z := x + y] value: 1 value:2 
 \end{cplus3}
 
-\item They can refer to variables of the surrounding environment
-(``closure''):
+\item They can refer to variables of the surrounding scope
+(they create \emph{closures}):
 \begin{cplus3}
 |newArray|
 newArray :=  ... 
@@ -304,6 +319,7 @@ newArray :=  ...
 \end{cplus3}
 \end{itemize}
 
+exercise: relate to λ-expression
 \end{frame}
 
 
@@ -318,6 +334,7 @@ Built-in types:
 \item abstract from the underlying implementation, 
 \item come with a set of predefined operations with predefined semantics
 (language specification, mathematics, \ldots).
+\item \emph{idealized} classes
 \end{itemize}
 \bigskip
 
@@ -416,31 +433,27 @@ Yet, the specification of an ADT is language-independent:
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{What is algebraic specification?}
-\framesubtitle{}
-Algebraic specification: based on mathematics
-(category theory and universal algebras). 
-\begin{itemize}
-\item Equational specification of ADTs
-\end{itemize}
-\bigskip
+\frametitle{Algebraic specifications}
+\framesubtitle{Overview}
 
-Mathematical view:
 \begin{itemize}
-\item (Partial) functions, domain/codomain
- \item Independent from implementation view \& language constructs:
-\begin{itemize}
-\item no body, no method specifiers, no parameter specifiers, no exceptions,
-no ``this, etc. 
-\end{itemize}
+\item Mathematical, language-independent specification of abstract data types.
+\item Implementation: not a concern
 \end{itemize}
 
-\bigskip
-Important applications:
+Applications:
 \begin{itemize}
 \item Language and (abstract) data type design
 \item Software specification
 \end{itemize}
+
+What?
+\begin{itemize}
+\item Syntax (operations)
+\item Semantics (axioms)
+\end{itemize}
+
+
 \end{frame}
 
 \begin{frame}[fragile]
@@ -461,15 +474,18 @@ Example:
  & \ \ & 
    \begin{tabular}{ll}
    create:& IntContainer\\
-   insert:& IntContainer $x$ integer $x$ integer $\rightarrow$  IntContainer\\
-   remove:&  IntContainer $x$ integer $\rightarrow$  integer \\
+   insert:& IntContainer × integer × integer → IntContainer\\
+   remove:& IntContainer × integer → IntContainer \\
    \end{tabular}
 \end{tabular} 
 \bigskip
 
-Sort-signature terminology: highlights difference  between specification (possible
-types) and language-level (real) types. \\
+
 Q: what is ``integer''?
+
+The signature defines a language of valid expressions.
+
+
 \end{frame}
 
 
@@ -488,8 +504,8 @@ Example:
  & \ \ & 
    \begin{tabular}{ll}
    create:& IntContainer\\
-   insert:& IntContainer $x$ integer $x$ integer $\rightarrow$  IntContainer\\
-   remove:&  IntContainer $x$ integer $\rightarrow$  integer \\
+   insert:& IntContainer × integer × integer →  IntContainer\\
+   remove:& IntContainer × integer →  IntContainer \\
    \end{tabular} \\
 \multicolumn{3}{l}{\textbf{variables:}}\\
 & \ \ & 
@@ -499,28 +515,30 @@ Example:
 \multicolumn{3}{l}{\textbf{axioms:}}\\
 & \ \ & 
    \begin{tabular}{l}
-   remove(create,i) = 0 \\
-   remove(insert(A,i,j), k) = if  i = k then j else remove(A,k)   
+   remove(create,i) = create \\
+   remove(insert(A,i,j), k) = if i == k then j else remove(A,k) \\
+   ...
    \end{tabular}
 \end{tabular} 
 \bigskip
 
-Conditional equational logic frequent; 
-other logics possible.
+An ADT must respect the axioms!
+
+% Conditional equational logic frequent; other logics possible.
 
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Initial algebras}
 \framesubtitle{From algebraic specification to ADTs}
-Goal: construct a unique algebra $\leadsto$ the unique specification of
-one particular type.
+Goal: construct a type which is a model for the spec.
 \bigskip
 
-Standard procedure:
+One can proceed as follows (informally):
 \begin{itemize}
-\item Construct the algebra $F$ of all  syntactically legal terms 
-(``free algebra''). Ex.:
+\item Consider all syntactically valid terms. This is sometimes
+called the ``free algebra''.
+Ex.:
 \\
 \hspace*{0.5cm}
 {\small\em
@@ -530,22 +548,15 @@ insert(create,1,2), insert(create,2,1),\\
 insert(insert(create,1,1),2,2), remove(insert(create,1,1), 1), \ldots
 \end{tabular}
 }
+This surely contains ``enough'' values: if you can write the expression, you
+can find it in there!
 
-\item Define an equivalence relation $==$ from the set of axioms, form 
-new algebra Q such that $x=y$ iff $x == y $ in F (``quotient algebra'').
-\item Given the set of axioms, there exists a 
-smallest equiva\-lence relation, the 
-\textit{initial algebra}. It can be
- used as ``the'' specification of a data type.
+\item The above contains ``too much'': the axioms are not respected.
+(Ex. remove(create,0) ≠ create ...) 
 
-\hspace*{0.5cm}
-{\small \em 
-\begin{tabular}{lll}
-remove(insert(A,1,1), 1)& == & 1\\
-remove(insert(A,2,1), 1)& == &  remove(A,1)
-\end{tabular}
-}
-
+\item The ``initial algebra'' is a subset of the ``free algebra''.
+  Additionally, if one can prove $x=y$ using the axioms, then $x$ and $y$ are
+  considered the same element.
 \end{itemize}
 \end{frame}
 
@@ -592,6 +603,7 @@ Final algebras do not always exist.
 \end{frame}
 } % end mycomment
 
+\mycomment{
 \begin{frame}[fragile]
 \frametitle{Formal language}
 \framesubtitle{}
@@ -608,15 +620,16 @@ OBJ family, Larch family, Tecton, Lotus, LPG, \ldots
 \item Principal problem: gap to programming language 
 \end{itemize}
 \end{frame}
+}
 
-
+\mycomment{
 \begin{frame}[fragile]
 \frametitle{\Cpp concepts}
 \framesubtitle{On the cutting edge}
 
 \begin{itemize}
 \item  \cpp extension by a specification language (``concepts'')
-\item Proposal approved by the evolution group $\leadsto$ \cpp0x
+% \item Proposal approved by the evolution group $\leadsto$ \cpp0x
 \item Combines advantages:
 \begin{itemize} 
 \item specification (formal \& implementation-independent), \\ 
@@ -646,10 +659,14 @@ concept CopyConstructible<typename T> {
 \end{itemize}
 \end{frame}
 
+}
+
+\mycomment {
+
 \begin{frame}[fragile]
 \frametitle{Design by contract (TM) in Eiffel}
 \framesubtitle{Interface specification of methods}
-%http://archive.eiffel.com/doc/online/eiffel50/intro/language/tutorial-09.html}
+%http://archive.eiffel.com/doc/online/eiffel50/intro/language/tutorial-09.html
 
 Eiffel provides syntax for expressing  pre- and postconditions of
 methods: 
@@ -678,7 +695,7 @@ methods:
 \end{frame}
 
 
-
+}
 
 
 \mycomment{
@@ -847,15 +864,14 @@ impossible)
 \begin{cplus3}
 class Complex 
 {
-    // add: Complex x double -> Complex  
-    public Complex add(double d) {...}
+    // add: (Complex , Real) -> Complex  
+    public Complex add(Real d) {...}
 }
 \end{cplus3}
 How to define an addition with signature 
 \begin{center}
-\textit{double x Complex} $\rightarrow$ \textit{Complex}?
+\textit{double x Complex} → \textit{Complex}?
 \end{center}
-
 \begin{itemize}
 \item Impossible in almost all OO-language (Java, C\#)!
 Exception: very few (``multi-dispatch languages'') 
@@ -1624,7 +1640,7 @@ it executes before the body of the child's constructor.
 
 \end{frame}
 
-\subsection{Covariance, contravariance, subtyping}
+\subsection{Subtyping, Covariance, Contravariance}
 \begin{frame}[fragile]
 \frametitle{Covariance and contravariance}
 \framesubtitle{}
@@ -1636,7 +1652,7 @@ the argument types or the return type.
 
 Assume a class \texttt{Animal}, a child \texttt{DomesticAnimal} with 
 %a method 
-%\begin{center} set_playmate(Sandwich) $\rightarrow$ void \end{center}
+%\begin{center} set_playmate(Sandwich) → void \end{center}
 \begin{cplus3}
        set_playmate(DomesticAnimal)->  void 
 \end{cplus3}
@@ -1689,48 +1705,51 @@ C\# requires invariance.
 
 \begin{frame}[fragile]
 \frametitle{Subtyping}
-\framesubtitle{}
+\framesubtitle{Intuition and Substitiution principle}
 %http://www.informatik.uni-bonn.de/~ralf/PvPS2007/Folien5.pdf
-Principle of substitution (Liskov):
+
+
+$S :< T$. $S$ ``is-a'' $T$.
+
+Examples: 
+
 \begin{itemize}
-\item A relation between two types $A,B$ that ensures that 
-$B$ can be used in a program wherever $A$ is used (``is-a relation'').
+  \item integer $:<$ number
+  \item student $:<$ person
+  \item mergeSort $:<$ sort
+  \item ...
 \end{itemize}
-\[
-\frac{\Gamma \mapsto e: A \qquad B <: A}
-         {\Gamma \mapsto e:B }
-\]
-Subtyping:
-\begin{itemize}
-\item 
-A type $S$ is a subtype of a type $T$ if the principle of substitution
-holds.
-\item In OOP, subtyping is established via inheritance. 
-\end{itemize}
-\bigskip
-An integer ``is-a'' number: 
-\begin{java}
-''Smalltalk''
-Number subclass: #Integer
-   instanceVariableNames: ''
-   classVariableNames: ''
-   poolDictionaries: ''
-   category: 'Kernel-Numbers
-\end{java}
+
+\begin{theorem}[Principle of substitution (Liskov)]
+  If $S :< T$, and $q$ is a true for objects of type $T$, then $q$ is true for objects of type $S$.
+\end{theorem}
+
+Corrollary: if a piece of code works for objects of type $T$, then it mush work for objects of type $S$.
+
+Ex. if it works for rectangles, then it works for squares. (Is this true? side conditions?)
+
+LSP is a necessary condition for subtyping.
 
 
 \end{frame}
 
-\mycomment{
-\begin{frame}[fragile]
-\frametitle{Casting and slicing}
+
+\begin{frame}
+\frametitle{Subtyping polymorphism}
 \framesubtitle{}
+
+Definition of polymorphism: values have multiple types.
+
+With subtyping:
+
+if $x : S$ and $S :< T$ then $x : T$.
+
+The LSP is a justification for the above rule.
 \end{frame}
-}
+
+
 \begin{frame}[fragile]
-\frametitle{Subclassing$\neq$ subtyping!}
-\framesubtitle{}
-General problem in OO languages 
+\frametitle{Inheritance for code reuse vs. inheritance for subtyping}
 
 \begin{itemize}
 \item  Inheritance used for two \textit{very}
@@ -1742,16 +1761,19 @@ different relations
 \item In most languages, every subclass 
 \textit{automatically} also is a  subtype even if
 intuitively  not justified. Famous example:
+\end{itemize}
 \begin{java}
 // JDK
 public class Stack<E> extends Vector<E> {...}
 \end{java}
-\end{itemize}
+
 \bigskip
 
 Would be better (i.e., safer, more intuitive) 
 to separate  subclassing and subtyping. 
+
 \end{frame}
+
 
 \begin{frame}[fragile]
 \frametitle{Restricting inheritance}

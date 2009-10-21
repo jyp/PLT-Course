@@ -76,8 +76,10 @@ OO
 
 Q1. 
 
-State the Liskov substitution principle. (3pts) 
-Specifiy the above principle to justify that subtyping is a reflexive relation.  (3pts)
+State the substitution principle of Liskov. (3pts) 
+
+I claim that every type is a subtype of itself. Show that this claim is compatible with 
+the above principle by specialising it. (3pts)
 
 Q2. 
 

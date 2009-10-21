@@ -39,7 +39,6 @@
 % or whatever
 
 \usepackage[utf8x]{inputenc}
-% or whatever
 
 \usepackage{times}
 \usepackage[T1]{fontenc}
@@ -1470,22 +1469,21 @@ it might not give users control.
 \begin{frame}[fragile]
 \frametitle{Comparison}
 
-{\small
+{\tiny
 \begin{tabular}{lcccc}
 Region & Access        & Allocation policy & Allocation operation      & Comment \\
 \hline 
 Static & fixed address & At startup & Ask OS & Rigid and cheap \\
-Stack  & AR + fixed address & LIFO & Bump stack pointer by fixed amount & Cheap (Local) \\
-Heap   & Through any pointer & See below & See below & Flexible, but maybe expensive \\
+Stack  & AR + fixed address & LIFO & SP += constant & Cheap (Local) \\
+Heap   & Through any pointer & See below & See below & Flexible, but maybe expansive \\
 \hline 
 \end{tabular}
 }
 
 There are many representations for the Heap. Major distinction: GC or not.
 
-Remark:Some language also have ``Bump stack pointer by dynamic amount'' allocation operation.
-
-Exercise: work out the other column and think about the tradeoffs.
+Remark: Some language also have ``AR + dynamic address'' as access mechanism.
+Exercise: work out the other columns and think about the tradeoffs.
 
 \end{frame}
 
@@ -1874,8 +1872,7 @@ int myInt = 5; SquareIt(ref myInt);
 In \Cpp
 \begin{itemize}
 
-\item By-reference parameters declared via ``\&''; not visible at
-invocation. 
+\item By-reference formal parameters declared via ``\&''. Actual parameters must be l-values.
 \item Can be write-protected via  ``const'' qualifiers.
 Combines efficiency with protection against alias effects.
 
@@ -2559,11 +2556,11 @@ mechanism.
 
 \end{itemize}
 
-Other views;
+Other views:
 \begin{itemize}
 \item In functional programming, the interesting distinction is between
 \textit{eager} or \textit{lazy} evaluation of actual parameters. 
-\item In declarative languages, parameter passing works entirely
+\item In logic languages, parameter passing works entirely
 differently (``unification'').
 \end{itemize}
 
