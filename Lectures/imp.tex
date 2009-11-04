@@ -3,25 +3,6 @@
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}{\insertpagenumber}
 
-% This file is a solution template for:
-
-% - Giving a talk on some subject.
-% - The talk is between 15min and 45min long.
-% - Style is ornate.
-
-
-
-% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
-%
-% In principle, this file can be redistributed and/or modified under
-% the terms of the GNU Public License, version 2.
-%
-% However, this file is supposed to be a template to be modified
-% for your own needs. For this reason, if you use this file as a
-% template and not specifically distribute it as part of a another
-% package/program, I grant the extra permission to freely copy and
-% modify this file as you see fit and even to delete this copyright
-% notice.
 
 
 \mode<presentation>
@@ -496,7 +477,7 @@ stored storable value
 In any von Neumann language, a variable is (both)
 \begin{itemize} 
     \item A memory location                 (if used on the left of :=)
-    \item The value stored at such location  (if used on the right of :=)
+    \item The value stored at such location  (if used \emph{elsewhere})
 \end{itemize}
 
 Example:
@@ -561,7 +542,7 @@ Assume:
 \tikzstyle{cell}=[rectangle,draw,minimum width=1cm,minimum height=0.5cm]
 
 \draw (-1,1) node {x} ;
-\draw ( 0,1) node [cell] {1} ;
+\draw ( 0,1) node [cell] {2} ;
 \draw (-1,0.5) node {y} ;
 \draw ( 0,0.5) node [cell] {2} ;
 
@@ -633,10 +614,10 @@ You can think of the assignment as ``the reference is copied''.
 
 
 \begin{frame}[fragile]
-\frametitle{Copy semantics in \Cpp}
+\frametitle{Translating reference semantics to copy semantics}
 \framesubtitle{}
 % Watt, p.64
-Assignments in \Cpp 
+e.g.: C/\Cpp 
 \begin{itemize}
 \item \Cpp supports copy semantics only. 
 \item Developers can achieve the
@@ -701,13 +682,12 @@ Date date1 = today.clone();
 \frametitle{Equality}
 \framesubtitle{}
 The semantics of the equality predicate should be consistent with
-the semantics of the assignment (why?).
+the semantics of the assignment. Why?
 
-Assume 
+Consider
 \begin{cplus3}
-          if (...) { x := y; } 
-          ...
-          if (x == y) ... 
+          x := y;
+          if (x == y) {} else {assert ?;} 
 \end{cplus3}
 \begin{itemize}
 \item Copy semantics: test whether the corresponding components contain

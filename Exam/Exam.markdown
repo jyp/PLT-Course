@@ -29,28 +29,29 @@ a + 1
 
 Q2. (4 pts)
 
-Consider the following program written using
-references. It assumes call-by-value semantics.
+Consider the following program. It uses the call by reference calling convention.
 
-f (a, b : reference to integer) returns reference to integer {    
-    t : reference to integer
-
-    t := a
+f (a, b : integers passed by reference) {    
     a := b
+    b := b + 3;
     return t
 }
 
 
 x, y: integer
 
-...
+f(x,y)
 
-print (f (x, y) + x)
+x := y + 1;
+print (x + y);
 
+
+What is printed?
 
 Translate the function `f` and its call to a language that does not support
-references, by using pointers. You are not allowed to change the "algorithm". 
+call by reference, but only call by value, by using pointers. You are not allowed to change anything else. In particular, the "algorithm", the declatations of x and y must remain the same.
 
+Alt: other calling conventions.
 
 Q3.
 
