@@ -1,0 +1,545 @@
+\documentclass{article}
+\begin{document}
+\newcommand{\examdate}{Thursday, 16th April}
+\newcommand{\examtime}{14.00 - 18.00}
+
+\noindent
+\begin{tabular}{lr}
+CHALMERS TEKNISKA H\"OGSKOLA              \\
+Dept. of Computer Science and Engineering \\
+John Hughes                               \\
+\end{tabular}
+
+\vspace{2.5cm} \noindent
+\begin{center} {\LARGE
+Exam in Programming Paradigms} \\
+DAT 120 - DIT 330
+\end{center}
+
+\vspace{1.5cm}
+
+\noindent
+\examdate, \examtime, V\"ag och vatten.\\
+Lecturer: John Hughes, tel 070 756 3760.\\
+Jean-Philippe Bernardy will visit the exam rooms around 15h00.
+\vspace{1cm}
+
+\noindent
+Permitted aids:\\
+English-Swedish or English-other language dictionary.\\
+\\
+\\
+Grade scale:\\
+CTH: \\
+$>= 48,$ 5\\
+$>= 36,$ 4\\
+$>= 24,$ 3\\
+$< 24, $ U\\
+\\
+GU:\\
+$>= 48,$ VG\\
+$>= 24,$ G\\
+$< 24, $ U\\
+\\
+Exam review time: May 15 at 9h00\\
+Approx time for preliminary grading results: May 15
+
+
+%\newcommand{\comment}[1]{}
+\newcommand{\comment}[1]{\marginpar{#1}}
+
+\newpage
+\section{Imperative Programming {\textbf{[12 points]}}}
+
+\begin{enumerate}
+\item (Parameter passing.) \hfill{\bf [4 points]}
+
+Consider the \texttt{exchange} routine below in a language that
+resembles Java.  
+
+{\small 
+\begin{verbatim}
+class Exchange {
+   public static void main(String args[]) {
+       Integer x,b;
+       x = new Integer(33);
+       y = new Integer(22);
+       exchange(x, b);
+       System.out.println("after exchange...");
+       System.out.println("x is " + x);
+       System.out.println("y is " + y);
+  }
+  public static void exchange(Integer x, Integer y)
+  {
+       Integer temp = x;
+       x = y;
+       y = temp;
+  }
+}
+\end{verbatim}
+}
+
+\begin{enumerate}
+\item Assume \texttt{Integer} is of class type and \texttt{x,y}
+are \textit{references} to Integer-objects. {\textbf{[2 points]}}
+\begin{enumerate}
+\item What would the program print if the parameters are passed
+by-value?
+\item What would the program print if the parameters are passed
+by-reference?
+\end{enumerate}
+\item Now assume a different implementation of the \texttt{Integer} type (as primitive
+type like \texttt{int} in Java, not
+as class type) so
+that \texttt{x,y} are integral values (and 
+not references to objects). {\textbf{[2 points]}}
+\begin{enumerate}
+\item What would the program print if the parameters are passed by-value?
+\item What would it print if the parameters are passed by-reference?
+\end{enumerate} 
+\end{enumerate} 
+\newpage
+\item (Copy and reference semantics.)  \hfill{\textbf{[8 points]}}
+{\small 
+\begin{verbatim}
+class complex 
+{
+   public int re;
+   public int im;
+};
+
+complex c1 = new complex(3,5); 
+// now c1.re = 3; c1.im = 5;
+complex c2;
+c2 = c1;    
+c1.re = 7; // (*)
+   
+\end{verbatim}
+}
+Consider the assignment ``c2 = c1;'' in the snippet above.
+\begin{enumerate}
+\item 
+Assume that the assignment has \textit{copy semantics} and 
+draw a picture of the variables \texttt{c1,c2} before and after the assignment.
+What  is the value of \texttt{c2.re} after line (*)?
+{\textbf{[2 points]}}
+\item Now assume that 
+the assignment has \textit{reference semantics} and, again, draw the picture of 
+ \texttt{c1,c2} before and after the assignment.
+What  is the value of \texttt{c2.re} after line (*)?
+{\textbf{[2 points]}}
+
+\item Assume a subclass \texttt{quaternion} that extends the class
+\texttt{complex}
+by two fields \texttt{j}  and \texttt{k}.  Suppose we changed the snippet above 
+so that \texttt{c1} would be of type \texttt{quaternion}, and not
+\texttt{complex}, and initialized \texttt{c1.j} and \texttt{c1.k} properly. 
+Assume copy semantics and describe the (state of)  \texttt{c2} 
+ after the assignment ``c2 = c1;'' in the snippet above. 
+As in part (a), (b) of this question, give your answer by drawing
+ a picture of the variables \texttt{c1,c2} 
+before and after the assignment.
+{\textbf{[2 points]}}
+\item In part (c): should \texttt{c1,c2} be considered ``equal'' after
+the assignment? Give a definition of ``equal'' that would return 
+``false.''  {\textbf{[2 points]}}
+\end{enumerate}
+\end{enumerate}
+\newpage
+
+\section{Object-Oriented Programming [12 points]}
+\begin{enumerate}
+\item (Invariance and co-variance.) \hfill{\textbf{[6 points]}}
+
+Given a class \texttt{Car}, which requires ordinary \texttt{Driver}s,
+and a class \texttt{RaceCar}, which requires special drivers
+of the class \texttt{FastDriver}s.
+The pseudo code below defines two small class hierarchies, but leaves
+out all type declarations for fields and method parameters. 
+%
+\begin{center}
+\small{
+\begin{tabular}{ll}
+\begin{minipage}{.5\textwidth}
+\begin{verbatim}
+class Car
+instance variables
+   driver
+instance methods
+   getDriver
+     return driver
+   register(aDriver)
+      driver := aDriver.
+      return
+end Car
+
+class RaceCar inherits Car
+instance variables
+   speedLimit
+instance methods
+   register(aDriver)
+      speedLimit 
+         := aDriver.getLicense * 10.
+      return
+end RaceCar
+\end{verbatim}
+\end{minipage}
+& 
+\begin{minipage}{.5\textwidth}
+\begin{verbatim}
+class Driver
+instance methods
+    testDrive(aCar) 
+        ... try out aCar ...
+        return aCar
+end Driver
+
+
+
+
+class FastDriver inherits Driver
+instance variables
+    license
+instance methods
+    getLicense
+         return license
+end FastDriver
+\end{verbatim}
+\end{minipage}
+\end{tabular}
+}
+\end{center}
+\begin{enumerate}
+\item Assume \textit{invariant overriding} and extend the signature of \texttt{register}
+by the appropriate type declaration. (Do not change anything else and use only types from the class hierarchies
+above.) Explain 
+whether or not the code compiles; also explain  whether or not it may fail with a
+run-time error. In case of a compilation error, give a plausible error message.
+In case of a run-time error, construct a program that fails (pseudo code
+suffices) and give
+a possible error message; only run-time errors due to co- or non-variance
+are of interest here. 
+\\
+{\textbf{[3 points]}}
+\item Assume \textit{co-variant overriding} and answer the same questions as above. 
+{\textbf{[3 points]}}
+\end{enumerate}
+\newpage
+\item (Double dispatching.) \hfill{\textbf{[6 points]}}
+
+The following Java snippet contains a class hierarchy of geometric classes:
+
+{\small
+\begin{verbatim}
+class Shape {
+    public  boolean intersect(Shape s) {
+         return s.intersectShape(this);
+    }
+    protected  boolean intersectShape(Shape s) {
+        // intersect Shape x Shape
+        return boolean b = ....;
+    }
+    protected  boolean intersectRectangle(Rectangle r) {
+        // no special code for Shape x Rectangle
+        return intersectShape(r);
+    }
+    protected  boolean intersectCircle(Circle c) {
+        return intersectShape(c);
+   }
+}
+class Circle extends Shape { 
+    public  boolean intersect(Shape s) {
+        return s.intersectCircle(this);  
+    }
+    protected  boolean intersectCircle(Circle c) {
+        return boolean b = ...;
+   }  
+}
+class Rectangle extends Shape {
+    public  boolean intersect(Shape s) {
+        return s.intersectRectangle(this);  
+    }
+    protected  boolean intersectRectangle(Rectangle r) {
+        // specialized code for two rectangles
+        return boolean b = ...;
+    }
+}
+class Test {
+   public static void Main() {
+      Shape s1 = new Rectangle(); 
+      Shape s2 = new Circle();
+      System.out.writeln(s1.intersect(s2)); // (*)
+   }}
+\end{verbatim}
+}
+\begin{enumerate}
+\item Assume dynamic method binding and give the sequence of method calls for the line marked (*) in
+\textsf{Main}; qualify the methods with the appropriate class names. {\textbf{[4 points]}}
+\item Now assume a language with \textit{static} method binding, based on the
+static type of a variable, and, again, look at
+the line marked (*). What is now the sequence of method calls?
+ {\textbf{[2 points]}}
+\end{enumerate}
+
+\end{enumerate}
+
+\newpage
+\section{Functional Programming [12 points]}
+
+\begin{enumerate}
+
+\item
+Draw the cons-cells representing the following LISP S-expression:
+\comment{1 point}
+\begin{verbatim}
+(1 2 3)
+\end{verbatim}
+
+\item
+The following LISP function concatenates two lists:
+\begin{verbatim}
+(define append (lambda (x y)
+  (if (null x)
+      y
+      (cons (car x) (append (cdr x) y)))))
+\end{verbatim}
+If \verb!x! is the S-expression \verb!(1 2 3)!, and \verb!y! is the S-expression \verb!(4 5)!, then
+\begin{enumerate}
+\item What S-expression does the call \verb!(append x y)! return as its result?
+\comment{1 point}
+\item How many new cons cells are created by this call?
+\comment{1 point}
+\item Draw the cons-cells on the heap representing the original values
+  of \verb!x!, \verb!y!, and the result of the call. Be careful to
+  take account of sharing.
+\comment{1 point}
+\end{enumerate}
+
+\item
+In LISP, cons cells are allocated by the function \verb!cons!. When are they {\em deallocated}?
+\begin{enumerate}
+\item At the end of program execution.
+\item When the function that created them returns.
+\item When they cannot be reached by following pointers from any
+  activation record.
+\end{enumerate}
+\comment{1 point}
+
+\item
+Study the following Haskell function definition:
+\begin{verbatim}
+f n x = g x n 1
+
+g n x r =
+  if n==0 
+    then r
+    else if n `rem` 2 == 0 
+    	   then g (n `div` 2) (x*x) r
+           else g (n-1) x (r*x)
+\end{verbatim}
+(In Haskell, \verb!n `div` 2! performs an integer division of \verb!n! by \verb!2!, and \verb!n `rem` 2! returns the remainder).
+
+\begin{enumerate}
+\item
+Write a {\bf while}-loop in an imperative language of your choice,
+using three local variables \verb!n!, \verb!x! and \verb!r!, which performs the same computation as the function \verb!g!.
+\comment{3 points}
+\item
+What well-known function does \verb!f! compute? (You may assume that \verb!n! is a non-negative integer).
+\comment{1 point}
+\end{enumerate}
+
+\item
+Suppose the Haskell type \verb!Set a! represents a {\em set} of values
+of type \verb!a!.
+\comment{3 points}
+\begin{enumerate}
+\item
+Suggest suitable types for the functions \verb!insert! and
+\verb!delete!, where \verb!insert a s! inserts an element \verb!a!
+into the set \verb!s!, and \verb!delete a s! removes an element
+\verb!a! from a set \verb!s!.
+\item
+What will the value of the following expression be, given that
+\verb!s! is the set $\{1,2\}$? You may write set values informally
+using the usual mathematical notation $\{x_1, x_2, x_3\dots\}$.
+\begin{verbatim}
+(delete 2 s, insert 3 s)
+\end{verbatim}
+\item Suppose that \verb!insert 3 s! and \verb!insert 4 s! are evaluated {\em in parallel}. What are the possible results that the two calls may return?
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+\newpage
+\section{Concurrency Oriented Programming [12 points]}
+
+\begin{enumerate}
+
+\item
+What possible outputs might the following Erlang function print?
+(\verb!io:write(X)! prints the value of X). Assume that the scheduler
+may randomly switch between processes at any time.
+\comment{1 point}
+\begin{verbatim}
+example() ->
+    Pid = self(),
+    spawn(fun() -> Pid ! {a,b} end),
+    spawn(fun() -> Pid ! c end),
+    receive A ->
+      receive B ->
+        io:write(A),
+        io:write(B)
+      end
+    end.
+\end{verbatim}
+
+\item 
+Erlang does not provide locks to protect shared data from simultaneous
+modification by two or more concurrent processes. What prevents Erlang
+processes from corrupting shared data?
+\comment{1 point}
+
+\item
+What is the effect of {\em linking} two Erlang processes?
+\comment{1 point}
+
+\item
+A {\em lock} can be implemented in Erlang as a server process which
+client processes communicate with to claim and release the lock.
+Assume we need to implement a {\em single} lock, which will be managed
+by a process registered under the name \verb!lock!. Clients will call
+\verb!claim()! and \verb!release()! to claim and release the lock; in
+between these two calls we say that the client is {\em holding} the
+lock.  If one client is holding the lock, then no other client may
+claim it until the first client releases the lock---calls of
+\verb!claim()!  in other clients should wait until the lock is
+released. Calls of \verb!release()! in clients which are not holding
+the lock should be ignored.
+\begin{enumerate}
+\item
+What message(s) should a client and server exchange when the client
+claims the lock? (Do not write the code yet: just give the sequence of
+messages that should be exchanged, giving the Erlang term
+representation for each message).
+  \comment{1 point}
+
+\item
+What message(s) should a client and server exchange when the client
+releases the lock? (See the note above).
+\comment{1 point}
+
+\item
+Write Erlang function definitions of \verb!claim()! and
+\verb!release()!.
+  \comment{2 points}
+
+\item
+At any time, the server is in one of two states: either it is {\em
+  unlocked}, or it is {\em locked by a particular client pid}. 
+Define Erlang functions \verb!unlocked()! and \verb!locked(Pid)! that
+implement the behaviour of the server in the unlocked state, and
+locked-by-Pid state respectively.
+\comment{2 points}
+
+\item
+Write a function \verb!start_lock()! to start the lock server, in an
+unlocked state.
+\comment{1 point}
+
+\item
+What {\em changes} would you make to your code, to ensure that the
+lock is released automatically if a client exits while holding it? Do
+not rewrite all your code, just mark the points in your code above
+where you would make changes with \verb!(A)!, \verb!(B)! and so on,
+and in your answer to this part, give the code that you would insert
+at each of these points.  \comment{2 points}
+
+\end{enumerate}
+
+\end{enumerate}
+
+\newpage
+\section{Logic Programming [12 points]}
+
+\begin{enumerate}
+\item
+What is the result of unification of the following pairs of terms? In
+each case, state whether or not unification succeeds, and if it
+succeeds, give the values bound to the variables.  \comment{2 points}
+\begin{enumerate}
+\item
+\verb![X|Xs]! and \verb![1,2,3]!
+\item
+\verb![X,2]! and \verb![1,Y]!
+\item
+\verb![A,A]! and \verb![1,B]!
+\item
+\verb![A,B]! and \verb![1,2,3]!
+\end{enumerate}
+
+\item
+Given the clauses
+\begin{verbatim}
+mem(X,[X|Xs]]).
+mem(X,[Y|Xs]) :- mem(X,Xs).
+\end{verbatim}
+what will Prolog display in response to these queries? Make sure to
+include all the solutions Prolog will find.
+\comment{3 points}
+\begin{enumerate}
+\item \verb!mem(X,[]).!
+\item \verb!mem(X,[1,2,3]).!
+\item \verb!mem(1,X).!
+\end{enumerate}
+
+\item
+Using no more than two clauses, define a predicate \verb!del(X,Xs,Ys)!
+which holds when \verb!X! is an element of the list \verb!Xs!, and
+removing \verb!X! from \verb!Xs! leaves the list \verb!Ys!. For
+example, given the query \verb!del(2,[1,2,3],Ys)!, Prolog should reply
+with \verb!Ys = [1,3]!.
+\comment{2 points}
+
+\item
+What solutions will Prolog find for the queries
+\comment{2 points}
+\begin{enumerate}
+\item
+\verb!del(1,[1,2,1],Ys).!
+\item
+\verb!del(3,Xs,[1,2]).!
+\end{enumerate}
+
+\item
+Study the following clauses, which define the predicate
+\verb!reverse(Xs,Ys)! that holds if the lists \verb!Xs! and
+\verb!Ys! are each other's reversal.  
+\begin{verbatim}
+reverse([],[]).
+reverse([X|Xs],Ys) :- reverse(Xs,Zs), append(Zs,[X],Ys).
+\end{verbatim}
+This uses the \verb!append! predicate from the lectures:
+\begin{verbatim}
+append([],Ys,Ys).
+append([X|Xs],Ys,[X|Zs]) :- append(Xs,Ys,Zs).
+\end{verbatim}
+\begin{enumerate}
+\item
+Both of the queries \verb!reverse([1,2,3],Xs)! and
+\verb!reverse(Xs,[1,2,3])! find the solution \verb!Xs = [3,2,1]!, but
+one of them falls into an infinite loop if we ask for more
+solutions. Which query can fall into an infinite loop?
+\comment{1 point}
+\item
+Using no more than three clauses, give a definition of the
+\verb!reverse! predicate which does not fall into a loop in either of
+these cases.
+\comment{2 points}
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}

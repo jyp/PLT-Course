@@ -1,0 +1,6 @@
+
+
+init() -> InitialState
+
+handle(Msg,State) -> {Reply,NewState}
+

@@ -1,0 +1,296 @@
+\documentclass{article}
+\usepackage{amssymb,amsmath}
+
+% \input{header}
+% \rhead{Ex. 2}
+\begin{document}
+\title{Ex. 2: Programming Paradigms 
+\\
+Object-Oriented Programming}
+\date{LP2, 2007}
+\author{}
+\maketitle
+
+\section*{Algebraic specification}
+
+\begin{enumerate}
+\item
+
+\begin{enumerate}
+
+\item The free algebra consists of all terms constructible out of the operations. (There are infinitely many of them)
+
+The free algebra for bool is the least fix point of these equations:
+
+\[true \in bool                          \]
+\[false \in bool                         \]
+\[a \in bool \rightarrow not (a) \in bool           \]
+\[a,b \in bool \rightarrow and (a,b) \in bool     \]
+\[a,b \in bool \rightarrow or (a,b) \in bool      \]
+\[a,b \in bool \rightarrow implies (a,b) \in bool \]
+
+
+\item
+  We can prove by structural induction that each term can reduce to either true or false.
+
+  The induction step uses the axioms. eg.
+
+  $(b \leadsto \{true, false\}) \rightarrow (not(b) \leadsto \{true,false\})$ by using the axioms $not(true) = false$ and $not(false) = true$
+  \end{enumerate}
+
+\item
+\begin{enumerate}
+
+
+\item construct the initial algebra as above
+\item the terms given by the fix point of $x = and (maybe, x)$ are not equivalent to anything else than themselves 
+   under the provided set of axioms, therefore we have infinitely many classes.
+\item adding (eg.) the axiom $and (maybe, maybe) = maybe$ would make the initial algebra consist of only 3 classes
+\end{enumerate}
+
+\item
+Only $not (maybe) = maybe$ was necessary
+\end{enumerate}
+
+
+\section*{Co/contra/nonvariance}
+\begin{enumerate}
+\item A monoid is a set $M$ equipped with an associative binary operation ( $\odot$ ), and with an identity element $i$ such that:
+$$\forall a \in M. i \odot a = a \odot i = a$$
+examples: The set of strings form a monoid under 
+concatenation, with the empty string as identity. 
+Other monoids (together with their neutral) are (int,+,0), (int,*,1), (float, +,0), (list, append, emptyList), \ldots 
+
+\item Error: C\# requires invariance both for argument types and for
+the return types. That's why we get an error for each method.
+
+\item If C\# would allow covariance in the argument type,  one
+could substitute one instance of monoid for another and that way cause a run-time
+error. In the example below, the method
+a.op() expects an IntegerAdditiveMonoid, but gets a RealAdditiveMonoid.
+\begin{verbatim}
+struct RealAdditiveMonoid: Monoid  {
+    public RealAdditiveMonoid(double x) {
+         elt = x;
+    }
+    public RealAdditiveMonoid op(RealAdditiveMonoid second) {
+         return new RealAdditiveMonoid(
+             elt + second.elt;
+    }
+    public RealAdditiveMonoid id(){
+         return new RealAdditiveMonoid(0.0);
+    }
+    double elt;
+};
+
+
+class Main {
+   public static void main(string[] args) {
+      Monoid a = new IntegerAdditiveMonoid(7);
+      Monoid b = new RealAdditiveMonoid(2.3);
+      b = a.op(b); // exception!
+   }
+}
+\end{verbatim}
+
+It is not possible to construct  such a run time error and blame it on
+Id because it does not take an extra argument.
+
+\item Java is covariant in the return type (JLS, 8,4,8.3). Therefore,
+Java would only flag an error for the method op() (since it doesn't implement
+the interface); the method id(), on the other hand, would be considered
+a valid implementation. 
+
+\item The typical workaround is to use the requested signature, but then
+cast the argument to the desired type (IntegerAdditiveMonoid),
+and from there back to Monoid. Obviously, the first cast isn't safe. 
+\begin{verbatim}
+    public Monoid op(Monoid second) { 
+         return new IntegerAdditiveMonoid(
+              // nothing guarantees that 'second'
+              // has the right type.
+              elt + ((IntegerAdditiveMonoid)second).elt); 
+    }
+
+    public Monoid id(){ 
+         return new IntegerAdditiveMonoid(0);
+    }
+    int elt;
+\end{verbatim}
+\end{enumerate}
+
+\section*{Dispatch}
+%http://blogs.msdn.com/devdev/archive/2005/08/29/457798.aspx
+\begin{enumerate}
+\item Problems of single dispatch: 
+1. Extensibility (if a new class is derived from Shape, Rectangle and Circle have to change their implementation).
+2. Run-time overhead due to type cast
+3. Loss of static type safety
+\begin{verbatim}
+class Shape {
+    public boolean intersect(Shape s) {
+        // intersect Shape x Shape
+        return false;
+    }
+}
+class Rectangle extends Shape {
+    public  boolean intersect(Shape s) {
+        if (s instanceof Rectangle) {
+           // intersect Rectangle x Rectangle
+        }
+        else {
+	    // intersect Rectangle x Shape
+             return super.intersect(s);
+        }
+        return false;
+    }
+}
+class Circle extends Shape {
+   public boolean intersect(Shape s) {
+         if (s instanceof Circle) {
+           // intersect Circle x Circle
+        }
+        else {
+             return super.intersect(s);
+        }
+	 return false;
+    }
+}
+\end{verbatim}
+\item 
+Sequence of calls is as follows:
+\begin{verbatim}
+  //Main
+Shape s1 = new Rectangle();
+Shape s2 = new Circle();
+s2.intersect(s1);
+  //Circle.intersect(Shape);
+  //Shape.intersectCircle(Circle);
+  //Shape.intersectShape(Shape);
+\end{verbatim}
+
+Problems with double dispatch: 
+1. Root class needs to be modified each time a new class is added; 
+2. lots of code to write
+3. loss of performance due to multiple calls.
+
+
+C\# has different access rules: within a subclass, one can access 
+protected members of the superclass only through  instances of the
+subclass. Double-dispatching, however, wants to return control to 
+the superclass, thus needs to take a superclass object. For C\#, 
+it follows that the doubly-dispatched methods must be public. 
+\begin{verbatim}
+class Shape {
+    public  boolean intersect(Shape s) {
+         return s.intersectShape(this);
+    }
+    protected  boolean intersectShape(Shape s) {
+        // intersect Shape x Shape
+        return true;
+    }
+    protected  boolean intersectRectangle(Rectangle r) {
+        // no special code for Shape x Rectangle
+        return intersectShape(r);
+    }
+    protected  boolean intersectCircle(Circle c) {
+        return intersectShape(c);
+   }
+}
+class Rectangle extends Shape {
+    public  boolean intersect(Shape s) {
+        return s.intersectRectangle(this);  
+    }
+    protected  boolean intersectRectangle(Rectangle r) {
+        // specialized code for two rectangles
+        return false; 
+    }
+}
+class Circle extends Shape { 
+    public  boolean intersect(Shape s) {
+        return s.intersectCircle(this);  
+    }
+    protected  boolean intersectCircle(Circle c) {
+        return false;
+   }      
+  
+}
+\end{verbatim}
+\item Problems with the visitor: 
+1. Arguments and return type have to be passed in a convoluted way
+2. One has to create a different (visitor) class for things that should be methods.
+3. Code for handling visits is spread out over various classes.
+
+\begin{verbatim}
+class Shape {
+    public void accept(IntersectVisitor v) {
+	v.visitShape(this);
+    }
+}
+class Rectangle extends Shape {
+    public  void accept(IntersectVisitor v) { 
+      v.visitRectangle(this);
+    }
+}
+class Circle extends Shape {
+    public  void accept(IntersectVisitor v) { 
+      v.visitCircle(this); } 
+}
+ 
+// visitor hierarchy
+abstract class IntersectVisitor { 
+    boolean intersects; 
+    public abstract void visitShape(Shape s);
+    public abstract void visitRectangle(Rectangle r); 
+    public abstract void visitCircle(Circle c); 
+} 
+class RectangleIntersectVisitor extends IntersectVisitor {
+    public  void visitShape(Shape s) {
+       // set intersects
+   }
+   public  void visitRectangle(Rectangle r) {
+       // set intersects
+   }
+    public  void visitCircle(Circle r) {
+       // set intersects
+   }
+}
+class CircleIntersectVisitor extends IntersectVisitor { 
+   public  void visitShape(Shape s) {
+       // set intersects
+   }
+    public  void visitCircle(Circle r) {
+       // set intersects
+   }
+   public  void visitRectangle(Rectangle r) {
+       // set intersects
+   }
+}
+
+
+class Intersect {
+   public static void Main() {
+      Shape s1 = new Rectangle(); 
+      Shape s2 = new Circle();
+      /* 
+      boolean b = s2.intersect(s1);
+      b = s1.intersect(s1);
+      b = s2.intersect(s1);
+      */
+      IntersectVisitor v = new RectangleIntersectVisitor();
+      s1.accept(v);
+      if (v.intersects) {
+          ; 
+      }
+   }
+}
+\end{verbatim}
+
+\end{enumerate}
+
+\end{document}
+
+
+
+
+  
