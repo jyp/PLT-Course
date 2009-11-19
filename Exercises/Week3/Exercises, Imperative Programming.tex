@@ -190,11 +190,9 @@ run-time stack and an activation record, and returns the ``right''
 reference (or at least its activation record).
 \answer{
 Include in the activation record a  ``static link'' (a.k.a. access links),
-then follow the link to the static parent, and find a matching declaration
-as in the dynamic case.
+then follow the link to the static parent. The static link functions as an
+extra (implicit) parameter to the function.
 
-For a solution in constant time: compute the ``static distance'' between
-a variable definition and a variable reference.
 }%
 \end{question}
 
