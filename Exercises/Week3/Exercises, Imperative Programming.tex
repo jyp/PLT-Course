@@ -44,8 +44,8 @@
 Determine the final values of the array \textsf{A} after the call to
 \textsf{f} for each of the parameter-passing mechanisms: call-by-value,
 call-by-name, call-by-reference, call-by-result, call-by-value-result.
-Assume left to right evaluation of parameters and early lvalue
-computation.
+(Assume left to right evaluation of parameters and early location 
+computation for by-result and by-value-result.)
 
 \vfil\noindent\begin{minipage}[b]{0.5\linewidth}
 \begin{java}
@@ -76,17 +76,17 @@ f(A[0],A[A[0]]);
 \end{question}
 
 An important question of call-by-result, which was not discussed in
-class, is the question \textit{when} the lvalue of the actual parameter is 
+class, is the question \textit{when} the location of the actual parameter is 
 computed. One might expect that this happens before the callee executes,
 but that is not necessarily the case---since the value of the actual
 parameter is not needed until the 
 callee returns, its computation could be delayed until the value is needed.
-Ada, for example,  supports early lvalue-computation, while Algol-W implements
-late lvalue-computation.
+Ada, for example,  supports early location-computation, while Algol-W implements
+late location-computation.
 
 \begin{question}{2}
 Use the snippet below to explain the difference between early and late
-lvalue-computation.
+location-computation.
 \vfil\noindent\begin{minipage}[b]{0.45\linewidth}
 \begin{java}
 void f(int [] A) {
@@ -116,7 +116,7 @@ void g(by-reference int i, by-result int j) {
 \end{question}
 
 %\begin{question}{X}{
-% When does C\# perform the lvalue-computation for its by-result parameters?
+% When does C\# perform the location-computation for its by-result parameters?
 %\end{question}
 
 Another important detail of call-by-result and call-by-value-result concerns
