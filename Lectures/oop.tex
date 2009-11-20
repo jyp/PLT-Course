@@ -177,48 +177,6 @@ Turing award
 \end{frame}
 }
 
-\begin{frame}[fragile]
-\frametitle{A short history}
-\url{http://heim.ifi.uio.no/~kristen/FORSKNINGSDOK_MAPPE/F_OO_start.html}
-%Scott, p.788
-First generation
-\begin{itemize}
-\item SIMULA1 (1962-65), SIMULA 67 (1967): 
-\begin{itemize}
-\item Ole-Johan Dahl, Kristen Nygaard, Oslo
-\item Inheritance, virtual methods
-\end{itemize}
-\item Smalltalk (1969-80) 
-\begin{itemize}
-\item Alan Kay, Dan Ingalls, Adele Goldberg at Xerox Parc
-\item Dynamic language %(dynamic typing)
-\end{itemize}
-\end{itemize}
-
-80s
-\begin{itemize}
-\item \cpp(1983-98)
-%\begin{itemize}
-%\item 
-B. Stroustrup, AT\&T; hybrid
-%\end{itemize}
-\item Eiffel (1986-98); B. Meyer, ISI; %design by contract
-
-\end{itemize}
-
-And later many more:
-\begin{itemize}
-\item BETA
-\item CLOS, Dylan, Cecil, SELF, Ruby, \ldots
-\item  Modula-3, Oberon, Ada95, Sather, \ldots
-\item Objective CAML, Objective-C, \ldots
-\item Java (1995-03),
-C\# (2000-03)
-
-
-\end{itemize}
-
-\end{frame}
 
 
 
@@ -228,100 +186,6 @@ C\# (2000-03)
   \tableofcontents
   % You might wish to add the option [pausesections]
 \end{frame}
-
-\section{A Quick Tour through Smalltalk}
-
-\begin{frame}[fragile]
-\frametitle{Smalltalk}
-Material:
-\begin{itemize}
-  \item \url{http://www.squeak.org/Smalltalk}
-  \item \url{http://squeakbyexample.org/SBE.pdf}
-\end{itemize}
-
-Principles
-\begin{itemize}
-\item Everything is an object.
-\item All computation happens by sending \textit{messages} to objects:
-\begin{cplus3}
-      anObj aMethod: anArg
-\end{cplus3}
-\item Every object is an instance of a class.
-\item All classes have a parent; \texttt{Object} is the root class.
-\item All methods are public, all instance variables are private.
-\end{itemize}
-
-
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Smalltalk syntax}
-% \url{http://www.mucow.com/squeak-qref.html} -- down
-\begin{itemize}
-\item Assignment
-\begin{cplus3}
-foo := 100 factorial.
-\end{cplus3}
-
-\item Messages
-\begin{itemize}
-\item Unary
-\begin{cplus3}
-4 factorial
-'bla' asUppercase
-Color yellow
-\end{cplus3}
-
-\item Infix syntax (``Binary'')
-\begin{cplus3}
-3 + 4
-1 <= 10
-3 + 4 * 2
-\end{cplus3}
-
-\item Named Arguments (``Keywords'')
-\begin{cplus3}
-nums := Array newFrom: (1 to: 5)
-nums at: 1 put: \$a
-nums at: 2 put: 3 + 4
-\end{cplus3}
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Blocks}
-%http://daitanmarks.sourceforge.net/or/squeak/squeak_tutorial.html
-Blocks %(a.k.a. block closure) 
-correspond to anonymous functions. 
-
-\begin{itemize}
-\item They are objects (instances of \texttt{BlockContext}) and
-typically receive the message \texttt{value:}.
-\item They can have parameters (indicated by a leading colon):
-
-\begin{cplus3}
-[:x | 1 + x] value: 2
-[:x :y | x + y] value: 1 value: 2
-\end{cplus3}
-
-\item They can  have local variables (indicated by bars):
-\begin{cplus3}
-[:x :y |  |z| z := x + y] value: 1 value:2 
-\end{cplus3}
-
-\item They can refer to variables of the surrounding scope
-(they create \emph{closures}):
-\begin{cplus3}
-|newArray|
-newArray :=  ... 
-[:i | newArray at: i put: (aCollection at: i)]
-\end{cplus3}
-\end{itemize}
-
-exercise: relate to λ-expression
-\end{frame}
-
 
 \section{Abstract Data Types}
 % Loudon, ch. 9
@@ -338,7 +202,7 @@ Built-in types:
 \end{itemize}
 \bigskip
 
-Suppose users define new types via record-constructors only: 
+Consider a record type:
 \begin{cplus2}
        typedef struct {
           int   no_of_edges;
@@ -384,26 +248,37 @@ Software-engineering advantages:
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]
+\begin{frame}
 \frametitle{ADT and OOP}
 \framesubtitle{}
-Object-oriented programming supports ADTs, but ADTs
-can also be defined in other paradigms.
+
+Similarities
+\begin{itemize}
+  \item operations and data defined together
+  \item encapsulation: abstract the data
+\end{itemize}
+
+Differences
+\begin{itemize}
+  \item No special receiver object
+  \item No state
+\end{itemize}
+
 \bigskip
 
-Implementation of ADTs: 
-\begin{itemize}
-\item Classes
-\begin{itemize}
-\item See next chapter
-\end{itemize}
+OOP: compromising ADT with practical aspects.
 
-\item Modules
-\begin{itemize}
-\item Ada package, modules in CLU, Haskell, ML, \ldots
-\end{itemize}
+\end{frame}
 
+\begin{frame}[fragile]
+\frametitle{Implementation of ADTs}
+
+\begin{itemize}
+\item Classes (See next chapter)
+\item Modules (packages in Ada, modules in CLU, Haskell, ML, \ldots)
 \item Special constructs
+\end{itemize}
+
 \mycomment{
 \begin{cplus3}
 (* ADT SET in ML *)
@@ -424,12 +299,10 @@ abstype complex = C of real * real with
     fun add(C(x1,y1), C(x2,y2)) = C(x1+x2, y1+y2)
 end
 \end{cplus3}
-\end{itemize}
 
-Yet, the specification of an ADT is language-independent:
-\begin{itemize}
-\item Algebraic specification 
-\end{itemize}
+
+Yet, the specification of an ADT is language-independent: \\
+↝ Algebraic specification 
 \end{frame}
 
 \begin{frame}[fragile]
@@ -481,7 +354,7 @@ Example:
 \bigskip
 
 
-Q: what is ``integer''?
+% Q: what is ``integer''?
 
 The signature defines a language of valid expressions.
 
@@ -492,7 +365,7 @@ The signature defines a language of valid expressions.
 \begin{frame}[fragile]
 \frametitle{Algebraic specification}
 \framesubtitle{Semantics}
-What ''is'' remove? Equations describe the semantic properties of operations.
+What ``is'' remove? Equations describe the semantic properties of operations.
  They are often called
 ``axioms.''
 \bigskip
@@ -528,9 +401,10 @@ An ADT must respect the axioms!
 
 \begin{frame}[fragile]
 \frametitle{Initial algebras}
-\framesubtitle{From algebraic specification to ADTs}
-Goal: construct a type which is a model for the spec.
-\bigskip
+\framesubtitle{The meaning of the specification}
+Goal: construct a type which is a model for the spec. 
+(all valid implementation will be isomorphic to this model)
+\vfill
 
 One can proceed as follows (informally):
 \begin{itemize}
@@ -552,8 +426,8 @@ can find it in there!
 \item The above contains ``too much'': the axioms are not respected.
 (Ex. remove(create,0) ≠ create ...) 
 
-\item The ``initial algebra'' is a subset of the ``free algebra''.
-  Additionally, if one can prove $x=y$ using the axioms, then $x$ and $y$ are
+\item The ``initial algebra'' is a subset of the ``free algebra'':
+  if one can prove $x=y$ using the axioms, then $x$ and $y$ are
   considered the same element.
 \end{itemize}
 \end{frame}
@@ -722,11 +596,57 @@ and ensure that no other access is possible.
 \end{frame}
 }
 
-\section{Objects}
+
+\begin{frame}[fragile]
+\frametitle{A short history}
+\url{http://heim.ifi.uio.no/~kristen/FORSKNINGSDOK_MAPPE/F_OO_start.html}
+%Scott, p.788
+First generation
+\begin{itemize}
+\item SIMULA1 (1962-65), SIMULA 67 (1967): 
+\begin{itemize}
+\item Ole-Johan Dahl, Kristen Nygaard, Oslo
+\item Inheritance, virtual methods
+\end{itemize}
+\item Smalltalk (1969-80) 
+\begin{itemize}
+\item Alan Kay, Dan Ingalls, Adele Goldberg at Xerox Parc
+\item Dynamic language %(dynamic typing)
+\end{itemize}
+\end{itemize}
+
+80s
+\begin{itemize}
+\item \cpp(1983-98)
+%\begin{itemize}
+%\item 
+B. Stroustrup, AT\&T; hybrid
+%\end{itemize}
+\item Eiffel (1986-98); B. Meyer, ISI; %design by contract
+
+\end{itemize}
+
+And later many more:
+\begin{itemize}
+\item BETA
+\item CLOS, Dylan, Cecil, SELF, Ruby, \ldots
+\item  Modula-3, Oberon, Ada95, Sather, \ldots
+\item Objective CAML, Objective-C, \ldots
+\item Java (1995-03),
+C\# (2000-03)
+
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\section{OOP Basics}
 \begin{frame}[fragile]
 \frametitle{What are objects? }
 \framesubtitle{}
-Objects  are entities with a modifiable state and a set of functions to access
+Objects are entities with a modifiable state and a set of functions to access
 and change that state.
 \begin{itemize}
 \item The state is local to the object and (meant to be) inaccessible to 
@@ -771,24 +691,8 @@ Most OO-languages permit classes that do not (have to) exhibit
 all aspects. 
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{Next on the agenda}
-\framesubtitle{}
-\begin{itemize}
-\item Methods
-\begin{itemize}
-\item Multimethods
-\end{itemize}
-\item Object state
-\begin{itemize}
-\item Object creation 
-\item Deallocation
-\end{itemize}
 
-\end{itemize}
-\end{frame}
-
-\subsection{Methods}
+\subsubsection{Methods}
 \begin{frame}[fragile]
 \frametitle{Methods}
 \framesubtitle{}
@@ -810,202 +714,11 @@ class complex {
 };
 
 \end{cplus3}
-\item  Exception: static methods
+\item Exception: static methods
 \end{itemize}
 \item Can access the internal state.
 \end{itemize}
-
-
 \end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Binary methods}
-\framesubtitle{Or more general: n-ary methods}
-\begin{itemize}
-\item Binary methods  take 2 parameters of the same type.
-\item 
-In OOP, binary methods are methods that contain one or more parameters
-of the same type as the receiver object.
-\item Examples: arithmetic, equality, comparison, \ldots
-\end{itemize}
-\bigskip
-
-They cause great difficulties in OOP. 
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Binary methods problem}
-\framesubtitle{Bruce, Cardelli, Hopkins Object Group }
-% typing in the presence of inheritance.
-
-Problem: 
-
-\begin{itemize}
-\item Receiver and argument are not treated symmetrically (but
-should be). 
-\end{itemize}
-
-\bigskip
-
-Other problems (also big): 
-
-\begin{itemize}
-\item Retrofitting of new classes not possible (makes extension
-impossible)
-\item Special access rights needed (violates protection)
-%\item Do subclasses always produce subtypes?
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Asymmetry}
-\begin{cplus3}
-class Complex 
-{
-    // add: (Complex , Real) -> Complex  
-    public Complex add(Real d) {...}
-}
-\end{cplus3}
-How to define an addition with signature 
-\begin{center}
-\textit{double × Complex} → \textit{Complex}?
-\end{center}
-\begin{itemize}
-\item Impossible in almost all OO-language (Java, C\#)!
-Exception: very few (``multi-dispatch languages'') 
-\item Possible in hybrid language (Ada, \Cpp) via non-OO constructs,
-e.g., free functions and overloading (or ``friends''). 
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Method dispatching}
-\framesubtitle{}
-
-Single-dispatch languages
-\begin{itemize}
-\item Dispatch based on the (dynamic) class of the receiver. 
-\begin{cplus3}
-     Complex c = ... ;   
-     c.add(arg);
-\end{cplus3}
-\item Ex.: all languages mentioned so far
-
-\end{itemize}
-
-Multiple-dispatch languages
-\begin{itemize}
-\item Dispatch (also) based on the dynamic class of \textit{arguments}.
-\item Ex.: Dylan (Apple), CLOS, Cecil
-\item Deviation from previous class concept: data records + generic functions.
-\begin{cplus3}
-     add(arg1, arg2);
-\end{cplus3}
-\item Combined overloading \& overriding (resolution at run time).
-\end{itemize} 
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Multi-methods in Dylan}
-\framesubtitle{}
-A multi-method is a method that does not belong to one class
-\begin{itemize}
-\item For each binary method, there exists
-a set of method bodies associated with the name of the method.
-\item The dispatch depends on all parameter types.
-\end{itemize}
-\begin{cplus3}
-// http://www.opendylan.org/books/dpg/db_88.html
-// Generic ``+'' 
-// Method on <time-offset>, <time-offset>
-define method \+
-    (offset1 :: <time-offset>, offset2 :: <time-offset>)
-=> (sum :: <time-offset>)
- let sum = offset1.total-seconds + offset2.total-seconds;
- make(<time-offset>, total-seconds: sum);
-end method \+;	
-
-// Method on <time-offset>, <time-of-day>
-define method \+ 
-    (offset :: <time-offset>, time-of-day :: <time-of-day>)
- => (sum :: <time-of-day>)
-  make(<time-of-day>, 
-       total-seconds: offset.total-seconds + time-of-day.total-seconds);
-end method \+;
-\end{cplus3}
-\end{frame}
-
-\subsection{Object state}
-
-\begin{frame}[fragile]
-\frametitle{Classes in Simula}
-%http://staff.um.edu.mt/jskl1/talk.html#Classes
-\framesubtitle{}
-A class in Simula consists of 4 parts, called:
-%\begin{itemize}
-%\item 
-parameters, attributes, methods,
-and  life (body). 
-%\end{itemize}
-\bigskip
-
-\begin{cplus3}
-! From the overview by J. Sklenar
-! http://staff.um.edu.mt/jskl1/talk.html
-Class Rectangle (Width, Height); Real Width, Height;
-                           ! Class with two parameters;
- Begin
-    Real Area, Perimeter;  ! Attributes;
-
-    Procedure Update;      ! Methods (Can be Virtual);
-    Begin
-      Area := Width * Height;
-      Perimeter := 2*(Width + Height)
-    End of Update;
-
-    Boolean Procedure IsSquare;
-      IsSquare := Width=Height;
-
-    Update;                ! Life of rectangle started at creation;
-    OutText("Rectangle created: "); OutFix(Width,2,6);
-    OutFix(Height,2,6); OutImage
- End of Rectangle;
-\end{cplus3}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Classes in  Eiffel}
-\framesubtitle{}
-\begin{eiffel}
--- se.ethz.ch/teaching/ss2006/0050/slides/eiffel_the_essentials.pdf
-indexing 
-     description: "Representation of a book" 
-class 
-     BOOK 
-create 
-     make 
-feature {NONE} -- Initialization 
-     make (a_title: like title; some_authors: like authors) is 
-          require 
-                a_title_not_void: a_title /= Void 
-                a_title_not_empty: not a_title.is_empty 
-          do 
-                title := a_title 
-                authors := some_authors 
-          ensure 
-               title_set: title = a_title 
-               authors_set: authors = some_authors 
-          end 
-feature -- Access 
-     title: STRING 
-invariant 
-     title_not_void: title /= Void 
-     title_not_empty: not title.is_empty 
-end
-\end{eiffel}
-\end{frame}
-
-
 
 \begin{frame}[fragile]
 \frametitle{Constructors and initialization}
@@ -1035,261 +748,17 @@ objects derived from Controlled. \Cpp has default ctors (initialization
 not required).
 \end{frame}
 
-\mycomment{
+
+
+
+\subsection{Inheritance}
+
+
+
 \begin{frame}[fragile]
-\frametitle{More on constructors}
+\frametitle{Inheritance}
 \framesubtitle{}
-Name
-\begin{itemize}
-\item Predefined as in Java, \Cpp, C\#? Or any name, as in Eiffel?
-\end{itemize}
-Signature
-\begin{itemize}
-\item  Multiple constructors possible ($\leadsto$ overloading)? 
-\end{itemize}
-Definition
-\begin{itemize}
-\item 
-Does the compiler create constructors (``default constructor'')? When? 
-Can they be overridden?
-\begin{eiffel}
--- Eiffel
-default_create is
-     do 
-         create books.make
-     end
-// C++
-class Point {
-    int x, y;
-public:
-    Point(): x(0), y(0) {}
-};    
-\end{eiffel}
-\end{itemize}
-\end{frame}
-}
-
-\mycomment{
-\begin{frame}[fragile]
-\frametitle{Meta-classes in Smalltalk}
-\framesubtitle{}
-In Smalltalk, only objects can send messages.
-What is the object that can send a 'creation' message? 
-\begin{itemize}
-\item Must belong to a class, but can't be of the same class. 
-\end{itemize}
-\bigskip
-
-A \textit{meta-class} is a  class whose instances are classes.
-\begin{itemize}
-\item For every Smalltalk class, there exists a meta-class. The meta-classes
-mirror the class hierarchy.
-\item They specify how to create objects. 
-\\ Examples:
-\begin{java}
-Time now.
-   ``Answer a Time representing the time right now - is a 
-     24 hour clock.''
-Time new.
-   ``Answer a Time representing midnight.''
-Date today.
-Data firstWeekdayOfMonth.
-   ``Answer the weekday index of the first day in <month> 
-     in the <year>.
-
-\end{java}
-
-\end{itemize}
-\end{frame}
-}
-
-\begin{frame}[fragile]
-
-\frametitle{Object models}
-\framesubtitle{Layout in memory}
-Value model:
-\begin{itemize}
-\item Variables (fields) stored as values, objects allocated directly
-on run-time stack. Ex: \cpp, \textit{struct}s in C\#
-%Ada, Modula-3
-\end{itemize}
-
-\begin{tabular}{ll}
-\begin{minipage}{5cm}
-\begin{cplus3}
-public struct Poly { // C#
-    public int deg;
-    public myvector terms;
-}
-Poly p; 
-p.deg = 
-\end{cplus3}
-\end{minipage}
-
-& 
-
-\begin{tabular}{l}
-{\small 
-\begin{tikzpicture}
-\draw (0,0)  rectangle (1.2,0.5);
-\pgftext[at={\pgfpoint{0.65cm}{0.3cm}}]{:} ;
-%\draw[->] (1.0, 0.1) .. controls (1.9, -0.2) and (2.5, 2.5) .. (3,1.5);
-
-\draw (0,0.5)  rectangle (1.2,1.0);
-\pgftext[at={\pgfpoint{0.65cm}{0.75cm}}]{:} ;
-
-
-\draw[red] (0,1.0)  rectangle (1.2,1.5);
-\pgftext[at={\pgfpoint{0.5cm}{1.25cm}}]{deg} ;
-
-
-\draw[red] (0,1.5)  rectangle (1.2,2.5);
-\pgftext[at={\pgfpoint{0.5cm}{1.75cm}}]{terms} ;
-
-%\draw[red] (0,2.0)  rectangle (1.2,2.5);
-%\pgftext[at={\pgfpoint{0.5cm}{1.75cm}}]{} ;
-
-
-\end{tikzpicture}
-}
-\end{tabular}
-\end{tabular}
-%\bigskip
-
-Reference model:
-\begin{itemize}
-%\item References are stored, object is allocated on the heap.
-\item Run-time stacks holds a reference;  object (fields)
-allocated on the heap.
-Ex: Smalltalk (pure), Java/C\# : class inst's
-\end{itemize}
-
-
-%
-\begin{tabular}{ll}
-\begin{minipage}{4cm}
-
-\end{minipage}
-
-& 
-
-\begin{tabular}{l}
-{\small 
-\begin{tikzpicture}
-\draw (0,0)  rectangle (1.2,0.5);
-\pgftext[at={\pgfpoint{0.65cm}{0.3cm}}]{:} ;
-%\draw[->] (1.0, 0.1) .. controls (1.9, -0.2) and (2.5, 2.5) .. (3,1.5);
-
-\draw (0,0.5)  rectangle (1.2,1.0);
-\pgftext[at={\pgfpoint{0.65cm}{0.75cm}}]{:} ;
-
-
-\draw[red] (0,1.0)  rectangle (1.2,1.5);
-\pgftext[at={\pgfpoint{0.5cm}{1.25cm}}]{p} ;
-\draw[->, thick] (1.0, 1.25) -- (2.5,1.25); 
-
-%\draw (0,1.5)  rectangle (1.2,2.0);
-%\pgftext[at={\pgfpoint{0.5cm}{1.75cm}}]{a: 4 } ;
-
-
-
-% Object 
-%\draw (3,0)  rectangle (4.2,0.5);
-%\pgftext[at={\pgfpoint{3.5cm}{0.25cm}}]{prev} ;
-
-\draw (2.5,0.5)  rectangle (3.7,1.0);
-\pgftext[at={\pgfpoint{3.0cm}{0.75cm}}]{deg} ;
-\draw[->, thick] (3.6, 0.75) -- (4.5,0.75); 
-%
-\draw (2.5,1.0)  rectangle (3.7,1.5);
-\pgftext[at={\pgfpoint{3.1cm}{1.25cm}}]{terms} ;
-\draw[->, thick] (3.6, 1.25) -- (4.5,1.25); 
-
-% Object fields
-\draw (4.5,0.5)  rectangle (5.7,1.5);
-\draw[->, thick] (5.5, 1.25) -- (6.5,1.25); 
-\draw (4.5,1.0)  rectangle (5.7,1.5);
-%\pgftext[at={\pgfpoint{4.5cm}{1.25cm}}]{x: 3} ;
-
-
-\end{tikzpicture}
-}
-\end{tabular}
-\end{tabular}
-
-Value model more efficient; reference model more flexible.
-
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{Curse of temporaries}
-\framesubtitle{The costs of OOP}
-How many objects are constructed?
-\begin{cplus3}
-     // C++
-     typedef matrix<complex<float> > > matrix;
-     matrix M = ...; // construct M
-     matrix N = matrix(M);
-     M = (M + N) * N;
-\end{cplus3}
-\bigskip
-
-Intermediate objects (``temporaries'') are a practical problem:
-\begin{itemize}
-\item Run-time costs
-\item Memory costs
-\end{itemize}
-\bigskip
-
-Advanced techniques exist to avoid their creation.\\
-If they must be created, at least  limit their lifetimes.
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{Automated deallocation and destruction}
-\framesubtitle{}
-Garbage collection
-\begin{itemize}
-\item Internal routine that automatically visits the heap, looks for
-unused (``non-referenced) objects. 
-\item Performs necessary finalization
-and reclaims the memory.
-\end{itemize}
-Destructors 
-\begin{itemize}
-\item 
-Based on blocks and scoping mechanisms: deallocation 
-done automatically (when object leaves block = ``goes out of scope'').
-\item Finalization: encapsulated in destructor. 
-Destructor called automatically 
-(when object goes out of scope).
-\begin{cplus3}
-// Example: C++ destructors  
-class file {
-public:
-   file( const string&  name ) : file_handle(fopen(name, "w+")){}  
-   ~file() { fclose(file_handle); }  // destructor
-private:
-   ...
-};
-\end{cplus3}
-\end{itemize}
-\end{frame}
-
-
-
-
-
-\section{Inheritance}
-
-
-\begin{frame}[fragile]
-\frametitle{Subclassing}
-\framesubtitle{}
-A class is a subclass of another class if it inherits 
-its fields and methods.
+Subclass ≊ Extension
 \bigskip
 
 Syntax (examples)
@@ -1315,111 +784,19 @@ Syntax (examples)
 
 \end{cplus3}
 
+
 \end{frame}
 
 
 \begin{frame}[fragile]
-\frametitle{Object model under inheritance}
+\frametitle{Example}
 \framesubtitle{}
+\bigskip
+
 The child object incorporates a parent \textit{object}, i.e., its fields.
-(Though it  may not have access to them.)
-\bigskip
+(Though the sublcass may not have access to them.)
 
-Value model:
-
-\begin{tabular}{ll}
-\begin{minipage}{4cm}
-\begin{cplus3}
-class base {
-   boolean b; 
-   poly p;
-}
-class child extends base {
-  integer c;
-}
-\end{cplus3}
-\end{minipage}
-
-& 
-
-\begin{tabular}{l}
-{\small 
-\begin{tikzpicture}
-\draw (0,0)  rectangle (1.2,0.5);
-\pgftext[at={\pgfpoint{0.65cm}{0.3cm}}]{c} ;
-%\draw[->] (1.0, 0.1) .. controls (1.9, -0.2) and (2.5, 2.5) .. (3,1.5);
-
-\draw[red] (0,0.5)  rectangle (1.2,1.0);
-\pgftext[at={\pgfpoint{0.65cm}{0.75cm}}]{b} ;
-
-
-\draw[red] (0,1.0)  rectangle (1.2,1.5);
-\pgftext[at={\pgfpoint{0.5cm}{1.25cm}}]{deg} ;
-
-
-\draw[red] (0,1.5)  rectangle (1.2,2.5);
-\pgftext[at={\pgfpoint{0.65cm}{1.75cm}}]{terms} ;
-
-%\draw[red] (0,2.0)  rectangle (1.2,2.5);
-%\pgftext[at={\pgfpoint{0.5cm}{1.75cm}}]{} ;
-
-
-\end{tikzpicture}
-}
-\end{tabular}
-\end{tabular}
-
-\bigskip
-
-Reference model:
-
-\begin{tabular}{ll}
-\begin{minipage}{4cm}
-
-\end{minipage}
-
-& 
-
-\begin{tabular}{l}
-{\small 
-\begin{tikzpicture}
-%\draw (0,0)  rectangle (1.2,0.5);
-%\pgftext[at={\pgfpoint{0.65cm}{0.3cm}}]{:} ;
-%\draw[->] (1.0, 0.1) .. controls (1.9, -0.2) and (2.5, 2.5) .. (3,1.5);
-
-\draw (0,0.5)  rectangle (1.2,1.0);
-\pgftext[at={\pgfpoint{0.65cm}{0.75cm}}]{c} ;
-\draw[->, thick] (1.0, 1.25) -- (2.5,1.25); 
-
-\draw(0,1.0)  rectangle (1.2,1.5);
-\pgftext[at={\pgfpoint{0.5cm}{1.25cm}}]{} ;
-\draw[->, thick] (1.0, 0.75) -- (2.5,-0.25); 
-
-
-
-
-% Object 
-\draw (2.5,-0.5)  rectangle (3.7,0.0);
-\pgftext[at={\pgfpoint{3.0cm}{-0.25cm}}]{} ;
-
-\draw[red] (2.5,0.5)  rectangle (3.7,1.0);
-\pgftext[at={\pgfpoint{3.0cm}{0.75cm}}]{b} ;
-\draw[->, thick] (3.6, 0.75) -- (4.5,0.75); 
-%
-\draw[red] (2.5,1.0)  rectangle (3.7,1.5);
-\pgftext[at={\pgfpoint{3.1cm}{1.25cm}}]{ p} ;
-\draw[->, thick] (3.6, 1.25) -- (4.5,1.25); 
-
-% Object fields
-\draw[red] (4.5,0.5)  rectangle (5.7,1.5);
-\draw[->, thick] (5.5, 1.25) -- (6.5,1.25); 
-\draw[red] (4.5,1.0)  rectangle (5.7,1.5);
-
-
-\end{tikzpicture}
-}
-\end{tabular}
-\end{tabular}
+(blackboard)
 
 \end{frame}
 
@@ -1449,7 +826,7 @@ end -- class FRIEND
 %XXX Ruby alias
 \end{frame}
 
-\subsection{Refinement, replacement, overriding}
+\subsubsection{Refinement, replacement, overriding}
 \begin{frame}[fragile]
 \frametitle{Methods in subclasses}
 \framesubtitle{}
@@ -1465,16 +842,17 @@ American vs. Scandinavian semantics of overriding
 \begin{itemize}
 \item Refinement
 \begin{itemize}
-\item Parent method executed within the child's method
+\item child's method called within the parent's method
 \item Behavior of the parent method preserved
 \end{itemize}
 \item Replacement
 \begin{itemize}
-\item Parent method not executed 
+\item Parent method (may be) called within the child's method
 \item Behavior of the parent might or might not be preserved 
 \end{itemize}
 \end{itemize}
 \end{frame}
+
 
 %\begin{frame}[fragile]
 %\frametitle{Refinement in Simula}
@@ -1572,37 +950,6 @@ C\# also supports hidden methods (keyword: \texttt{new}).
 % Eiffel: redefine
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{Pre-and postconditions in Eiffel}
-\framesubtitle{Restricting replacement semantics}
-\textit{Assertion redeclaration rule}: a redeclared version need not contain its own requires or ensure
-clause.
-\begin{itemize}
-\item It may use a \texttt{require else} or
-\texttt{then ensure} clause
-to weaken/strengthen the pre/postcondition of the parent. 
-
-\end{itemize}
-\begin{eiffel}
-class ACCOUNT 
-feature
-   withdraw(sum: INTEGER) is
-       require
-           sum >= 0
-       do ..  end
-end -- class ACCOUNT
-class SPECIAL_ACCOUNT inherit
-      ACCOUNT
-      redefine withdraw end
-feature
-       withdraw(sum: INTEGER) is
-       do ...
-       ensure then
-           balance >= 1000
-       end
-end -- class SPECIAL_ACCOUNT       
-\end{eiffel}
-\end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Constructors and refinement semantics}
@@ -1638,76 +985,18 @@ it executes before the body of the child's constructor.
 
 \end{frame}
 
-\subsection{Subtyping, Covariance, Contravariance}
-\begin{frame}[fragile]
-\frametitle{Covariance and contravariance}
-\framesubtitle{}
-Overriding can be \textit{covariant}, 
-\textit{contravariant}, or \textit{invariant} in either
-the argument types or the return type.
-\bigskip
+\section{Subtyping polymorphism}
 
-
-Assume a class \texttt{Animal}, a child \texttt{DomesticAnimal} with 
-%a method 
-%\begin{center} set_playmate(Sandwich) → void \end{center}
-\begin{cplus3}
-       set_playmate(DomesticAnimal)->  void 
-\end{cplus3}
-
-and the child \texttt{Cat},
-which re-defines \texttt{set_playmate}. 
-How may the argument type change?% (relativeto DomesticAnimal.set_playmate):
-\begin{itemize}
-\item Covariance (in the argument type):
-\begin{cplus3}
- set_playmate(Cat) -> void
-\end{cplus3}
- \item Contravariance:
-\begin{cplus3}
- set_playmate(Animal) -> void
-\end{cplus3}
-  \item Invariance: 
-\begin{cplus3}
- set_playmate(DomesticAnimal) -> void
-\end{cplus3}
-
-
-\end{itemize}
-Eiffel uses the covariance rule; but this can be unsafe (why?).
-%http://www.faqs.org/faqs/eiffel-faq/
-Most languages use the invariance rule (for argument types). 
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Covariance in return type}
-\framesubtitle{}
-Covariance in the return type is less contested.
-\bigskip
-
-\begin{cplus3}
-// Java 1.5
-class BaseClass {
-    public BaseClass Clone() {..}
-}
-class DerivedClass extends BaseClass {
-    public DerivedClass Clone() {..}
-}
-\end{cplus3}
-Java, \Cpp, Eiffel support covariance in the return type.\\
-C\# requires invariance. 
-\end{frame}
-
-
-
+\subsection{Intuition and implementation}
 
 \begin{frame}[fragile]
 \frametitle{Subtyping}
-\framesubtitle{Intuition and Substitiution principle}
+\framesubtitle{Intuition and ``Substitiution Principle''}
 %http://www.informatik.uni-bonn.de/~ralf/PvPS2007/Folien5.pdf
 
 
-$S :< T$. $S$ ``is-a'' $T$.
+$S :< T$. $S$ ``is-a'' $T$. 
+Subtyping is a basic element of OOP modeling/design.
 
 Examples: 
 
@@ -1718,16 +1007,13 @@ Examples:
   \item ...
 \end{itemize}
 
-\begin{theorem}[Principle of substitution (Liskov)]
-  If $S :< T$, and $q$ is a true for objects of type $T$, then $q$ is true for objects of type $S$.
-\end{theorem}
-
-Corrollary: if a piece of code works for objects of type $T$, then it mush work for objects of type $S$.
-
-Ex. if it works for rectangles, then it works for squares. (Is this true? side conditions?)
-
-LSP is a necessary condition for subtyping.
-
+``LSP'': Principle of substitution (due to Liskov)
+\begin{itemize}
+  \item Principle: $S :< T$ ⇔ ∀ property $q$. $q$ is true for objects of type $T$, then $q$ is true for objects of type $S$.
+  \item Corrollary: $S :< T$ ⇒ if a piece of code works for objects of type $T$, then it works for objects of type $S$.
+  \item Example: If it works for rectangles, then it works for squares. (Is this true? side conditions?)
+  \item Take home: LSP is a \emph{guideline} for subtyping (or subclassing).
+\end{itemize}
 
 \end{frame}
 
@@ -1743,7 +1029,51 @@ With subtyping:
 if $x : S$ and $S :< T$ then $x : T$.
 
 The LSP is a justification for the above rule.
+
+\begin{example}
+  assume: 
+  \begin{itemize}
+  \item Box boundingBox (Shape);
+  \item Sphere :< Shape
+  \item s : Sphere
+  \end{itemize}
+  Then calling $boundingBox(s)$ is valid. Why?  
+\end{example}
+
 \end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Implementation of subtyping polymorphism}
+\framesubtitle{Dynamic binding}
+For each call, method binding can be done in two ways:
+\begin{itemize}
+\item Static: based on the declared type (``early binding'')
+\item Dynamic: based on the type of the object  (``late binding'')
+\end{itemize}
+\bigskip
+
+
+Actual binding based on
+\begin{itemize}
+\item Nature of the object: is it polymorphic?
+\begin{itemize}
+\item Application view
+\end{itemize}
+\item Nature of the method: it is dynamically bindable?
+\begin{itemize}
+\item Class designer's view
+\end{itemize}
+\end{itemize}
+
+Complete blackboard example.
+
+\end{frame}
+
+
+
+\subsection{Subtyping and inheritance}
+
 
 
 \begin{frame}[fragile]
@@ -1751,24 +1081,28 @@ The LSP is a justification for the above rule.
 
 \begin{itemize}
 \item  Inheritance used for two \textit{very}
-different relations
+different purposes:
 \begin{itemize}
 \item Specialization ($\leadsto$ subtyping)
 \item Construction   ($\leadsto$ subclassing)
 \end{itemize}
 \item In most languages, every subclass 
 \textit{automatically} also is a  subtype even if
-intuitively  not justified. Famous example:
+intuitively not justified. 
 \end{itemize}
-\begin{java}
-// JDK
-public class Stack<E> extends Vector<E> {...}
-\end{java}
+
+% I think it is fine.
+% \begin{java}
+% // JDK
+% public class Stack<E> extends Vector<E> {...}
+% \end{java}
 
 \bigskip
 
-Would be better (i.e., safer, more intuitive) 
-to separate  subclassing and subtyping. 
+Would it be better (i.e., safer, more intuitive) 
+to separate subclassing and subtyping? 
+
+(see java interfaces; C++ private inheritance)
 
 \end{frame}
 
@@ -1808,19 +1142,17 @@ can prohibit inheritance altogether:
 
 \begin{frame}[fragile]
 
-\frametitle{Abstract classes}
-\framesubtitle{Yet another view on inheritance}
-Abstract classes are classes that cannot be instantiated. 
+\frametitle{Interfaces}
+\framesubtitle{subtyping only}
 
 \begin{itemize}
-\item They contain no fields and at least one \textit{abstract} method, i.e., 
+\item They contain no field and at least one \textit{abstract} method, i.e., 
 a method without body. 
-\item Their purpose is to save as the base for non-abstract classes.
-\item They specify a common interface. Children must
-implement all abstract methods; otherwise they remain abstract
-themselves.
-
+\item Their purpose is to serve as the base for non-abstract classes.
+\item They specify a common interface. 
 \end{itemize}
+
+``Abstract base class'' in C++.
 
 \begin{cplus3}
 public abstract class Shape {
@@ -1833,350 +1165,6 @@ public class Circle: Shape {
 \end{cplus3}
 \end{frame}
 
-
-
-
-\mycomment{
-\begin{frame}[fragile]
-\frametitle{Deferred classes in Eiffel}
-\framesubtitle{}
-\end{frame}
-}
-
-\section{Dynamic Binding}
-
-\begin{frame}[fragile]
-
-\frametitle{Dynamic binding and polymorphism}
-\begin{center}
-``poly'' (Greek): many
-\end{center}
-Polymorphic variable: 
-\begin{itemize}
-\item A variable with multiple types
-\item In OOP: inheritance + subtyping (``is-a'') 
-\end{itemize}
-Combine:
-\begin{itemize}
-\item \textit{Dynamic} binding of methods
-\item Polymorphic variables
-\end{itemize}
-$\Longrightarrow$ polymorphism in OOP 
-
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{The issue}
-\framesubtitle{}
-%
-\begin{cplus3}
-        // C# 
-        class A {
-            public void Foo() { Console.WriteLine("A::Foo()"); }
-        }
-
-        class B : A  {
-            public new void Foo() { Console.WriteLine("B::Foo()"); }
-        }
-
-        class Test {
-            static void Main(string[] args)
-            {
-                A a;
-                B b;
-
-                a = new A();
-                b = new B();
-                a.Foo();  // output --> "A::Foo()"
-                b.Foo();  // output --> "B::Foo()"
-
-                a = new B();
-                a.Foo();  // output -->  ??
-            }
-        }
-\end{cplus3}
-% Output: "A::Foo()"
-\begin{itemize}
-\item Statically, $a$ of type $A$.
-\item Dynamically, 
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{Method binding}
-\framesubtitle{}
-Method binding
-\begin{itemize}
-\item Static: based on the declared type (``early binding'')
-\item Dynamic: based on the type of the object  (``late binding'')
-\end{itemize}
-\bigskip
-
-Actual binding based on
-\begin{itemize}
-\item Nature of the object: is it polymorphic?
-\begin{itemize}
-\item Application view
-\end{itemize}
-\item Nature of the method: it is dynamically bindable?
-\begin{itemize}
-\item Class designer's view
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Polymorphism in OOP}
-Polymorphic variables in OOP are of reference type.
-\begin{itemize}
-\item In Java, Smalltalk, Eiffel: all variables are polymorphic.
-\item In C\#, \Cpp, Ada: variables of value types are not polymorphic;
-references are. 
-\end{itemize}
-\bigskip
-
-Polymorphic = dynamically bindable methods (``virtual methods'') 
- 
-\begin{itemize}
-\item In Java, Smalltalk, Eiffel: all method are polymorphic.
-\item In Simula, C\#, \Cpp:  both virtual and non-virtual methods possible;
- keyword needed. 
-\end{itemize}
-% Return to C\# example
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Type checking }
-\framesubtitle{}
-How to type-check if the method is not known before run time? 
-\bigskip
-
-Dynamic languages (Smalltalk, Ruby): 
-\begin{itemize}
-\item No type check (regardless of polymorphism), can get run-time error
-\begin{cplus3}
-       obj <- aMethod
-\end{cplus3}
-\end{itemize}
-
-Non-dynamic languages (Java, C\#, \Cpp, Eiffel):
-
-\begin{itemize}
-\item Type check based on static type (why?).
-\item If check succeeds on the static type, 
-inheritance guarantees that method exists also for the dynamic
-type 
-\\
-$\leadsto$ no run-time error
-
-\begin{cplus3}
-Base b = new Child();
-b.foo()                // check or issue ``symbol not found''
-\end{cplus3}
-\end{itemize}
-
-\end{frame}
-
-\mycomment{
-\begin{frame}
-\frametitle{Implementation, step 1: static type check}
-\framesubtitle{``Call-by-value'' strategy for parameter passing} 
-Assume a non-dynamic language.
-How does the compiler process the invocation of, say, 
-\texttt{anObj.foo(i,j-k)}? 
-Its steps:
-\begin{enumerate}
-\item Evaluate \texttt{anObj} to get the class or object on which ``foo'' is
-called.
-\item Evaluate the (expressions for the) arguments $i$ and $j-k$ to obtain
-the actual parameter values.
-\item Create an \textit{activation record} with space for all formal
-parameters and  push it on the run-time stack.
-\item Initialize formal parameters with the values of the actual parameters.
-\item Dispatch control to the method \texttt{anObj.foo}. 
-\end{enumerate}
-\end{frame}
-}
-
-\mycomment{
-\begin{frame}
-\frametitle{Implementation, step 2: dispatching}
-Calling the right method: done through a run-time mechanism called 
-\textit{dispatching}. Compiler does not generate code to call the method. Instead,
-it generates code to find the right method:
-\bigskip
-
-Dispatching algorithm:
-\begin{enumerate}
-\item Deduce the static type, using variable and method declarations.
-\item Keep dynamic type (from construction or assignment time).
-\item Check whether static type is a supertype of dynamic type.
-\item Check whether method is legal for static type.
-\item Go to the object, retrieve the address of the code of its method;
-generate code that branches to that address.
-% Correct: go to vtbl
-\end{enumerate}
-
-
-\end{frame}
-} % mycomment
-
-\begin{frame}[fragile]
-\frametitle{Dispatch vector (virtual function table)}
-
-Dispatching requires an auxiliary data structure: the virtual function table
-(a.k.a. dispatch vector).
-
-\begin{itemize}
-\item Every \textit{object} holds a reference to the function table.
-\item The table is shared among all objects of a class.
-\item It contains one entry per method (declared or inherited). The
-entry stores the start address of the code of the method.
-\end{itemize}
-
-\bigskip
-\begin{tabular}{ll}
-\begin{minipage}{4.3cm}
-\begin{cplus3}
-class Foo {
-  int i;
-  boolean b;
-  public void m1() {...}
-  public Integer m2() {...}
-  public Window m3() {..}
-}
-Foo f = new Foo();
-\end{cplus3}
-\end{minipage}
-
-& 
-
-\begin{tabular}{l}
-{\small 
-\begin{tikzpicture}
-\draw (0,0)  rectangle (1.2,0.5);
-\pgftext[at={\pgfpoint{0.65cm}{0.3cm}}]{b } ;
-%\draw[->] (1.0, 0.1) .. controls (1.9, -0.2) and (2.5, 2.5) .. (3,1.5);
-
-\draw (0,0.5)  rectangle (1.2,1.0);
-\pgftext[at={\pgfpoint{0.5cm}{0.75cm}}]{i} ;
-
-
-\draw[red] (0,1.0)  rectangle (1.2,1.5);
-\pgftext[at={\pgfpoint{0.5cm}{1.25cm}}]{} ;
-\draw[->, thick] (1.0, 1.25) -- (3.0,1.25); 
-
-
-
-
-
-% right one 
-\draw (3,0)  rectangle (4.2,0.5);
-\pgftext[at={\pgfpoint{3.5cm}{0.25cm}}]{m3} ;
-\draw[->, thick] (4.0, 0.25) -- (4.8,0.25); 
-\pgftext[at={\pgfpoint{5.8cm}{0.25cm}}]{Foo::m3} ;
-
-\draw (3,0.5)  rectangle (4.2,1.0);
-\pgftext[at={\pgfpoint{3.5cm}{0.75cm}}]{m2} ;
-\draw[->, thick] (4.0, 0.75) -- (4.8,0.75); 
-\pgftext[at={\pgfpoint{5.8cm}{0.75cm}}]{Foo::m2} ;
-
-\draw (3,1.0)  rectangle (4.2,1.5);
-\pgftext[at={\pgfpoint{3.5cm}{1.25cm}}]{m1} ;
-\draw[->, thick] (4.0, 1.25) -- (4.8,1.25); 
-\pgftext[at={\pgfpoint{5.8cm}{1.25cm}}]{Foo::m1} ;
-
-\end{tikzpicture}
-}
-\end{tabular}
-
-\end{tabular}
-\end{frame}
-
-
-
-
-\begin{frame}[fragile]
-\frametitle{Virtual function table and inheritance}
-\framesubtitle{}
-\begin{tabular}{ll}
-\begin{minipage}{4.3cm}
-\begin{cplus3}
-class Foo {
-  int i;
-  boolean b;
-  public void m1() {...}
-  public Integer m2() {...}
-  public Window m3() {..}
-}
-class Bar extends Foo {
-  int y;
-
-  // override
-  public void m1() {..}
-
-  // extend
-  public int m4() {..}
-}
-Bar b = new Bar();
-\end{cplus3}
-\end{minipage}
-
-& 
-
-\begin{tabular}{l}
-{\small 
-\begin{tikzpicture}
-
-\draw (0,-0.5)  rectangle (1.2,0.0);
-\pgftext[at={\pgfpoint{0.5cm}{-0.25cm}}]{y} ;
-
-\draw (0,0)  rectangle (1.2,0.5);
-\pgftext[at={\pgfpoint{0.5cm}{0.25cm}}]{b} ;
-
-
-\draw (0,0.5)  rectangle (1.2,1.0);
-\pgftext[at={\pgfpoint{0.5cm}{0.75cm}}]{i} ;
-
-
-\draw[red] (0,1.0)  rectangle (1.2,1.5);
-\pgftext[at={\pgfpoint{0.5cm}{1.25cm}}]{} ;
-\draw[->, thick] (1.0, 1.25) -- (3.0,1.25); 
-
-
-
-
-
-% right one 
-\draw (3,-0.5)  rectangle (4.2,0.0);
-\pgftext[at={\pgfpoint{3.5cm}{-0.25cm}}]{m4} ;
-\draw[->, thick] (4.0, -0.25) -- (4.8,-0.25); 
-\pgftext[at={\pgfpoint{5.8cm}{-0.25cm}}]{Bar::m4} ;
-
-
-\draw (3,0)  rectangle (4.2,0.5);
-\pgftext[at={\pgfpoint{3.5cm}{0.25cm}}]{m3} ;
-\draw[->, thick] (4.0, 0.25) -- (4.8,0.25); 
-\pgftext[at={\pgfpoint{5.8cm}{0.25cm}}]{Foo::m3} ;
-
-\draw (3,0.5)  rectangle (4.2,1.0);
-\pgftext[at={\pgfpoint{3.5cm}{0.75cm}}]{m2} ;
-\draw[->, thick] (4.0, 0.75) -- (4.8,0.75); 
-\pgftext[at={\pgfpoint{5.8cm}{0.75cm}}]{Foo::m2} ;
-
-\draw (3,1.0)  rectangle (4.2,1.5);
-\pgftext[at={\pgfpoint{3.5cm}{1.25cm}}]{m1} ;
-\draw[->, thick] (4.0, 1.25) -- (4.8,1.25); 
-\pgftext[at={\pgfpoint{5.8cm}{1.25cm}}]{Bar::m1} ;
-
-\end{tikzpicture}
-}
-\end{tabular}
-
-\end{tabular}
-\end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Evaluation}
@@ -2199,10 +1187,71 @@ impossible
 \end{frame}
 
 
+\subsection{Subtyping in depth}
+
+
+\begin{frame}
+\frametitle{Subtyping for records}
+\framesubtitle{}
+
+Assume $R_1 = \{f_i : S_i\}$ and $R_2 = \{g_i : T_i\}$.
+(No methods, only modifiable fields)
+
+$R1 :< R2$ ⇔ all fields in $R2$ are also found in $R1$, and have corresponding types $(S_i = T_i)$
+
+Why?
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Subtyping for methods}
+\framesubtitle{}
+
+Assume $R_1 = \{f_i : S_i\}$ and $R_2 = \{g_i : T_i\}$.
+(No modifiable fields, only methods)
+
+$R1 :< R2$ ⇔ all fields in $R2$ are also found in $R1$, and have corresponding types $(S_i :< T_i)$
+
+Why?
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Subtyping for functions}
+\framesubtitle{}
+
+\[
+\frac{\; T_1 :< T_2 \mbox{\hspace{1cm}}  S_2 :< S_1 \;}{S_1 → T_1 \; :< \; S_2 → T_2}
+\]
+
+Why?
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Subtyping for parametric types/classes}
+\framesubtitle{}
+
+\[
+\frac{T_1 :< T_2 }{S ⟨T_1⟩ :< S ⟨ T_2 ⟩}
+\]
+
+\pause
+
+oops!
+
+\end{frame}
 
 
 
-\section{Multiple Inheritance}
+
+
+
+\section{Extras}
+
+\subsection{Multiple Inheritance}
 
 \begin{frame}[fragile]
 \frametitle{Motivation}
@@ -2512,35 +1561,232 @@ flat hierarchies
 Example: interfaces in Java and C\#
 \end{frame}
 
-\end{document}
+
+
+\subsection{Binary methods}
+
+\begin{frame}[fragile]
+\frametitle{Binary methods}
+\framesubtitle{Or in general: n-ary methods}
+\begin{itemize}
+\item Binary methods take 2 parameters of the same type.
+\item 
+In OOP, binary methods are methods that contain one or more parameters
+of the same type as the receiver object.
+\item Examples: arithmetic, equality, comparison, \ldots
+\end{itemize}
+\bigskip
+
+They cause great difficulties in OOP. 
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Binary methods problem}
+\framesubtitle{Bruce, Cardelli, Hopkins Object Group }
+% typing in the presence of inheritance.
+
+Problem: 
+
+\begin{itemize}
+\item Receiver and argument are not treated symmetrically (but
+should be). 
+\end{itemize}
+
+
+% I do not understand this...
+% \bigskip
+
+% Other problems (also big): 
+
+% \begin{itemize}
+% \item Retrofitting of new classes not possible (makes extension
+% impossible)
+% \item Special access rights needed (violates protection)
+% %\item Do subclasses always produce subtypes?
+% \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Asymmetry}
+\begin{cplus3}
+class Complex 
+{
+    // add: (Complex , Real) -> Complex  
+    public Complex add(Real d) {...}
+}
+\end{cplus3}
+How to define an addition with signature 
+\begin{center}
+\textit{double × Complex} → \textit{Complex}?
+\end{center}
+\begin{itemize}
+\item Impossible in almost all OO-language (Java, C\#)!
+Exception: very few (``multi-dispatch languages'') 
+\item Possible in hybrid language (Ada, \Cpp) via non-OO constructs,
+e.g., free functions and overloading (or ``friends''). 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Method dispatching}
+\framesubtitle{}
+
+Single-dispatch languages
+\begin{itemize}
+\item Dispatch based on the (dynamic) class of the receiver. 
+\begin{cplus3}
+     Complex c = ... ;   
+     c.add(arg);
+\end{cplus3}
+\item Ex.: all languages mentioned so far
+
+\end{itemize}
+
+Multiple-dispatch languages
+\begin{itemize}
+\item Dispatch (also) based on the dynamic class of \textit{arguments}.
+\item Ex.: Dylan (Apple), CLOS, Cecil
+\item Deviation from previous class concept: data records + generic functions.
+\begin{cplus3}
+     add(arg1, arg2);
+\end{cplus3}
+\item Combined overloading \& overriding (resolution at run time).
+\end{itemize} 
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Multi-methods in Dylan}
+\framesubtitle{}
+A multi-method is a method that does not belong to one class
+\begin{itemize}
+\item For each binary method, there exists
+a set of method bodies associated with the name of the method.
+\item The dispatch depends on all parameter types.
+\end{itemize}
+\begin{cplus3}
+// http://www.opendylan.org/books/dpg/db_88.html
+// Generic ``+'' 
+// Method on <time-offset>, <time-offset>
+define method \+
+    (offset1 :: <time-offset>, offset2 :: <time-offset>)
+=> (sum :: <time-offset>)
+ let sum = offset1.total-seconds + offset2.total-seconds;
+ make(<time-offset>, total-seconds: sum);
+end method \+;	
+
+// Method on <time-offset>, <time-of-day>
+define method \+ 
+    (offset :: <time-offset>, time-of-day :: <time-of-day>)
+ => (sum :: <time-of-day>)
+  make(<time-of-day>, 
+       total-seconds: offset.total-seconds + time-of-day.total-seconds);
+end method \+;
+\end{cplus3}
+\end{frame}
+
+
+\subsection{Overriding in real languages}
+
+\begin{frame}[fragile]
+\frametitle{Overriding rules in real languages}
+\framesubtitle{}
+Overriding can be \textit{covariant}, 
+\textit{contravariant}, or \textit{invariant} in either
+the argument types or the return type.
+\bigskip
+
+
+Assume a class \texttt{Animal}, a child \texttt{DomesticAnimal} with 
+%a method 
+%\begin{center} set_playmate(Sandwich) → void \end{center}
+\begin{cplus3}
+       set_playmate(DomesticAnimal)->  void 
+\end{cplus3}
+
+and the child \texttt{Cat},
+which re-defines \texttt{set_playmate}. 
+How may the argument type change?% (relativeto DomesticAnimal.set_playmate):
+\begin{itemize}
+\item Covariance (in the argument type):
+\begin{cplus3}
+ set_playmate(Cat) -> void
+\end{cplus3}
+ \item Contravariance:
+\begin{cplus3}
+ set_playmate(Animal) -> void
+\end{cplus3}
+  \item Invariance: 
+\begin{cplus3}
+ set_playmate(DomesticAnimal) -> void
+\end{cplus3}
+
+
+\end{itemize}
+Eiffel uses the covariance rule; but this can be unsafe (why?).
+%http://www.faqs.org/faqs/eiffel-faq/
+Most languages use the invariance rule (for argument types). 
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Covariance in return type}
+\framesubtitle{}
+Covariance in the return type is less contested.
+\bigskip
+
+\begin{cplus3}
+// Java 1.5
+class BaseClass {
+    public BaseClass Clone() {..}
+}
+class DerivedClass extends BaseClass {
+    public DerivedClass Clone() {..}
+}
+\end{cplus3}
+Java, \Cpp, Eiffel support covariance in the return type.\\
+C\# requires invariance. 
+\end{frame}
+
 
 
 \begin{frame}[fragile]
-\frametitle{Design by contract in Eiffel}
-\framesubtitle{http://archive.eiffel.com/doc/online/eiffel50/intro/language/tutorial-09.html}
-The contract of a class contains pre- and postconditions and class invariants.
-\begin{cplus3}
-indexing
-    description: "Simple bank accounts"
-class interface
-    ACCOUNT
-feature -- Access
-    balance: INTEGER
-            -- Current balance
-    deposit_count: INTEGER
-            -- Number of deposits made since opening
-feature -- Element change
-    deposit (sum: INTEGER)
-            -- Add sum to account.
-         require
-            non_negative: sum >= 0
-         ensure
-            one_more_deposit: deposit_count = old deposit_count + 1
-            updated: balance = old balance + sum
-invariant
-    consistent_balance: balance = all_deposits . total
-end -- class interface ACCOUNT
-\end{cplus3}
+\frametitle{Pre-and postconditions in Eiffel}
+\framesubtitle{Restricting replacement semantics}
+\textit{Assertion redeclaration rule}: a redeclared version need not contain its own requires or ensure
+clause.
+\begin{itemize}
+\item It may use a \texttt{require else} or
+\texttt{then ensure} clause
+to weaken/strengthen the pre/postcondition of the parent. 
+
+\end{itemize}
+\begin{eiffel}
+class ACCOUNT 
+feature
+   withdraw(sum: INTEGER) is
+       require
+           sum >= 0
+       do ..  end
+end -- class ACCOUNT
+class SPECIAL_ACCOUNT inherit
+      ACCOUNT
+      redefine withdraw end
+feature
+       withdraw(sum: INTEGER) is
+       do ...
+       ensure then
+           balance >= 1000
+       end
+end -- class SPECIAL_ACCOUNT       
+\end{eiffel}
 \end{frame}
+
+
+
+\end{document}
+
+
+
+
 
 

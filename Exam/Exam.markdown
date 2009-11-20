@@ -15,7 +15,9 @@ Q1. (4 pts)
 
 Which of the following these expressions are l-values? (2pts) Which expressions are adresses? (2pts)
 
-                        l-value        pointer
+Reproduce the following table and tick the appropriate cells.
+
+                        l-value        address
 a                        
 p
 a + 1
@@ -49,7 +51,7 @@ print (x + y);
 What is printed?
 
 Translate the function `f` and its call to a language that does not support
-call by reference, but only call by value, by using pointers. You are not allowed to change anything else. In particular, the "algorithm", the declatations of x and y must remain the same.
+call by reference, but only call by value, by using pointers (use operators * and &). You are not allowed to change anything else. In particular, the "algorithm", the declatations of x and y must remain the same.
 
 Alt: other calling conventions.
 
@@ -70,7 +72,14 @@ Do not forget the return address! Indicate the return address with an arrow poin
 source code.(2pts)
 
 
-Q4. When/why do you need a pointer to the previous AR?
+Q4. 
+
+Give one reason to keep a pointer to the AR of the caller.
+Give one reason to keep a pointer to the AR of the lexically enclosing function.
+
+
+
+
 
 OO
 ===
@@ -80,7 +89,7 @@ Q1.
 State the substitution principle of Liskov. (3pts) 
 
 I claim that every type is a subtype of itself. Show that this claim is compatible with 
-the above principle by specialising it. (3pts)
+the above statement (your answer to the above question) by specialising it. (3pts)
 
 Q2. 
 
@@ -103,15 +112,12 @@ Bag<Apple> ba
 
 % Bag<Fruit>(ba).insert (o)
 
-// here ba.contains(o)
+// here the bag of apples contains an orange!
 
 
-Can you add a condition on the rule 
-
-
-I argue that the rule A :< B => Bag<A> :< Bag<B> is missing a side condition,
-in terms of mutability.
+I argue that A :< B => Bag<A> :< Bag<B> is missing a side condition for it to be correct.
 
 State such a side condition. (3 pts)
+
 
 Q3. 
