@@ -162,7 +162,7 @@ remain the same.
   the above statement (your answer to the above question) by specialising it. \hfill{\textbf{[2 points]}}
 \end{enumerate}
 
-\item Subtyping.
+\item Algebraic specification.
 
 Consider the following axioms to describe semantics of a sort
 \verb!S!.
@@ -173,7 +173,7 @@ contains (x, insert (x,s)) = true
 contains (x, insert (y,s)) = contains (x, s) (assuming x /= y)
 remove (x, empty) = empty
 remove (x, insert (x,s)) = s
-remove (x, insert (y,s)) = insert (y, (remove (x,s)) (assuming x /= y)
+remove (x, insert (y,s)) = insert (y, remove (x,s)) (assuming x /= y)
 insert (x, insert (y,s)) = insert (y, insert (x,s))
 \end{verbatim}
 

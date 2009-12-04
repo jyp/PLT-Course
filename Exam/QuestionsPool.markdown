@@ -162,7 +162,7 @@ contains (x, insert (x,s)) = true
 contains (x, insert (y,s)) = contains (x, s) (assuming x /= y)
 remove (x, empty) = empty
 remove (x, insert (x,s)) = s
-remove (x, insert (y,s)) = insert (y, (remove (x,s)) (assuming x /= y)
+remove (x, insert (y,s)) = insert (y, remove (x,s)) (assuming x /= y)
 insert (x, insert (y,s)) = insert (y, insert (x,s))
 ~~~~~~~~~~~~~~~~
 
