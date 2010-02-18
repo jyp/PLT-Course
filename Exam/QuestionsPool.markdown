@@ -3,18 +3,19 @@ Imp.
 
 In this part of the exam, we use the following notation: 
 
-* `* q` means: memory cell whose adress is `q`. (Note that `q` must be an address)
-* `& a` means: address of `a`. (Note that `a` must be an l-value)
+* `* q` means: memory cell whose adress is `q`. (Note that `q` must be an pointer)
+* `& a` means: pointer to `a`. (Note that `a` must be an l-value)
 
 
 Q1. (4 pts)
 
-Which of the following these expressions are l-values? Which expressions are adresses?
-(`a`, `b` denote rational numbers variables; `p`, `q` denote addresses of rational numbers.)
+Which of the following these expressions are l-values? Which expressions are pointers?
+(`a`, `b` denote integers variables; `p`, `q` denote variables containing pointers of integers.)
+
 
 Reproduce the following table and replace the question marks with "yes" or "no" appropriately.
 
- expression  l-value        address
+ expression  l-value        pointer
  ----------  --------       --------
  a           ?              ?               
  p           ?              ?
@@ -22,28 +23,29 @@ Reproduce the following table and replace the question marks with "yes" or "no" 
  & a         ?              ?
  & p         ?              ?
  * p         ?              ?
-
+ * (& a)
+ * (& p)
 
 
 ----------------------
 
 Q2. (4 pts)
 
-Consider the following program. It uses the "call by reference" calling convention.
+Consider the following program. 
 
 ~~~~~~~~~~~~~~~~~~~~~
-f (a, b : integers passed by reference) {    
+f (a, b : integers passed by value-result) {    
     a := b
     b := b + 3;
     return t
 }
 
-x, y: integer
-x := 2;
-y := 4;
-f(x,y)
-x := y + 1;
-print (x + y);
+i: integer
+x: array of integers
+x[0] := 3;
+x[1] := 4;
+f(i,x)
+print (i + x[0] + x[1]);
 ~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -51,10 +53,19 @@ print (x + y);
 What is printed?
 
 Translate the function `f` *and* its call to a language that does not
-support call by reference, but only call by value. Do so using pointers
-(use operators `*` and `&`). You are not allowed to change anything
-else. In particular, the "algorithm" and the declatations of `x` and `y` must
-remain the same.
+support call by value-result, but only call by reference. 
+
+(In particular the function may not return any value).
+
+Do so by
+  * using pointers (use operators `*` and `&`). 
+  * using temporary variables.
+
+You are not allowed to change anything
+else. In particular, the "algorithm" and the declatations of `x` and
+`i` must remain the same. The value printed must remain the same.
+
+Assume copy semantics for assignment.
 
 Alt: other calling conventions.
 
@@ -89,10 +100,15 @@ OO
 
 Q1. 
 
+"A :< B" reads: A is a subtype of B. Use this notation in your answers.
+
 State the substitution principle of Liskov. (3pts) 
 
 I claim that every type is a subtype of itself. Show that this claim is compatible with 
 the above statement (your answer to the above question) by specialising it. (3pts)
+
+Is subtyping a transitive relation (A :< B and B :< C implies that A :< C)?
+Justify by using the substitution principle.
 
 Q2. 
 
@@ -175,3 +191,37 @@ number of times that an element is inserted.
 By adding an axiom to the above specification, I can change the answer to the above question.
 Write down this axiom.
 
+
+
+
+Q.
+
+~~~~~~~~~~~~~~~~~~~~
+yes : S
+no : S
+maybe : S
+and : S × S → S
+or : S × S → S
+not : S → S
+
+
+variables x, y
+
+not(yes) = no
+not(no) = yes
+not(maybe) = maybe
+or (no,x) = x
+or (x,y) = or (y,x)
+and (x,y) = not (or (not(x),not(y)))
+~~~~~~~~~~~~~~~~~~~~
+
+
+Assuming initial algebra semantics, which of the propositions are true?
+(Copy each line and write "true" or "false" after it)
+
+* and(maybe,maybe) = maybe 
+* or  (maybe,no) = not(maybe)
+* and (yes,no) = or(maybe,no)
+* and (maybe,yes) = not(maybe)
+* and (no,yes) = or(no,no)
+* or(maybe,yes) = or(yes,maybe)
