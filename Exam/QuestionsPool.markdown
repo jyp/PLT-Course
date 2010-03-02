@@ -10,7 +10,7 @@ In this part of the exam, we use the following notation:
 Q1. (4 pts)
 
 Which of the following these expressions are l-values? Which expressions are adresses?
-(`a`, `b` denote rational numbers variables; `p`, `q` denote addresses of rational numbers.)
+(`a`, `b` denote rational numbers variables; `p`, `q` denote addresses of rational numbers variables.)
 
 Reproduce the following table and replace the question marks with "yes" or "no" appropriately.
 
@@ -29,19 +29,19 @@ Reproduce the following table and replace the question marks with "yes" or "no" 
 
 Q2. (4 pts)
 
-Consider the following program. It uses the "call by reference" calling convention.
+Consider the following program. It uses the "call by reference" calling convention; and copy semantics for assignment.
 
 ~~~~~~~~~~~~~~~~~~~~~
 f (a, b : integers passed by reference) {    
-    a := b
+    a := b;
     b := b + 3;
-    return t
+    return;
 }
 
 x, y: integer
 x := 2;
 y := 4;
-f(x,y)
+f(x,y);
 x := y + 1;
 print (x + y);
 ~~~~~~~~~~~~~~~~~~~~~
