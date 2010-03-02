@@ -12,7 +12,6 @@ Q1. (4 pts)
 Which of the following these expressions are l-values? Which expressions are pointers?
 (`a`, `b` denote integers variables; `p`, `q` denote variables containing pointers of integers.)
 
-
 Reproduce the following table and replace the question marks with "yes" or "no" appropriately.
 
  expression  l-value        pointer
@@ -33,11 +32,10 @@ Q2. (4 pts)
 
 Consider the following program. 
 
-~~~~~~~~~~~~~~~~~~~~~
 f (a, b : integers passed by value-result) {    
     a := b
     b := b + 3;
-    return t
+    return;
 }
 
 i: integer
@@ -46,8 +44,6 @@ x[0] := 3;
 x[1] := 4;
 f(i,x)
 print (i + x[0] + x[1]);
-~~~~~~~~~~~~~~~~~~~~~
-
 
 
 What is printed?
