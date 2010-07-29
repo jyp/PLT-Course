@@ -142,26 +142,26 @@ Assume the following subtyping statements:
 $Cat :< Animal$, $Dog :< Animal$, $Terrier :< Dog$
 
 Given the above, which of the following subtyping statements are sound
-with respect to the substitution principle?  (We have seen general
-rules for sound subtyping in class, apply them to the following
+with respect to the substitution principle?  (We have seen
+sound subtyping rules in the course, apply them to the following
 examples)
 
 
 
-  label     statement
- -------  -------------------------------------------------
-                 Cat :< Dog
-                 Terrier :< Animal 
-    a         Animal -> Dog        :<   Dog -> Animal
-    b         Dog -> Animal        :<   Animal -> Dog
-    c         Animal -> Animal     :<   Dog -> Dog
-    d         Terrier -> Terrier   :<   Dog -> Dog
-              { mutable  f : Dog } :<   { mutable  f : Animal }
-              { constant f : Dog } :<   { constant f : Animal }
-              { mutable  f : Dog } :<   { }
-              { }                  :< { mutable  f : Dog } 
-              { constant  f : Dog } :<   { }
-              { }                  :< { constant  f : Dog } 
+  sound?     statement
+ -------  -----------------------------------------------------------
+    ?            $Cat :< Dog$
+    ?            $Terrier :< Animal$
+    ?         $Animal → Dog        :<   Dog → Animal$
+    ?         $Dog → Animal        :<   Animal → Dog$
+    ?         $Animal → Animal     :<   Dog → Dog$
+    ?         $Terrier → Terrier   :<   Dog → Dog$
+    ?          ${ mutable  f : Dog } :<   { mutable  f : Animal }$
+    ?          ${ constant f : Dog } :<   { constant f : Animal }$
+    ?          ${ mutable  f : Dog } :<   { }$
+    ?          ${ }                  :< { mutable  f : Dog } $
+    ?          ${ constant  f : Dog } :<   { }$
+    ?          ${ }                  :< { constant  f : Dog }$ 
 
 
 Q4.  Algebraic specification.

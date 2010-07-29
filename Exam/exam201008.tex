@@ -1,0 +1,252 @@
+\documentclass{article}
+\usepackage{graphicx}
+
+\usepackage{amsmath}
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{listings}
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\usepackage{array}
+% This is needed because raggedright in table elements redefines \\:
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\let\PBS=\PreserveBackslash
+
+\setcounter{secnumdepth}{0}
+
+
+\begin{document}
+\noindent
+\begin{tabular}{lr}
+CHALMERS TEKNISKA H\"OGSKOLA &Tuesday ?th August, 2010.\\
+Dept. of Computer Science and Engineering & Programming Paradigms\\
+John Hughes                  & DAT120(CTH) / DIT330(GU) \\
+\end{tabular}
+
+\vspace{2.5cm} \noindent
+\begin{center} {\LARGE
+Exam in Programming Paradigms}
+\end{center}
+
+\vspace{1.5cm}
+
+\noindent
+Tuesday ??th August, 2010, EM.\\
+Lecturer: John Hughes, tel 070 756 3760.
+\vspace{1cm}
+
+\noindent
+Permitted aids:\\
+English-Swedish or English-other language dictionary.
+
+There are five questions, one on each paradigm, worth 12 points each
+for a total of 60 points. 24 points is required to pass (grade 3), 36
+points is required for grade 4, and 48 points is required for grade 5.
+
+%\newcommand{\comment}[1]{}
+\newcommand{\comment}[1]{\marginpar{#1}}
+
+\newpage
+
+\section{Imperative Programming [12 points]}
+
+In this part of the exam, we use the following notation in expressions:
+
+\begin{itemize}
+\item
+  \verb!* q! means: memory cell whose adress is \verb!q!. (Note that
+  \verb!q! must be an address)
+\item
+  \verb!& a! means: address of \verb!a!. (Note that \verb!a! must be
+  an l-value)
+\item
+  \verb!p + 1! means: the address following the the address \verb!p!. (\verb!p! must be an address)
+\end{itemize}
+
+\begin{itemize}
+\item Adresses and L-values\hfill{\textbf{[4 points]}}
+
+Which of the following these expressions are l-values? Which
+expressions are pointers? (\verb!a!, \verb!b! denote integers
+variables; \verb!p!, \verb!q! denote variables containing pointers
+to integers.)
+
+Reproduce the following table and replace the question marks with
+``yes'' or ``no'' appropriately.
+
+\begin{center}
+\begin{tabular}{>{\PBS\raggedright\hspace{0pt}}p{0.15\columnwidth}>{\PBS\raggedright\hspace{0pt}}p{0.19\columnwidth}>{\PBS\raggedright\hspace{0pt}}p{0.10\columnwidth}}
+expression
+ & l-value
+ & pointer
+\\
+\hline
+a
+ & ?
+ & ?
+\\
+p
+ & ?
+ & ?
+\\
+p + 1
+ & ?
+ & ?
+\\
+\& p
+ & ?
+ & ?
+\\
+* (p + 1)
+ & ?
+ & ?
+\\
+(\& a) + 1
+ & ?
+ & ?
+\\
+\end{tabular}
+\end{center}
+
+
+\newpage
+
+\item Parameter passing
+
+Consider the following program.
+
+\begin{verbatim}
+f (a, b : integers passed by value-result) {    
+    a := b
+    b := b - 3;
+    return;
+}
+
+i: integer
+x: array of integers
+i := 1;
+x[0] := 3;
+x[1] := 4;
+f(i,x[0]);
+print (i + x[0] + x[1]);
+\end{verbatim}
+
+What is printed? \hfill{\textbf{[2 points]}}
+
+  
+Translation to call-by-reference. \hfill{\textbf{[6 points]}}
+
+Translate the function \verb!f! \emph{and} its call to a language that
+does not support call by value-result, but only call by copy.
+Do so by using temporary variables and pointers (address variables).  You are not
+allowed to change anything else. In particular, the ``algorithm'' and
+the declatations of \verb!x! and \verb!i! must remain the same. The
+value printed must remain the same.  Assume copy semantics for
+assignment and early l-value (memory location) computation.
+
+
+\end{itemize}
+
+
+\newpage
+\section{Object-Oriented Programming [12 points]}
+
+\begin{description}
+
+\item[Subtyping]
+  For this question, we use the notation $A :< B$ to mean $A$ is a
+  subtype of $B$.
+
+\begin{enumerate}
+\item State the substitution principle of Liskov.  \hfill{\textbf{[2
+      points]}}
+
+\item Assume the following subtyping statements:
+$Cat :< Animal$, $Dog :< Animal$, $Terrier :< Dog$
+
+Given the above, which of the following subtyping statements are
+sound with respect to the substitution principle? (We have seen
+sound subtyping rules in the course, apply them to the following
+examples) Reproduce the following table and replace the question marks with
+``yes'' or ``no'' appropriately.
+\hfill{\textbf{[4 points]}}
+
+\newcommand{\mutable}{\mathbf{mutable}}
+\newcommand{\constant}{\mathbf{constant}}
+
+\begin{center}
+\begin{tabular}{cc}
+sound?
+ & statement
+\\
+\hline
+?
+ & $Cat :< Dog$
+\\
+?
+ & $Terrier :< Animal$
+\\
+?
+ & $Animal → Dog :< Dog → Animal$
+\\
+?
+ & $Dog → Animal :< Animal → Dog$
+\\
+?
+ & $Animal → Animal :< Dog → Dog$
+\\
+?
+ & $Terrier → Terrier :< Dog → Dog$
+\\
+?
+ & $\{ f : Dog \} :< \{ \}$
+\\
+?
+ & $\{ \} :< \{ f : Dog \}$
+\\
+\end{tabular}
+\end{center}
+
+The notation $\{ fieldName : Type \}$ stands for a record with one
+immutable field, and $\{ \}$ stands for a record with no field.
+
+
+\end{enumerate}
+
+\item[Algebraic specification]
+
+Consider the following signature for the sort \verb!S!.
+
+\begin{verbatim}
+yes : S
+no : S
+maybe : S
+and : S × S → S
+or : S × S → S
+not : S → S
+\end{verbatim}
+
+Write \emph{at most four} axioms that, together, make all the
+following statements true \emph{at the same time}. \\ \hfill{\textbf{[6 points]}}
+
+\begin{itemize}
+\item
+  and(maybe,maybe) = maybe
+\item
+  and (yes,no) = or(maybe,no)
+\item
+  and (maybe,yes) = not(maybe)
+\item
+  and (no,yes) = or(no,no)
+\item
+  or(maybe,yes) = or(yes,maybe)
+\end{itemize}
+\end{description}
+
+
+\newpage
+
+
+\end{document}
