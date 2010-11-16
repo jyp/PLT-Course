@@ -1,0 +1,43 @@
+\usepackage[latin1]{inputenc}
+\usepackage{fancyvrb}
+\usepackage{pstricks,pst-node,pst-text,pst-3d, pst-tree}
+\usepackage{hyperref}
+\usepackage{graphicx}
+%\pagestyle{fancy}
+%\lhead{S. Schupp} %}
+
+%\oddsidemargin 0.35in
+%\textwidth 5.0in
+%\textheight 9.5in
+%\topmargin -0.5in
+
+\newcommand{\Cpp}{C\kern-0.05em\texttt{+\kern-0.03em+}}
+\newcommand{\cpp}{\Cpp}
+\newcommand{\comment}[1]{}
+\newcommand{\mycomment}[1]{}
+
+\newcommand{\courseinfo}{ Sibylle Schupp \\ Programming Paradigms 2008 }
+
+
+
+
+\usepackage{listings}
+\lstset{language=java,basicstyle=\small}
+\lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
+\lstnewenvironment{java}
+    {\lstset{language=java,frame=tb}}
+    {}
+\lstnewenvironment{java2}
+    {\lstset{language=java}}
+    {}
+\lstnewenvironment{cplus}
+    {\lstset{language=c++,frame=tb}}
+    {}
+\lstnewenvironment{cplus2}
+    {\lstset{language=c++}}
+    {}
+\lstnewenvironment{perl}
+    {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip}}
+    {}
+
+

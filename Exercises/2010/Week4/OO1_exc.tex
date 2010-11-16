@@ -1,0 +1,300 @@
+\documentclass{article}
+
+\title{Programming Paradigms\\--\\OO Part I: Basic Imperative and OO Concepts}
+\date{18th October 2010}
+
+\input{header}
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{Activation records and scoping}
+The \textit{scope} of a variable declaration refers to the range of
+statements in which the variable can be referenced. 
+\begin{itemize}
+\item In \textit{static scoping}, the use of a variable $y$ in
+a subprogram $f$ refers to the declaration of $y$ at the beginning of $f$ 
+or, if not
+declared there, to the declaration of $y$ in the subprogram $g$ 
+whose declaration
+contains the declaration of $f$, and so on. The static scope, thus,
+is a property of the program text and can be determined at compile time.
+\item In \textit{dynamic scoping}, on the other hand, 
+the scope depends on the call sequence of
+subroutines: the use of a variable refers to the declaration in 
+the nearest caller (``dynamic parent'').
+\end{itemize}
+Java, C, \Cpp, C\#, and most other
+ languages support static scoping. The language Perl is special
+since it gives the user control over  scoping: 
+variables declared as \textsf{`my'} are statically scoped, 
+variables declared as \textsf{'local'} are dynamically scoped.  
+
+\mycomment{
+In this exercise, the question is: given a particular  use of
+a variable, how does the run-time system know which declaration that 
+variable refers to? As discussed in class, activation records contain
+only two kinds of internal information: the return address and the previous
+activation record. This does not suffice for languages with
+static scoping and \textit{non-local variable references}.
+}
+
+\begin{enumerate}
+\item What is the effect of static and dynamic scoping?
+Consider the Perl program below and vary  between 
+\textsf{my} and \textsf{local}
+for the three
+declarations of $x$. When, if at all, does the value $x=2$ get printed?
+When $x=4.14$ or $x=56$ (if at all)? 
+(Hint: Perl is installed on (almost) all machines; you can run
+the program.)
+\item In dynamic scoping, it is easy for the run-time system
+to determine which declaration
+the use of a variable refers to. Explain. (Hint: run-time
+stack)
+\item Static scoping with non-local references, on the other hand, is
+  not so easy to implement. In particular, the kind of activation
+  records discussed in class (which contain only two kinds of internal
+  information: the return address and the previous activation record)
+  does not suffice.
+%
+
+What information would be necessary and where could it be stored? 
+Make a suggestion  and 
+sketch a (simple) algorithm that takes a run-time stack and an activation record,
+and returns the ``right'' reference (or at least its activation record).
+How expensive is your algorithm? Determine the parameters on which its
+cost depends and give the cost of the algorithm.
+\end{enumerate}
+
+
+\begin{perl}
+ sub outer {
+   my $x = 0;
+
+   sub r(){
+       $x = $x + 1; 
+       print("In subroutine r, x = ", $x);
+   }
+   sub q() {
+      my $x = 3.14; 
+      &r;      # call outer's subroutine r
+   }
+   sub p() {
+      my $x = 55; 
+      &q;      # call outer's subroutine q
+   } 
+   &p;         # call subroutine p
+}
+
+&outer;
+\end{perl}
+
+
+\section{Parameter passing}
+\begin{enumerate}
+\item For each mechanism of parameter passing, determine the final
+values of the array \textsf{A} after the call to \textsf{f}. 
+
+\begin{java}
+void f(int x, int y) {
+    x = 1;
+    y = 3;
+}
+
+int[] A = new int[2];
+A[0] = 0;
+A[1] = 2;
+f(A[0],A[A[0]]);
+\end{java}
+\item An important question of call-by-result, which was not discussed in
+class, is the question \textit{when} the lvalue of the actual parameter is 
+computed. One might expect that this happens before the callee executes,
+but that is not necessarily the case---since the value of the actual
+parameter is not needed until the 
+callee returns, its computation could be delayed until the value is needed.
+Ada, for example,  supports early lvalue-computation, while Algol-W implements
+late lvalue-computation.
+
+Use the snippet below to explain the difference between early and late
+lvalue-computation.
+\begin{java}
+void f(int [] A) {
+   int i = 0;
+   g(i, A[i]);
+}
+void g(by-reference int i, by-result int j) {
+   j = 2;
+   i = 1;
+   j = 3;
+}
+\end{java}
+
+\item Another important detail of call-by-result and call-by-value-result concerns
+the order in which the final values of the formal parameter are written back
+to the actual parameters. For a binary method \textsf{f(x,y)}, for
+example, either (the value of) \textsf{x} or (the value of) 
+\textsf{y} is written back
+first; this order might make a difference. 
+
+Write two methods \textsf{f,g} (in pseudo-code,
+if you wish) that demonstrate the difference.
+\end{enumerate}
+
+\section{An Introduction to Squeak}
+\begin{enumerate}
+\item For each of the following expressions determine
+the message(s), and for each message determine the receiver object and all 
+argument object(s). 
+\begin{java}
+Date today 
+2 + 3 
+anArray at: 1 put: 'hej'
+10 raisedTo: 2 + 3
+10 negated raisedTo: 2 + 3
+2 * 3 + 4      
+\end{java}
+\item The following snippet contains a fragment of the class \textsf{Count} with the methods \textsf{initialize},
+ \textsf{value},  \textsf{increment1}, and \textsf{increment2}:
+\begin{java}
+initialize
+    value := 0.
+value
+    value notNil ifFalse: [^0].
+    ^value
+increment1
+    value := value + 1.
+increment2
+    value := self value + 1
+\end{java}
+\begin{enumerate}
+\item Compare the two increment
+methods from a design point of view: which one would you prefer?  Why?
+\item What is the meaning of the semicolon (``;''), thus  the value of \textsf{aCounter} at the end of  the following program (1 sentence)?
+
+\begin{java}
+|aCounter|
+aCounter := Count new.
+aCounter initialize.
+aCounter increment1; increment2.
+\end{java}
+(Hint: open the ``Browser'', implement the class \textsf{Count}, enter the
+ program below in 
+the ``Workspace'',
+run the program, and ``inspect'' the counter variable.)
+\end{enumerate}
+\item Consider the following block expression
+\begin{java}
+|anArray sum|
+sum := 0
+anArray := #(4 55 19 23).
+anArray do: [:item | sum := sum + item].
+^sum
+\end{java}
+\begin{enumerate}
+\item Rewrite the block in Java (or a Java-like language). (This is just
+a sanity check; don't make it too complicated!)
+\item Rewrite the block using \textsf{inject:into}.
+%\item Rewrite the block using explicit array indexing (via the method \textsf{at:}) to access array elements. 
+\end{enumerate}
+\item Implementing an abstract syntax tree for a small calculator
+  language. The language grammar looks like
+  $$\begin{array}{lcl}
+    e & ::= & e + e | e - e | e * e | e / e \\
+  \end{array}$$
+  \begin{itemize}
+    \item Implement a class \textsf{ASTNode} with methods for getting
+      the number of children \textsf{childrenCount}, setting a child
+      \textsf{setChild:At:} and retrieving a child \textsf{childAt:}
+   \item Implement for each operator $+,-$ etc.\ an own subclass of
+      ASTNode \textsf{AddNode},\textsf{MinusNode} etc. as well as one
+      for integers \textsf{IntLitNode}. 
+    \item Implement an interpreter for the language by implementing
+      the method \textsf{eval} for each of the classes which evaluates
+      first the children (by subsequent calls of \textsf{eval}) and,
+      finally, computes and returns the result.
+    \item Implement a short test class which constructs the ASTs for 
+      \begin{enumerate}
+        \item $1 + (2 * 3)$
+        \item $(1 + 2) * 3$
+        \item $(2 * 119) / 17$
+     \end{enumerate}
+     evaluates them and prints the result of the evaluation.
+  \end{itemize}
+\end{enumerate}
+Further material
+\begin{itemize}
+\item By default, Squeak is not installed on the machines in the department,
+but you can easily install it yourself at home or in your account at
+Chalmers. Visit the download area on the main webpage of Squeak:
+\begin{center}
+\textsf{http://www.squeak.org}
+\end{center}
+\item The Squeak main page contains links to tutorials of varying degree
+of difficulty and lots of other useful online resources. Here is a 
+tutorial for Java programmers:
+\begin{center}
+\textsf{http://daitanmarks.sourceforge.net/or/squeak/squeak\_tutorial.html}
+\end{center}
+\end{itemize}
+
+\end{document}
+
+
+\section{Answers (sketches)}
+
+
+\section*{Scoping}
+\begin{enumerate}
+\item Scoping declaration in outer/p/q
+\begin{itemize}
+\item my/my/my  or local/my/my -$>$ x=1
+\item local/local/local or local/my/local -$>$ x =4.14
+\item local/local/my -$>$ x=55
+\end{itemize}
+\item Traverse the run-time stack, take the first declaration encountered.
+\item (Not-constant solution:) Include in the activation record a 
+``static link'' (a.k.a. access links), then follow the link to the
+static parent. For a solution in constant time: compute the
+``static distance'' between a variable definition and a variable
+reference; jump to the definition in constant time.
+\end{enumerate}
+
+
+\section*{Parameter passing}
+\begin{enumerate}
+\item Elements in A
+
+\begin{tabular}{lll}
+               & A[0] & A[1] \\
+ by-reference  & 3    & 2    \\
+by-value        & 0   & 2   \\
+by-result      &  3 (1) & 2 (3);  depends on order, see next problem \\
+by-value-result & 1 & 3 \\
+by-name      & 1 & 3  \\
+\end{tabular}
+\item Early/late:
+
+\begin{tabular}{lll}
+               & A[0] & A[1] \\
+early          & 3    & ? \\
+late       & ?   & 3   \\
+middle     &    & \\
+\end{tabular}
+\item Order:
+\begin{java}
+int f(int x, int y) {
+    x = 4;
+    y = 5;
+}
+int a=3;
+p(a,a); 
+\end{java}
+
+\end{enumerate}
+
+
+\end{document}
