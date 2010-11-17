@@ -1,0 +1,67 @@
+\mode<presentation>
+
+\setbeamercolor*{author in head/foot}{bg=white}
+\setbeamercolor*{title in head/foot}{bg=white}
+\setbeamercolor*{date in head/foot}{bg=white}
+
+\setbeamercolor*{section in head/foot}{bg=white}
+\setbeamercolor*{subsection in head/foot}{bg=white}
+
+\setbeamercolor*{frametitle}{parent=palette primary}
+\usefonttheme[onlylarge]{structurebold}
+
+\defbeamertemplate*{footline}{progver theme}
+{
+  \leavevmode%
+  \mbox{}
+  \qquad
+  \hbox{%
+  \raisebox{3pt}{\begin{beamercolorbox}[wd=.94\paperwidth,ht=2.25ex,dp=1ex]{titl
+e in head/foot}%
+    {\color{green!70!blue}\mbox{}\hrule}%
+    \usebeamerfont{title in head/foot}
+    {\vspace{.2pt}\insertshorttitle:~\insertshortsubtitle}
+    \hfill
+    \raisebox{0pt}{\insertlogo\hskip-0.3pt}
+    \hfill
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em} 
+    {\insertframenumber{} / \inserttotalframenumber}
+  \end{beamercolorbox}}}
+  \vskip0pt%
+}
+
+\defbeamertemplate*{headlinex}{progver theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,right]{section in hea
+d/foot}%
+    \usebeamerfont{section in head/foot}\insertsection\hspace*{2ex}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,left]{subsection in h
+ead/foot}%
+    \usebeamerfont{subsection in head/foot}{
+%    \color{green!70!blue}$|$
+    }\hspace*{2ex}
+    \insertsubsection
+  \end{beamercolorbox}} {\color{green!70!blue}\hrule}%
+  \vskip0.3pt%
+}
+
+\defbeamertemplate*{headline}{progver theme}
+{}
+
+\defbeamertemplate*{sidebar right}{progver theme}
+{
+  \vfill%
+%  \llap{\insertlogo\hskip0.1cm}%
+  \vskip0pt%
+  \llap{\usebeamertemplate***{navigation symbols}\hskip0.1cm}%
+  \vskip1pt%
+}
+
+\setbeamersize{text margin left=1em,text margin right=1em}
+
+\mode
+<all>
+
