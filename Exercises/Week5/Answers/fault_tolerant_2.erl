@@ -1,4 +1,4 @@
--module(server1x).
+-module(fault_tolerant_2).
 -export([start/2,stop/1,rpc/2]).
 
 start(Name,Mod) -> Pid = spawn (fun() -> 
