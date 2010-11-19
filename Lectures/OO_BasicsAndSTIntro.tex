@@ -184,7 +184,7 @@ And later many more:
 \section{OOP Basics}
 \begin{frame}[fragile]
 \frametitle{Structured Data}
-\Blue{Built-in types:} integers, characters, etc.
+\Blue{Built-in types:}\ integers, characters, etc.
 
 \bigskip
 
@@ -220,14 +220,12 @@ Programming languages supporting records/structs must
 
 Usage of records:
 \begin{itemize}
-  \item Records globally known? Can any procedure operate on it?
-    \pause namespaces, libraries
-  \item Specialisation/Extension of records? How?
-  \item How to deal with structural changes of a record?
+  \item<+-> Records globally known? Can any procedure operate on it? 
+  \item<+-> Specialisation/Extension of records? How?
+  \item<+-> How to deal with structural changes of a record?
 \end{itemize}
 
-
-\pause\bigskip\bigskip
+\onslide<+->\bigskip\bigskip
 
 Starting point for the introduction of \emph{classes} and
 \emph{objects}:\\
@@ -271,8 +269,6 @@ Modifiable state
 An object \textit{instantiates} a class.
 \end{frame}
 
-
-
 \begin{frame}[fragile]
 \frametitle{What are classes?}
 \framesubtitle{}
@@ -295,6 +291,49 @@ class and one can use it to derive a new class from it.
 \bigskip
 Most OO-languages permit classes that do not (have to) exhibit all aspects. 
 \end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Object Model}
+\begin{tikzpicture}
+
+% object 3
+\draw (0,-2.5)  rectangle (1.2,-3.0);
+\pgftext[at={\pgfpoint{0.5cm}{-2.75cm}}]{a1} ;
+
+% vptr object 3
+\draw (0,-2.5)  rectangle (1.2,-2.0);
+\pgftext[at={\pgfpoint{0.5cm}{-2.25cm}}]{} ;
+\draw[->, thick] (1.0, -2.25) -- (3.0,-2.25); 
+\pgftext[at={\pgfpoint{2.1cm}{-1.75cm}}]{\textit{vtbl B}} ;
+
+\draw (3,0.5)  rectangle (4.2,1.0);
+\pgftext[at={\pgfpoint{3.5cm}{0.75cm}}]{m2} ;
+\draw[->, thick] (4.0, 0.75) -- (4.8,0.75); 
+\pgftext[at={\pgfpoint{5.8cm}{0.75cm}}]{Person::m2} ;
+
+\draw (3,1.0)  rectangle (4.2,1.5);
+\pgftext[at={\pgfpoint{3.5cm}{1.25cm}}]{m1} ;
+\draw[->, thick] (4.0, 1.25) -- (4.8,1.25); 
+\pgftext[at={\pgfpoint{5.8cm}{1.25cm}}]{Person::m1} ;
+
+
+
+% object 2
+\draw (0,-2.0)  rectangle (1.2,-1.0);
+\pgftext[at={\pgfpoint{0.5cm}{-1.25cm}}]{s1} ;
+\pgftext[at={\pgfpoint{0.5cm}{-1.75cm}}]{s2} ;
+
+% vptr
+\draw (0,-1.0)  rectangle (1.2,-0.5);
+\pgftext[at={\pgfpoint{-0.25cm}{-0.75cm}}]{} ;
+\draw[->, thick] (1.0, -0.75) -- (3.0,-0.75); 
+\pgftext[at={\pgfpoint{4.0cm}{-0.75cm}}]{\textit{vtbl A}} ;
+
+
+\end{tikzpicture}
+\end{frame}
+
 
 
 \subsubsection{Methods}
@@ -330,26 +369,31 @@ Object creation is typically done by constructors. Two tasks:
 \begin{itemize}
 \item Allocate memory 
 \item Initialize fields
+
 \end{itemize}
 \framesubtitle{}
 %se.ethz.ch/teaching/ss2006/0050/slides/eiffel_the_essentials.pdf 
 \bigskip
 
-Syntax (example) of constructors:
-\begin{eiffel}
-! Simula
-Ref(Rectangle) R;
-R :- New Rectangle(10,20)
-
--- Eiffel
-b: Book
-create b.make(``Another Harry Potter'', ``Rowling'')
-\end{eiffel}
-\bigskip
-
-More examples: Modula-3 provides no constructors; Ada95 only for 
-objects derived from Controlled. \Cpp has default ctors (initialization
-not required).
+Syntax (example) of constructor:
+\begin{center}
+\begin{lstlisting}[language=Java, basicstyle=\small\ttfamily, commentstyle=\scriptsize]
+public class Point {
+  ...
+  public Point(int x, int y) {
+     this.x = x; this.y = y;
+  } 
+}
+// invoked via
+Point p = new Point(10,10);
+\end{lstlisting}
+\end{center}
+Other languages:
+\begin{itemize}
+\item Modula-3 provides no constructors
+\item Ada95 only for objects derived from Controlled
+\item \Cpp/Java have default constructors (initialization not required).
+\end{itemize}
 \end{frame}
 
 
@@ -360,7 +404,11 @@ not required).
 \begin{frame}[fragile]
 \frametitle{Inheritance}
 \framesubtitle{}
-Subclass ≊ Extension
+
+\begin{center}
+  A subclass is an \emph{extension} of its \emph{superclass}.
+\end{center}
+
 \bigskip
 
 Syntax (examples)
@@ -374,11 +422,9 @@ Syntax (examples)
         category: ''
 
      // C# and C++
-     public class Rectangle: Shape 
-     {
+     public class Rectangle: Shape {
         ... 
      }
-
 \end{cplus3}
 
 
@@ -417,7 +463,6 @@ inherit
 feature
      name: STRING
 end -- class FRIEND
-
 \end{eiffel}
 \end{itemize}
 %XXX Ruby alias
@@ -433,7 +478,8 @@ The subclass
 \item can add new methods,
 \item can ``override'' the methods of the superclass.
 \end{itemize}
-\bigskip
+
+\bigskip\pause
 
 American vs. Scandinavian semantics of overriding
 \begin{itemize}
@@ -588,41 +634,84 @@ it executes before the body of the child's constructor.
 
 \begin{frame}[fragile]
 \frametitle{Subtyping}
-\framesubtitle{Intuition and ``Substitiution Principle''}
-%http://www.informatik.uni-bonn.de/~ralf/PvPS2007/Folien5.pdf
+\framesubtitle{Intuition}
 
+For $S$ subtype of $T$ write:
+\[
+    S :< T
+\]
 
-$S :< T$. $S$ ``is-a'' $T$. 
-Subtyping is a basic element of OOP modeling/design.
+(Polymorphic) subtyping 
+\begin{itemize}
+\item describes an ``is-a'' relationship: $S$ ``is-a'' $T$. 
+\item basic element of OOP modeling/design.
+\end{itemize}
 
+\pause
+
+\begin{example}
 \begin{itemize}
   \item integer $:<$ number
   \item student $:<$ person
   \item mergeSort $:<$ sort
   \item ...
 \end{itemize}
-
-``LSP'': Principle of substitution (due to Liskov)
-\begin{itemize}
-  \item Principle: $S :< T$ ⇔ ∀ property $q$. $q$ is true for objects of type $T$, then $q$ is true for objects of type $S$.
-  \item Corrollary: $S :< T$ ⇒ if a piece of code works for objects of type $T$, then it works for objects of type $S$.
-  \item Example: If it works for rectangles, then it works for squares. (Is this true? side conditions?)
-  \item Take home: LSP is a \emph{guideline} for subtyping (or subclassing).
-\end{itemize}
+\end{example}
 
 \end{frame}
 
 
+\begin{frame}[fragile]
+\frametitle{Subtyping:  Substitution Principle}
+\framesubtitle{also: Liskov Principle}
+
+Variable \texttt{o} declared as \texttt{Object o;} \medskip
+
+Distinguish between 
+\begin{itemize}
+\item the \emph{declared or static type} of \texttt{o} (here: \texttt{Object})
+\item the \emph{runtime or dynamic} of $o$ is the most-specific type
+  of the object actually stored in the variable
+\end{itemize} 
+\pause \medskip
+
+\begin{overlayarea}{\textwidth}{0.6\textheight}%
+\only<2>{%
+\medskip 
+Intuitively: Subtyping has to be \emph{safe}, i.e.,
+substituting \texttt{o} by an entity of any subtype
+\begin{itemize}
+\item does not cause a (runtime) type error
+\item (often also intended, but \emph{not} enforced/checked) the
+  program using \texttt{o} works ``correct'' for any subtype of the
+  static type of \texttt{o} (see e.g. SEFM lecture)
+\end{itemize}
+}\only<3>{%
+\begin{block}{LSP--Principle of substitution (due to Liskov)}
+\begin{itemize}
+  \item Principle: $S :< T$ $\Leftrightarrow$ $\forall$ properties $q$
+    holds: if $q$ is true for objects of type $T$, then $q$ is true
+    for objects of type $S$. 
+  \item Corollary: $S :< T$ $\Rightarrow$ then a piece of code works
+    for objects of type $T$, then it works for objects of type $S$. 
+  \item Liskov enforced/checked (what means \emph{works})? Always?
+  \item LSP is a \emph{guideline} for subtyping (or subclassing).
+\end{itemize}
+\end{block}}
+\end{overlayarea}
+\end{frame}
+
 \begin{frame}
-\frametitle{Subtyping polymorphism}
-\framesubtitle{}
+\frametitle{Subtyping Polymorphism}
 
-Definition of polymorphism: values have multiple types.
+\begin{definition}[Polymorphism]
+   Values can have multiple types.
+\end{definition}
 
-With subtyping:
-
-if $x : S$ and $S :< T$ then $x : T$.
-
+Together with subtyping:
+\begin{center}
+  if $x : S$ and $S :< T$ then $x : T$.
+\end{center}
 The LSP is a justification for the above rule.
 
 \begin{example}
@@ -637,17 +726,106 @@ The LSP is a justification for the above rule.
 
 \end{frame}
 
+\begin{frame}
+\frametitle{Subtyping for Records}
+\framesubtitle{}
+
+Given two records 
+\[ 
+   R_1 = \{f_i : S_i\} \quad \text{and} \quad R_2 = \{g_i : T_i\}
+\]
+(No methods, only modifiable fields $f_i$, $g_i$ of type $S_i$ resp.\ $T_i$)
+
+\pause
+
+The following subtyping rule is sound wrt.\ LSP
+
+\begin{center}
+  $R1 :< R2$\\[0.5em]
+  if and only if \\[0.5em]
+  \begin{minipage}{0.75\textwidth}
+    for all fields $g:T$ in $R2$ there is a field $f:S$ in $R1$ of
+    \begin{itemize}
+    \item same name $f=g$ and
+    \item same type $S=T$
+    \end{itemize}
+  \end{minipage}
+\end{center}
+   
+Why?
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Subtyping for Methods}
+\framesubtitle{}
+
+Given two sets of methods \[
+   R_1=\{m_i : S_i \rightarrow T_i\} \quad \text{and}\quad R_2=\{n_i :U_i \rightarrow V_i\}
+\]
+of same name.\medskip\pause
+
+Then 
+\[R_2~:<~R_1\]
+iff.\ for all methods $m:S\rightarrow T$ in $R_2$\\ 
+there is an equally named method $m: U\rightarrow V$ in $R_1$\hfill 
+\[
+\frac{\; V :< T \mbox{\hspace{1cm}}  S :< U \;}{U → V \; :< \; S → T}
+\]
+Why?
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Subtyping for Arrays}
+\framesubtitle{}
+
+\[
+\frac{T_1 :< T_2 }{Array ⟨T_1⟩ :< Array ⟨ T_2 ⟩}
+\]
+
+Is the rule sound?\pause\ \alert{No.}
+
+\pause
+
+Java compiler uses this rule for type checking $\Rightarrow$ Java is
+not (static) type safe (\texttt{ArrayStoreException}).
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Nominal vs. Structural Subtyping}
+\framesubtitle{}
+
+\begin{description}
+
+\item[Nominal] Programmer declares subtyping relations (using the \emph{name}
+of types), compiler/rts can check subtyping. (Java, C++, etc.)
+
+\item[Structural] Programmer does not declare subtyping relations. Compiler
+infers subtyping using the \emph{structure} of types. (ML, dynamic languages)
+
+\end{description}
+
+\end{frame}
+
+
 
 \begin{frame}[fragile]
-\frametitle{Implementation of subtyping polymorphism}
-\framesubtitle{Dynamic binding}
+\frametitle{Subtyping Polymorphism: Dynamic Binding}
+
 For each call, method binding can be done in two ways:
 \begin{itemize}
 \item Static: based on the declared type (``early binding'')
-\item Dynamic: based on the type of the object  (``late binding'')
+\item Dynamic: based on the type of the object  (``late binding'');
 \end{itemize}
-\bigskip
 
+In case of dynamic binding also a method is \emph{dynamically
+  dispatched}.
+
+\bigskip
 
 Actual binding based on
 \begin{itemize}
@@ -660,19 +838,100 @@ Actual binding based on
 \item Class designer's view
 \end{itemize}
 \end{itemize}
-
-Complete blackboard example.
-
 \end{frame}
 
 
+\begin{frame}[fragile]
+\frametitle{Subtyping Polymorphism: Dynamic Binding (II)}
+\begin{center}
+\begin{minipage}{0.45\textwidth}
+\begin{lstlisting}[language=Java, basicstyle=\small\ttfamily]
+public class A {
+ int m(String s){}
+ int m(Object o){}
+}
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+\begin{lstlisting}[language=Java, basicstyle=\small\ttfamily]
+public class B extends A {
+ int m(String s){}
+ int m(Object o){}
+}
+\end{lstlisting}
+\end{minipage}
+\end{center}
 
-\subsection{Subtyping and inheritance}
+\pause
+\begin{overlayarea}{\textwidth}{0.6\textheight}
+\only<2-4>{
+Consider the invocation \begin{center}\texttt{A o; o = new B(); o.m("Hej");}\end{center}
+
+Which method is invoked 
+\begin{itemize}
+  \item<2-> if static bound?\onslide<3->\ \texttt{A::m(String)}
+  \item<3-> if dynamic bound?\onslide<4->\ \texttt{B::m(String)}
+\end{itemize}
+}\only<5->{
+Two kinds of dynamic dispatch:
+\begin{description}
+\item[Single dynamic dispatch:]\hfill\\ dynamic wrt.\ callee, but static wrt.\ argument
+\item[Multi dynamic dispatch:]\hfill\\ dynamic wrt.\ callee \emph{and} arguments
+\end{description}
+\only<6->{
+   \begin{center}\texttt{A o = new B(); Object arg="Hej"; o.m(arg);}\end{center}
+Which method is invoked in case of
+\begin{itemize}
+  \item single dynamic dispatch?\onslide<7->\ B::m(Object)
+  \item single dynamic dispatch?\onslide<8->\ B::m(String)
+\end{itemize}
+}}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Dynamic Binding (III): Essence of OO}
+
+Assume: $B:<A, C:<A$ and neither is $B$ subtype of $C$ nor vice versa.
+\begin{lstlisting}[language=Java, basicstyle=\small\ttfamily]
+  A o; ...
+  if (o instanceof C) { // doC }
+  else if (o instanceof B) { // doB }
+  else if (o instanceof A) { // doA }
+\end{lstlisting}
+
+\pause
+
+Indicates usually that OO is not really used or a problem in the
+modeling.  
+
+\medskip
+
+\pause
+
+\Blue{Better:}\ Replace above code by
+
+\begin{lstlisting}[language=Java, basicstyle=\small\ttfamily]
+  A o; o.doWork();
+\end{lstlisting}
+
+and add method \texttt{doWork} to classes
+
+\begin{lstlisting}[language=Java, basicstyle=\small\ttfamily]
+class A {void doWork() { // doA }}
+class B extends A {void doWork() { // doB }}
+class C extends A {void doWork() { // doC }}
+\end{lstlisting}
+
+
+\end{frame}
+
+\subsection{Subtyping and Inheritance}
 
 
 
 \begin{frame}[fragile]
-\frametitle{Inheritance for code reuse vs. inheritance for subtyping}
+\frametitle{Inheritance: Code Reuse vs. Subtyping}
 
 \begin{itemize}
 \item  Inheritance used for two \textit{very}
@@ -782,84 +1041,7 @@ impossible
 \end{frame}
 
 
-\subsection{Subtyping in depth}
 
-
-\begin{frame}
-\frametitle{Nominal vs. Structural Subtyping}
-\framesubtitle{}
-
-\begin{description}
-
-\item[Nominal] Programmer declares subtyping relations (using the \emph{name}
-of types), compiler/rts can check subtyping. (Java, C++, etc.)
-
-\item[Structural] Programmer does not declare subtyping relations. Compiler
-infers subtyping using the \emph{structure} of types. (ML, dynamic languages)
-
-\end{description}
-
-\end{frame}
-
-\subsubsection{Sound subtyping rules}
-
-\begin{frame}
-\frametitle{Subtyping for records}
-\framesubtitle{}
-
-Assume $R_1 = \{f_i : S_i\}$ and $R_2 = \{g_i : T_i\}$.
-(No methods, only modifiable fields)
-
-$R1 :< R2$ ⇔ all fields in $R2$ are also found in $R1$, and have corresponding types $(S_i = T_i)$
-
-Why?
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Subtyping for methods}
-\framesubtitle{}
-
-Assume $R_1 = \{f_i : S_i\}$ and $R_2 = \{g_i : T_i\}$.
-(No modifiable fields, only methods)
-
-$R1 :< R2$ ⇔ all methods in $R2$ are also found in $R1$, with subtypes $(S_i :< T_i)$
-
-Why?
-
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Subtyping for functions}
-\framesubtitle{}
-
-\[
-\frac{\; T_1 :< T_2 \mbox{\hspace{1cm}}  S_2 :< S_1 \;}{S_1 → T_1 \; :< \; S_2 → T_2}
-\]
-
-Why?
-
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Subtyping for parametric types/classes}
-\framesubtitle{}
-
-\[
-\frac{T_1 :< T_2 }{Array ⟨T_1⟩ :< Array ⟨ T_2 ⟩}
-\]
-
-\pause
-
-oops!
-
-\pause
-
-Exercise: how to change the above rule so that it becomes sound?
-
-\end{frame}
 
 
 \section{Smalltalk Introduction}
@@ -1037,7 +1219,7 @@ Message `+`: \texttt{1 + 3}
 \end{itemize}
 \pause
 
-All can be overwritten by the user!
+All can be overridden by the user!
 
 \end{frame}
 
@@ -1086,6 +1268,8 @@ the semicolon \texttt{;} sends message to receiver of previous
 message. The above statement assigns \texttt{result} the list (1,2) as intended.
 
 \end{itemize}
+
+\onslide<3->
 
 \Blue{Method not understood}
 
