@@ -278,15 +278,15 @@ A \emph{class} is a blueprint (construction scheme) for objects.
 
 \bigskip
 
-Some aspects:
+A class
 
 \begin{itemize}
-\item A class groups the fields and methods of an object.
-\item A class is \textit{instantiable} by objects.
+\item groups the fields and methods of an object.
+\item is \textit{instantiable} by objects.
 It contains \textit{constructors} to allocate and initialize objects.
-\item A class is a unit of inheritance: it is derived from another
+\item is a unit of inheritance: it is derived from another
 class and one can use it to derive a new class from it. 
-\item A class is a type. 
+\item is a type. 
 % in statically-typed languages
 \end{itemize}
 \bigskip
@@ -688,7 +688,7 @@ Distinguish between
 \pause \medskip
 
 \begin{overlayarea}{\textwidth}{0.6\textheight}%
-\only<2>{%
+\only<2| handout:1>{%
 \medskip 
 Intuitively: Subtyping has to be \emph{safe}, i.e.,
 substituting \texttt{o} by an entity of any subtype
@@ -698,7 +698,7 @@ substituting \texttt{o} by an entity of any subtype
   program using \texttt{o} works ``correct'' for any subtype of the
   static type of \texttt{o} (see e.g. SEFM lecture)
 \end{itemize}
-}\only<3>{%
+}\only<3| handout:2>{%
 \begin{block}{LSP--Principle of substitution (due to Liskov)}
 \begin{itemize}
   \item Principle: $S :< T$ $\Leftrightarrow$ $\forall$ properties $q$
@@ -780,8 +780,8 @@ of same name.\medskip\pause
 
 Then 
 \[R_2~:<~R_1\]
-iff.\ for all methods $m:S\rightarrow T$ in $R_2$\\ 
-there is an equally named method $m: U\rightarrow V$ in $R_1$\hfill 
+iff.\ for all methods $m:S\rightarrow T$ in $R_1$\\ 
+there is an equally named method $m: U\rightarrow V$ in $R_2$\hfill 
 \[
 \frac{\; V :< T \mbox{\hspace{1cm}}  S :< U \;}{U → V \; :< \; S → T}
 \]
@@ -876,7 +876,7 @@ public class B extends A {
 
 \pause
 \begin{overlayarea}{\textwidth}{0.6\textheight}
-\only<2-4>{
+\only<2-4|handout:1>{
 Consider the invocation \begin{center}\texttt{A o; o = new B(); o.m("Hej");}\end{center}
 
 Which method is invoked 
@@ -884,7 +884,7 @@ Which method is invoked
   \item<2-> if static bound?\onslide<3->\ \texttt{A::m(String)}
   \item<3-> if dynamic bound?\onslide<4->\ \texttt{B::m(String)}
 \end{itemize}
-}\only<5->{
+}\only<5-|handout:2>{
 Two kinds of dynamic dispatch:
 \begin{description}
 \item[Single dynamic dispatch:]\hfill\\ dynamic wrt.\ callee, but static wrt.\ argument
