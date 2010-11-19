@@ -140,16 +140,15 @@ Turing award
 
 \begin{frame}[fragile]
 \frametitle{A short history}
-\url{http://heim.ifi.uio.no/~kristen/FORSKNINGSDOK_MAPPE/F_OO_start.html}
 %Scott, p.788
 First generation
 \begin{itemize}
-\item SIMULA1 (1962-65), SIMULA 67 (1967): 
+\item SIMULA1 (1962), SIMULA 67 (1967): 
 \begin{itemize}
 \item Ole-Johan Dahl, Kristen Nygaard, Oslo
 \item Inheritance, virtual methods
 \end{itemize}
-\item Smalltalk (1969-80) 
+\item Smalltalk (1969) 
 \begin{itemize}
 \item Alan Kay, Dan Ingalls, Adele Goldberg at Xerox Parc
 \item Dynamic language %(dynamic typing)
@@ -158,12 +157,12 @@ First generation
 
 80s
 \begin{itemize}
-\item \cpp(1983-98)
+\item \cpp(1983)
 %\begin{itemize}
 %\item 
 B. Stroustrup, AT\&T; hybrid
 %\end{itemize}
-\item Eiffel (1986-98); B. Meyer, ISI; %design by contract
+\item Eiffel (1986); B. Meyer, ISI; %design by contract
 
 \end{itemize}
 
@@ -172,7 +171,7 @@ And later many more:
 \item BETA, SELF, Ruby, \ldots
 \item Modula-3, Oberon, Ada95, Sather, \ldots
 \item Objective CAML, Objective-C, \ldots
-\item Java (1995-03), C\# (2000-03)
+\item Java (1995), C\# (2000)
 
 
 \end{itemize}
@@ -295,43 +294,49 @@ Most OO-languages permit classes that do not (have to) exhibit all aspects.
 
 \begin{frame}[fragile]
 \frametitle{Object Model}
+\begin{minipage}{0.64\textwidth}
 \begin{tikzpicture}
 
-% object 3
-\draw (0,-2.5)  rectangle (1.2,-3.0);
-\pgftext[at={\pgfpoint{0.5cm}{-2.75cm}}]{a1} ;
-
-% vptr object 3
-\draw (0,-2.5)  rectangle (1.2,-2.0);
-\pgftext[at={\pgfpoint{0.5cm}{-2.25cm}}]{} ;
-\draw[->, thick] (1.0, -2.25) -- (3.0,-2.25); 
-\pgftext[at={\pgfpoint{2.1cm}{-1.75cm}}]{\textit{vtbl B}} ;
-
-\draw (3,0.5)  rectangle (4.2,1.0);
-\pgftext[at={\pgfpoint{3.5cm}{0.75cm}}]{m2} ;
-\draw[->, thick] (4.0, 0.75) -- (4.8,0.75); 
-\pgftext[at={\pgfpoint{5.8cm}{0.75cm}}]{Person::m2} ;
-
-\draw (3,1.0)  rectangle (4.2,1.5);
-\pgftext[at={\pgfpoint{3.5cm}{1.25cm}}]{m1} ;
-\draw[->, thick] (4.0, 1.25) -- (4.8,1.25); 
-\pgftext[at={\pgfpoint{5.8cm}{1.25cm}}]{Person::m1} ;
-
-
-
-% object 2
 \draw (0,-2.0)  rectangle (1.2,-1.0);
-\pgftext[at={\pgfpoint{0.5cm}{-1.25cm}}]{s1} ;
-\pgftext[at={\pgfpoint{0.5cm}{-1.75cm}}]{s2} ;
+\draw (0,-1.0)  rectangle (1.2,-1.5);
+\draw (0,-1.5)  rectangle (1.2,-2.0);
+\draw (0,-2.0)  rectangle (1.2,-2.5);
+\pgftext[at={\pgfpoint{0.5cm}{-1.25cm}}]{a};
+\pgftext[at={\pgfpoint{0.5cm}{-1.75cm}}]{b};
+\pgftext[at={\pgfpoint{0.5cm}{-2.25cm}}]{c};
 
 % vptr
 \draw (0,-1.0)  rectangle (1.2,-0.5);
 \pgftext[at={\pgfpoint{-0.25cm}{-0.75cm}}]{} ;
 \draw[->, thick] (1.0, -0.75) -- (3.0,-0.75); 
-\pgftext[at={\pgfpoint{4.0cm}{-0.75cm}}]{\textit{vtbl A}} ;
+\pgftext[at={\pgfpoint{2.0cm}{-0.5cm}}]{\textit{vtbl}} ;
 
+% 
+\draw (3.0,0) rectangle (4.2,-0.5);
+\pgftext[at={\pgfpoint{3.6cm}{-0.25cm}}]{m} ;
+\draw[->, thick] (4.0, -0.25) -- (4.75,-0.25); 
+\pgftext[at={\pgfpoint{5.25cm}{-0.25cm}}]{B::m} ;
+
+\draw (3.0,-0.5) rectangle (4.2,-1);
+\pgftext[at={\pgfpoint{3.6cm}{-0.75cm}}]{n} ;
+\draw[->, thick] (4.0, -0.75) -- (4.75,-0.75); 
+\pgftext[at={\pgfpoint{5.25cm}{-0.75cm}}]{A::n} ;
+
+
+\draw (3.0,-1) rectangle (4.2,-1.5);
+\pgftext[at={\pgfpoint{3.6cm}{-1.25cm}}]{o} ;
+\draw[->, thick] (4.0, -1.25) -- (4.75,-1.25); 
+\pgftext[at={\pgfpoint{5.25cm}{-1.25cm}}]{B::o} ;
 
 \end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.35\textwidth}
+\input{objmodel.tex}
+\end{minipage}
+\bigskip
+
+vtbl: virtual method table
+
 \end{frame}
 
 
@@ -436,10 +441,15 @@ Syntax (examples)
 \framesubtitle{}
 \bigskip
 
-The child object incorporates a parent \textit{object}, i.e., its fields.
-(Though the sublcass may not have access to them.)
+\begin{center}
+\begin{minipage}{0.3\textwidth}
+\input{objmodel2}
+\end{minipage}
+\end{center}
 
-(blackboard)
+
+The child object incorporates a parent \textit{object}, i.e., its fields.
+(Though the subclass may not have access to them.)
 
 \end{frame}
 
