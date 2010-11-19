@@ -183,7 +183,64 @@ And later many more:
 
 \section{OOP Basics}
 \begin{frame}[fragile]
-\frametitle{What are objects? }
+\frametitle{Structured Data}
+\Blue{Built-in types:} integers, characters, etc.
+
+\bigskip
+
+\Blue{Need to represent \emph{user-defined} complex data?}\\
+E.g., contact card in an address book
+
+\bigskip
+
+\Blue{Solution:}\ Structured data: records/structs 
+
+A record defines a new type grouping a collection of attributes:
+
+\begin{cplus3}
+struct Person {
+   char *name;
+   int birthyear;
+};
+\end{cplus3}
+
+defines a new type called \texttt{struct Person}.
+
+Programming languages supporting records/structs must
+\begin{itemize}
+\item provide selectors for the components
+\item means of creating a new record
+\item copy semantics vs. reference semantics; shallow vs. deep-copy
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Structured Data - Cont'd}
+
+Usage of records:
+\begin{itemize}
+  \item Records globally known? Can any procedure operate on it?
+    \pause namespaces, libraries
+  \item Specialisation/Extension of records? How?
+  \item How to deal with structural changes of a record?
+\end{itemize}
+
+
+\pause\bigskip\bigskip
+
+Starting point for the introduction of \emph{classes} and
+\emph{objects}:\\
+\begin{center}
+  Group records and operations on records
+\end{center}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{What are objects?}
 \framesubtitle{}
 
 \emph{Objects} are entities with 

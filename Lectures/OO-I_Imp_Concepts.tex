@@ -2,7 +2,6 @@
 
 \beamertemplatenavigationsymbolsempty
 
-
 \mode<presentation>
 {
 \usetheme[width=0cm]{Goettingen}
@@ -418,7 +417,7 @@ variable denotes its (static) type.
 \begin{itemize}
 \item What?
 \begin{itemize}
-\item l-value vs.r-value; copy vs. reference
+\item l-value vs.\ r-value; copy vs.\ reference
 \end{itemize}
 \item How long?
 
@@ -581,7 +580,7 @@ Generalizable to expressions (C, \cpp, ...). An expression is an
 \end{itemize}
 
 \pause\medskip
-Most languages prevent observation of the adadress of an l-value
+Most languages prevent observation of the address of an l-value
 \begin{itemize}
 \item Exception: Address-of operator in C/\cpp (e.g., \texttt{x = \&y;})
 \end{itemize}
@@ -806,9 +805,9 @@ deallocation (i.e., time during which it is bound to memory)
 lifetime:\smallskip
 
 \begin{description}
-\item[Global:] alive throughout the program
-\item[Local:] during ``activation'' of its block
-\item[Heap:] no general rule, until deallocated (manually or automatically) 
+\item[Global:] Alive throughout the program
+\item[Local:] During ``activation'' of its block
+\item[Heap:] No general rule, until deallocated (manually or automatically) 
 \end{description}
 
 \end{frame}
@@ -1787,8 +1786,8 @@ Concepts discussed:
 \bigskip
 
 \begin{itemize}
-\item L-value vs. r-value
-\item Copy semantics vs. reference semantics
+\item L-value vs.\ r-value
+\item Copy semantics vs.\ reference semantics
 \item Storage classes and lifetime (global, local, heap)
 \item Activation records (static and dynamic allocation), run-time stack,
 static area and heap. 
@@ -1826,7 +1825,7 @@ void f()  {
 \end{itemize}
 Here: Arguments: 1 and 5; Actual parameters: 1 and abs(-5); Formal
 parameters: a and b. 
-\item<+-> Distinguish: ``caller'' vs. ``callee''
+\item<+-> Distinguish: ``caller'' vs.\ ``callee''
 \begin{itemize}
 \item  In the example: \texttt{plus} is the callee, 
 \texttt{f} the caller.
@@ -2343,7 +2342,7 @@ put(r.a); --- print
 
 
 \begin{frame}[fragile]
-\frametitle{Call-by-value-result vs. call-by-reference}
+\frametitle{Call-by-value-result vs.\ call-by-reference}
 \framesubtitle{Differences}
 Similar, but
 \begin{itemize}
@@ -2561,7 +2560,7 @@ call-by-name:
 \begin{itemize}
 \item Actual parameters evaluated in the context of the caller
 when they are used the first time.
-\item Value is cached; no re-evaluation(``memoization''). 
+\item Value is cached; no re-evaluation(``memorization''). 
 \end{itemize}
 
  Example : Haskell
