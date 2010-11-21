@@ -1,6 +1,7 @@
 -module(test).
 -export([client/0,server/0]).
 
+% Run server()  and then client() to test.
 server() ->
    transactional:start('name',client_api).
 
@@ -14,15 +15,15 @@ send(Msg)->
    transactional:rpc('name',Msg).
    
 sendBlock(List) ->
-   case List of
-   [] -> done;
-   [Msg|Rest] -> send(Msg), sendBlock(Rest)
-   end.
+  case List of
+    [] -> done;
+    [Msg|Rest] -> send(Msg), sendBlock(Rest)
+  end.
 
 doTransaction(List) ->
-   transactional:start_transaction('name'),
- 	 sendBlock(List),
-   transactional:end_transaction('name').
+  transactional:start_transaction('name'),
+ 	sendBlock(List),
+  transactional:end_transaction('name').
    
 client_1() ->
 	doTransaction([verde, que, te, quiero, verde]).

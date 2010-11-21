@@ -40,23 +40,25 @@
 %% Spawns a new server with Name using module Mod.
 %%  
 start(Name,Mod) ->
-    spawn(fun() ->
-		  register(Name,self()),
-		  server(Name,Mod,Mod:init())
-	  end).
+  spawn(
+    fun() ->
+      register(Name,self()),
+  	  server(Name,Mod,Mod:init())
+	  end
+  ).
 	  
-%% Empties the mailbox of messages of type {Pid,transaction,_,_}
+%% Empties the mailbox of messages of type {Pid,transaction,_}
 %% The elements in brackets are not important
 %% The point here is to iteratively delete the trace of the previous exchanges from
 %% the mailbox.
 
 cleanup_transaction(Pid) ->
-    receive
-        {Pid,transaction,_,_} ->
-	    cleanup_transaction(Pid)
-    after
-        0 -> done
-    end.
+  receive
+    {Pid,transaction,_} ->
+      cleanup_transaction(Pid)
+  after
+     0 -> done
+  end.
 
 %% Applies the transaction relative to identifier (Pid), by receiving all the
 % messages in the mailbox previously queued by the server himself.
@@ -68,36 +70,35 @@ cleanup_transaction(Pid) ->
 % 
 
 apply_transaction(Pid,Mod,State) ->
-    receive
-        {Pid,transaction,Msg} ->
-	    try Mod:handle(Msg,State) of
+  receive
+    {Pid,transaction,Msg} ->
+
+      try Mod:handle(Msg,State) of
 	      {Reply,NewState} ->
-		    apply_transaction(Pid,Mod,NewState)
-		catch
-		  exit:Reason ->
-		    cleanup_transaction(Pid),
-  		    {transaction_aborted,Reason};
-		  _:_->
-		    cleanup_transaction(Pid),
-		    {transaction_aborted,wrong_reply}
+		      apply_transaction(Pid,Mod,NewState)
+	    catch
+	      exit:Reason ->
+  	      {transaction_aborted,Reason};
+    	  _:_->
+	        {transaction_aborted,wrong_reply}
 	    end
-    after
-        0 -> {transaction_complete, State}
-    end.
+
+  after
+    0 -> {transaction_complete, State}
+  end.
 
 server_start_transaction(Name,Mod,State,Pid) ->
-    srvprint("starting transaction for ~w~n",[Pid]),
+  srvprint("starting transaction for ~w~n",[Pid]),
     receive
       {Pid,transaction_running,placeholder} -> % If such a transaction was already started.
-         reply(Name,Pid,{crash,'already started'}),
-         cleanup_transaction(Pid),
-         server(Name,Mod,State)
+        failClient(Name,Pid,"Transaction already started"),
+        server(Name,Mod,State)
     after 0 ->
   	  self() ! {Pid,transaction_running,placeholder},
-	  reply(Name,Pid,{ok,transaction_started}),
-	  srvprint("Initiated transaction by ~w with msg ~w~n",[Pid,transaction_running]),
-	  server(Name,Mod,State)
-	end.
+  	  reply(Name,Pid,{ok,transaction_started}),
+	    srvprint("Initiated transaction by ~w with msg ~w~n",[Pid,transaction_running]),
+	    server(Name,Mod,State)
+	  end.
 	
 	
 %% Action taken if Pid requests end of transaction.
@@ -115,26 +116,26 @@ server_end_transaction(Name,Mod,State,Pid) ->
 		case apply_transaction(Pid,Mod,State) of
 		  {transaction_complete,NewState} ->
   	      % The transaction was applied successfully.
-			srvprint("Transaction successful for ~w ~n",[Pid]),
+			  srvprint("Transaction successful for ~w ~n",[Pid]),
 		    reply(Name,Pid,{ok,transaction_ended}),
-			server(Name,Mod,NewState);
+			  server(Name,Mod,NewState);
+
 		  {transaction_aborted,wrong_reply} ->
 		  % The transaction was aborted because, e.g., the protocol was not respected
-			srvprint("Protocol not respected by ~w ~n",[Pid]),
-			reply(Name,Pid,{ok,{transaction_aborted,resend}}),
-            server(Name,Mod,State);
+			  srvprint("Protocol not respected by ~w ~n",[Pid]),
+        failClient(Name,Pid,Reason),
+        server(Name,Mod,State);
 						
-	      {transaction_aborted,Reason} ->
+	    {transaction_aborted,Reason} ->
 	      % The transaction was aborted for some other reason, there fore the client is asked to crash.
-			srvprint("Crashing ~w ~n",[Pid]),
-            reply(Name,Pid,{crash,Reason}),
-            server(Name,Mod,State)
+        failClient(Name,Pid,Reason),
+        server(Name,Mod,State)
 		end
 	after 0 ->
 	% The transaction requested to be ended was never initiated. Request to crash.
-  	  srvprint("Non-existent Transaction for ~w ~n",[Pid]),
-      reply(Name,Pid,{crash,no_active_transaction}),
-      server(Name,Mod,State)
+    srvprint("Non-existent Transaction for ~w ~n",[Pid]),
+    failClient(Name,Pid,Reason),
+    server(Name,Mod,State)
 	end.
 
 %%
@@ -143,42 +144,49 @@ server_end_transaction(Name,Mod,State,Pid) ->
 %
 %
 server_intermediate_message(Name,Mod,State,Pid,Msg) ->
-    receive
-	  {Pid,transaction_running,placeholder} -> % Did the transaction ever start?
-	  	srvprint("intermediate action, existent transaction for ~w,~w ~n",[Pid,Msg]),
-		reply(Name,Pid,{ok,''}),
-		self() ! {Pid,transaction_running,placeholder}, % Insert again the placeholder in the mailbox
-		self() ! {Pid,transaction,Msg}, % Insert the message in the mailbox
-		server(Name,Mod,State)			
+  receive
+    {Pid,transaction_running,placeholder} -> % Did the transaction ever start?
+      srvprint("intermediate action, existent transaction for ~w,~w ~n",[Pid,Msg]),
+		  reply(Name,Pid,{ok,''}),
+      self() ! {Pid,transaction_running,placeholder}, % Insert again the placeholder in the mailbox
+		  self() ! {Pid,transaction,Msg}, % Insert the message in the mailbox
+	  	server(Name,Mod,State)			
     after 0 ->  %% No transaction running in the mailbox; the logic to deal with this is demanded to the Mod module
                 % that should possibly throw an exception 
-  	srvprint("Timeout for ~w,~w ~n",[Pid,Msg]),
-      try Mod:handle(Msg,State) of % Stateless query.
-		{Reply,NewState} ->
+    	srvprint("Timeout for ~w,~w ~n",[Pid,Msg]),
+
+      try Mod:handle({Msg},State) of % Stateless query.
+		    {Reply,NewState} ->
 	      reply(Name,Pid,{ok,Reply}),
-		  server(Name,Mod,NewState)
-	  catch 
+		    server(Name,Mod,NewState)
+	    catch 
 	  	  exit:Reason -> % Request to crash.
-		  reply(Name,Pid,{crash,Reason}),
-		  server(Name,Mod,State)
-	  end
-	end.
+        failClient(Name,Pid,Reason),
+		    server(Name,Mod,State)
+	    end
+  end.
 
 
 server(Name,Mod,State) ->
+  receive
+    {Pid,start_transaction} ->
+  	  srvprint("start ~w~n",[Pid]),
+		  server_start_transaction(Name,Mod,State,Pid);
+      
+    {Pid,end_transaction} ->
+  	 	srvprint("end ~w ~n",[Pid]),
+      server_end_transaction(Name,Mod,State,Pid);
 
-    receive
-      {Pid,start_transaction} ->
-	  	srvprint("start ~w~n",[Pid]),
-		server_start_transaction(Name,Mod,State,Pid);
-      {Pid,end_transaction} ->
-	  	srvprint("end ~w ~n",[Pid]),
-        server_end_transaction(Name,Mod,State,Pid);
 	  {Pid,Msg} ->
-	  	srvprint("intermediate ~w,~w ~n",[Pid,Msg]),
-        server_intermediate_message(Name,Mod,State,Pid,Msg)
-    end.
+	    srvprint("intermediate ~w,~w ~n",[Pid,Msg]),
+      server_intermediate_message(Name,Mod,State,Pid,Msg)
 
+  end.
+
+failClient(Name,Pid,Reason) ->
+  srvprint("Crashing ~w ~n",[Pid]),
+  reply(Name,Pid,{crash,Reason}),
+  cleanup_transaction(Pid).
 
 start_transaction(Name) -> rpc(Name, start_transaction).
 
@@ -189,8 +197,8 @@ rpc(Name,Msg) ->
     Name ! {self(), Msg},
    	cliprint("after sending ~w~n",self(),[Msg]),
     receive 
-		{Name,{crash,Reason}} -> cliprint("I am crashing because ~p ~n",self(),[Reason]),exit(Reason);
-		{Name,{ok,Reply}} -> Reply
+		  {Name,{crash,Reason}} -> cliprint("I am crashing because ~p ~n",self(),[Reason]),exit(Reason);
+		  {Name,{ok,Reply}} -> Reply
     end.
 
 reply(Name,Pid,Reply) ->
