@@ -15,19 +15,19 @@
 init() -> [].
 
 handle(Msg,State) -> 	
-    case Msg of
+  case Msg of
 	  Atom when is_atom(Atom) -> 
 	     case lists:member(Atom,State) of
 	        false ->	io:format("***SUCCESS*** ~p ~n",[atom_to_list(Atom)]), {ok,[Atom|State]};
 	        true -> exit(string:concat(atom_to_list(Atom) ," has already been printed."))
-		 end;
+		   end;
 	  {Fun} -> pure_request(Fun,State); 
 	  _-> exit('non valid request')
-	 end.
+	end.
 
 
 pure_request(Fun,State) ->
-   case Fun of 
-   level -> {length(State),State}; % asking how many strings have been printed so far
-   _ -> exit('non valid request')
-   end.
+  case Fun of 
+    level -> {length(State),State}; % asking how many strings have been printed so far
+    _ -> exit('non valid request')
+  end.
