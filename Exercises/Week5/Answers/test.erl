@@ -26,15 +26,15 @@ doTransaction(List) ->
   transactional:end_transaction('name').
    
 client_1() ->
-	doTransaction([verde, que, te, quiero, verde]).
+	doTransaction([verde, que, te, quiero,verde]).
 
 client_2() ->
 	doTransaction([solo, et, pensoso, i, piu, deserti, campi, vo, mesurando, a, passi, tardi, e, lenti]).
 
 client_3() ->
-	doTransaction([den, kloka, kvinnan, blir, glad, nar, hon, anses, vacker]).
+	doTransaction([ kloka, kvinnan, blir, glad, nar, hon, anses, vacker]).
 	
 client_4() ->
-	doTransaction([den, vackra, kvinnan, blir, glad, nar, hon, anses, klok]).
+	doTransaction([ vackra, kvinnan, blir, glad, nar, hon, anses, klok]).
 
    

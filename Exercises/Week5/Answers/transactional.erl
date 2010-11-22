@@ -21,20 +21,6 @@
 % this is a problem if a new client comes with the same PID. How 
 % to address this (hint: linking)
 %
-% If a transaction contains multiple copies of the same atoms (see test:client_1),
-% in the current implementation the transaction fails but the state
-% is modified. This is because it is assumed that a transaction
-% will not contain dupes. How would you extend the server and the
-% client_api in order to (mutually exclusive):
-%
-% 1) (easy) Make the transaction fail when a duplicate in the same
-%    transaction is detected.
-%
-% 2) (less easy) Allow duplicates to occurr in the same transaction.
-%
-% The modification should of course be generic in the server, that
-% is, there must not be reference to the concepts of duplicates
-% that are on a different abstraction level.
 
 
 %% Spawns a new server with Name using module Mod.
@@ -69,22 +55,21 @@ cleanup_transaction(Pid) ->
 % handle signals such an event with an exception (the catch part)
 % 
 
-apply_transaction(Pid,Mod,State) ->
+apply_transaction(Pid,Mod,TempState,State) ->
   receive
     {Pid,transaction,Msg} ->
-
-      try Mod:handle(Msg,State) of
+      apply_transaction(Pid,Mod,[Msg|TempState],State)
+  after
+    0 ->       
+      try Mod:handle(TempState,State) of
 	      {Reply,NewState} ->
-		      apply_transaction(Pid,Mod,NewState)
+		      {transaction_complete, NewState}
 	    catch
 	      exit:Reason ->
   	      {transaction_aborted,Reason};
     	  _:_->
 	        {transaction_aborted,wrong_reply}
 	    end
-
-  after
-    0 -> {transaction_complete, State}
   end.
 
 server_start_transaction(Name,Mod,State,Pid) ->
@@ -113,7 +98,7 @@ server_end_transaction(Name,Mod,State,Pid) ->
 	receive
  	  {Pid,transaction_running,placeholder} ->
 		srvprint("Existent transaction for ~w ~n",[Pid]),
-		case apply_transaction(Pid,Mod,State) of
+		case apply_transaction(Pid,Mod,[],State) of
 		  {transaction_complete,NewState} ->
   	      % The transaction was applied successfully.
 			  srvprint("Transaction successful for ~w ~n",[Pid]),
@@ -123,7 +108,7 @@ server_end_transaction(Name,Mod,State,Pid) ->
 		  {transaction_aborted,wrong_reply} ->
 		  % The transaction was aborted because, e.g., the protocol was not respected
 			  srvprint("Protocol not respected by ~w ~n",[Pid]),
-        failClient(Name,Pid,Reason),
+        failClient(Name,Pid,"Wrong reply"),
         server(Name,Mod,State);
 						
 	    {transaction_aborted,Reason} ->
@@ -133,8 +118,8 @@ server_end_transaction(Name,Mod,State,Pid) ->
 		end
 	after 0 ->
 	% The transaction requested to be ended was never initiated. Request to crash.
-    srvprint("Non-existent Transaction for ~w ~n",[Pid]),
-    failClient(Name,Pid,Reason),
+    srvprint("Non-existent transaction for ~w ~n",[Pid]),
+    failClient(Name,Pid,"Non-existent transaction"),
     server(Name,Mod,State)
 	end.
 
