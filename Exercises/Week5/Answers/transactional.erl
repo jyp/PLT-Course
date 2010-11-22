@@ -9,6 +9,11 @@
 %   This format is used to keep track of the state of the transaction. There is 
 %   just one of such messages per transaction.
 
+% A client may interact in two modalities with the server:
+% when a transaction has been initiated, the server waits for messages with atoms
+% inside them.
+% When the message Msg has form of tuple, then it is an escaping format that
+% triggers a side-effect free action on the server.
 
 %Caveats:
 % This server does not allow a process to start more than one transaction.
@@ -132,25 +137,30 @@ server_intermediate_message(Name,Mod,State,Pid,Msg) ->
   receive
     {Pid,transaction_running,placeholder} -> % Did the transaction ever start?
       srvprint("intermediate action, existent transaction for ~w,~w ~n",[Pid,Msg]),
+      
 		  reply(Name,Pid,{ok,''}),
       self() ! {Pid,transaction_running,placeholder}, % Insert again the placeholder in the mailbox
 		  self() ! {Pid,transaction,Msg}, % Insert the message in the mailbox
 	  	server(Name,Mod,State)			
-    after 0 ->  %% No transaction running in the mailbox; the logic to deal with this is demanded to the Mod module
-                % that should possibly throw an exception 
-    	srvprint("Timeout for ~w,~w ~n",[Pid,Msg]),
 
-      try Mod:handle({Msg},State) of % Stateless query.
-		    {Reply,NewState} ->
-	      reply(Name,Pid,{ok,Reply}),
-		    server(Name,Mod,NewState)
-	    catch 
-	  	  exit:Reason -> % Request to crash.
-        failClient(Name,Pid,Reason),
-		    server(Name,Mod,State)
-	    end
+  after 0 -> 
+    	srvprint("Non existent transaction for ~w,~w ~n",[Pid,Msg]),
+      failClient(Name,Pid,'Non existent transaction'),
+      server(Name,Mod,State)
+  
   end.
 
+server_query(Name,Mod,State,Pid,TupMsg)->
+  try Mod:pure_request(TupMsg,State) of % Stateless query.
+	  {Reply,NewState} ->
+	    reply(Name,Pid,{ok,Reply}),
+		  server(Name,Mod,NewState)
+	catch 
+	  exit:Reason -> % Request to crash.
+    failClient(Name,Pid,Reason),
+	  server(Name,Mod,State)
+	end.
+  
 
 server(Name,Mod,State) ->
   receive
@@ -161,6 +171,10 @@ server(Name,Mod,State) ->
     {Pid,end_transaction} ->
   	 	srvprint("end ~w ~n",[Pid]),
       server_end_transaction(Name,Mod,State,Pid);
+    
+    {Pid,TupMsg} when is_tuple(TupMsg) ->
+      srvprint("query ~w,~w ~n",[Pid,TupMsg]),
+      server_query(Name,Mod,State,Pid,TupMsg);
 
 	  {Pid,Msg} ->
 	    srvprint("intermediate ~w,~w ~n",[Pid,Msg]),

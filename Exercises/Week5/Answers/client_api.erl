@@ -1,6 +1,6 @@
 
 -module(client_api).
--export([init/0, handle/2]).
+-export([init/0, handle/2, pure_request/2]).
 % This module implements the logic of the transactional server.
 % Messages (the Msg) from the client can be of two types:
 %   List - A request to add in the printout this atom. It changes the state of the server.
@@ -10,14 +10,13 @@
 % The server takes atoms and it converts them to strings. The state is a list
 % of the atoms received so far (and printed). A transaction fails if any 
 % atom to be printed out appears to have been already printed.
-% "Paganini non repete"
+
 
 init() -> [].
 
 handle(Msg,State) ->
  case Msg of
          List when is_list(List) -> {ok,handle_list(Msg,State,[])};
-         {Fun} -> pure_request(Fun,State);
          _-> exit('non valid request')
        end.
 
@@ -51,6 +50,6 @@ commit(Trans,State)->
 
 pure_request(Fun,State) ->
   case Fun of 
-    level -> {length(State),State}; % asking how many strings have been printed so far
+    {level} -> {length(State),State}; % asking how many strings have been printed so far
     _ -> exit('non valid request')
   end.
