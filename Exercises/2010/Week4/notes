@@ -1,0 +1,59 @@
+Notes to exercise 1.
+(i)
+{my,my,my} : 1
+  All declarations are statically scoped, therefore
+  the value printed refers to the nearest variable declaration in
+  the outer subprogram (who is the nearest declaration in the first enclosing
+  subprogram)
+
+{my, my, loc}, {my,loc,loc}, {my, loc, my}
+  "Can't localize lexical variable $x at references.pl line _."
+  The most external (static) declaration here creates an ambiguity
+  problem: when executing r, which declaration of x should be taken?
+
+{loc, my, my} : 1
+  The first (outermost) declaration is taken since the other declarations
+  are local to q and p's scopes, which are not visible from r (since r is not
+  enclosed in them).
+  (Q : What happens if r is not called from a stack with outer below r?)
+
+{loc, my, loc} : 56
+  The stack is outer->p->q->r, therefore references to x in r refer to the 
+  nearest visible declaration (in the stack) of x, which is the one in p (56).
+
+{loc, loc, my} : 4.14
+  The stack is outer->p->q->r, therefore references to x in r refer to the 
+  nearest visible declaration (in the stack) of x, which is the one in q (3.14).
+
+{loc, loc, loc} : 4.14
+  The stack is outer->p->q->r, therefore references to x in r refer to the 
+  nearest visible declaration (in the stack) of x, which is the one in q (3.14).
+
+(ii) Climbing down the run-time stack, each record will have its local variables declared
+there; to determine which is the variable declaration to be read/written, it 
+suffices to pick the first occurrence from the record in which the variable
+is referenced.
+
+(iii)
+
+
+(smalltalk)
+today is the unary message
+2+3 is a binary message (+ sent to 2 w arg 3)
+anArray is sent the message at:put:
+10 is sent raisedTo: with argument 2+3 (priority of binary over keyword)
+raisedTo: is sent to 10 negated with argument 2+3 (priority of unary over binary over keyword)
+2 is sent * with argument 3, and the result is sent + with arg 4
+
+(3)
+int[] arr;
+int sum;
+sum = 0;
+arr = new int[]{4,55,19,23};
+for(int item : arr){
+  sum = item+sum;
+}
+
+anArray inject:0 into: [:subTotal :next | subTotal+next].
+
+
