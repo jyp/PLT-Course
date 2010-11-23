@@ -1,0 +1,498 @@
+\documentclass{beamer}
+
+\beamertemplatenavigationsymbolsempty
+
+
+\mode<presentation>
+{
+\usetheme[width=0cm]{Goettingen}
+\usecolortheme{seahorse}
+\useoutertheme{SEFM}
+}
+
+\input{header}
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage[utf8x]{inputenc}
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+
+
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+\usepackage{pgf,tikz}
+\usetikzlibrary{decorations}
+\usetikzlibrary{shapes.arrows}
+\usepackage{url}
+\usepackage{listings}
+
+\lstdefinelanguage{FSharp}
+      {morekeywords={let, new, match, with, rec, open, module, namespace, type, of, member, and, for, in, do, begin, end, fun, function, try, mutable, if, then, else, class, end},
+    keywordstyle=\color{blue},
+    sensitive=false,
+    morecomment=[l][\color{green!50!black!80}]{///},
+    morecomment=[l][\color{green!50!black!80}]{//},
+    morecomment=[s][\color{green!50!black!80}]{{(*}{*)}},
+    morestring=[b]",
+    stringstyle=\color{red},
+    columns=fullflexible
+    }
+
+
+\lstdefinelanguage{Smalltalk}{
+  basicstyle=\ttfamily,
+  keywordstyle=\bfseries,
+  morekeywords={self,super,true,false,nil,thisContext}, % This is overkill
+  morestring=[d]',
+  morecomment=[s]{"}{"},
+  alsoletter={\#:},
+  escapechar={!},
+}[keywords,comments,strings]
+
+
+\newcommand{\Blue}[1]{\color{blue}#1\color{black}}
+
+\title[]{Object-Oriented Programming}
+
+\subtitle[F\#]{F\#: A Multi-Paradigm Language} %
+%{OOP} % (optional)
+
+
+\author[Richard Bubel] % (optional, use only with lots of authors)
+{Richard Bubel}
+
+\institute[CTH]{Chalmers University of Technology}
+
+\date{25th November 2010}%[Short Occasion] % (optional)
+
+
+\subject{Talks}
+% This is only inserted into the PDF information catalog. Can be left
+% out.
+
+
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+%\pgfdeclareimage[height=0.5cm]{university-logo}{../../../project/gitroot/clipart/ChalmGUmarke.pdf}
+% \logo{\pgfuseimage{university-logo}}
+
+
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{History}
+\end{frame}
+
+\begin{frame}{Features}
+  \Blue{Functional Features}
+  \begin{description}
+    \item[Automatic Type Inference]
+    \item[Automatic Type Inference]
+ \end{description}
+ 
+  \Blue{Object-Oriented Features}
+  \begin{description}
+    \item[Mutability]
+    \item[Classes]
+ \end{description}
+
+\end{frame}
+
+\section{Function Concepts}
+
+\begin{frame}[fragile]{Variable Definition}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+  let %\textit{var-name [}% : %\textit{type]}% = %\textit{expression}%
+
+%Examples:%
+
+  let x = 10
+  let input = Console.ReadLine()
+\end{lstlisting}
+  
+\begin{itemize}
+\item Variables defined as above are immutable
+\item Type if possible automatic inferred
+\item Strict evaluation of expressions
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Function Definitions}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+ let %\textit{[}%inline%\textit{]}% %\textit{fct-name} \textit{parameter-list [}%:%\textit{return-type ]}% = %\textit{fct-body}%
+
+%Examples: %
+  let sum x y = x + y
+  (* Whitespaces matter; nesting by indentation. *) 
+  let inc x =
+    let step = 1
+    sum x step
+  (* Functions are values *)
+  let binOp (f: int -> int -> int) x y = f x y
+  let plus x y = binOp (+) x y
+\end{lstlisting}
+Function
+\begin{itemize}
+\item<+-> types (if possible) automatically inferred and generalized.
+\item<+-> body is a sequence of expressions.
+\item<+-> body evaluates to value of last expression.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{More on Functions}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+(* Lambda expressions *)
+let dup y = (fun x -> x * 2) y
+let mul x y = binOp (fun x y -> x * y) x y
+
+(* Function can be declared with tuple parameter *)
+let mul2 (x, y) = x * y 
+  
+let dup2 = mul2 2  (* error *)
+
+mul2 (4,5) (* instead of *) mul2 4 5
+\end{lstlisting}  
+\begin{itemize}
+  \item Lambda expressions (anonymous functions) supported
+  \item Tuple parameters for functions $\Rightarrow$ no partial function application
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Recursive Functions}
+
+\Blue{Recursive functions must be explicitly declared using \alert{rec}}
+
+\begin{center}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+let %\color{red}\textsf{rec}\color{black}% fct-name = expr
+\end{lstlisting}  
+\end{center}
+
+Example:
+
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+let rec fib n =
+   if n <= 2 then 1
+   else fib (n - 1) + fib (n - 2)
+\end{lstlisting}  
+
+\end{frame}
+
+\begin{frame}[fragile]{F\#: Pure or Impure?}
+
+Consider:
+\begin{lstlisting}[language=FSharp]
+let rec fib n = 
+    printf "Called with %d\n" n
+    if n <= 2 then 1 
+    else fib (n - 1) + fib (n - 2)
+\end{lstlisting}  
+\pause
+Output:
+\begin{lstlisting}[language=FSharp]
+> pp.fib 3;;
+ Called with 3 
+ Called with 2 
+ Called with 1 
+ val it : int = 2
+\end{lstlisting}
+\bigskip
+
+\begin{center}
+  Expressions can have \emph{side-effects} $\Rightarrow$ F\# is \emph{impure}.
+\end{center}
+\end{frame}
+
+
+\begin{frame}[fragile]{Discriminate Unions}
+
+General Declration:
+
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+type %\it type-name% = 
+   | %\it case-identifier1 %[ of %\it type1% [ * %\it type2 ...%]]
+   | %\it case-identifier2 %[ of %\it type3% [ * %\it type4 ...%]]
+  ...
+\end{lstlisting}
+
+Example:
+
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+type Color = 
+    | Red 
+    | Black
+type Tree  =
+    | Leaf 
+    | Node of Color * Tree * Tree
+%\pause%
+let tree0 = Leaf
+let tree1 = Node(Black, Leaf, Leaf)
+let tree2 = Node(Black, Node(Red, Leaf, Leaf), Node(Red, Leaf, Leaf))
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pattern Matching}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+match %\it test-expression% with
+    | %\it pattern1% [ when %\it condition% ] -> %\it result-expression1%
+    | %\it pattern2% [ when %\it condition% ] -> %\it result-expression2%
+    | ...
+\end{lstlisting}
+
+\pause
+
+Example:
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+let rec countRed tree =
+    match tree with
+    | Leaf -> 0
+    | Node(Red, left, right) ->
+         1 + countRed(left) + countRed(right)
+    | Node(Black, left, right) ->
+         0 + countRed(left) + countRed(right)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Lists and Listgenerators}
+\begin{overlayarea}{\textwidth}{0.3\textheight}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+let list = [ %\it el1%; %\it el2%; %\it el3% ]   
+%\pause%
+let list = [ for i in %\it coll% do %\it exp-with-yield% ]   
+let list = [ for i in %\it coll% <- %\it exp% ]   
+\end{lstlisting}
+\end{overlayarea}
+List construction:
+\begin{itemize}
+\item explicit element enumeration
+\item looping constructs
+  \begin{itemize}
+    \item imperative flavor
+    \item $coll$ any \textsl{.net}-class implementing \texttt{IEnumerable<T>} 
+    \item $exp-with-yield$: expression sequence with sub-exp.\ '\lstinline!yield! $elExp$' where $elExp$ evaluates to the value to be added
+    \item shortform \lstinline!<-! if $exp$ evaluates to the value to be added 
+ \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Listgenerators: Examples}
+\begin{lstlisting}[language=FSharp]
+ (* list generation by explicit enumeration *)
+let list1 = [ 1; 2; 3 ] 
+
+(* list generation from .. step .. to .. *)
+let listOdd1to100 = [1 .. 2 .. 100]
+
+(* list generation using looping construct *)
+let listEven1To100 = [for i in 1..49 <- i * 2 ]  
+let altListEven1To100 = [for i in 1..49 do if i%2=0 then yield i * 2 ]  
+
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Operation on Lists}
+\begin{lstlisting}[language=FSharp]
+ (* add element as head *)
+let list2 = 0 :: list1
+(* concatenate lists *)
+let list3 = list1 @ list2
+
+(* recursion *)
+let rec sum list =
+   match list with
+   | head :: tail -> head + sum tail
+   | [] -> 0
+
+(* provided by package List *)
+List.sort [1; 2; 3]
+List.sum [1; 2; 3]
+
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Pipelining}
+
+Pipelining Operator: \lstinline!|>!
+
+Basically defined as:
+\begin{lstlisting}[language=FSharp]
+let (|>) x f = f x 
+\end{lstinline}
+ 
+\pause
+
+allows to write
+
+\begin{lstlisting}[language=FSharp]
+[4; 2; 1; 3; 9; 11; 8] 
+  |> List.filter (fun x -> x%2 = 0) 
+  |> sort ;;
+\end{lstlisting}
+
+instead of
+
+\begin{lstlisting}[language=FSharp]
+List.sort List.filter (fun x -> x%2 = 0) [4; 2; 1; 3; 9; 11; 8]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Sequences}
+\end{frame}
+
+%\begin{frame}{Monads}
+%\end{frame}
+
+%\begin{frame}{State-Monad}
+%\end{frame}
+
+\begin{frame}[fragile]{Mutability in F\#: Mutable Variables}
+
+\Blue{Mutable variables}
+
+Declaration:
+
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+             let %\alert{mutable}\it\ var-name% = %\it exp% 
+\end{lstlisting}
+
+\begin{itemize}
+\item Should only be used local (better control!)
+\item Mutability causes same complications as in imperative languages
+  \begin{itemize}
+    \item side-effects, e.g., evaluation order of expressions important
+    \item aliasing (see later)
+   \end{itemize}
+\end{itemize}
+
+\pause 
+
+Update (assignment):
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+  %\it var-name% <- %\it new-value%
+\end{lstlisting}
+
+\pause 
+
+\begin{center}
+\alert{Attention: F\# is strongly typed!}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Mutability in F\#: Reference Cells}
+
+\Blue{Reference Cells}
+
+Creation:
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+             let %\it\ ref-var-name% = %\it\alert{ref}\ exp% 
+\end{lstlisting}
+
+\begin{itemize}
+  \item creates a reference cell with a \emph{mutable} value, here: $exp$
+\end{itemize}
+
+\pause 
+
+Update (Assignment) and Content Access:
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+(* updating reference cell content *)
+    %\it ref-var-name% %\alert{:=}% %\it new-value%
+
+(* accessing reference cell content *)
+    %\alert{!}\it ref-var-name% 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Mutable Variables vs. Reference Cell}
+
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+  let mul x y = x * y
+  let mutable factor = 2
+  let dup = mul factor
+
+  let mulRef x y = !x * y
+  let factorRef = ref 2
+  let dupRef = mulRef factorRef
+
+  dup 5      (* value? *)
+  dupRef 5   (* value? *)
+%\onslide<2->% 
+  factor <- 3
+  dup 5     (* value? *)
+  dupRef 5  (* value? *)
+
+\end{lstlisting}
+
+
+\begin{itemize}
+\item<3-> Closures: arguments passed as values not by reference
+\item<4-> Reference cell need if change of value shall effect closure
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{While loops in F\#}
+  F\# knows actual \lstinline!while! loops:
+
+\begin{lstlisting}[language=FSharp]
+    let mutable counter = 10 
+     
+    while counter>0 do
+      printf "%d" counter
+      counter <- counter - 1
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Classes and Objects in F\#}
+
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+type [%$access-modifier$%] %$type\!-\!name$% 
+         [%$type-params$%](%$parameter\!-\!list$%) %$[$% as %$identifier]$% =
+   %$[$% class %$]$%
+     %$[$% inherit %$base-type-name$%(%$base\!-\!constructor\!-\!args$%) %]%
+     %$[ let-bindings ]$%
+     %$[ do-bindings ]$%
+     %$member-list$%
+   %$[$% end %$]$%
+\end{lstlisting}
+
+\begin{itemize}
+  \item fields are declared as \texttt{let} bindings
+  \item fields are private and cannot be accessed from the outside
+  \item \lstinline!do! bindings are initialisers (if marked static for class init.)
+  \item up-on construction the let and do bindings are executed in source code order
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Constructors}
+  
+\end{frame}
+
+\begin{frame}{Methods}
+\end{frame}
+
+\begin{frame}{Methods: Parameter Passing-by-Reference}
+F\# supports also parameter passing by reference
+\end{frame}
+
+\begin{frame}{F\#: Parallel and Async}
+\end{frame}
+
+\end{document}
