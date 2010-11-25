@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[handout]{beamer}
 
 \beamertemplatenavigationsymbolsempty
 
@@ -113,7 +113,11 @@ http://www.cs.williams.edu/~kim/cs334/s00/Lectures/Lec13/Lec13.html}
 \end{itemize}
 \end{frame}
 
-
+\begin{frame}[fragile]
+\frametitle{Smalltalk Introduction}
+The next slides about ST are repeated from last lecture as we did not
+completely finish the walk-through. 
+\end{frame}
 
 
 
@@ -332,15 +336,15 @@ All can be overridden by the user!
 \begin{itemize}
 \item<1->
 \begin{lstlisting}[language=Smalltalk]
-result := list add: 1 add: 2
+result := (list add: 1) add: 2
 \end{lstlisting} 
 in Java: \texttt{result = list.add(1).add(2)} (Attention: in Smalltalk
 \texttt{add} on collections returns added object; so above will most
-likely not be what you want. Why? \onslide<2-> \texttt{result} assigned the
-value \texttt{3}) 
+likely not be what you want. Why? \onslide<2-> triggers error resp.\ 
+if Integer would provide \texttt{add} \texttt{result} assigned the value \texttt{3}) 
 \item<2-> 
 \begin{lstlisting}[language=Smalltalk]
-result := list add: 1; add: 2
+(result := list) add: 1; add: 2
 \end{lstlisting} 
 the semicolon \texttt{;} sends message to receiver of previous
 message. The above statement assigns \texttt{result} the list (1,2) as intended.
@@ -527,7 +531,6 @@ Char, Integer, Complex.
 \item Most OO languages support single inheritance only.
 \item Eiffel, \cpp, CLOS support multiple inheritance.
 \item Java, C\# support ``interfaces''. 
-
 \end{itemize}
 \end{frame}
 
@@ -791,7 +794,8 @@ if (...) person::name() else student::name();
   (2,0) {Employee
     \nodepart{second} \small salary    
   };
-  \node[draw, rectangle split, rectangle split parts=3] (CA) at (0,-3) {Course Assistant}; 
+  \node[draw, rectangle split, rectangle split parts=3] (CA) at (0,-3)
+  {Course Assistant (CA)}; 
 \draw[thick, open triangle 90-] (PersonViaS.south) -- (Student);
  \draw[thick, open triangle 90-] (Student.south) -- (CA);
  \draw[thick, open triangle 90-] (PersonViaE.south) -- (Employee);
@@ -809,7 +813,8 @@ if (...) person::name() else student::name();
   \item No direct access possible (even not via scope resolution operator.
   \item Access via parents needed.  
   \end{itemize}
-\item Virtual fct.\ tables are merged, keeping the \texttt{S::P} and \texttt{E::P} methods portions.
+%%\item Virtual fct.\ tables are merged, keeping the \texttt{S::P} and \texttt{E::P} methods portions.
+   \item Assignment: \texttt{CA ca = ...; Person a = ca; // illegal}
 \end{itemize}
 Problem: inconsistency
 \end{minipage}
@@ -912,7 +917,7 @@ Interfaces
 \frametitle{Mix-ins}
 \framesubtitle{}
 
-Interfaces nice, but can we improve on code reuse?\medskip
+\only<1|handout:0>{Interfaces nice, but can we improve on code reuse?\medskip}
 
 \pause
 
@@ -939,9 +944,8 @@ Interfaces nice, but can we improve on code reuse?\medskip
 \draw[thick, dashed, triangle 90-] (PSE.north) -- (Employee.south) ;
 \end{tikzpicture}
 \medskip
-
 \begin{overlayarea}{\textwidth}{0.5\textheight}
-\only<2>{
+\only<2|handout:1>{
 \Blue{Mix-ins} (here: \texttt{Student} and \texttt{Employee})
 \begin{itemize}
 \item have a state component, i.e., fields
@@ -950,16 +954,17 @@ Interfaces nice, but can we improve on code reuse?\medskip
   submixins)
 \item cannot be instantiated
 \end{itemize}
-}\only<3>{
+}\only<3|handout:2>{
 \Blue{Composition of Mix-ins}
 \begin{itemize}
 \item Mix-ins are \emph{mixed} into a class which is then referred to
   as mixee (here: Course Assistant)
-\item Mixing follows linear order where most left overrides right;
+\item Mixing follows linear order; superclass overides all
+  mix-ins; within mix-ins most right overrides left;
   here student's \texttt{getId()} overrides employee's
 \item Fields: if field of same name and type exists unified otherwise inherited
 \end{itemize}
-}\only<4>{%
+}\only<4|handout:3>{%
 \Blue{Problems and Restrictions}
 \begin{itemize}
 \item Mixee has not full control over composition (cannot access all
@@ -974,7 +979,7 @@ Interfaces nice, but can we improve on code reuse?\medskip
 
 \begin{frame}[fragile]
 \frametitle{Traits}
-\only<1>{Can we do even better?} \pause 
+\only<1|handout:1>{Can we do even better?} \pause 
 
 \begin{center}
 \begin{overlayarea}{0.6\textwidth}{0.3\textheight}
@@ -990,13 +995,13 @@ Interfaces nice, but can we improve on code reuse?\medskip
 \end{center}
 
 \begin{overlayarea}{\textwidth}{0.68\textheight}
-\only<2>{%
+\only<2|handout:2>{%
 \begin{definition}[Trait]
   A \emph{trait} is solely a \emph{unit of reuse} and does \emph{not}
   declare a nominal type. A trait consists of a set of provided
   methods and a set of required methods.
 \end{definition}
-}\only<3>{%
+}\only<3|handout:3>{%
   \Blue{Trait Facts}
   \begin{itemize}
     \item traits are \emph{not} types
@@ -1004,19 +1009,19 @@ Interfaces nice, but can we improve on code reuse?\medskip
       cannot access the internal state (have to go via required
       methods)
     \end{itemize}%
-}\only<4>{%
-  \Blue{Trait Composition}
+}\only<4|handout:4>{%
+  \Blue{Trait Composition: Class = State + Superclass + Traits + Glue}
   \begin{itemize}    
   \item Conflicts must be resolved manually 
   \item Number of trait composition operators: union, exclusion (turns
     a provided method into a required method), renaming etc.
   \item Client class \emph{using} traits maintains control
   \item Traits can be composed to new traits
+  \item Flattening: after composition class has same semantics as if
+    methods would have been implemented directly
 \end{itemize}}
 \end{overlayarea}
 \end{frame}
-
-
 
 \section{Simulating Multi-Dispatch}
 
