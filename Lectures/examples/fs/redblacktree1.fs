@@ -25,3 +25,6 @@ let y = countRed tree2
 let dir = new System.IO.DirectoryInfo(@"/Users/bubel")
 
 let files = [for i in dir.GetFiles(@"*") -> i.]
+
+let natNumbers = Seq.unfold (fun i -> Some(i, i + 1)) 0
+for i in 80..90 do printf "%d" Seq.nth i natNumbers

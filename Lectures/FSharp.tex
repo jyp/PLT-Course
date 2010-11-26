@@ -29,8 +29,9 @@
 \usepackage{listings}
 
 \lstdefinelanguage{FSharp}
-      {morekeywords={let, new, match, with, rec, open, module, namespace, type, of, member, and, for, in, do, begin, end, fun, function, try, mutable, if, then, else, class, end},
+      {morekeywords={let, new, match, inherit, abstract, with, rec, open, module, namespace, type, of, member, and, for, in, do, begin, end, fun, function, try, mutable, if, then, else, class, end},
     keywordstyle=\color{blue},
+    basicstyle = \small,
     sensitive=false,
     morecomment=[l][\color{green!50!black!80}]{///},
     morecomment=[l][\color{green!50!black!80}]{//},
@@ -116,12 +117,18 @@
 
   let x = 10
   let input = Console.ReadLine()
+
 \end{lstlisting}
   
 \begin{itemize}
 \item Variables defined as above are immutable
 \item Type if possible automatic inferred
-\item Strict evaluation of expressions
+\item Eager evaluation of expressions (lazy supported but not enabled
+  by default; keyword \lstinline!lazy!)
+\item Seamless integration in \texttt{.net} framework, e.g.,
+  \lstinline!let dir = new System.IO.DirectoryInfo(@"/Users/bubel")!
+
+ 
 \end{itemize}
 
 \end{frame}
@@ -265,24 +272,29 @@ let rec countRed tree =
 \end{frame}
 
 \begin{frame}[fragile]{Lists and Listgenerators}
-\begin{overlayarea}{\textwidth}{0.3\textheight}
+\begin{overlayarea}{\textwidth}{0.35\textheight}
 \begin{lstlisting}[language=FSharp, escapechar=\%]
 let list = [ %\it el1%; %\it el2%; %\it el3% ]   
 %\pause%
 let list = [ for i in %\it coll% do %\it exp-with-yield% ]   
 let list = [ for i in %\it coll% <- %\it exp% ]   
+%\pause\color{red}\\[-1em]\smallskip General view:%
+     [ %\it computation-workflow-exp % ]   
 \end{lstlisting}
 \end{overlayarea}
+\onslide<1->
 List construction:
 \begin{itemize}
-\item explicit element enumeration
-\item looping constructs
+\item<1-> explicit element enumeration
+\item<2-> looping constructs
   \begin{itemize}
     \item imperative flavor
     \item $coll$ any \textsl{.net}-class implementing \texttt{IEnumerable<T>} 
-    \item $exp-with-yield$: expression sequence with sub-exp.\ '\lstinline!yield! $elExp$' where $elExp$ evaluates to the value to be added
+    \item \textit{exp-with-yield}: expression sequence with sub-exp.\ '\lstinline!yield! $elExp$' where $elExp$ evaluates to the value to be added
     \item shortform \lstinline!<-! if $exp$ evaluates to the value to be added 
  \end{itemize}
+\item<3-> List constructor \lstinline![]! gets a
+  \emph{computation-workflow expression} (provide syntax for monads)
 \end{itemize}
 \end{frame}
 
@@ -295,28 +307,36 @@ let list1 = [ 1; 2; 3 ]
 let listOdd1to100 = [1 .. 2 .. 100]
 
 (* list generation using looping construct *)
-let listEven1To100 = [for i in 1..49 <- i * 2 ]  
+let listEven1To100 = [for i in 1..49 -> i * 2 ]  
 let altListEven1To100 = [for i in 1..49 do if i%2=0 then yield i * 2 ]  
 
 \end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile]{Operation on Lists}
-\begin{lstlisting}[language=FSharp]
+\begin{lstlisting}
 (* add element as head *)
 let list2 = 0 :: list1
 (* concatenate lists *)
 let list3 = list1 @ list2
-
-(* recursion *)
+(* recursion and matching on lists *)
 let rec sum list =
    match list with
    | head :: tail -> head + sum tail
    | [] -> 0
-
 (* provided by package List *)
 List.sort [1; 2; 3]
 List.sum [1; 2; 3]
+\end{lstlisting}
+
+\pause
+
+Lists are constructed eagerly. For lazy/on-demand use \emph{sequences}.
+
+\begin{lstlisting}[language=FSharp]
+  let first1000  = seq { for i in 1..1000 -> i }
+  let natNumbers = Seq.unfold (fun i -> Some(i, i + 1)) 0
+  for i in 80..90 do printf "%d;" (Seq.nth i natNumbers)
 \end{lstlisting}
 
 \end{frame}
@@ -349,15 +369,6 @@ The pipeline operator is basically defined as
   let (|>) x f = f x 
 \end{lstlisting}
 \end{frame}
-
-\begin{frame}{Sequences}
-\end{frame}
-
-%\begin{frame}{Monads}
-%\end{frame}
-
-%\begin{frame}{State-Monad}
-%\end{frame}
 
 \begin{frame}[fragile]{Mutability in F\#: Mutable Variables}
 
@@ -469,20 +480,21 @@ Update (Assignment) and Content Access:
 
 
 \begin{frame}[fragile]{Classes and Objects in F\#}
-\begin{lstlisting}[language=FSharp, escapechar=\%]
+\begin{lstlisting}[language=FSharp, basicstyle=\small, escapechar=\%]
 type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) =
+class (* optional *)
     static let mutable counter = 0
 
     let ul = upperLeft
     let ur = lowerRight
     let mutable color = col
 
-    do
-        counter <- counter + 1
+    do counter <- counter + 1
     ...
+end (* optional *)
 \end{lstlisting}%
+Remarks:
 \onslide<1->
-
 \begin{overlayarea}{\textwidth}{0.3\textheight}
 \begin{itemize}
   \item<+-> private fields/methods are declared as \lstinline{let}
@@ -568,26 +580,29 @@ inherit AShape(col) =  ...
 \end{frame}
 
 \begin{frame}[fragile]{Interfaces}
-\begin{lstlisting}[language=FSharp, escapechar=\%]
-type interface IShape =
-  abstract member self.Color: Color -> unit
-  abstract member self.Color: unit -> Color
-  abstract member self.Area: unit -> float
+\begin{lstlisting}
+type IColored =
+interface
+ abstract member self.Color: Color -> unit
+ abstract member self.Color: unit -> Color
+end 
 
-type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) 
-inherit AShape(col) =  ...
-   override self.Area() = (lowerRight.x - upperLeft.x) * (...)
+type IShape =
+abstract member self.Area: unit -> float
+
+type IColoredShape =
+inherit IColored
+ inherit IShape
+ abstract member self.fill: bool -> unit
 \end{lstlisting}
 
-\Blue{Remarks:}
-\begin{overlayarea}{\textwidth}{0.6\textheight}
+Remarks:
+\begin{overlayarea}{\textwidth}{0.3\textheight}
 \begin{itemize}
- \item<+-> single class inheritance
- \item<+-> primary constructor of superclass must be invoked (in
-   parentheses following the \lstinline!inherit! expression.
- \item<+-> overriding requires use of \lstinline!override! keyword 
- \item<+-> possible (not done here) to provide a default
-   implementation for an abstract method
+ \item<+-> all members must be declared \lstinline!abstract! (default
+   impl\. possible)
+ \item<+-> keywords \lstinline!interface, end! optional (if missing,
+   compiler tries to infer if it is a class or interface)
 \end{itemize}
 \end{overlayarea}
 \end{frame}
