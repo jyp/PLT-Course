@@ -29,7 +29,10 @@
 \usepackage{listings}
 
 \lstdefinelanguage{FSharp}
-      {morekeywords={let, new, match, inherit, abstract, with, rec, open, module, namespace, type, of, member, and, for, in, do, begin, end, fun, function, try, mutable, if, then, else, class, end},
+      {morekeywords={let, new, match, inherit, abstract, with, rec,
+          open, module, namespace, type, of, member, and, for, in, do,
+          begin, end, fun, function, try, mutable, if, then, else,
+          class, interface, end},
     keywordstyle=\color{blue},
     basicstyle = \small,
     sensitive=false,
@@ -89,21 +92,24 @@
   \titlepage
 \end{frame}
 
-\begin{frame}{History}
-\end{frame}
+\begin{frame}{Facts}
 
-\begin{frame}{Features}
-  \Blue{Functional Features}
-  \begin{description}
-    \item[Automatic Type Inference]
-    \item[Automatic Type Inference]
- \end{description}
- 
-  \Blue{Object-Oriented Features}
-  \begin{description}
-    \item[Mutability]
-    \item[Classes]
- \end{description}
+\Blue{F\# is tightly integrated into Microsofts \textsf{.net} framework}
+
+\bigskip
+
+\Blue{\textsf{.net} framework is object-oriented and provides a huge standard API}
+
+\bigskip
+
+\Blue{F\# incorporates the functional as well as the object-oriented
+paradigm to integrate well in the common framework.}
+
+\bigskip\bigskip
+
+Material and Language Reference at:
+
+{\small \url{http://msdn.microsoft.com/en-us/library/dd233154.aspx}}
 
 \end{frame}
 
@@ -445,7 +451,7 @@ Update (Assignment) and Content Access:
   dup 5 (* value%\color{green!50!black!80}\only<1>{?}\only<2->{ = 10}% *)
   dupRef 5 (* value%\color{green!50!black!80}\only<1>{?}\only<2->{ = 10}% *)
 %\onslide<3->% 
- factor <- 3; factorRef := 3
+  factor <- 3; factorRef := 3
   dup 5     (* value%\color{green!50!black!80}\only<3>{?}\only<4->{ = 10}% *)
   dupRef 5  (* value%\color{green!50!black!80}\only<3>{?}\only<4->{ = 15}% *)
 \end{lstlisting}
@@ -454,6 +460,26 @@ Update (Assignment) and Content Access:
 \begin{itemize}
 \item<4-> Closures: Arguments passed as values not by reference
 \item<4-> Reference cell need if change of value shall effect closure
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Parameter Passing: By-Reference}
+
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+  let mul (x:int byref) y = x * y
+  let mutable factor = 2
+  let dup    = mul &factor
+
+  dup 5 (* value%\color{green!50!black!80}\only<1>{?}\only<2->{ = 10}% *)
+%\onslide<2->% 
+  factor <- 3; factorRef := 3
+  dup 5     (* value%\color{green!50!black!80}\only<3>{?}\only<4->{ = 15}% *)
+\end{lstlisting}
+
+Observations:
+\begin{itemize}
+\item F\# supports parameter passing by reference
+\item Mutable variable needs to be prefixed with \lstinline{&}
 \end{itemize}
 \end{frame}
 
@@ -477,7 +503,6 @@ Update (Assignment) and Content Access:
 \end{lstlisting}
 
 \end{frame}
-
 
 \begin{frame}[fragile]{Classes and Objects in F\#}
 \begin{lstlisting}[language=FSharp, basicstyle=\small, escapechar=\%]
@@ -554,7 +579,7 @@ type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) =
 \end{overlayarea}
 \end{frame}
 
-\begin{frame}[fragile]{Inheritance}
+\begin{frame}[fragile]{Class Inheritance}
 \begin{lstlisting}[language=FSharp, escapechar=\%]
 type AShape(col:Color) =
     let mutable color = col
@@ -583,31 +608,165 @@ inherit AShape(col) =  ...
 \begin{lstlisting}
 type IColored =
 interface
- abstract member self.Color: Color -> unit
- abstract member self.Color: unit -> Color
+  abstract member Color: Color -> unit
+  abstract member Color: Color
 end 
 
 type IShape =
-abstract member self.Area: unit -> float
+ abstract member self.Area: float
 
 type IColoredShape =
-inherit IColored
+ inherit IColored
  inherit IShape
- abstract member self.fill: bool -> unit
+ abstract member fill: bool -> unit
+\end{lstlisting}
+
+\begin{overlayarea}{\textwidth}{0.3\textheight}
+\begin{itemize}
+\item<+-> all members must be declared \lstinline!abstract! (default
+  impl.\ possible)
+\item<+-> keywords \lstinline!interface, end! optional (if missing,
+  compiler tries to infer if it is a class or interface)
+\item<+-> interface can inherit from multiple other interfaces
+\end{itemize}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}[fragile]{Class implementing Interfaces}
+\begin{lstlisting}[basicstyle=\scriptsize]
+type IColored = interface
+  abstract member Color: Color -> unit
+  abstract member Color: Color
+end 
+
+type IShape =
+ abstract member Area: float
+
+type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) 
+ let mutable color = col
+ interface IColored with
+   member self.Color(col) = color <- col
+   member self.Color = color
+ interface IShape with
+   member self.Area = (lowerRight.x - upperLeft.x) * (...)
+ ...
 \end{lstlisting}
 
 Remarks:
 \begin{overlayarea}{\textwidth}{0.3\textheight}
 \begin{itemize}
- \item<+-> all members must be declared \lstinline!abstract! (default
-   impl\. possible)
- \item<+-> keywords \lstinline!interface, end! optional (if missing,
-   compiler tries to infer if it is a class or interface)
+\item<+-> class implements interfaces via keywords 
+  \lstinline!interface ... with!
 \end{itemize}
 \end{overlayarea}
 \end{frame}
 
-\begin{frame}[fragile]{General Classdeclaration}
+\begin{frame}[fragile]{Class implementing Interfaces}
+\begin{lstlisting}[basicstyle=\scriptsize]
+type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) 
+ let mutable color = col
+ interface IColored with
+   member self.Color(col) = color <- col
+   member self.Color = color
+ interface IShape with
+   member self.Area = (lowerRight.x - upperLeft.x) * (...)
+ ...
+
+let rect = new CRectangle(...)
+rect.Area  (* not possible, call must go vi interface type)
+
+(rect :> IShape).Area
+\end{lstlisting}
+
+Remarks:
+\begin{overlayarea}{\textwidth}{0.3\textheight}
+\begin{itemize}
+\item<+-> interface method cannot be invoked on class (upcast needed)
+\item<+-> allows to provide different impl.\ for method of same name
+  inherited from different interfaces
+\end{itemize}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}[fragile]{Usage of Classes}
+
+\Blue{Interoperability}
+
+Use classes if 
+\begin{itemize}
+\item you want to provide APIs to others using \textsf{.net}
+but not necessarily F\#
+\item at places where you have to interact with the \textsf{.net}
+  environment.
+\item otherwise try to use discriminated unions, records or structs
+  together with pattern matching on these expressions
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Asynchronous Workflows}
+\Blue{F\# provides an easy way to execute tasks in parallel}
+
+\begin{lstlisting}[escapechar=\%]
+let rec fib x =
+   match x with
+    | 0 -> 1
+    | 1 -> 2
+    | n -> fib(x - 1) + fib(x - 2)
+
+let task1 n  = async { return fib(n) }
+let task2 n  = async { return fib(n) }
+
+let fibTwoTasksInParallel = Async.Parallel[task1; task2] 
+Async.RunSynchronously fibTwoTasksInParallel
+
+(* or (scales) *)
+
+let fibs =
+    Async.Parallel [ for i in 0 .. 40 -> async { return fib(i) } ]
+    |> Async.RunSynchronously
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Asynchronous Workflows}
+
+The expression
+\color{blue}
+\begin{lstlisting}
+  async { workflow-exp }
+\end{lstlisting}
+\color{black}
+
+creates an asynchronous workflow. 
+
+\medskip
+
+\emph{Workflow expressions} define the computation logic, e.g.,
+compute 
+\begin{itemize}
+\item fibonacci number,
+\item average file length of given files or
+\item sum of all characters in given files. 
+\end{itemize}
+
+\medskip
+
+The function \lstinline!Async.Parallel! groups all tasks which are
+then run in parallel by applying \lstinline!Async.RunSynchronously!.
+
+\medskip
+
+The return value is extracted from the asynchronous workflow with help
+of the \lstinline!return! function.
+
+\end{frame}
+
+
+
+
+
+\appendix
+
+\begin{frame}[fragile]{General Class Declaration}
 
 \begin{lstlisting}[language=FSharp, escapechar=\%]
 type [%$access-modifier$%] %$type\!-\!name$% 
@@ -627,7 +786,5 @@ type [%$access-modifier$%] %$type\!-\!name$%
 \end{itemize}
 \end{frame}
 
-\begin{frame}{F\#: Parallel and Async}
-\end{frame}
 
 \end{document}

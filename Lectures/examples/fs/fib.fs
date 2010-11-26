@@ -1,6 +1,2 @@
 module pp
 
-let rec fib n = 
-    printf "Called with %d \n" n
-    if n <= 2 then 1 
-    else fib (n - 1) + fib (n - 2)
