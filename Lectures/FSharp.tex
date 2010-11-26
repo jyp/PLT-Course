@@ -19,7 +19,6 @@
 \usepackage{times}
 \usepackage[T1]{fontenc}
 
-
 % Or whatever. Note that the encoding and the font should match. If T1
 % does not look nice, try deleting the line with the fontenc.
 
@@ -52,8 +51,9 @@
   escapechar={!},
 }[keywords,comments,strings]
 
+\lstset{language=FSharp}
 
-\newcommand{\Blue}[1]{\color{blue}#1\color{black}}
+\newcommand{\Blue}[1]{\color{blue}#1\color{black}\xspace}
 
 \title[]{Object-Oriented Programming}
 
@@ -106,7 +106,7 @@
 
 \end{frame}
 
-\section{Function Concepts}
+\section{Functional Concepts}
 
 \begin{frame}[fragile]{Variable Definition}
 \begin{lstlisting}[language=FSharp, escapechar=\%]
@@ -303,7 +303,7 @@ let altListEven1To100 = [for i in 1..49 do if i%2=0 then yield i * 2 ]
 
 \begin{frame}[fragile]{Operation on Lists}
 \begin{lstlisting}[language=FSharp]
- (* add element as head *)
+(* add element as head *)
 let list2 = 0 :: list1
 (* concatenate lists *)
 let list3 = list1 @ list2
@@ -317,34 +317,36 @@ let rec sum list =
 (* provided by package List *)
 List.sort [1; 2; 3]
 List.sum [1; 2; 3]
-
 \end{lstlisting}
 
 \end{frame}
 
 \begin{frame}[fragile]{Pipelining}
 
-Pipelining Operator: \lstinline!|>!
+\Blue{Task:} Select all even numbers from a list and sort the result:
 
-Basically defined as:
-\begin{lstlisting}[language=FSharp]
-let (|>) x f = f x 
-\end{lstinline}
- 
 \pause
 
-allows to write
-
 \begin{lstlisting}[language=FSharp]
-[4; 2; 1; 3; 9; 11; 8] 
-  |> List.filter (fun x -> x%2 = 0) 
-  |> sort ;;
+  List.sort List.filter (fun x -> x%2 = 0) [4; 2; 1; 3; 9; 11; 8]
 \end{lstlisting}
 
-instead of
+\pause\bigskip
+
+Improve readability using \emph{pipelining} \lstinline!|>! instead 
 
 \begin{lstlisting}[language=FSharp]
-List.sort List.filter (fun x -> x%2 = 0) [4; 2; 1; 3; 9; 11; 8]
+  [4; 2; 1; 3; 9; 11; 8] 
+    |> List.filter (fun x -> x%2 = 0) 
+    |> List.sort ;;
+\end{lstlisting}
+
+\pause\bigskip
+
+The pipeline operator is basically defined as
+
+\begin{lstlisting}[language=FSharp]
+  let (|>) x f = f x 
 \end{lstlisting}
 \end{frame}
 
@@ -429,18 +431,17 @@ Update (Assignment) and Content Access:
   let factorRef = ref 2
   let dupRef = mulRef factorRef
 
-  dup 5      (* value? *)
-  dupRef 5   (* value? *)
-%\onslide<2->% 
-  factor <- 3
-  dup 5     (* value? *)
-  dupRef 5  (* value? *)
-
+  dup 5 (* value%\color{green!50!black!80}\only<1>{?}\only<2->{ = 10}% *)
+  dupRef 5 (* value%\color{green!50!black!80}\only<1>{?}\only<2->{ = 10}% *)
+%\onslide<3->% 
+ factor <- 3; factorRef := 3
+  dup 5     (* value%\color{green!50!black!80}\only<3>{?}\only<4->{ = 10}% *)
+  dupRef 5  (* value%\color{green!50!black!80}\only<3>{?}\only<4->{ = 15}% *)
 \end{lstlisting}
 
 
 \begin{itemize}
-\item<3-> Closures: arguments passed as values not by reference
+\item<4-> Closures: Arguments passed as values not by reference
 \item<4-> Reference cell need if change of value shall effect closure
 \end{itemize}
 \end{frame}
@@ -448,48 +449,167 @@ Update (Assignment) and Content Access:
 \begin{frame}[fragile]{While loops in F\#}
   F\# knows actual \lstinline!while! loops:
 
-\begin{lstlisting}[language=FSharp]
+\begin{lstlisting}[language=FSharp, escapechar=\']
     let mutable counter = 10 
-     
+
     while counter>0 do
       printf "%d" counter
-      counter <- counter - 1
+      count <- counter - 1
+
+'equivalent'
+
+    let counter = ref 10 
+
+    while !counter>0 do
+      printf "%d" !counter
+      counter := !counter - 1
 \end{lstlisting}
 
 \end{frame}
 
+
 \begin{frame}[fragile]{Classes and Objects in F\#}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) =
+    static let mutable counter = 0
+
+    let ul = upperLeft
+    let ur = lowerRight
+    let mutable color = col
+
+    do
+        counter <- counter + 1
+    ...
+\end{lstlisting}%
+\onslide<1->
+
+\begin{overlayarea}{\textwidth}{0.3\textheight}
+\begin{itemize}
+  \item<+-> private fields/methods are declared as \lstinline{let}
+    bindings; static fields/methods use the \lstinline!static! keyword
+  \item<+-> \lstinline!do! bindings are initialisers
+  \item<+-> \lstinline!let! bindings and \lstinline!do! bindings form the
+    primary constructor whose arguments are given in parentheses
+\end{itemize}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}[fragile]{Additional Constructors}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) =
+    static let mutable counter = 0
+
+    let ul = upperLeft
+    let ur = lowerRight
+    let mutable color = col
+
+    do
+        counter <- counter + 1
+
+    new(ul, lr) = CRectangle(ul, lr, RGB(0,0,0))     
+\end{lstlisting}
+
+\begin{overlayarea}{\textwidth}{0.3\textheight}
+\begin{itemize}
+ \item<+-> possible to define additional constructors but primary
+   constructor must be invoked
+\end{itemize}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}[fragile]{Public Members}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+   type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) =
+   ...
+
+   member Area =
+       (lowerRight.x - upperLeft.x) * (lowerRight.y - upperLeft.y)
+
+   member %\alert<2>{self}%.Color(col:Color) = color <- col
+\end{lstlisting}
+
+\begin{overlayarea}{\textwidth}{0.3\textheight}
+\begin{itemize}
+ \item<+-> public members are declared using \lstinline!member!
+ \item<+-> qualification of \lstinline!member! needed if access to
+   private fields/methods needs to be possible
+   \begin{itemize}
+     \item free to choose any qualifier (often used: \lstinline!self, this!)
+     \item attention: member Area needs no access to private fields
+       (uses constructor parameters directly)
+  \end{itemize}
+\end{itemize}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}[fragile]{Inheritance}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+type AShape(col:Color) =
+    let mutable color = col
+    member self.Color(c) = col <- c 
+    abstract member self.Area: -> float
+
+type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) 
+inherit AShape(col) =  ...
+   override self.Area() = (lowerRight.x - upperLeft.x) * (...)
+\end{lstlisting}
+
+\Blue{Remarks:}
+\begin{overlayarea}{\textwidth}{0.6\textheight}
+\begin{itemize}
+ \item<+-> single class inheritance
+ \item<+-> primary constructor of superclass must be invoked (in
+   parentheses following the \lstinline!inherit! expression.
+ \item<+-> overriding requires use of \lstinline!override! keyword 
+ \item<+-> possible (not done here) to provide a default
+   implementation for an abstract method
+\end{itemize}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}[fragile]{Interfaces}
+\begin{lstlisting}[language=FSharp, escapechar=\%]
+type interface IShape =
+  abstract member self.Color: Color -> unit
+  abstract member self.Color: unit -> Color
+  abstract member self.Area: unit -> float
+
+type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) 
+inherit AShape(col) =  ...
+   override self.Area() = (lowerRight.x - upperLeft.x) * (...)
+\end{lstlisting}
+
+\Blue{Remarks:}
+\begin{overlayarea}{\textwidth}{0.6\textheight}
+\begin{itemize}
+ \item<+-> single class inheritance
+ \item<+-> primary constructor of superclass must be invoked (in
+   parentheses following the \lstinline!inherit! expression.
+ \item<+-> overriding requires use of \lstinline!override! keyword 
+ \item<+-> possible (not done here) to provide a default
+   implementation for an abstract method
+\end{itemize}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}[fragile]{General Classdeclaration}
 
 \begin{lstlisting}[language=FSharp, escapechar=\%]
 type [%$access-modifier$%] %$type\!-\!name$% 
-         [%$type-params$%](%$parameter\!-\!list$%) %$[$% as %$identifier]$% =
+         [%$type-params$%](%$parameter\!-\!list$%) %$[$%as %$identifier]$% =
    %$[$% class %$]$%
      %$[$% inherit %$base-type-name$%(%$base\!-\!constructor\!-\!args$%) %]%
-     %$[ let-bindings ]$%
-     %$[ do-bindings ]$%
+     %$[let-bindings]$%
+     %$[do-bindings]$%
      %$member-list$%
    %$[$% end %$]$%
 \end{lstlisting}
 
 \begin{itemize}
-  \item fields are declared as \texttt{let} bindings
-  \item fields are private and cannot be accessed from the outside
-  \item \lstinline!do! bindings are initialisers (if marked static for class init.)
-  \item up-on construction the let and do bindings are executed in source code order
+  \item private fields/methods are declared as \lstinline{let} bindings
+  \item \lstinline!do! bindings are initialisers
+  \item upon construction let and do bindings are executed in source code order
 \end{itemize}
-
-
-\end{frame}
-
-\begin{frame}{Constructors}
-  
-\end{frame}
-
-\begin{frame}{Methods}
-\end{frame}
-
-\begin{frame}{Methods: Parameter Passing-by-Reference}
-F\# supports also parameter passing by reference
 \end{frame}
 
 \begin{frame}{F\#: Parallel and Async}

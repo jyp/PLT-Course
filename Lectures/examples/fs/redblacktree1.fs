@@ -1,8 +1,9 @@
 module pp
 
-type Color = 
-    | Red 
+type Color =
+    | Red
     | Black
+
 type Tree  =
     | Leaf 
     | Node of Color * Tree * Tree
@@ -18,3 +19,9 @@ let rec countRed tree =
          1 + countRed(left) + countRed(right)
     | Node(Black, left, right) ->
          0 + countRed(left) + countRed(right)
+
+let y = countRed tree2
+
+let dir = new System.IO.DirectoryInfo(@"/Users/bubel")
+
+let files = [for i in dir.GetFiles(@"*") -> i.]
