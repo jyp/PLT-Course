@@ -491,36 +491,37 @@ and from there back to Monoid. Obviously, the first cast isn't safe.
 \item Problems of single dispatch: 1. Extensibility (if a new class is
 derived from Shape, Rectangle and Circle have to change their implementation).
 2. Run-time overhead due to type cast 3. Loss of static type safety
+
+(maybe even more explicit checks for explicit type for method...)
 \begin{java}
-class Shape {
-    public boolean intersect(Shape s) {
-        // intersect Shape x Shape
-        return false;
-    }
-}
-class Rectangle extends Shape {
-    public  boolean intersect(Shape s) {
-        if (s instanceof Rectangle) {
-           // intersect Rectangle x Rectangle
-        }
-        else {
-	    // intersect Rectangle x Shape
-             return super.intersect(s);
-        }
-        return false;
-    }
-}
-class Circle extends Shape {
-   public boolean intersect(Shape s) {
-         if (s instanceof Circle) {
-           // intersect Circle x Circle
-        }
-        else {
-             return super.intersect(s);
-        }
-	 return false;
-    }
-}
+Shape>>
+   intersect: s
+        "intersect Shape x Shape"
+        ^false
+    
+Shape subclass: #Rectangle 
+
+Rectangle>>
+   intersect: s 
+        (s isKindOf: Rectangle) ifTrue: [
+           "intersect Rectangle x Rectangle"
+        ] ifFalse:[
+	   " intersect Rectangle x Shape"           
+           super intersect: s
+        ]
+
+
+Shape subclass: #Circle 
+
+Circle>>
+   intersect: s 
+        (s isKindOf: Circle) ifTrue: [
+           "intersect Circle x Circle"
+        ] ifFalse:[
+	   " intersect Rectangle x Shape"
+           super intersect: s
+        ]
+       
 \end{java}
 \item Problems with  double dispatch: 1.  Root class needs to be modified
 each time a new class is added; 2. lots of code to write
