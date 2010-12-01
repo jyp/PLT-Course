@@ -1,11 +1,10 @@
-
-
 fromList([],d(X,X)).
 fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
 
-toList(d(X,[]),X).
-
-toListAlt(X,Y) :- fromList(Y,X).
+toList(d(Rest,Rest),[]):-!.
+toList(d(Head:Tail,Diff),[Head|OtherTail]) :- toList(d(Tail,Diff),OtherTail).
 
 dconcat(d(Out,Intermediate),d(Intermediate,In),d(Out,In)).
-% dconcat(d(Out2,In2),d(Out1,In1),d(Out,In)) :- Out = Out2, In2 = Out1, In = In1.
+
+append([],Ys,Ys).
+append([X|Xs],Ys,[X|Zs]):- append(Xs,Ys,Zs).

@@ -16,7 +16,7 @@
 \newcounter{question}
 \newenvironment{question}[1]{%
   \addtocounter{question}{1}%
-  \paragraph{Exercise~\arabic{question}  \percent{#1}}%
+  \paragraph{Exercise~\arabic{question}  }%
 }{%
   \vskip1em%
 }
@@ -26,8 +26,8 @@
 \newcommand{\answer}[1]{}
 
 % Uncomment to show answers
-% \renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}\ }{}
-% \renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
+ \renewenvironment{longanswer}{\paragraph{Answer~\arabic{question}}\ }{}
+ \renewcommand{\answer}[1]{\begin{longanswer}#1\end{longanswer}}
   
 
 \begin{document}
@@ -46,6 +46,12 @@ This page will help you getting started:
 \url{http://gollem.science.uva.nl/SWI-Prolog/Manual/quickstart.html}
 
 Also, we found that version 5.6.47 was buggy, but 5.6.55 was ok.
+
+\textbf{Note.} SWI prolog comes with the "cyclic unification" feature
+activated. You should switch it off by setting the \texttt{occurs\_check} flag to \texttt{true}, by issuing on the interpreter the command
+\begin{prolog}
+set_prolog_flag(occurs_check,true).
+\end{prolog}
 
 \section{Unification}
 
@@ -213,8 +219,8 @@ like(sven,Language) :- neg(Language = prolog).
 \begin{question}{1}
 This new predicate is not reversible. Why?
 
-\answer{Because Prolog works by backtracking, it has no way to know the
-universe of programming languages.}
+\answer{Reversible here means that you can basically consider the predicate a device in which each of the arguments can act as inputs or outputs. Suppose you want to know which languages does sven like with like(sven,X). You will get false because of how the neg predicate is built.
+Note that an unification that succeeds is always true.}
 
 \end{question}
 
@@ -244,7 +250,7 @@ diff([X|Xs],Ys,[X|Zs]) :- neg(elem(X,Ys)),  diff(Xs,Ys,Zs).
 \section{Applying Unification}
 
 A difference list is a special structure that can support efficient
-concatenation. It uses unification in a clever way to that end.
+concatenation (Recall the discussion on \texttt{append/3} predicate in the lectures). It uses unification in a clever way to that end.
 
 The difference-list representation for a list can be obtained as follows:
 
@@ -255,7 +261,10 @@ fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
 
 
 A structure of the form \textsf{d(Out,In)} will represent the list 
-\textsf{L} if \textsf{Out} unifies with \textsf{L} concatenated with \textsf{In}.
+\textsf{L} if \textsf{Out} unifies with \textsf{L} concatenated with \textsf{In}. Or, less technically, a list L will be represented as the
+difference between Out and In: so for instance,
+
+$$[1,2] \longrightarrow d(1:2:3:4:[],3:4:[])$$
 
 You can check how fromList works by testing it: 
 \begin{prolog}
@@ -270,11 +279,8 @@ metavariable with the empty list.
 Write a predicate toList/2 to get back to the normal list representation.
 \begin{longanswer}
 \begin{prolog}
-toList(d(X,[]),X).
-\end{prolog}
-or
-\begin{prolog}
-toList(d(Out,In),Result) :- Result = Out, In = [].
+toList(d(X,X),[]).
+toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
 \end{prolog}
 \end{longanswer}
 
@@ -292,11 +298,10 @@ dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
 \end{prolog}
 
 
-
 should produce:
 
 \begin{verbatim}
-Final = 1:2:3:4:5:[].
+Final = [1,2,3,4,5].
 \end{verbatim}
 
 \begin{longanswer}
@@ -315,7 +320,7 @@ dconcat(d(Out,Intermediate),d(Intermediate,In),d(Out,In)).
 
 \end{question}
 
-
+\end{document}
 \begin{question}{1}
 What happens when you concatenate a difference list with itself?
 \answer{The difference list will contain circular, infinite lists.}
@@ -323,4 +328,3 @@ What happens when you concatenate a difference list with itself?
 
 
 
-\end{document}
