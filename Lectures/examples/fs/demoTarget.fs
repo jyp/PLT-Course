@@ -46,7 +46,7 @@ type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) =
     static let mutable counter = 0
 
     let ul = upperLeft
-    let ur = lowerRight
+    let lr = lowerRight
     let mutable color = col
 
     do
@@ -98,6 +98,7 @@ let rectSet = generateRectangles 100
 
 List.map computeArea rectSet
 List.map computeCircumfence rectSet
+
 
 (* async *)
 

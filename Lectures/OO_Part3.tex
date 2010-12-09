@@ -1,4 +1,4 @@
-\documentclass[handout]{beamer}
+\documentclass{beamer}
 
 \beamertemplatenavigationsymbolsempty
 
@@ -1025,30 +1025,6 @@ Interfaces
 
 \section{Simulating Multi-Dispatch}
 
-\subsection{Dispatch Semantics}
-\begin{frame}[fragile]
-\frametitle{Recall: Method Dispatching}
-\framesubtitle{}
-
-Single-dispatch languages
-\begin{itemize}
-\item Dispatch based on the (dynamic) class of the receiver. 
-\begin{cplus3}
-     Complex c = ... ;   
-     c.add(arg);
-\end{cplus3}
-\item Ex.: all languages mentioned so far
-
-\end{itemize}
-
-Multiple-dispatch languages
-\begin{itemize}
-\item Dispatch (also) based on the dynamic class of \textit{arguments}.
-\item Ex.: Dylan (Apple), CLOS, Cecil
-\end{itemize} 
-\end{frame}
-
-
 \subsection{Overriding in real languages}
 
 \begin{frame}[fragile]
@@ -1109,6 +1085,31 @@ class DerivedClass extends BaseClass {
 Java, \Cpp, Eiffel support covariance in the return type.\\
 C\# requires invariance. 
 \end{frame}
+
+\subsection{Dispatch Semantics}
+\begin{frame}[fragile]
+\frametitle{Recall: Method Dispatching}
+\framesubtitle{}
+
+Single-dispatch languages
+\begin{itemize}
+\item Dispatch based on the (dynamic) class of the receiver. 
+\begin{cplus3}
+     Complex c = ... ;   
+     c.add(arg);
+\end{cplus3}
+\item Ex.: all languages mentioned so far
+
+\end{itemize}
+
+Multiple-dispatch languages
+\begin{itemize}
+\item Dispatch (also) based on the dynamic class of \textit{arguments}.
+\item Ex.: Dylan (Apple), CLOS, Cecil
+\end{itemize} 
+\end{frame}
+
+
 
 \begin{frame}[fragile]{Double-Disptach in a Single-Dispatch Language}
 

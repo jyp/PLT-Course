@@ -19,9 +19,6 @@ type Color =
     | YMUV of int * int * int * int
 
 
-type AShape() =
-    
-
 type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) =
     static let mutable counter = 0
 
@@ -42,5 +39,8 @@ type CRectangle(upperLeft:Point2D, lowerRight:Point2D, col:Color) =
 
 
 
+
+(* short tests *)
 let rect = new Rectangle({x=100.0; y=100.0}, {x=200.0; y=110.0})
 rect.Area
+
