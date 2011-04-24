@@ -284,8 +284,9 @@ x.a = x.a + y.a;   (*)
 where the program variables \lstinline!x! and \lstinline!y! refer
 initially to different objects.
 
-Give the values of \lstinline!x.a! and \lstinline!y.a! after execution
-of line \lstinline!(*)! if the assignment operator is realised using
+Give the values of expression \lstinline!x.a! and expression
+\lstinline!y.a! after execution of line~\lstinline!(*)! if the
+assignment operator is realised using
 \begin{enumerate}
   \item copy semantics 
   \item reference semantics 
@@ -299,14 +300,14 @@ of line \lstinline!(*)! if the assignment operator is realised using
   \item Assume \textsf{IMP} is able to allocate an arbitrary number of
     activation records per method at compile-time. Further, put
     yourself in the role of a developer who is implementing a compiler
-    for \textsf{IMP}. Your aim is to enable the programmer to use
-    recursion to some extent. What must your compiler be able to
+    for \textsf{IMP}. Your aim is to enable the programmer to use to
+    some extent recursion. What must your compiler be able to
     determine to compile successfully a program that uses recursion?
     (If the compiler is not able to determine the property/-ies, it
     will reject the program.)
  \end{enumerate}
  \points{3}
-\item Consider the following program:
+\item Given the following program:
 \begin{lstlisting}[language=Java, columns=flexible] 
 int f(int a) {
   return a * 2;  // (*)
@@ -354,8 +355,8 @@ at (*) after the method \lstinline!f! returns if
   \item all parameters are passed \emph{by-copy}
   \item parameter \lstinline!a! is passed \emph{by-copy} and
     the parameters \lstinline!b! and \lstinline!c! \emph{by-reference}
-  \item the parameters \lstinline!a! and \lstinline!b! are passed by
-    copy and parameter \lstinline!c! \emph{by-value-result}. 
+  \item the parameters \lstinline!a! and \lstinline!b! are passed
+    \emph{by-copy} and parameter \lstinline!c! \emph{by-value-result}.
   \item parameter \lstinline!a! is passed \emph{by-name}, parameter
     \lstinline!b! is passed \emph{by-reference} and parameter
     \lstinline!c! is passed \emph{by-copy}.
@@ -521,11 +522,11 @@ Which of the three implementations of method \lstinline!m! is invoked by
       a) F\# runs on the \textsf{.net} virtual machine, but cannot use the
       normal libraries as it is a functional language, while the normal
       libraries on \textsf{.net} are object-oriented. & & \\\hline
-      b) Declaring a variable mutable or as reference cell in F\# means
-      the same. & & \\\hline
-      c) Expressions in F\# are side-effect free. & & \\\hline
-      d) Smalltalk has no distinguished loop statement, but realizes
-      them as methods of the class implementing block closures.  & & \\\hline
+      b) In F\# declaring variables mutable or as reference cells has
+      the same meaning. & & \\\hline
+      c) F\#-Expressions are side-effect free. & & \\\hline
+      d) Smalltalk has no distinguished loop statement instead loops
+      are realized as methods invoked on block closures.  & & \\\hline
    \end{tabular}\\
    For your answer draw that table but refer to the statements by a),
    b) etc. instead of writing them again. Wrong answers lead to a
@@ -568,11 +569,11 @@ Which of the three implementations of method \lstinline!m! is invoked by
       a) F\# runs on the \textsf{.net} virtual machine, but cannot use the
       normal libraries as it is a functional language, while the normal
       libraries on \textsf{.net} are object-oriented. & & X \\\hline
-      b) Declaring a variable mutable or as reference cell in F\# means
-      the same. & & X \\\hline
-      c) Expressions in F\# are side-effect free. & & X \\\hline
-      d) Smalltalk has no distinguished loop statement, but realizes
-      them as methods of the class implementing block closures.  & X & \\\hline
+      b) Declaring variables mutable or as reference cell in F\# has
+      the same meaning. & & X \\\hline
+      c) F\#-Expressions are side-effect free. & & X \\\hline
+      d) Smalltalk has no distinguished loop statement instead loops
+      are realized as methods invoked on block closures.  & X & \\\hline
    \end{tabular}\\
 
 \end{enumerate}
