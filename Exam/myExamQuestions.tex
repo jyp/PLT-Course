@@ -115,8 +115,8 @@ grade VG.
 
 \newpage
 
-\section{Basic Imperative and Object-Oriented Concepts [10 points]}
-
+\section{Basic Imperative and Object-Oriented Concepts [12 points]}
+\lstset{language=Java, columns=flexible}
 
 \begin{enumerate}
 \item Let \lstinline!A! be a class with an integer typed attribute
@@ -255,7 +255,7 @@ at (*) after the method \lstinline!f! returns if
 
 \newpage
 
-\section{Object-Oriented Programming [15 points]}
+\section{Object-Oriented Programming [12 points]}
 
 \begin{enumerate}
 \item Describe briefly in not more than three to four short sentences,
@@ -301,7 +301,7 @@ at (*) after the method \lstinline!f! returns if
    minimum width=2cm] (D) at (10,2) 
   {D 
      \nodepart{second} \ldots 
-     \nodepart{third} \textbf{void} m(A x)};
+     \nodepart{third} \textbf{void} m(\textbf{A} x)};
 
 \draw[open triangle 90-] (A) -- (B);
 \draw[open triangle 90-] (B) -- (C);
@@ -319,21 +319,78 @@ Give for each of the following overriding semantics (for arguments):
 \lstinline!B! such that \lstinline!m! is overridden by the method
 \lstinline!m! declared in class \lstinline!C!.  \comment{\textbf{3
     points}}
-\item Given the following class hierarchy:
+\item Given the following class hierarchy:\\
 \begin{tikzpicture}
+\node[draw, 
+   rectangle split, 
+   rectangle split parts=3, 
+   minimum width=2cm] (A) at (5,4) 
+  {   A 
+     \nodepart{second} \ldots 
+     \nodepart{third} \textbf{void} m(\textbf{A} x)};
+\node[draw, 
+   rectangle split, 
+   rectangle split parts=3, 
+   minimum width=2cm] (B) at (3,2) 
+  {B 
+     \nodepart{second} \ldots 
+     \nodepart{third} \textbf{void} m(\textbf{C} x)
+  };
+ \node[draw, 
+    rectangle split, 
+    rectangle split parts=3, 
+    minimum width=2cm] (C) at (7,2) 
+  {C 
+    \nodepart{second} \ldots 
+    \nodepart{third} \textbf{void} m(\textbf{A} x)};   
+\draw[open triangle 90-] (A) -- (B);
+\draw[open triangle 90-] (A) -- (C);
 \end{tikzpicture}
-Overriding semantics for methods is contra-variant for arguments and
-co-variant for return types (as in Java). Consider the following
-program piece
-\begin{lstlisting}
-\end{lstlisting}
-Which implementation of method \lstinline!m! is invoked when the
-programming language use
-\begin{enumerate}
-\item single-dynamic dispatch
-\item multi-dynamic dispatch
-\end{enumerate}
 
+Overriding semantics for methods is such that the method \lstinline!m!
+of class \lstinline!B! as well as the method \lstinline!m! of class
+\lstinline!C! override the method \lstinline!m! defined in class
+\lstinline!A!. 
+
+In addition there is a method \lstinline!g! 
+\begin{lstlisting}[language=Java, columns=flexible]
+void g(A x, B y) {
+   x.m(y);
+}
+\end{lstlisting}
+
+Which of the three implementations of method \lstinline!m! is invoked by
+\lstinline!g! if
+\begin{enumerate}
+\item the programming language uses \emph{single-dynamic dispatch} and
+  the call statement is
+ \begin{enumerate}
+    \item \lstinline!g(new B(), new B());!
+    \item \lstinline!g(new B(), new C());!
+  \end{enumerate}
+  \item the programming language uses \emph{multi-dynamic dispatch}
+    and the call statement is
+ \begin{enumerate}
+    \item \lstinline!g(new B(), new B());!
+    \item \lstinline!g(new B(), new C());!
+    \end{enumerate}
+\end{enumerate}\points{2}
+\item Which of the following statements are true\\
+    \begin{tabular}{|p{6cm}|c|c|}\hline
+      & True & False \\ \hline
+      a) F\# runs on the \textsf{.net} virtual machine, but cannot use the
+      normal libraries as it is a functional language, while the normal
+      libraries on \textsf{.net} are object-oriented. & & \\\hline
+      b) Declaring a variable mutable or as reference cell in F\# means
+      the same. & & \\\hline
+      c) Expressions in F\# are side-effect free. & & \\\hline
+      d) Smalltalk has no distinguished loop statement, but realizes
+      them as methods of the class implementing block closures.  & & \\\hline
+   \end{tabular}\\
+   For your answer draw that table but refer to the statements by a),
+   b) etc. instead of writing them again. Wrong answers lead to a
+   reduction of points, a negative result does not carry over to other
+   sub-assignments. \points{2}
 \end{enumerate}
 
 \solution{
@@ -352,6 +409,32 @@ programming language use
       \item B, C
       \item B
     \end{enumerate}
+\item 
+    \begin{enumerate}
+    \item 
+    \begin{enumerate}
+    \item method \lstinline!m! as defined in class \lstinline!A!
+    \item method \lstinline!m! as defined in class \lstinline!A!
+  \end{enumerate}
+    \item 
+    \begin{enumerate}
+    \item method \lstinline!m! as defined in class \lstinline!A!
+    \item method \lstinline!m! as defined in class \lstinline!B!
+    \end{enumerate}
+    \end{enumerate}
+\item
+      \begin{tabular}{|p{6cm}|c|c|}\hline
+      & True & False \\ \hline
+      a) F\# runs on the \textsf{.net} virtual machine, but cannot use the
+      normal libraries as it is a functional language, while the normal
+      libraries on \textsf{.net} are object-oriented. & & X \\\hline
+      b) Declaring a variable mutable or as reference cell in F\# means
+      the same. & & X \\\hline
+      c) Expressions in F\# are side-effect free. & & X \\\hline
+      d) Smalltalk has no distinguished loop statement, but realizes
+      them as methods of the class implementing block closures.  & X & \\\hline
+   \end{tabular}\\
+
 \end{enumerate}
 }
 
