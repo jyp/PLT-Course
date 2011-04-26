@@ -58,11 +58,18 @@ English-Swedish or English-other language dictionary.
 There are five ordinary questions, one on each paradigm, worth 12
 points each for a total of 60 points. 24 points is required to pass
 (grade 3), 36 points is required for grade 4, and 48 points is
-required for grade 5.
+required for grade 5.\\
+Grades for GU: 24~points is required for G and 48~points is required
+for VG\\
+
+Sheets are two-sided.
 
 %\newcommand{\comment}[1]{}
 \newcommand{\comment}[1]{\marginpar{#1}}
 
+\newpage
+This page is left blank intentionally.
+\hfill
 \newpage
 
 \section{Functional Programming [12 points]}
@@ -286,17 +293,17 @@ initially to different objects.
 
 Give the values of expression \lstinline!x.a! and expression
 \lstinline!y.a! after execution of line~\lstinline!(*)! if the
-assignment operator is realised using
+assignment operator of the programming language is realised using
 \begin{enumerate}
   \item copy semantics 
   \item reference semantics 
 \end{enumerate}
 \points{2}
 \item Consider an imperative programming language \textsf{IMP} that
-  allocates activation records \emph{statically} for each method
-  (function). 
+  allocates activation records \emph{statically} (i.e., at
+  compile-time) for each method (function).
   \begin{enumerate}
-  \item What is the problem with recursion in such a setting?  
+  \item What is the problem with recursion in such a setting?\points{1}
   \item Assume \textsf{IMP} is able to allocate an arbitrary number of
     activation records per method at compile-time. Further, put
     yourself in the role of a developer who is implementing a compiler
@@ -304,9 +311,8 @@ assignment operator is realised using
     some extent recursion. What must your compiler be able to
     determine to compile successfully a program that uses recursion?
     (If the compiler is not able to determine the property/-ies, it
-    will reject the program.)
+    will reject the program.)\points{2}
  \end{enumerate}
- \points{3}
 \item Given the following program:
 \begin{lstlisting}[language=Java, columns=flexible] 
 int f(int a) {
@@ -408,7 +414,7 @@ at (*) after the method \lstinline!f! returns if
 \item One motivation for allowing repeated inheritance is to achieve
   better and more flexible code reuse than achievable with single
   inheritance. Name two alternatives to repeated inheritance aiming to
-  provide better code reuse avoiding some of the disadvanatges of
+  provide better code reuse avoiding some of the disadvantages of
   repeated inheritance. \points{2}
 \item Given the following class
   hierarchy \\
