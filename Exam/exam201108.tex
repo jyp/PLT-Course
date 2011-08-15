@@ -395,7 +395,7 @@ their content explicitly. If a content is not yet defined use
 \item Consider the following program
 \begin{lstlisting}[language=Java, columns=flexible] 
 void f(by-?? int a, by-?? int b, by-?? int c) {
-  a = a + a;
+  b = a + a;
   b = a + b + c;
   c = c + 15;
 }
@@ -445,7 +445,7 @@ at (*) after the method \lstinline!f! returns if
   \begin{tabular}{lcc}
     & \lstinline!i! & \lstinline!j! \\ \hline
    (a) &  1 & 5 \\
-   (b) & 10 & 20 \\
+   (b) & 11 & 20 \\
    (c) & 1 & 20 \\
    (d) & 14 & 5 \\
   \end{tabular}
