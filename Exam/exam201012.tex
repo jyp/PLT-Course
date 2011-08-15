@@ -51,8 +51,8 @@
 \let\PBS=\PreserveBackslash
 
 %%%%%%%%%%%%%% 
-\newcommand{\solution}[1] {}
-%\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
+%\newcommand{\solution}[1] {}
+\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
 
 %\newcommand{\comment}[1]{}
 \newcommand{\comment}[1]{\marginpar{#1}}
@@ -105,7 +105,7 @@ grade 4, and 48 points is required for grade 5.
 
 \textbf{GU:}
 24 points is required to pass (grade G) and 48 points is required for
-grade VG.
+grade~VG.
 
 
 \newpage 
@@ -332,7 +332,7 @@ void m() {
 \end{center}
 
 \begin{enumerate}
-\item \comment{\textbf{3 points}} Assume the assignment at (*) in
+\item Assume the assignment at (*) in
   Listing 3.1 uses
   \emph{copy semantics}. Give the values of \texttt{a} and \texttt{b}
   at (**) directly after the call to \texttt{f} returned if
@@ -341,8 +341,8 @@ void m() {
   \item both parameters are passed by-reference.
   \item the first parameter \texttt{x} is passed by-value and the
     second parameter \texttt{y} is passed by-value-result.
-  \end{enumerate} 
-\item \comment{\textbf{3 points}} Assume now that the assignment at
+  \end{enumerate}\points{3}
+\item Assume now that the assignment at
   (*) in Listing 3.1 uses \emph{reference semantics}. Like in the
   previous assignment, give the values of \texttt{a} and \texttt{b} at
   (**) directly after the call to \texttt{f} returned if
@@ -351,15 +351,15 @@ void m() {
   \item both parameters are passed by-reference.
   \item the first parameter \texttt{x} is passed by-value and the
     second parameter \texttt{y} is passed by-value-result. 
-  \end{enumerate} 
-\item \comment{\textbf{2 points}} Let $sp$ denote the base
+  \end{enumerate}  \points{3}
+\item Let $sp$ denote the base
   address/stack pointer for an activation record. Access to e.g. local
   variables is the computed by an offset $sp+\mathit{offset}$. Assume
   that array-typed parameters are passed by-value and stored
   completely within an activation record. Where should the arrays be
   stored in the activation record: at the beginning or at the end? Why?
-  (one sentence) \newpage
-\item \comment{\textbf{2 points}} Consider the following program:
+  (one sentence)  \points{2}  \newpage
+\item Consider the following program:
 \begin{lstlisting}[language=Java, columns=flexible]
 int f (int x, int y) {
   if (y == 0) { 
@@ -378,7 +378,7 @@ above call just before returning from the base case (*), i.e.,
 directly after assigning the return value, but before popping the last
 activation record from the stack. Give also the activation record on
 top of the stack (the last allocated one). Name all slots/components
-of the activation record and their content explicitly.
+of the activation record and their content explicitly.\points{2} 
 \end{enumerate}
 
 \solution{
@@ -423,7 +423,7 @@ of the activation record and their content explicitly.
 
 \begin{enumerate}
 \item Which OO-principle gets easily violated when providing setter
-  and getter methods for each field?  \comment{\textbf{1 point}}
+  and getter methods for each field?  \points{1}
 \item Let \texttt{Person} be a Smalltalk class defining the following
   methods \texttt{m} and \texttt{n}
 \begin{lstlisting}[basicstyle=\small]
@@ -442,7 +442,7 @@ p1 m: p2; n:nil          (*b*)
 \end{lstlisting}
 Which objects \lstinline!p1! or \lstinline!p2! are the receivers for the
 messages \lstinline!m! and \lstinline!n! in \lstinline!(*a*)! and
-\lstinline!(*b*)!?  \comment{\textbf{2 points}}
+\lstinline!(*b*)!?  \points{2}
 
 \item Given the following class
   hierarchy \\
@@ -484,7 +484,7 @@ Give for each of the following overriding semantics (for arguments):
 \end{enumerate}
 all possible argument types for method \lstinline!m! in class
 \lstinline!C! such that \lstinline!m! overrides the method
-\lstinline!m! declared in class \lstinline!B!.  \comment{\textbf{3 points}}
+\lstinline!m! declared in class \lstinline!B!.  \points{3}
 \item Which of the overriding
   semantics mentioned in the previous item is \emph{not} safe with
   respect to Liskov's (substitution) principle (if you do not know the
@@ -494,7 +494,7 @@ all possible argument types for method \lstinline!m! in class
 void f(A a1, A a2, B b1, B b2, C c1, C c2) { ... }        
 \end{lstlisting}
 declared in class A consisting of maximal 3 statements exhibiting the
-unsafe behavior. \comment{\textbf{2 points}}
+unsafe behavior. \points{\textbf{2}}
 
 \item Consider the following code snippet
 \begin{lstlisting}[language=Java, columns=flexible, basicstyle=\small]
@@ -512,9 +512,9 @@ which realises a simple interpreter.
 \begin{enumerate}
 \item The shown solution is not optimal as adding new commands
   requires to change existing code. Which OO oriented feature allows a
-  solution that avoids this problem? \comment{\textbf{1 point}}
+  solution that avoids this problem? \points{1}
 \item Describe in \emph{at most} 3 \emph{short} sentences (or draw a
-  UML diagram) the OO solution. \comment{\textbf{3 points}}
+  UML diagram) the OO solution. \points{3}
 \end{enumerate}
 \item Which of the following statements are true\\
     \begin{tabular}{|p{6cm}|c|c|}\hline
@@ -528,7 +528,7 @@ which realises a simple interpreter.
    For your answer draw that table but refer to the statements by a),
    b) etc. instead of writing them again. Wrong answers lead to a
    reduction of points, a negative result does not carry over to other
-   sub-assignments. \comment{\textbf{2 points}}
+   sub-assignments. \points{\textbf{2}}
  \item Assume you have two interfaces in F\# named
    \lstinline[language=FSharp]{IPv4} and
    \lstinline[language=FSharp]{IPv6} both declare a method
@@ -536,7 +536,7 @@ which realises a simple interpreter.
    resp.\ IPv6 address. Both kinds of addresses are not compatible. In
    Java this would lead to a problem when a class implements both
    interfaces as no single implementation can cover both
-   semantics. Why does F\# not have this kind of problem?  \comment{\textbf{1 point}}
+   semantics. Why does F\# not have this kind of problem?  \points{1}
 \end{enumerate}
 
 \solution{

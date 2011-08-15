@@ -51,15 +51,15 @@
 \let\PBS=\PreserveBackslash
 
 %%%%%%%%%%%%%% 
-%\newcommand{\solution}[1] {}
-\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
+\newcommand{\solution}[1] {}
+%\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
 
 %\newcommand{\comment}[1]{}
 \newcommand{\comment}[1]{\marginpar{#1}}
 
 
 \begin{document}
-\newcommand{\examtime}{14:00, Thursday August 18th, 2010}
+\newcommand{\examtime}{14:00, Thursday August 18th, 2011}
 \newcommand{\points}[1]{\marginpar{\bf #1 points}}
 \noindent
 \begin{tabular}{lr}
@@ -78,7 +78,7 @@ Exam in Programming Paradigms}
 \noindent
 \examtime{}.\\
 \begin{tabular}{lllc}
-\textbf{Lecturer:} &  John Hughes  & tel 070 756 3760 & (Examiner)\\
+\textbf{Lecturer:} &  John Hughes  &  - & (Examiner)\\
 \textbf{Lecturer:} & Richard Bubel & tel 073 965 7355 & \\ 
 \end{tabular}
 \vspace{1cm}
@@ -87,9 +87,7 @@ Exam in Programming Paradigms}
 Permitted aids:\\
 English-Swedish or English-other language dictionary.
 
-There are 5 questions on {\Huge to be filled in} numbered pages. 
-
-Five of the six questions are ordinary questions: One on functional
+There are 5 questions: one on functional
 programming (12 points), one on concurrency oriented programming (12
 points), one on basic imperative and object-oriented concepts (12
 points), one on object-oriented programming (12 points) and one on
@@ -107,9 +105,222 @@ grade 4, and 48 points is required for grade 5.
 grade VG.
 
 
-\newpage 
-\hfill\\
 \newpage
+
+\section{Functional Programming [12 points]}
+
+\begin{enumerate}
+
+\newcommand{\id}[1]{\mbox{\it #1}}
+
+\item Given that
+\begin{eqnarray*}
+\id{twice} &=& \lambda f.\lambda x.f~(f~x)
+\end{eqnarray*}
+show how to simplify 
+\[ \id{twice}~\id{twice}~f~x \]
+as far as possible using $\beta$-reductions.  Apply $\beta$-reductions
+one at a time, and write out the result of each step explicitly.
+\points{2}
+
+\item 
+Study the following Haskell definition of the list append function:
+\begin{verbatim}
+[]     ++ ys = ys
+(x:xs) ++ ys = x : (xs ++ ys)
+\end{verbatim}
+List structures can be drawn diagrammatically using boxes to represent
+{\em cons} cells and arrows to represent pointers\dots for example, if
+\verb!xs! is the list \verb![1,2]!, then the heap containing it can be drawn
+as:
+\begin{center}
+\includegraphics[width=7cm]{List.jpg}
+\end{center}
+{\em Copy this diagram}, and add to your drawing the list \verb!ys! defined by
+\begin{verbatim}
+ys = xs ++ xs
+\end{verbatim}
+Make sure that any sharing in the heap is shown accurately in your diagram.
+\points{1}
+
+\item
+Study the following Haskell definitions:
+\begin{verbatim}
+take 0 xs     = []
+take n []     = []
+take n (x:xs) = x:take (n-1) xs
+
+drop 0 xs     = xs
+drop n []     = []
+drop n (x:xs) = drop (n-1) xs
+\end{verbatim}
+
+Assume \verb!xs! is a list of at least \verb!n! elements.
+\begin{enumerate}
+\item
+What are the values of \verb!take 3 [1,2,3,4,5]! and \verb!drop 3 [1,2,3,4,5]!?
+\points{1}
+\item
+How many new cons cells are allocated during the evaluation of \verb!take n xs!?
+\points{1}
+\item
+How many new cons cells are allocated during the evaluation of \verb!drop n xs!?
+\points{1}
+\item
+What well-known compiler optimization is applicable to \verb!drop!, but not to \verb!take!?
+\points{1}
+\end{enumerate}
+
+
+\item
+QuickCheck properties take the form of boolean functions whose result
+should always be true. For example,
+\begin{verbatim}
+prop_twice_increment x =
+  twice (+1) x == x + 2
+\end{verbatim}
+\begin{enumerate}
+\item
+Complete the following definitions so that they become true QuickCheck
+properties, by replacing \verb!???! in each case by a suitable
+expression ({\em different} from the left hand side, of course!).
+\begin{verbatim}
+prop_twice_drop n xs =
+  twice (drop n) xs == ???
+
+prop_twice_take n xs =
+  twice (take n) xs == ???
+\end{verbatim}
+\points{2}
+\item
+Propose a QuickCheck property relating \verb!take!, \verb!drop!, and \verb!++!.
+\points{1}
+\end{enumerate}
+
+\item
+The Haskell standard {\em higher-order function} \verb!foldr! combines
+the elements of a list using a two-argument function:
+\[ \verb!foldr!~f~z~[x_1,x_2,\cdots,x_n] =
+f~x_1~(f~x_2~(\cdots(f~x_n~z)\cdots)) \]
+(Of course, this is not a valid Haskell definition, just an
+illustration of what \verb!foldr! computes).
+The standard function \verb!insert! inserts an element into an ordered
+list, for example
+\[ \verb!insert 4 [1,3,5,7]! = \verb![1,3,4,5,7]! \]
+Define a function
+\begin{verbatim}
+sort :: [Integer] -> [Integer]
+\end{verbatim}
+to sort lists, by making use of \verb!foldr! and \verb!insert!
+appropriately.
+\points{2}
+
+\end{enumerate}
+
+\newpage
+\section{Concurrency Oriented Programming [12 points]}
+
+\begin{enumerate}
+\item
+How are Erlang data structures protected against simultaneous
+modification by concurrent processes?
+\points{1}
+
+\item
+Study the following code, which starts a server managing an integer value:
+\begin{verbatim}
+server() ->
+    spawn(fun() -> server(0) end).
+
+server(N) ->
+    receive
+        {read,Pid} ->
+            Pid ! {self(),N},
+            server(N);
+        {write,New} ->
+            server(New)
+    end.
+\end{verbatim}
+Write the following functions for use in clients of the server:
+\begin{enumerate}
+\item
+\verb!read(ServerPid)!, which returns the value \verb!N! currently managed by the server,
+\points{1}
+\item
+\verb!write(ServerPid,New)!, which updates the value currently managed by the server to \verb!New!.
+\points{1}
+\end{enumerate}
+
+\item
+What value(s) can the following function return:
+\begin{verbatim}
+test() ->
+    Server = server(),
+    spawn(fun() -> write(Server,read(Server)+1) end),
+    spawn(fun() -> write(Server,read(Server)+2) end),
+    read(Server).
+\end{verbatim}
+\points{1}
+
+\item
+What happens if a message such as \verb!{lock,Pid}!, that does not
+match any of the patterns in the \verb!receive! clause, is sent to the
+server?
+\points{1}
+
+\item
+In the rest of the question, we will extend the server to handle two
+new requests,
+\begin{itemize}
+\item to {\em lock} the server, and return its current value, and
+\item to {\em unlock} the server again, and update its value.
+\end{itemize}
+After accepting a \verb!lock! request, the server should defer all
+other requests until after it has handled an \verb!unlock! request
+from the same client. After calling \verb!lock!, a client {\em must}
+call \verb!unlock! before making any other requests of the server; a
+client {\em must not} call \verb!unlock! without a preceding call of
+\verb!lock!. You can assume that all clients follow this protocol.
+
+First, write the {\em client-side} code: define the following
+functions for use in clients:
+\begin{enumerate}
+\item
+\verb!lock(ServerPid)!, which locks the server and returns the value
+\verb!N! it currently manages, and
+\points{1}
+\item
+\verb!unlock(ServerPid,New)!, which updates the value currently
+managed by the server to \verb!New!, and permits other clients to use
+the server again.
+\points{1}
+\end{enumerate}
+These functions should never fail (provided the server is
+running)---in other words, the client-side code can assume that it
+will receive a correct response from the server.
+
+\item
+Write the code which must be added to the \verb!server(N)! function to
+handle these two new requests. Remember the server may only send
+correct responses to the clients!
+\points{2}
+
+\item
+What happens (to the server and other clients) if a client crashes
+after calling \verb!lock(Server)!, but before calling
+\verb!unlock(Server,New)!?
+\points{1}
+\item
+What is the effect of calling \verb!link(Pid)! in an Erlang process?
+\points{1}
+\item
+How would you make the server {\em fault-tolerant}, so that if a
+client crashes while holding the lock, then the server and other
+clients are unaffected?  Show the code that you would add to the
+\verb!server(N)! function.  \points{1}
+
+
+\end{enumerate}
 
 
 \newpage
@@ -436,5 +647,93 @@ Which of the three implementations of method \lstinline!m! is invoked by
 
 \end{enumerate}
 }
+
+\newpage
+\section{Logic Programming [12 points]}
+
+\begin{enumerate}
+\item
+Given the three clauses
+\begin{enumerate}
+\item \verb!A || B!
+\item \verb?!A || D?
+\item \verb!C || D!
+\end{enumerate}
+state {\em which two} of the clauses can be combined using a resolution step, and give the resulting clause.
+\points{1}
+
+\item
+For each pair of terms below, state whether the terms can be unified,
+and if so, give the variable bindings that result. For example,
+\verb!X! and \verb!2! {\em can} be unified, and the result is
+\verb!X=2!.
+\begin{enumerate}
+\item \verb![X|Xs]! and \verb![1,2,3]!
+\item \verb![X]! and \verb![]!
+\item \verb!pear(A,banana)! and \verb!pear(apple,B)!
+\item \verb!X! and \verb!Y!
+\item \verb!pear(A,A)! and \verb!pear(B,C)!
+\item \verb!pear(A,A)! and \verb!pear(apple,banana)!
+\end{enumerate}
+\points{3}
+
+\item
+Study the following Prolog program:
+\begin{verbatim}
+isa(john,human).
+isa(human,mammal).
+isa(cat,mammal).
+isa(dog,mammal).
+isa(mammal,vertebrate).
+isa(jellyfish,invertebrate).
+isa(vertebrate,animal).
+isa(invertebrate,animal).
+isa(chanterelle,fungus).
+\end{verbatim}
+What solutions will Prolog find for the following goals?
+\begin{enumerate}
+\item
+\verb!isa(X,mammal).!
+\item
+\verb!isa(john,Y)!
+\end{enumerate}
+\points{2}
+
+\item
+It is tempting to add a clause
+\begin{verbatim}
+isa(X,Y) :- isa(X,Z), isa(Z,Y).
+\end{verbatim}
+to enable Prolog to conclude that \verb!john! is a \verb!vertebrate!,
+for example, by transitive reasoning (because \verb!john! is a
+\verb!human!, which is a \verb!mammal!, which is a
+\verb!vertebrate!). Explain why adding this clause would not work.
+\points{1}
+
+\item
+Extend the program above to perform transitive reasoning by defining a
+new predicate \verb!is_transitively_a!, such that (among other things)
+Prolog can draw the conclusion
+\verb!is_transitively_a(john,vertebrate)!.
+\points{2}
+
+\item
+What solutions would Prolog find for the goal
+\verb!is_transitively_a(X,mammal)!?
+\points{1}
+
+\item
+Let us call any Y for which \verb!isa(X,Y)! succeeds a
+``category''---for example, \verb!human!, \verb!mammal! and
+\verb!fungus! are all categories, but \verb!john!, \verb!cat! and
+\verb!dog! are not.  Write a query to find all \verb!animal!s, which
+     {\em does not} include any ``categories'' in its result. For
+     example, your query should include \verb!john! and \verb!cat! and
+     \verb!dog! in its results, but should {\em not} include
+     \verb!human! or \verb!mammal!.
+{\em Hint:} you may find the Prolog `cut' useful.
+\points{2}
+\end{enumerate}
+
 
 \end{document}
