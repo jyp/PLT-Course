@@ -435,14 +435,16 @@ at (*) after the method \lstinline!f! returns if
   \end{enumerate}
 \item
   \begin{enumerate}   
-  \item \lstinline!x.a!: 5 \quad  \lstinline!y.a!: 5
+  \item \lstinline!x.a!: 5 \quad  \lstinline!y.a!: 1
   \item \lstinline!x.a!: 0  \quad \lstinline!y.a!: 0
   \end{enumerate}
-\item 4 activation records are on the stack; the last two ones
+\item for copy semantics equality must test the content for reference
+  semantics if the same object is referenced
+\item 5 activation records are on the stack; the last two ones
   $A_1$, $A_2$ where $A_2$ is the one on top of the stack are defined
-  as follows: $A_1=(8,1,?,\text{ref to}~A_{0} , ?)$ (first two parameters,
+  as follows: $A_1=(5,1,?,\text{ref to}~A_{0} , ?)$ (first two parameters,
   third local variable, fourth reference to first activation record,
-  fifth return value), $A_2=(8,0, \text{ref to}~A_1, 0)$  
+  fifth return value), $A_2=(5,0, \text{ref to}~A_1, 0)$  
 \item\hfill\\
   \begin{tabular}{lcc}
     & \lstinline!i! & \lstinline!j! \\ \hline
