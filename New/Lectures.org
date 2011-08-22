@@ -1,0 +1,400 @@
+* Introduction
+
+- Programming paradigms
+ (pronounciation: ˈpærədaɪm)
+- DAT121
+
+** The teaching team
+*** JP Bernardy
+Course responsible / Lecturer
+Room: 6126
+E-mail: bernardy@chalmers.se
+
+CV:
+1996-2000: Master in CS (Free University of Brussels)
+2000-2007: Software engineer at various places
+2007-2011: PhD (Chalmers)
+
+*** Ramona Enache
+Assistant
+*** Michal Pałka
+Assistant
+
+** Schedule & Organisation
+*** Lectures
+Time:
+Please interrupt me during lectures.
+*** Exercises
+Time:
+*** Office hours
+JP:
+Ramona:
+Michal:
+*** Formal requirements:
+- Pass the exam
+- Participate in the exercises correction sessions (bonus points)
+- Do the exercises
+- Attend the lectures
+- Prepare lectures by reading lecture notes
+** What is a "programming paradigm"?
+
+*** Definition
+
+http://www.merriam-webster.com/dictionary/paradigm
+
+"A philosophical and theoretical framework of a scientific school or
+discipline within which theories, laws, and generalizations and the
+experiments performed in support of them are formulated; broadly: a
+philosophical or theoretical framework of any kind"
+
+see also: http://en.wikipedia.org/wiki/Programming_paradigm
+
+*** "Way of organising thought"
+
+
+      Paradigms
+
+         ^
+         |
+
+    Design Patterns
+
+         ^
+         |
+
+      Programs
+
+(I cannot teach you so many ways to organise your brain in 7 weeks!
+But fear not... You have other courses :) )
+
+*** "Mental model of the computer"
+
+- von Neumann model
+- Rewriting engine
+- Mathematical functions
+
+
+*** Languages
+**** (Do not reveal:) Discussion: What languages do you know? 
+
+Regexp / Excell formulas / sql queries / Haskell / C / Asm / ...
+
+--> clouds / recognise paradigms / discussions
+
+- Paradigms build on top of features
+- Languages implement features
+
+http://www.info.ucl.ac.be/~pvr/paradigmsDIAGRAMeng108.pdf
+
+*** Features
+- Structured data / Records
+- Naming and abstraction (2nd order, etc).
+- Memory (cell) / State
+- Processes
+- Communication channels
+- Recursion
+- Search
+
+
+*** The importance of knowing multiple paradigms
+**** Ability to think "big thoughts"
+- Anecdote: MULTICS
+- Further reading: "Language as thought shaper" http://soft.vub.ac.be/~tvcutsem/whypls.html
+
+
+Language as thought shaper
+
+To quote Alan Perlis: "a language that doesn't affect the way you think about programming, is not worth knowing."
+
+The goal of a thought shaper language is to change the way a programmer thinks about structuring his or her program. The basic building blocks provided by a programming language, as well as the ways in which they can (or cannot) be combined, will tend to lead programmers down a "path of least resistance", for some unit of resistance. For example, an imperative programming style is definitely the path of least resistance in C. It's possible to write functional C programs, but as C does not make it the path of least resistance, most C programs will not be functional.
+
+Functional programming languages, by the way, are a good example of thought shaper languages. By taking away assignment from the programmer's basic toolbox, the language really forces programmers coming from an imperative language to change their coding habits. I'm not just thinking of purely functional languages like Haskell. Languages like ML and Clojure make functional programming the path of least resistance, yet they don't entirely abolish side-effects. Instead, by merely de-emphasizing them, a program written in these languages can be characterized as a sea of immutability with islands of mutability, as opposed to a sea of mutability with islands of immutability. This subtle shift often makes it vastly easier to reason about the program.
+
+Erlang's concurrency model based on isolated processes communicating by messages is another example of a language design that leads to radically different program structure, when compared to mainstream multithreading models. Dijkstra's "GOTO considered harmful" and Hoare's Communicating Sequential Processes are pioneering examples of the use of language design to reshape our thoughts on programming. In a more recent effort, Fortress wants to steer us towards writing parallel(izable) programs by default.
+
+Expanding the analogy with natural languages, languages as thought shapers are not about changing the vocabulary or the grammar, but primarily about changing the concepts that we talk about. Erlang inherits most of its syntax from Prolog, but Erlang's concepts (processes, messages) are vastly different from Prolog's (unification, facts and rules, backtracking). As a programing language researcher, I really am convinced that language shapes thought.
+
+**** Altenative paradigms in the industry:
+- "Excell is the most used programming language"
+- SQL is mostly functional (relational)
+- F# officially supported by MicroSoft
+- Exponential growth of Erlang / Haskell
+
+**** Fun reading on the importance of using the right language:
+http://tauday.com/
+
+** Outline of the course
+*** Brief exposition of each paradigm
+- Functional (requirement: "introduction to functional programming" TDA555)
+- Imperative (not a requirement: "machine-oriented programming" EDA480)
+- Concurrent (not a requirement: "concurrent programming" TDA381)
+- Object oriented (requirement: "Object oriented programming" DAT042)
+- Logic (not a requirement: ?)
+*** (Some) Transformations between paradigms
+*** Learning outcomes
+**** Awareness of multiple paradigms
+First question of the design phase: "How should I think about this
+problem?"
+**** Recognise "encoded" thoughts:
+***** what is the natural paradigm
+***** decode them
+**** Encode thoughts expressed in a paradigm in another one
+
+**** The exam questions will be similar to exercises
+Note in particular that exercises are integral part of the course material.
+
+
+* Imperative programming
+
+"von neumann" model of the computer:
+
+- Memory cells
+- Program (assignments, arithmetic, logic, (conditional) jumps)
+
+* Example
+
+** Gotos
+
+   -- Assume A : list of sortable items
+
+   begin:
+        swapped = false
+        i := 1;
+   loop:
+        if A[i-1] <= A[i] goto no_swap
+        swap( A[i-1], A[i] )
+        swapped = true
+   no_swap:
+        i := i+1
+        if i < n then goto loop
+        if swapped goto begin
+
+
+** Loops & Ifs
+
+   -- Assume A : list of sortable items
+
+      while swapped
+        swapped = false
+        for each i in 1 to length(A) - 1 inclusive do:
+          if A[i-1] > A[i] then
+            swap( A[i-1], A[i] )
+            swapped = true
+          end if
+        end for
+
+
+** Procedures
+
+    procedure bubbleSort( A : list of sortable items )
+      do
+        swapped = false
+        for each i in 1 to length(A) - 1 inclusive do:
+          if A[i-1] > A[i] then
+            swap( A[i-1], A[i] )
+            swapped = true
+          end if
+        end for
+      while swapped
+    end procedure
+
+
+When are gotos appropriate?
+extra reading: http://portal.acm.org/citation.cfm?id=362947
+
+
+** Transformation 1. Gotos  <-> Loops
+
+
+** Transformation 2. Procedures <-> Gotos
+
+--------------------------------------
+function sqrt(x : Float) : Float
+  [...]
+-- Newton approx
+
+
+-- the call:
+sqrt(12345)
+------------------------------------
+
+
+----------------------------------
+sqrt:
+-- argument in global variable 'x'
+-- Newton approx
+goto sqrtCaller;
+
+
+x := 12345;
+sqrtCaller := out;
+goto sqrt;
+out:
+-- rest of the program
+---------------------------------------
+
+
+
+** Transformation 3. Recursive procedures <-> Explicit stack
+
+-----------------------------------
+function fact (n:Int)
+  if n = 0 then
+    return 1
+  else
+    return n * fact(n-1)
+-----------------------------------
+
+Straightforward application of rules:
+
+---------------------------------------
+push(n,out);
+goto fact;
+out:
+
+fact:
+(n,caller) := pop
+if n = 0 then
+  result := 1;
+  goto caller;
+else
+  push(n);
+  push(n-1,continue);
+  goto fact;
+  continue:
+  pop(n);
+  result := n * result; -- result is the result of the recursive call.
+  goto caller;
+------------------------------------------------
+
+- In removing recursive procedures, one MUST use a stack for arguments and return addresses (why?)
+- One must save local variables on the stack too (why ?)
+
+
+
+Other example:
+
+--------------------------------
+function fact (n:Int,acc:Int)
+  if n = 0 then
+    return acc
+  else
+    return fact(n-1,n * acc)
+--------------------------------
+
+
+
+--------------------------------
+push (n,1,out)
+goto fact
+
+fact:
+(n,acc,caller) := pop
+if n = 0 then
+  result := acc;
+  goto caller;
+else
+  push (n-1,n * acc,continue)
+  goto fact;
+  continue:
+  result := result; -- forward the result of the recursive call.
+--------------------------------
+
+
+The only occurrences of push are just before recursive calls (which starts by doing a pop).
+Hence, the stack can be removed altogether! This is called /tail-call optimisation/. Why?
+
+
+We get:
+-----------------
+acc := 1;
+caller := out;
+goto fact
+out:
+
+fact:
+if n = 0 then
+  result := acc;
+  goto caller;
+else
+  acc := n * acc; -- note the order of assignments
+  n := n-1;
+  goto fact:
+-----------------
+
+Finally we can reconstruct a loop:
+
+
+-------------------------
+while n /= 0 do
+  acc := n * acc;
+  n := n-1;
+result := acc;
+-------------------------
+
+
+
+Exercise:
+- Derecursify tree traversal
+- Do you really need a stack? (hint: you can update the tree as you go)
+
+  
+* Functional programming
+
+Application BINDS TO THE LEFT.
+
+Higher-order functions
+
+Example: map.
+
+** Reading:
+"Can Programming Be Liberated From the von Neumann Style?", John
+Backus, 1977 Turing Award Lecture
+http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
+
+"Why Functional Programming Matters", John Hughes
+http://www.cse.chalmers.se/~rjmh/Papers/whyfp.html
+
+"Learn you a Haskell, for great good!"
+http://learnyouahaskell.com/
+
+** Functional programming as imperative programming (closure)
+
+manual closures     <-->  higher-order functions
+
+** Imperative programming as functional programming
+
+state monad
+
+
+Lazy evaluation
+
+
+* Object-oriented programming
+
+objects             <-->  manual records and pointers
+
+inheritance
+multiple-inheritance
+
+objects are poor man's closures
+
+* Concurrent programming
+
+manual scheduler    <-->  concurrent processes
+
+* Logic programming
+manual search       <-->  constraints
+
+http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
+
+
+* Overview
+
+#+begin_src dot :file some_filename.png :cmdline -Kdot -Tpng
+digraph G {
+   Functional -> 1st order Imperative [label=defunctionalization]
+   
+
+}
+#+end_src
