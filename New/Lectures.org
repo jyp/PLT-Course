@@ -1,12 +1,12 @@
-* Introduction
+* Introduction, and Paradigms in General
 
 - Programming paradigms
- (pronounciation: ˈpærədaɪm)
+ (pronounciation: ˈpærədaɪm (us?)) 
 - DAT121
 
 ** The teaching team
 *** JP Bernardy
-Course responsible / Lecturer
+Course responsible & Lecturer
 Room: 6126
 E-mail: bernardy@chalmers.se
 
@@ -36,6 +36,13 @@ Michal:
 - Do the exercises
 - Attend the lectures
 - Prepare lectures by reading lecture notes
+*** Course evaluation
+3-4 Volunteers needed
+- Discuss the course with other students, represent their views to the teachers.
+- Take part in 4 meetings
+**** TODO (when?)
+- Cremona voucher for 200SEK?
+- Volunteer today! 
 ** What is a "programming paradigm"?
 
 *** Definition
@@ -143,7 +150,6 @@ problem?"
 **** The exam questions will be similar to exercises
 Note in particular that exercises are integral part of the course material.
 
-
 * Imperative programming
 
 "von neumann" model of the computer:
@@ -151,9 +157,9 @@ Note in particular that exercises are integral part of the course material.
 - Memory cells
 - Program (assignments, arithmetic, logic, (conditional) jumps)
 
-* Example
+** Example
 
-** Gotos
+*** Gotos
 
    -- Assume A : list of sortable items
 
@@ -169,8 +175,7 @@ Note in particular that exercises are integral part of the course material.
         if i < n then goto loop
         if swapped goto begin
 
-
-** Loops & Ifs
+*** Loops & Ifs
 
    -- Assume A : list of sortable items
 
@@ -183,8 +188,7 @@ Note in particular that exercises are integral part of the course material.
           end if
         end for
 
-
-** Procedures
+*** Procedures
 
     procedure bubbleSort( A : list of sortable items )
       do
@@ -198,13 +202,12 @@ Note in particular that exercises are integral part of the course material.
       while swapped
     end procedure
 
-
-When are gotos appropriate?
-extra reading: http://portal.acm.org/citation.cfm?id=362947
+** Discussion: When are gotos appropriate?
+extra reading: "goto statement considered harmful", E. G. Dijkstra
+http://portal.acm.org/citation.cfm?id=362947
 
 
 ** Transformation 1. Gotos  <-> Loops
-
 
 ** Transformation 2. Procedures <-> Gotos
 
@@ -338,14 +341,134 @@ Exercise:
 - Derecursify tree traversal
 - Do you really need a stack? (hint: you can update the tree as you go)
 
+
+** TODO Passing by reference 
+
+* Object-oriented programming
+
+** Coupling data and related code
+*** Toy example: Date
+
+class Date
+
+  field
+    year : Integer
+    month : Integer
+    day : Integer
+
+
+  method ShiftByDays(days : Integer);
+
+  constructor ymd(y,m,d : Integer)
+  constructor today -- -- query OS for current date
+
+
+-- Example use:
+appointment = today;
+appointment.shiftByDays(7);
+
+
+-- Plus mechanisms to make the fields private (Data abstraction).
+
+
+**** Tranlated into plain records + procedures
+
+record Date
+  Year : Integer
+  Month : Integer
+  Day : Integer
   
+
+function today : Date;
+
+procedure ShiftByDays(this : Date by reference; days : Integer);
+-- Why is "by reference" important?
+  
+
+-- Example use:
+appointment = today;
+shiftByDays(appointment,7);
+
+** Inheritance
+
+*** Toy example:
+
+class Canis
+  method Feed
+     print "Undefined"
+
+class Dog inherits Canis
+  method Feed
+     print "Shake tail"
+
+class Wolf inherits Canis 
+  method Feed
+     print "Eat hand"
+
+
+procedure Test(c : Canis)
+  c.Feed
+
+Test(new Dog);
+Test(new Wolf);
+
+*** Translated to records:
+
+record Canis
+  field
+    Feed : function pointer;
+
+
+record Dog 
+  field
+    Feed : function pointer;
+
+procedure feedDog(this : Dog);
+  print "Shake tail"  -- (1)
+
+
+function createDog : Dog
+  return new Dog(feed = feedDog);  
+    
+
+record Wolf
+  field 
+     Feed : function pointer;
+
+procedure feedWolf(this : Wolf);
+  print "Shake tail"
+
+
+function createWolf : Wolf
+  return new Wolf(feed = feedWolf);  
+
+
+procedure Test(c : Canis by reference)
+  c.Feed; -- explain this line
+
+
+Test(cast<Canis> createDog); -- why is the cast valid?
+Test(cast<Canis> createWolf);
+
+*** Exercise: the modify the Wolf to count of the number of wounds inflicted.
+
+*** Extension: function tables
+
+- Is the 'feed' function pointer ever modified?
+- How can we save space if there are many methods per class? 
+
+** TODO multiple-inheritance & interfaces
+** Forward reference: objects are poor man's closures
+
 * Functional programming
+** TODO Currying and partial application
+** Sum types
 
 Application BINDS TO THE LEFT.
 
 Higher-order functions
 
-Example: map.
+** Example: map
 
 ** Reading:
 "Can Programming Be Liberated From the von Neumann Style?", John
@@ -358,9 +481,15 @@ http://www.cse.chalmers.se/~rjmh/Papers/whyfp.html
 "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
 
-** Functional programming as imperative programming (closure)
+
+** Defunctionalisation (closures)
+
 
 manual closures     <-->  higher-order functions
+
+
+http://en.wikipedia.org/wiki/Closure_(computer_science)
+
 
 ** Imperative programming as functional programming
 
@@ -369,19 +498,53 @@ state monad
 
 Lazy evaluation
 
+** Purity and its Consequences
 
-* Object-oriented programming
+Did you know that side effects...
+... are a common source of bugs?
+... make testing difficult?
+... make reasoning difficult?
+... make parallelizing diffcult?
+... cause cancer?
 
-objects             <-->  manual records and pointers
+ -> Referential transparency
 
-inheritance
-multiple-inheritance
+    Mathematical function (cos)
 
-objects are poor man's closures
+     vs. 
+
+    Function in (say) Java (getChar)
+
+ -> Testing is MUCH easier
+
+       (no guesswork to know what a function depends on)
+
+ -> More optimisations possible (what?)
+ -> Easier concurrency
+
+    x = 0
+    x = x+1 |in parallel with| x = x + 1
+  
+    x ∈ {1,2}
+
+ -> Sharing is ALWAYS safe!
+ -> Possible to use laziness 
+
+** Copying and sharing
+
+Example: tree update
+
+** Laziness
+
+why fp
+
+Can ALWAYS and ONLY return a list of ALL possible results.
 
 * Concurrent programming
 
 manual scheduler    <-->  concurrent processes
+
+http://en.wikipedia.org/wiki/Communicating_sequential_processes
 
 * Logic programming
 manual search       <-->  constraints
