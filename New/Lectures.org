@@ -43,6 +43,8 @@ Michal:
 **** TODO (when?)
 - Cremona voucher for 200SEK?
 - Volunteer today! 
+*** Reading material
+
 ** What is a "programming paradigm"?
 
 *** Definition
@@ -207,9 +209,9 @@ extra reading: "goto statement considered harmful", E. G. Dijkstra
 http://portal.acm.org/citation.cfm?id=362947
 
 
-** Transformation 1. Gotos  <-> Loops
+** Transformation: Gotos  <-> Loops
 
-** Transformation 2. Procedures <-> Gotos
+** Transformation: Procedures <-> Gotos
 
 --------------------------------------
 function sqrt(x : Float) : Float
@@ -238,7 +240,7 @@ out:
 
 
 
-** Transformation 3. Recursive procedures <-> Explicit stack
+** Transformation: Recursive procedures <-> Explicit stack
 
 -----------------------------------
 function fact (n:Int)
@@ -367,10 +369,6 @@ class Date
 appointment = today;
 appointment.shiftByDays(7);
 
-
--- Plus mechanisms to make the fields private (Data abstraction).
-
-
 **** Tranlated into plain records + procedures
 
 record Date
@@ -389,21 +387,36 @@ procedure ShiftByDays(this : Date by reference; days : Integer);
 appointment = today;
 shiftByDays(appointment,7);
 
+** Encapsulation 
+
+mechanisms to make the fields private
+
+*** Paradigm Shift: Abstract Data Type (ADT)
+ - Every piece data type comes with a specification
+ - ... maybe in the form of _unit tests_
+ - Notion of data-invariant
+ - Advantage: it's easy to change representation of data
+
+ - NOTE: not every piece of data fits the ADT model. 
+   Example: "Person" record.
+ - Dogma: never any direct field access (cf. "set" and "get")
+
+
 ** Inheritance
 
 *** Toy example:
 
-class Canis
-  method Feed
+class Animal
+  method Pet
      print "Undefined"
 
 class Dog inherits Canis
-  method Feed
+  method Pet
      print "Shake tail"
 
 class Wolf inherits Canis 
-  method Feed
-     print "Eat hand"
+  method Pet
+     print "Mew"
 
 
 procedure Test(c : Canis)
@@ -414,63 +427,142 @@ Test(new Wolf);
 
 *** Translated to records:
 
-record Canis
+record Animal
   field
-    Feed : function pointer;
+    Pet : function pointer;
 
 
 record Dog 
   field
-    Feed : function pointer;
+    Pet : function pointer;
 
-procedure feedDog(this : Dog);
+procedure petDog(this : Dog);
   print "Shake tail"  -- (1)
 
 
 function createDog : Dog
-  return new Dog(feed = feedDog);  
+  return new Dog(pet = petDog);  
     
 
-record Wolf
+record Cat
   field 
-     Feed : function pointer;
+     Pet : function pointer;
 
-procedure feedWolf(this : Wolf);
+procedure petCat(this : Cat);
   print "Shake tail"
 
 
-function createWolf : Wolf
-  return new Wolf(feed = feedWolf);  
+function createCat : Cat
+  return new Cat(pet = petCat);  
 
 
-procedure Test(c : Canis by reference)
-  c.Feed; -- explain this line
+procedure Test(c : Animal by reference)
+  c.Pet; -- question: explain this line
 
 
-Test(cast<Canis> createDog); -- why is the cast valid?
-Test(cast<Canis> createWolf);
+Test(cast<Animal> createDog); -- why is the cast valid?
+Test(cast<Animal> createCat);
 
-*** Exercise: the modify the Wolf to count of the number of wounds inflicted.
+*** Exercise: add a StrayCat subclass which: 
+- scratches instead of meowing;
+- counts of the number of wounds inflicted.
 
 *** Extension: function tables
 
-- Is the 'feed' function pointer ever modified?
+- Is the 'pet' function pointer ever modified?
 - How can we save space if there are many methods per class? 
 
-** TODO multiple-inheritance & interfaces
-** Forward reference: objects are poor man's closures
 
+*** Paradigm Shift
+
+  - Multiple "cases" can be implemented by inheriting a common class
+  - Dogma: no "if".
+  - Specific behaviour is implemented in derived methods
+  
+  - Open question: multiple dispatch!
+
+** Reading/Exercise: Javascript prototypes
+http://en.wikipedia.org/wiki/ECMAScript_syntax#Objects
+
+** TODO multiple-inheritance & interfaces
+** Forward reference: objects are poor man's _closures_
+
+* Interlude: Garbage Collection
 * Functional programming
-** TODO Currying and partial application
-** Sum types
+** Reading: (as necessary) "Learn you a Haskell, for great good!"
+http://learnyouahaskell.com/
+
+** A bit of syntax
 
 Application BINDS TO THE LEFT.
 
-Higher-order functions
+f x   ==  f(x)
 
-** Example: map
+f x y == (f x) y  ==  (f(x))(y)
 
-** Reading:
+** Algebraic Data
+
+If A and B are data types, then...
+
+what is  A + B ?
+
+         similar to union in C (what is the difference?)
+
+         A × B ?
+
+         similar to records in C
+
+
+Let's count the number of inhabitants of the type:
+
+
+    #(A + B) = #A + #B
+    #(A × B) = #A × #B
+
+*** Extra: what is A → B, algebraically ?
+
+*** Lists 
+
+List a = (Nil : a) + (Cons : a × List a)
+
+
+Haskell syntax:
+
+data List a = Nil a | Cons a (List a)
+
+
+Lists as a
+
+*** Exercise: binary trees
+
+*** Transformation: Algebraic data type <-> inheritance
+
+** Higher-order functions
+
+*** Example: fold/reduce
+
+-- sum the elements in a list
+sum Nil          = 0
+sum (Cons x xs)  = x + sum xs
+
+
+-- multiply the elements in a list
+product Nil         = 1
+product (Cons x xs) = 1 * product xs
+
+
+ABSTRACT! ABSTRACT! ABSTRACT!
+
+...
+
+*** Example: map
+
+
+*** Exercise: write a function that does the dot-product of a vector; then Abstract.
+
+What do you get?    
+
+*** Reading: (1st part compulsory)
 "Can Programming Be Liberated From the von Neumann Style?", John
 Backus, 1977 Turing Award Lecture
 http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
@@ -478,11 +570,13 @@ http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
 "Why Functional Programming Matters", John Hughes
 http://www.cse.chalmers.se/~rjmh/Papers/whyfp.html
 
-"Learn you a Haskell, for great good!"
-http://learnyouahaskell.com/
+** Removing Higher-Order functions
+*** Transformation: Inlining higher-order functions
+
+Example/Exercise: from "filter/map" to for loop...
 
 
-** Defunctionalisation (closures)
+*** Transformation: Defunctionalisation (explicit closures)
 
 
 manual closures     <-->  higher-order functions
@@ -491,12 +585,40 @@ manual closures     <-->  higher-order functions
 http://en.wikipedia.org/wiki/Closure_(computer_science)
 
 
-** Imperative programming as functional programming
+** Transformation: Imperative programming --> functional programming
 
-state monad
+Idea: pass around the "state of the world".
+
+for i = 1 to 100
+  print i, " bottles on the wall"...
 
 
-Lazy evaluation
+print : ()
+print : State -> State × ()
+
+
+
+Assuming the "state of the world" is only the contents of the output file, then print does...
+
+?
+
+print 
+
+Exercise: implement "safePrint" functionally...
+
+procedure safePrint(line) : ErrorCode
+  if outOfInk then
+    return -1
+  else
+    print(line)
+
+... given the imperative function
+
+outOfInk : Bool
+
+ 1. What is the type of outOfInk in the functional representation ?
+ 2. What is the translation ?
+
 
 ** Purity and its Consequences
 
@@ -525,10 +647,13 @@ Did you know that side effects...
     x = 0
     x = x+1 |in parallel with| x = x + 1
   
-    x ∈ {1,2}
+    Value of x ?
 
- -> Sharing is ALWAYS safe!
- -> Possible to use laziness 
+ -> Sharing is ALWAYS safe! (see in a moment)
+
+     Why is this important?
+
+ -> Possible to use laziness  (see in a moment)
 
 ** Copying and sharing
 
@@ -536,21 +661,42 @@ Example: tree update
 
 ** Laziness
 
-why fp
+map: how much memory is used?
 
 Can ALWAYS and ONLY return a list of ALL possible results.
 
+Most used lazy language?
+
+Probably SQL!
+
+Some say: "in Haskell, lists are a _control structure_".
+
+*** Read: _Why functional programming matters_, J. Hughes.
+
 * Concurrent programming
+
+Disclaimer: Concurrent programming ≠ Parallel programming
+
+"The world is concurrent!"
+
+** Process
+** Channel
+
+Read: http://en.wikipedia.org/wiki/Communicating_sequential_processes
+
 
 manual scheduler    <-->  concurrent processes
 
-http://en.wikipedia.org/wiki/Communicating_sequential_processes
+
+ Continuations as closures
 
 * Logic programming
 manual search       <-->  constraints
 
 http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
 
+
+Performace of inverted functions can be terrible.
 
 * Overview
 
