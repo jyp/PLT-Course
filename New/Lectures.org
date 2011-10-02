@@ -1,4 +1,4 @@
-* Introduction, and Paradigms in General
+* Introduction + Programming Paradigms in General
 
 - Programming paradigms
  (pronounciation: ˈpærədaɪm (us?)) 
@@ -211,36 +211,59 @@ http://portal.acm.org/citation.cfm?id=362947
 
 ** Transformation: Gotos  <-> Loops
 
-** Transformation: Procedures <-> Gotos
+** Transformation: inlining procedures
+
+What happens when the original program is recursive?
+
+** Transformation: explicit jumps
 
 --------------------------------------
 function sqrt(x : Float) : Float
-  [...]
--- Newton approx
+  result := x / 2 
+  while ...
+    -- Newton approx to refine the result
+  return result;
 
-
--- the call:
+-- the calls:
 sqrt(12345)
+...
+...
+sqrt(6789);
+
 ------------------------------------
 
 
 ----------------------------------
 sqrt:
--- argument in global variable 'x'
--- Newton approx
+-- argument in global variable 'sqrtArgument'
+sqrtResult := sqrtArgument / 2;
+-- And then newton algorithm 
+...
+...
+-- at this point, sqrtResult contains the result.
 goto sqrtCaller;
 
 
-x := 12345;
-sqrtCaller := out;
+sqrtArgument := 12345;
+sqrtCaller := out1;
 goto sqrt;
-out:
--- rest of the program
+out1:
+...
+...
+sqrtArgument := 6789;
+sqrtCaller := out1;
+goto sqrt;
+out1:
 ---------------------------------------
 
+What happens when the original program is recursive?
 
-
-** Transformation: Recursive procedures <-> Explicit stack
+** Transformation: Explicit stack
+*** 1st example: factorial.
+Translation of a recursive call:
+ - push local variables on a stack
+ - goto
+ - pop local variables
 
 -----------------------------------
 function fact (n:Int)
@@ -253,29 +276,32 @@ function fact (n:Int)
 Straightforward application of rules:
 
 ---------------------------------------
-push(n,out);
+-- Call to 'fact'
+caller := out;
+n := 12;
 goto fact;
 out:
 
+...
+...
+
+-- Definition of 'fact':
 fact:
-(n,caller) := pop
 if n = 0 then
   result := 1;
   goto caller;
-else
-  push(n);
-  push(n-1,continue);
+else 
+  push(n,caller);
+  caller := continue;
+  n := n-1;
   goto fact;
   continue:
-  pop(n);
+  pop(n,caller);
   result := n * result; -- result is the result of the recursive call.
   goto caller;
 ------------------------------------------------
 
-- In removing recursive procedures, one MUST use a stack for arguments and return addresses (why?)
-- One must save local variables on the stack too (why ?)
-
-
+*** 2nd example: factorial (alternative algorithm)
 
 Other example:
 
@@ -288,25 +314,66 @@ function fact (n:Int,acc:Int)
 --------------------------------
 
 
+What is the algorithm used?
+
 
 --------------------------------
-push (n,1,out)
-goto fact
-
-fact:
-(n,acc,caller) := pop
+fact: -- n,acc,caller are defined here.
 if n = 0 then
   result := acc;
   goto caller;
 else
-  push (n-1,n * acc,continue)
-  goto fact;
+  push (n,acc,caller)
+  acc := acc * n;
+  n := n-1;
+  caller := continue;
+  goto fact;  
   continue:
-  result := result; -- forward the result of the recursive call.
+  pop (n,acc,caller)
+  result := result; -- just forward the result of the recursive call.
+  goto caller;
 --------------------------------
 
 
-The only occurrences of push are just before recursive calls (which starts by doing a pop).
+But:
+ - The local variables are saved for nothing: they are not used after they are popped!
+ - The result := result statement is useless.
+
+Hence we obtain:
+
+
+--------------------------------
+fact: -- n,acc,caller are defined here.
+if n = 0 then
+  result := acc;
+  goto caller;
+else
+  push (caller)
+  acc := acc * n;
+  n := n-1;
+  caller := continue;
+  goto fact;  
+  continue:
+  pop (caller)
+  goto caller;
+--------------------------------
+
+What is the effect of the following?
+
+  push (caller)
+  caller := continue
+  goto fact
+
+It fact, it is the same as 
+
+  goto fact
+
+Indeed, after returning to "continue", the caller will just be popped
+from the stack; and we'll jump to it.  This would also be done by the
+normal "goto caller" return statement if we had not overwritten the
+caller with continue.
+
+
 Hence, the stack can be removed altogether! This is called /tail-call optimisation/. Why?
 
 
@@ -331,6 +398,7 @@ Finally we can reconstruct a loop:
 
 
 -------------------------
+acc := 1;
 while n /= 0 do
   acc := n * acc;
   n := n-1;
@@ -343,9 +411,11 @@ Exercise:
 - Derecursify tree traversal
 - Do you really need a stack? (hint: you can update the tree as you go)
 
-
 ** TODO Passing by reference 
-
+* Interlude: Garbage Collection
+aka. Automatic memory management
+- Allows for much easier OOP
+- Practically impossible to do FP/Logic without it
 * Object-oriented programming
 
 ** Coupling data and related code
@@ -391,7 +461,8 @@ shiftByDays(appointment,7);
 
 mechanisms to make the fields private
 
-*** Paradigm Shift: Abstract Data Type (ADT)
+*** Paradigm Shift: Abstract Data Type (ADT) 
+ - Example: "stack", "priority queue", ... from your data structures course
  - Every piece data type comes with a specification
  - ... maybe in the form of _unit tests_
  - Notion of data-invariant
@@ -487,18 +558,43 @@ http://en.wikipedia.org/wiki/ECMAScript_syntax#Objects
 ** TODO multiple-inheritance & interfaces
 ** Forward reference: objects are poor man's _closures_
 
-* Interlude: Garbage Collection
 * Functional programming
 ** Reading: (as necessary) "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
 
 ** A bit of syntax
 
-Application BINDS TO THE LEFT.
+*** Function definitions
+
+minimum (x,y) = if x < y 
+                  then x
+                  else y
+
+*** (λ) abstractions / local functions
+
+In the literature:
+
+minimum = λ(x,y). if x < y 
+                      then x
+                      else y
+
+
+In Haskell:
+
+minimum = \(x,y) -> if x < y 
+                      then x
+                      else y
+
+
+
+*** Application BINDS TO THE LEFT.
 
 f x   ==  f(x)
 
 f x y == (f x) y  ==  (f(x))(y)
+
+
+** TODO Types: a minimal introduciton
 
 ** Algebraic Data
 
@@ -571,38 +667,29 @@ http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
 http://www.cse.chalmers.se/~rjmh/Papers/whyfp.html
 
 ** Removing Higher-Order functions
-*** Transformation: Inlining higher-order functions
+*** TODO Transformation: Inlining higher-order functions
 
 Example/Exercise: from "filter/map" to for loop...
 
 
-*** Transformation: Defunctionalisation (explicit closures)
-
-
-manual closures     <-->  higher-order functions
+*** TODO Transformation: Defunctionalisation (explicit closures)
 
 
 http://en.wikipedia.org/wiki/Closure_(computer_science)
 
 
-** Transformation: Imperative programming --> functional programming
+** Transformation: Explicit State
 
-Idea: pass around the "state of the world".
+Idea: pass around the "state of the world" explicitly
 
-for i = 1 to 100
-  print i, " bottles on the wall"...
+print : () -- in an imperative language, the state is implicit
 
-
-print : ()
-print : State -> State × ()
+print : State -> State × () -- after making the state explicit
 
 
 
-Assuming the "state of the world" is only the contents of the output file, then print does...
-
-?
-
-print 
+Assuming the "state of the world" is only the contents of the output
+file, then print does what?
 
 Exercise: implement "safePrint" functionally...
 
@@ -619,47 +706,93 @@ outOfInk : Bool
  1. What is the type of outOfInk in the functional representation ?
  2. What is the translation ?
 
+*** Imperative syntax in Haskell
 
+-- "IP a": type of imperative programs returning a value of type a.
+type IP a = State -> State × a
+
+Generic way to sequence two "IP a":
+
+andThen : IP a -> IP b -> IP b
+f `andThen` g = \s0 -> let (s1,a) = f s0
+                           (s2,b) = g s1
+                       in  (s2,b)
+
+
+But what if the 2nd program uses the returned value of the 1st?
+Then (in general) the 2nd program must depend on 'a':
+
+andThen : IP a -> (a -> IP b) -> IP b
+f `andThen` g = \s0 -> let (s1,a) = f s0
+                           (s2,b) = g a s1
+                       in  (s2,b)
+
+If you _can_ define a function with the above type, then Haskell gives
+you special syntax for imperative programming. If you give:
+
+instance Monad IP where
+  (>>=) = andThen
+  return x = -- when x does not depend on the state:
+
+
+Then the following is valid:
+
+
+safePrint line = do
+  condition <- outOfInk  
+  if outOfInk 
+    then return -1
+    else do print line
+            return 0
+            
+In fact, the meaning of "imperative" is given by that function -- andThen in our case:
+
+safePrint line = 
+  outOfInk `andThen` \condition ->
+  if outOfInk 
+    then return -1
+    else print line `andThen` \() ->
+         return 0
+
+** TODO Transformation: Currification
 ** Purity and its Consequences
 
 Did you know that side effects...
-... are a common source of bugs?
-... make testing difficult?
-... make reasoning difficult?
-... make parallelizing diffcult?
-... cause cancer?
+ - are a common source of bugs?
+ - make testing difficult?
+ - make reasoning difficult?
+ - make parallelizing diffcult?
+ - cause cancer?
 
- -> Referential transparency
+*** Referential transparency
 
-    Mathematical function (cos)
+    Mathematical function (sin)
 
      vs. 
 
     Function in (say) Java (getChar)
 
- -> Testing is MUCH easier
+*** Testing is MUCH easier
 
        (no guesswork to know what a function depends on)
 
- -> More optimisations possible (what?)
- -> Easier concurrency
+*** More optimisations possible (which ones?)
+*** Easier concurrency (cf. Erlang)
 
     x = 0
     x = x+1 |in parallel with| x = x + 1
   
-    Value of x ?
+    Value of x ?     
 
- -> Sharing is ALWAYS safe! (see in a moment)
+*** Sharing is ALWAYS safe! (see in a moment)
 
-     Why is this important?
-
- -> Possible to use laziness  (see in a moment)
+*** Possible to use laziness  (see in a moment)
 
 ** Copying and sharing
 
 Example: tree update
 
-** Laziness
+** TODO Laziness
 
 map: how much memory is used?
 
@@ -673,37 +806,55 @@ Some say: "in Haskell, lists are a _control structure_".
 
 *** Read: _Why functional programming matters_, J. Hughes.
 
-* Concurrent programming
+* TODO Concurrent programming
 
 Disclaimer: Concurrent programming ≠ Parallel programming
 
 "The world is concurrent!"
 
 ** Process
+file:Process.hs
 ** Channel
+file:Channel.hs
+** Transformation: variable-managing process
+file:CSPVariable.hs
+** Transformation: explicit continuations
+file:Server.hs
+*** Exercise: make continuations explicit closures
+* TODO Logic programming
 
-Read: http://en.wikipedia.org/wiki/Communicating_sequential_processes
+** Unification
+*** Metavariables
+** Search
 
-
-manual scheduler    <-->  concurrent processes
-
-
- Continuations as closures
-
-* Logic programming
 manual search       <-->  constraints
 
 http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
 
 
-Performace of inverted functions can be terrible.
+Performance of inverted functions can be terrible.
 
-* Overview
+* Overview of transformations
+
+The following graph is an overview of all the transformations seen in
+the course.
+
+NOTE: You should know also how to "invert" a transformation!
 
 #+begin_src dot :file some_filename.png :cmdline -Kdot -Tpng
 digraph G {
-   Functional -> 1st order Imperative [label=defunctionalization]
-   
-
+   Functional -> Imperative [label=explicit closures\n(defunctionalization)]
+   Functional -> Imperative [label=inline higher-order]
+   Imperative -> Functional [label=explicit state]
+   Imperative -> Machine [label=explicit stack\n(derecursification)]
+   Object-Oriented -> Imperative [label=explicit dispatch]
+   Concurrent -> Functional [label=explicit continuations]   
+   Concurrent -> Imperative [label=state in a process]
+   Logic -> Functional [label=list of successes]
 }
 #+end_src
+
+
+* Extras
+** Introduction to programming with shift and reset
+http://okmij.org/ftp/continuations/index.html#tutorial1
