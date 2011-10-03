@@ -21,21 +21,20 @@ Assistant
 Assistant
 
 ** Schedule & Organisation
-*** Lectures
-Time:
-Please interrupt me during lectures.
-*** Exercises
-Time:
-*** Office hours
-JP:
-Ramona:
-Michal:
 *** Formal requirements:
 - Pass the exam
 - Participate in the exercises correction sessions (bonus points)
 - Do the exercises
 - Attend the lectures
 - Prepare lectures by reading lecture notes
+*** Lectures
+Please interrupt me during lectures!
+*** Exercises
+Time:
+*** Office hours
+JP:
+Ramona:
+Michal:
 *** Course evaluation
 3-4 Volunteers needed
 - Discuss the course with other students, represent their views to the teachers.
@@ -854,7 +853,12 @@ digraph G {
 }
 #+end_src
 
-
-* Extras
-** Introduction to programming with shift and reset
+* Where to go from here?
+** Exam :)
+** Explore the paradigms you like!
+** Invent you own paradigm!
+- ... that suits the way you think
+- ... that suits your favourite application domain (AFP)
+** A lot more to read ...
+*** Introduction to programming with shift and reset
 http://okmij.org/ftp/continuations/index.html#tutorial1
