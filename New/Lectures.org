@@ -593,10 +593,22 @@ f x   ==  f(x)
 f x y == (f x) y  ==  (f(x))(y)
 
 
-** TODO Types: a minimal introduciton
+** Types: a minimal introduciton
+
+0 : Int
+1 : Int
+"hello" : String
+
+successor : Int -> Int
+
+factorial : ?
+
+π : ?
+
+sin : ?
 
 ** Algebraic Data
-
+   
 If A and B are data types, then...
 
 what is  A + B ?
@@ -650,8 +662,7 @@ ABSTRACT! ABSTRACT! ABSTRACT!
 
 ...
 
-*** Example: map
-
+*** TODO Example: map
 
 *** Exercise: write a function that does the dot-product of a vector; then Abstract.
 
@@ -662,19 +673,67 @@ What do you get?
 Backus, 1977 Turing Award Lecture
 http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
 
-"Why Functional Programming Matters", John Hughes
-http://www.cse.chalmers.se/~rjmh/Papers/whyfp.html
-
 ** Removing Higher-Order functions
 *** TODO Transformation: Inlining higher-order functions
 
 Example/Exercise: from "filter/map" to for loop...
 
 
+
+inverse of abstraction
+
+map : (a -> b) -> List a -> List b
+map f xs = case xs of 
+   [] ->  []
+   (x:xs) -> f x : map f xs
+
+
+multiply n xs = map (\x -> x * n) xs
+
+
+replace 'f' by its value in the code of 'map':
+
+
+multiply n xs = case xs of
+    [] ->  []
+    (x:xs) -> (\x -> x * n) x : recursiveCall f xs
+
+
+β-reduce:
+
+multiply n xs = case xs of
+    [] ->  []
+    (x:xs) -> x * n : recursiveCall f xs
+
+
+Downside: 
+- explosion of the code size
+- maybe impossible! (eg. the code of map is not available -- map itself is abstract)
+
+
 *** TODO Transformation: Defunctionalisation (explicit closures)
 
-
 http://en.wikipedia.org/wiki/Closure_(computer_science)
+
+
+map : (a -> b) -> List a -> List b
+map f [] = []
+map f (x:xs) = f x : map f xs
+
+
+multiply n = map (\x -> x * n) 
+
+
+map : Closure -> List a -> List b
+map f [] = []
+map f (x:xs) = apply f x : map f xs
+
+
+multiply n = map (Multiply n)
+
+apply (Multiply n) x = x * n
+
+data Closure = Multiply Int | ...
 
 
 ** Transformation: Explicit State
@@ -805,7 +864,7 @@ Some say: "in Haskell, lists are a _control structure_".
 
 *** Read: _Why functional programming matters_, J. Hughes.
 
-* TODO Concurrent programming
+* Concurrent programming
 
 Disclaimer: Concurrent programming ≠ Parallel programming
 
@@ -818,7 +877,10 @@ file:Channel.hs
 ** Transformation: variable-managing process
 file:CSPVariable.hs
 ** Transformation: explicit continuations
+A (trivial) server:
 file:Server.hs
+Same with explicit continuations:
+file:ServerWithContinuations.hs
 *** Exercise: make continuations explicit closures
 * TODO Logic programming
 
@@ -826,6 +888,8 @@ file:Server.hs
 *** Metavariables
 ** Search
 
+*** List of successes
+*** Backtracking
 manual search       <-->  constraints
 
 http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
@@ -842,14 +906,17 @@ NOTE: You should know also how to "invert" a transformation!
 
 #+begin_src dot :file some_filename.png :cmdline -Kdot -Tpng
 digraph G {
+   Imperative -> Machine [label=explicit stack\n(derecursification)]
+   Object-Oriented -> Imperative [label=explicit dispatch]
    Functional -> Imperative [label=explicit closures\n(defunctionalization)]
    Functional -> Imperative [label=inline higher-order]
    Imperative -> Functional [label=explicit state]
-   Imperative -> Machine [label=explicit stack\n(derecursification)]
-   Object-Oriented -> Imperative [label=explicit dispatch]
+   Functional -> Functional [label=explicit thunks]
+   Imperative -> Concurrent [label=process managing state]
    Concurrent -> Functional [label=explicit continuations]   
    Concurrent -> Imperative [label=state in a process]
-   Logic -> Functional [label=list of successes]
+   Functional -> Logic [label=explicit result\n(embedding functions into relations)]
+   Logic -> Functional [label=explicit list of successes]
 }
 #+end_src
 
@@ -858,7 +925,13 @@ digraph G {
 ** Explore the paradigms you like!
 ** Invent you own paradigm!
 - ... that suits the way you think
-- ... that suits your favourite application domain (AFP)
+- ... that suits your favourite application domain (AFP Course)
 ** A lot more to read ...
+*** A poor man's concurrency monad (Claessen)
+*** The essence of list comprehensions (Wadler)
+*** Andre Pang's thesis
 *** Introduction to programming with shift and reset
 http://okmij.org/ftp/continuations/index.html#tutorial1
+*** Transforming failure into a list of successes (Wadler)
+
+
