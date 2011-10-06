@@ -43,6 +43,20 @@ Michal:
 - Cremona voucher for 200SEK?
 - Volunteer today! 
 *** Reading material
+- Scattered across this document
+- Single most relevant textbook: probably
+
+  "Programming Languages -- Application and Interpretation", Shriram Krishnamurthi.
+  http://www.plai.org/
+  http://www.cs.brown.edu/~sk/Publications/Books/ProgLangs/2007-04-26/
+
+ ... but uses different structure, and scheme (LISP) syntax.
+
+**** Other relevant books
+
+- "Essentials of Programming Languages", Friedman, Wand and Haynes (http://www.eopl3.com/)
+- "Concepts, Techniques, and Models of Computer Programming", Van Roy (http://www.info.ucl.ac.be/~pvr/book.html)
+- ...
 
 ** What is a "programming paradigm"?
 
@@ -658,9 +672,12 @@ product Nil         = 1
 product (Cons x xs) = 1 * product xs
 
 
-ABSTRACT! ABSTRACT! ABSTRACT!
+ABSTRACT! ABSTRACT! ABSTRACT! (Parameterize)
 
-...
+
+foldr :: (a -> b -> b) -> b -> [a] -> b
+
+A function taking another function in parameter: a higher order function.
 
 *** TODO Example: map
 
@@ -674,7 +691,7 @@ Backus, 1977 Turing Award Lecture
 http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
 
 ** Removing Higher-Order functions
-*** TODO Transformation: Inlining higher-order functions
+*** Transformation: Inlining higher-order functions
 
 Example/Exercise: from "filter/map" to for loop...
 
@@ -710,8 +727,7 @@ Downside:
 - explosion of the code size
 - maybe impossible! (eg. the code of map is not available -- map itself is abstract)
 
-
-*** TODO Transformation: Defunctionalisation (explicit closures)
+*** Transformation: Defunctionalisation (explicit closures)
 
 http://en.wikipedia.org/wiki/Closure_(computer_science)
 
@@ -735,6 +751,15 @@ apply (Multiply n) x = x * n
 
 data Closure = Multiply Int | ...
 
+**** Exercise: Implement the above example C. 
+Hint: Instead of a 'tag', use a function pointer.
+
+....
+
+Note the similarity with objects!
+
+**** Exercise: Implement the above example Java
+Hint: Instead of a tag, make a derived class ('apply' is a method)
 
 ** Transformation: Explicit State
 
@@ -866,9 +891,14 @@ Some say: "in Haskell, lists are a _control structure_".
 
 * Concurrent programming
 
-Disclaimer: Concurrent programming ≠ Parallel programming
-
-"The world is concurrent!"
+** Disclaimer: Concurrent programming ≠ Parallel programming
+** "The world is concurrent!"
+"
+The world is concurrent
+Things in the world don't share data
+Things communicate with messages
+Things fail                                      <- (the part we will not discuss)
+" -- Joe Armstrong
 
 ** Process
 file:Process.hs
@@ -877,6 +907,8 @@ file:Channel.hs
 ** Transformation: variable-managing process
 file:CSPVariable.hs
 ** Transformation: explicit continuations
+*** What is a continuation?
+*** Example
 A (trivial) server:
 file:Server.hs
 Same with explicit continuations:
@@ -897,24 +929,23 @@ http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
 
 Performance of inverted functions can be terrible.
 
-* Overview of transformations
+* Outlook
 
 The following graph is an overview of all the transformations seen in
 the course.
 
-NOTE: You should know also how to "invert" a transformation!
+(NOTE: You should know also how to "invert" a transformation!)
 
 #+begin_src dot :file some_filename.png :cmdline -Kdot -Tpng
 digraph G {
    Imperative -> Machine [label=explicit stack\n(derecursification)]
    Object-Oriented -> Imperative [label=explicit dispatch]
    Functional -> Imperative [label=explicit closures\n(defunctionalization)]
-   Functional -> Imperative [label=inline higher-order]
+   Functional -> Imperative [label=inline higher-order fct.]
    Imperative -> Functional [label=explicit state]
    Functional -> Functional [label=explicit thunks]
-   Imperative -> Concurrent [label=process managing state]
+   Imperative -> Concurrent [label=state-managing process]
    Concurrent -> Functional [label=explicit continuations]   
-   Concurrent -> Imperative [label=state in a process]
    Functional -> Logic [label=explicit result\n(embedding functions into relations)]
    Logic -> Functional [label=explicit list of successes]
 }
@@ -922,6 +953,8 @@ digraph G {
 
 * Where to go from here?
 ** Exam :)
+- re-do the exercises
+- exam will be in the same style
 ** Explore the paradigms you like!
 ** Invent you own paradigm!
 - ... that suits the way you think
@@ -933,5 +966,6 @@ digraph G {
 *** Introduction to programming with shift and reset
 http://okmij.org/ftp/continuations/index.html#tutorial1
 *** Transforming failure into a list of successes (Wadler)
-
-
+** Formal study of Syntax, Types, and Semantics
+   -> Programming Languages Coures
+   -> "Types and Programming Languages", Pierce
