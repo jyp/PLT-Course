@@ -914,6 +914,10 @@ file:Server.hs
 Same with explicit continuations:
 file:ServerWithContinuations.hs
 *** Exercise: make continuations explicit closures
+** Closing
+There are more models for concurrency than chanels + processes
+(eg. revisions)
+
 * TODO Logic programming
 
 ** Unification
