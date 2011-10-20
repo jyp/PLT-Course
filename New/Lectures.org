@@ -203,7 +203,7 @@ Note in particular that exercises are integral part of the course material.
           end if
         end for
 
-*** Procedures
+*** Wrapping in a procedures for good measure
 
     procedure bubbleSort( A : list of sortable items )
       do
@@ -222,13 +222,81 @@ extra reading: "goto statement considered harmful", E. G. Dijkstra
 http://portal.acm.org/citation.cfm?id=362947
 
 
-** Transformation: Gotos  <-> Loops
+** Transformation: Loops -> Gotos
+
+*** Source: 
+while cond do
+  body
+
+*** Target
+test:
+  p := cond
+  if p goto done
+  body
+  goto test
+done:
+
+*** Exercise: translate the following
+
+do
+   body
+until cond
+
+** Transformation: If .. then .. else -> Gotos
+*** Source
+if cond then
+  part1
+else
+  part2
+
+*** Target
+  p := not(cond)
+  if p then goto label2
+  part1
+  goto done
+label2:
+  part2
+done:
+
+*** Exercise: switch/case
+
+** Reverse transformation?
+
+No general form! (You must be creative)
 
 ** Transformation: inlining procedures
 
-What happens when the original program is recursive?
+*** Source
+procedure g(x,y)
+  x := x + y
 
-** Transformation: explicit jumps
+procedure f(x,y)
+  g(x,y)
+  x := x + 1
+  g(y,x)
+
+f(a,b)
+
+*** Intermediate
+
+procedure f(x,y)
+  x := x + y
+  x := x + 1
+  y := y + x
+
+
+f(a,b)
+
+*** Final
+
+a := a + b
+a := a + 1
+b := b + x
+
+
+*** Trivia: What happens when the original program is recursive?
+
+** Transformation: Procedures -> Gotos
 
 --------------------------------------
 function sqrt(x : Float) : Float
@@ -269,8 +337,10 @@ goto sqrt;
 out1:
 ---------------------------------------
 
-What happens when the original program is recursive?
+*** Trivia: What happens when the original program is recursive?
 
+- Loop (dynamic)
+- variables: a mess...
 ** Transformation: Explicit stack
 *** 1st example: factorial.
 Translation of a recursive call:
@@ -424,7 +494,53 @@ Exercise:
 - Derecursify tree traversal
 - Do you really need a stack? (hint: you can update the tree as you go)
 
-** TODO Passing by reference 
+** Passing by reference 
+
+*** Reminder: References (aka. pointers)
+
+ x : Integer
+
+ addressOf(x) : ReferenceTo Integer
+   ≃ where in the memory is the variable x
+
+ variableAt(x : ReferenceTo Integer) : Integer
+
+
+**** Trivia: whats the meaning of addressOf(addressOf(x))?
+ -> none! because addressOf(x) is just a value, there is no location for it in the memory.
+**** Exercise: write the above in C syntax
+
+
+*** Example
+**** Supposing the language supports by. ref.
+increment(by ref. x : Int)
+  x := x + 1
+
+
+...
+
+
+increment(y)
+
+**** No by ref, but pointers:
+
+
+increment(x : ReferenceTo Int)
+  variableAt(x) := variableAt(x) + 1
+
+...
+
+increment(addressOf(y))
+
+*** Uses of passing by reference (?)
+
+- "expressive power" : you can factor out parts of the computation that update any (sub-part of) the state
+
+- save time : no need to copy around things
+
+*** Exercise: Does Java use call by reference? 
+  Show example(s) that says yes/no
+  
 * Interlude: Garbage Collection
 aka. Automatic memory management
 - Allows for much easier OOP
@@ -451,6 +567,8 @@ class Date
 -- Example use:
 appointment = today;
 appointment.shiftByDays(7);
+
+**** Note: Objects are, almost invariably, passed by reference.
 
 **** Tranlated into plain records + procedures
 
@@ -481,7 +599,7 @@ mechanisms to make the fields private
  - Notion of data-invariant
  - Advantage: it's easy to change representation of data
 
- - NOTE: not every piece of data fits the ADT model. 
+ - Note: not every piece of data fits the ADT model. 
    Example: "Person" record.
  - Dogma: never any direct field access (cf. "set" and "get")
 
@@ -498,7 +616,7 @@ class Dog inherits Canis
   method Pet
      print "Shake tail"
 
-class Wolf inherits Canis 
+class Cat inherits Canis 
   method Pet
      print "Mew"
 
@@ -507,7 +625,7 @@ procedure Test(c : Canis)
   c.Feed
 
 Test(new Dog);
-Test(new Wolf);
+Test(new Cat);
 
 *** Translated to records:
 
@@ -572,7 +690,7 @@ http://en.wikipedia.org/wiki/ECMAScript_syntax#Objects
 ** Forward reference: objects are poor man's _closures_
 
 * Functional programming
-** Reading: (as necessary) "Learn you a Haskell, for great good!"
+** Reading (as necessary): "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
 
 ** A bit of syntax
@@ -607,7 +725,7 @@ f x   ==  f(x)
 f x y == (f x) y  ==  (f(x))(y)
 
 
-** Types: a minimal introduciton
+** Types: a crash course
 
 0 : Int
 1 : Int
@@ -640,10 +758,23 @@ Let's count the number of inhabitants of the type:
     #(A + B) = #A + #B
     #(A × B) = #A × #B
 
-*** Extra: what is A → B, algebraically ?
+To "bootstrap" we also need types 0 (empty type, unit of +) and 1 (singleton, unit of ×)
 
-*** Lists 
+*** Exercise (⋆⋆⋆): what is A → B, algebraically ?
 
+*** Examples
+
+Bool = 1 + 1
+
+Giving a name to the cases:
+
+Bool = (True : 1) + (False : 1)
+
+In Haskell syntax:
+
+data Bool = True | False
+
+Lists can be defined as follows, using _recursion_:
 List a = (Nil : a) + (Cons : a × List a)
 
 
@@ -654,9 +785,9 @@ data List a = Nil a | Cons a (List a)
 
 Lists as a
 
-*** Exercise: binary trees
+*** Exercise: define an algebraic type for binary trees
 
-*** Transformation: Algebraic data type <-> inheritance
+*** Transformation: Algebraic data type -> inheritance
 
 ** Higher-order functions
 
@@ -837,7 +968,23 @@ safePrint line =
     else print line `andThen` \() ->
          return 0
 
-** TODO Transformation: Currification
+** Transformation: Currification
+
+
+f : (A × B) → C
+f = ...
+
+g : A → (B → C)
+g a = \b -> f (a,b)
+
+
+h : (A × B) → C
+h (a,b) = g a b
+
+*** Note: try to read A → B as B^A
+  then what is currification
+**** Extra: can you implement other algebraic laws?
+
 ** Purity and its Consequences
 
 Did you know that side effects...
@@ -875,19 +1022,36 @@ Did you know that side effects...
 
 Example: tree update
 
-** TODO Laziness
+** Laziness
 
-map: how much memory is used?
+*** Question: How much memory is used by map?
 
-Can ALWAYS and ONLY return a list of ALL possible results.
+- l : List Int
+- length l = n
+- How much is consumed by:
 
-Most used lazy language?
+    map (+1) l
 
+**** Same question, but assume that only the 1st element of the new list is used in the rest of the program
+
+**** Same question, but assume 'l' is no longer used in the rest of the program.
+
+-> Some say: "in Haskell, lists are a _control structure_".
+
+** Paradigm shift:
+
+- When writing a search function, the programmer can ALWAYS (and ONLY)
+  return a list of ALL possible results.
+
+*** Trivia: what is the most used lazy language?
 Probably SQL!
 
-Some say: "in Haskell, lists are a _control structure_".
-
 *** Read: _Why functional programming matters_, J. Hughes.
+
+
+** Transformation: explicit thunks
+
+
 
 * Concurrent programming
 
