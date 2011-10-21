@@ -1,0 +1,46 @@
+
+* LP3
+  SCHEDULED: <2012-01-16 Mon>--<2012-03-02 Fri> 
+* CHARM
+  SCHEDULED: <2012-02-07 Tue>--<2012-02-08 Wed>
+* Examination
+  SCHEDULED:  <2013-03-02 Sat>--<2011-07-02 Sat> 
+
+* Lecture time 1:
+  SCHEDULED: <2012-01-16 Mon 10:00 +1w>
+
+* Lecture time 2:
+  SCHEDULED: <2012-01-16 Mon 10:00 +1w>
+
+* Meeting 1  
+* Meeting 2
+* Meeting 3 
+
+* Timetable
+
+  1. Intro (+ Types)
+  2. IP 1 (Loops -> Gotos, Inline procedures) 
+  3. IP 2 (Procedures -> Gotos, Explicit stack)
+  4. OO 1 (Inheritance) 
+  5. FP 1 (Algebraic Types & Pattern matching)
+  6. FP 2 (Higher-order functions)
+  7. FP 3 (Explicit state & Currification)
+  8. FP 4 (Laziness)
+  9. CP 1 (Variable-managing process)
+  10. CP 2 (Explicit continuations)
+  11. LP 1 (Unification)
+  12. LP 2 (Search as list of successes)
+  13. Guest lecture: some awesome topic.
+
+  14. OO 2 (Traits -- Maybe should be removed)
+
+
+| Week # | Lecture 1 | Exercises | Lecture 2 |
+|--------+-----------+-----------+-----------|
+|      1 | Intro     |           | IP 1      |
+|      2 | IP 2      |           | OO 2      |
+|      3 |           |           |           |
+|      4 |           |           |           |
+|      5 |           |           |           |
+|      6 |           |           |           |
+|      7 |           |           |           |

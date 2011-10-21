@@ -1,8 +1,12 @@
+How to read this document: 
+- Simple: plain text, header level is indicated by number of *
+- Better: Use emacs [[http://orgmode.org/][org mode]]. Check out the [[http://orgmode.org/orgcard.txt][reference card]].
+
 * Introduction + Programming Paradigms in General
 
 - Programming paradigms
  (pronounciation: ˈpærədaɪm (us?)) 
-- DAT121
+- DAT121 / DIT...
 
 ** The teaching team
 *** JP Bernardy
@@ -29,19 +33,21 @@ Assistant
 - Prepare lectures by reading lecture notes
 *** Lectures
 Please interrupt me during lectures!
-*** Exercises
+*** TODO Exercises
 Time:
-*** Office hours
+Your group:
+*** TODO Office hours
 JP:
 Ramona:
 Michal:
 *** Course evaluation
-3-4 Volunteers needed
+https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
+2-6 Volunteers needed
 - Discuss the course with other students, represent their views to the teachers.
-- Take part in 4 meetings
-**** TODO (when?)
-- Cremona voucher for 200SEK?
-- Volunteer today! 
+- Cremona voucher for 200SEK
+- Volunteer _today_ !
+
+
 *** Reading material
 - Scattered across this document
 - Single most relevant textbook: probably
@@ -165,8 +171,57 @@ problem?"
 **** The exam questions will be similar to exercises
 Note in particular that exercises are integral part of the course material.
 
-* Imperative programming
+* Prelude: A crash course on types
 
+Types are essential to get a quick overview of what a program is
+"about". Very useful when facing abstract programs! Hence, they are
+important in this course since some paradigms have high "expression
+power".
+
+Here I use the colon ':' to denote the typing relation. 
+
+*** Some examples:
+
+0 : Int
+1 : Int
+'c' : Char
+"hello" : String
+(1/2) : Rational
+
+*** Paramerisation of programs / Abstraction / Function types
+
+Take a simple value like this:
+
+    greetMe = "Hello, Jean-Philippe! How are you today?" 
+    greetMe : String
+
+
+That's very useless as a program! We want to be able to greet more
+than one person, and parametrize (or abstract) over the name of the
+person greeted:
+
+
+greet(name) = "Hello, " ++ name ++ " How are you today?" 
+
+
+The above makes sense only when 'name' is a string, and in that case
+greet(name) is a string. 
+
+name : String    ⊢    "Hello, " ++ name ++ " How are you today?" : String
+
+We can then deduce that "greet" is a function taking a string into a string:
+
+greet : String -> String
+
+*** Trivia: types of the following
+- factorial : ?  
+- π : ?  
+- sin : ?
+- × : ?
+- ∫ : ? (answer this question after FP paradigm...)
+
+* Imperative programming
+** Computing model
 "von neumann" model of the computer:
 
 - Memory cells
@@ -220,7 +275,6 @@ Note in particular that exercises are integral part of the course material.
 ** Discussion: When are gotos appropriate?
 extra reading: "goto statement considered harmful", E. G. Dijkstra
 http://portal.acm.org/citation.cfm?id=362947
-
 
 ** Transformation: Loops -> Gotos
 
@@ -546,7 +600,6 @@ aka. Automatic memory management
 - Allows for much easier OOP
 - Practically impossible to do FP/Logic without it
 * Object-oriented programming
-
 ** Coupling data and related code
 *** Toy example: Date
 
@@ -603,9 +656,7 @@ mechanisms to make the fields private
    Example: "Person" record.
  - Dogma: never any direct field access (cf. "set" and "get")
 
-
 ** Inheritance
-
 *** Toy example:
 
 class Animal
@@ -627,7 +678,9 @@ procedure Test(c : Canis)
 Test(new Dog);
 Test(new Cat);
 
-*** Translated to records:
+*** Transformation: embed method pointers
+
+The above example gets translated as follows:
 
 record Animal
   field
@@ -659,21 +712,41 @@ function createCat : Cat
 
 
 procedure Test(c : Animal by reference)
-  c.Pet; -- question: explain this line
+  c.Pet; -- (1)
 
 
-Test(cast<Animal> createDog); -- why is the cast valid?
-Test(cast<Animal> createCat);
+Test(cast<Animal> createDog); -- (2)
+Test(cast<Animal> createCat); -- (2)
+
+**** Question: what happens on line (1)
+
+- 'c.Pet' is a function pointer;
+- the function stored in that variable is called.
+- if c.Pet has been correctly set, either dog/cat case will be called.
+
+**** Question: why are the casts (2) valid?
+The layout of the parent class is exactly the same as that of the subclass.
+(In general, there can be more fields/methods in the subclass, found _after_ the fields of the top class)
+ 
+**** TODO Liskov substitution principle
+
+ (http://en.wikipedia.org/wiki/Liskov_substitution_principle is badly written)
 
 *** Exercise: add a StrayCat subclass which: 
 - scratches instead of meowing;
 - counts of the number of wounds inflicted.
+- and apply the transformation
+
+*** TODO Exercise (⋆⋆): what happens when functions have arguments:
+(Needs the notion of type, which is found later)
+(contra-variance)
 
 *** Extension: function tables
 
 - Is the 'pet' function pointer ever modified?
 - How can we save space if there are many methods per class? 
 
+-> One more indirection!
 
 *** Paradigm Shift
 
@@ -687,8 +760,9 @@ Test(cast<Animal> createCat);
 http://en.wikipedia.org/wiki/ECMAScript_syntax#Objects
 
 ** TODO multiple-inheritance & interfaces
-** Forward reference: objects are poor man's _closures_
-
+** Forward reference: ``objects are poor man's [[closures]]''
+ Note the similarity between objects and closures: they are both
+ encoded as state/environment + fct. pointer.
 * Functional programming
 ** Reading (as necessary): "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
@@ -723,21 +797,6 @@ minimum = \(x,y) -> if x < y
 f x   ==  f(x)
 
 f x y == (f x) y  ==  (f(x))(y)
-
-
-** Types: a crash course
-
-0 : Int
-1 : Int
-"hello" : String
-
-successor : Int -> Int
-
-factorial : ?
-
-π : ?
-
-sin : ?
 
 ** Algebraic Data
    
@@ -859,9 +918,8 @@ Downside:
 - maybe impossible! (eg. the code of map is not available -- map itself is abstract)
 
 *** Transformation: Defunctionalisation (explicit closures)
-
-http://en.wikipedia.org/wiki/Closure_(computer_science)
-
+# <<closures>>
+**** Example
 
 map : (a -> b) -> List a -> List b
 map f [] = []
@@ -882,12 +940,16 @@ apply (Multiply n) x = x * n
 
 data Closure = Multiply Int | ...
 
+**** Read: 
+http://en.wikipedia.org/wiki/Closure_(computer_science)
+
+
 **** Exercise: Implement the above example C. 
 Hint: Instead of a 'tag', use a function pointer.
 
 ....
 
-Note the similarity with objects!
+Note the similarity with [[objects]]!
 
 **** Exercise: Implement the above example Java
 Hint: Instead of a tag, make a derived class ('apply' is a method)
@@ -985,6 +1047,8 @@ h (a,b) = g a b
   then what is currification
 **** Extra: can you implement other algebraic laws?
 
+** Paradigm shift: HOT!
+Higher-Order and Typed
 ** Purity and its Consequences
 
 Did you know that side effects...
@@ -1038,35 +1102,62 @@ Example: tree update
 
 -> Some say: "in Haskell, lists are a _control structure_".
 
-** Paradigm shift:
+** Paradigm shift: composition of transformations
 
 - When writing a search function, the programmer can ALWAYS (and ONLY)
   return a list of ALL possible results.
 
+- Programs can be understood as 
+
+- Dogma: no side effect (eg. no global state)
+
 *** Trivia: what is the most used lazy language?
-Probably SQL!
+- Probably SQL!
+- But remember also unix-shell pipes:
+  
+   cat /etc/password | grep 'group=admin' | head 
 
 *** Read: _Why functional programming matters_, J. Hughes.
 
-
 ** Transformation: explicit thunks
 
+One can have strict structures in haskell like so:
+file:Strict.hs
 
+It's possible to recover laziness like this:
+file:Lazy.hs
+
+*** Question: What if we want to encode laziness in an imperative language?
+- First introduce explicit thunks,
+- Then transform them into closures!
 
 * Concurrent programming
-
 ** Disclaimer: Concurrent programming ≠ Parallel programming
+
+Parallel programming = expose (lack of) dependencies between parts of
+the computation, so that the computer can run subtasks in parallel.
+
+Concurrent programming = spawn independent processes, which live
+independent lives (dependencies might come, but "after the fact").
+
+In summary:
+- parallelism: SPEED!
+- concurrency: distribution, redundancy, ...
+
 ** "The world is concurrent!"
 "
 The world is concurrent
 Things in the world don't share data
 Things communicate with messages
 Things fail                                      <- (the part we will not discuss)
-" -- Joe Armstrong
+" -- Joe Armstrong 
+     (After his 7th victory in Tour de France)
 
 ** Process
+A process is an independent thread of computation
 file:Process.hs
 ** Channel
+A medium for communication between processes.
 file:Channel.hs
 ** Transformation: variable-managing process
 file:CSPVariable.hs
@@ -1082,7 +1173,105 @@ file:ServerWithContinuations.hs
 There are more models for concurrency than chanels + processes
 (eg. revisions)
 
+** TODO Paradigm shift:
 * TODO Logic programming
+
+In this lecture I use the Curry syntax. 
+** Read (as needed): 
+  http://www-ps.informatik.uni-kiel.de/currywiki/documentation/tutorial
+
+** Logic: a crash course
+
+*** Question: what is a Logic?
+- Principles of reasoning
+- (Preferrably) sound.
+
+*** Propositions:
+- A statement (can be true or false).
+
+(A proposition that can be proved is called a theorem.)
+
+**** Closed propositions:
+- "Socrates is a man"
+- "John Hughes has a tatto on the sole of his left foot"
+
+**** Open propositions:
+- "x is a man"
+- "John Hughes has a tatto on x"
+
+(The above statements _may_ be made true for some value of the (meta-)variable x)
+
+*** Principles
+**** Example: conjunction
+
+   A        B                   <--- premisses
+----------------
+      A ∧ B                     <--- conclusion
+
+
+
+     A ∧ B
+----------------
+       A
+
+
+     A ∧ B
+----------------
+       B
+
+**** Example: specialisation
+      ∀x. A(x) ⇒ B(x)          A(a)
+----------------------------------------
+           B(a)
+
+
+Famously:
+
+   ∀x. Man(x) ⇒ Mortal(x)          Man(socrates)
+ ------------------------------------------------
+                   Mortal(socrates)
+
+**** Example(⋆⋆⋆): application
+
+
+   ∀x:A ⇒ B(x)          a:A
+----------------------------
+           B(a)
+
+
+Famously:
+
+   ∀x:Man ⇒ Mortal(x)          socrates : Man
+ ------------------------------------------------
+                   Mortal(socrates)
+
+
+
+*** Proof
+
+derive a theorem from a number of axioms, using the principles.
+
+
+   axiom1   axiom4                              axiom2
+ --------------------- principle           -------------- principle ...
+   quux                                         foo
+  ----------------------------------------------------------- principle ....
+                        bar
+
+** Logic programming:
+- Provide a number of facts (axioms)
+- Let the computer search for a proof 
+
+*** Example: family tree
+
+data People = ... | 
+
+parent : Person -> Person -> Prop
+parent = True
+parent = True
+
+
+
 
 ** Unification
 *** Metavariables
@@ -1097,12 +1286,13 @@ http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
 
 Performance of inverted functions can be terrible.
 
+** TODO Paradigm shift:
 * Outlook
 
 The following graph is an overview of all the transformations seen in
 the course.
 
-(NOTE: You should know also how to "invert" a transformation!)
+(NOTE: You should know also how to "revert" a transformation!)
 
 #+begin_src dot :file some_filename.png :cmdline -Kdot -Tpng
 digraph G {
@@ -1119,7 +1309,7 @@ digraph G {
 }
 #+end_src
 
-* Where to go from here?
+* Postlude: Where to go from here?
 ** Exam :)
 - re-do the exercises
 - exam will be in the same style
