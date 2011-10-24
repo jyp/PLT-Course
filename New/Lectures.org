@@ -1,6 +1,11 @@
 How to read this document: 
 - Simple: plain text, header level is indicated by number of *
-- Better: Use emacs [[http://orgmode.org/][org mode]]. Check out the [[http://orgmode.org/orgcard.txt][reference card]].
+- Better: Use emacs [[http://orgmode.org/][org mode]]. Use <TAB> to expand/collapse nodes. Check out the
+  [[http://orgmode.org/orgcard.txt][reference card]].
+- Sometimes the difficulty of a section is indicated by a number of stars:
+  + (⋆) material required to pass the course
+  + (⋆⋆) material for grade 4
+  + (⋆⋆⋆) only for grade 5 (or above)
 
 * Introduction + Programming Paradigms in General
 
@@ -209,7 +214,8 @@ greet(name) is a string.
 
 name : String    ⊢    "Hello, " ++ name ++ " How are you today?" : String
 
-We can then deduce that "greet" is a function taking a string into a string:
+We can then deduce that "greet" is a function taking a string into a
+string, written formally as follows:
 
 greet : String -> String
 
@@ -218,10 +224,20 @@ greet : String -> String
 - π : ?  
 - sin : ?
 - × : ?
-- ∫ : ? (answer this question after FP paradigm...)
+- derivative : ? (or ∫ : ?) (answer this question after FP paradigm...)
 
 * Imperative programming
-** Computing model
+** Paradigm
+
+1. do this
+2. then do that
+3. then do some otherthing 
+4. if not done, then repeat 2. and 3. 
+
+(cf. cookbook...
+   ... for beginner cooks :)
+
+*** Computing model
 "von neumann" model of the computer:
 
 - Memory cells
@@ -258,7 +274,7 @@ greet : String -> String
           end if
         end for
 
-*** Wrapping in a procedures for good measure
+*** Wrapping in a procedure for good measure
 
     procedure bubbleSort( A : list of sortable items )
       do
@@ -296,7 +312,7 @@ do
    body
 until cond
 
-** Transformation: If .. then .. else -> Gotos
+** Transformation: If then else -> Gotos
 *** Source
 if cond then
   part1
@@ -319,7 +335,6 @@ done:
 No general form! (You must be creative)
 
 ** Transformation: inlining procedures
-
 *** Source
 procedure g(x,y)
   x := x + y
@@ -347,10 +362,8 @@ a := a + b
 a := a + 1
 b := b + x
 
-
-*** Trivia: What happens when the original program is recursive?
-
-** Transformation: Procedures -> Gotos
+*** Question: What happens when the original program is recursive?
+** Transformation: Procedures -> Gotos & Variables
 
 --------------------------------------
 function sqrt(x : Float) : Float
@@ -399,6 +412,7 @@ out1:
 *** 1st example: factorial.
 Translation of a recursive call:
  - push local variables on a stack
+ - set caller
  - goto
  - pop local variables
 
@@ -428,20 +442,18 @@ if n = 0 then
   result := 1;
   goto caller;
 else 
-  push(n,caller);
-  caller := continue;
-  n := n-1;
-  goto fact;
-  continue:
-  pop(n,caller);
-  result := n * result; -- result is the result of the recursive call.
-  goto caller;
+  push(n,caller);         -- save locals         \
+  caller := continue;     -- remember caller      |
+  n := n-1;               -- set arguments        |    This is the translation
+  goto fact;              -- jump                 |        of the call  'fact(n-1)'
+continue:                                         |
+  pop(n,caller);          -- restore locals       /
+  result := n * result;   -- result (on the rhs of :=) is the result of the recursive call.
+  goto caller;            
 ------------------------------------------------
 
 *** 2nd example: factorial (alternative algorithm)
-
-Other example:
-
+**** Source
 --------------------------------
 function fact (n:Int,acc:Int)
   if n = 0 then
@@ -450,10 +462,9 @@ function fact (n:Int,acc:Int)
     return fact(n-1,n * acc)
 --------------------------------
 
+**** Question: explain the algorithm.
 
-What is the algorithm used?
-
-
+**** Target (by straightforward application of rules)
 --------------------------------
 fact: -- n,acc,caller are defined here.
 if n = 0 then
@@ -471,7 +482,7 @@ else
   goto caller;
 --------------------------------
 
-
+**** Improvement:
 But:
  - The local variables are saved for nothing: they are not used after they are popped!
  - The result := result statement is useless.
@@ -531,6 +542,7 @@ else
   goto fact:
 -----------------
 
+**** Final version
 Finally we can reconstruct a loop:
 
 
@@ -542,54 +554,64 @@ while n /= 0 do
 result := acc;
 -------------------------
 
-
-
-Exercise:
-- Derecursify tree traversal
-- Do you really need a stack? (hint: you can update the tree as you go)
+**** Exercise 
+- Derecursify tree traversal (⋆⋆)
+- Do you really need a stack? (⋆⋆⋆) (hint: you can update the tree as you go)
 
 ** Passing by reference 
-
 *** Reminder: References (aka. pointers)
+**** Addresses
+Assume:
 
  x : Integer
 
- addressOf(x) : ReferenceTo Integer
+Then
+
+ addressOf(x) : PointerTo Integer
    ≃ where in the memory is the variable x
 
- variableAt(x : ReferenceTo Integer) : Integer
+addressOf : Integer -> PointerTo Integer
 
+**** "De-reference"
+
+Assume:
+
+ p : PointerTo Integer
+
+Then:
+
+ variableAt(p) : Integer
+
+------------------------------------
+variableAt : PointerTo Integer -> Integer 
 
 **** Trivia: whats the meaning of addressOf(addressOf(x))?
  -> none! because addressOf(x) is just a value, there is no location for it in the memory.
-**** Exercise: write the above in C syntax
-
-
+**** Exercise (⋆): re-write the above in C syntax
 *** Example
-**** Supposing the language supports by. ref.
+**** Source:
+
+(Supposing the language supports passing arguments by reference:)
+
 increment(by ref. x : Int)
   x := x + 1
-
-
 ...
-
 
 increment(y)
 
-**** No by ref, but pointers:
+**** Target
 
+(Assuming the language supports pointers:)
 
-increment(x : ReferenceTo Int)
+increment(x : PointerTo Int)
   variableAt(x) := variableAt(x) + 1
 
 ...
 
 increment(addressOf(y))
-
-*** Uses of passing by reference (?)
-
+*** Exercise (⋆): bubbleSort
+*** Question: Why is passing by reference useful?
 - "expressive power" : you can factor out parts of the computation that update any (sub-part of) the state
-
 - save time : no need to copy around things
 
 *** Exercise: Does Java use call by reference? 
@@ -597,6 +619,8 @@ increment(addressOf(y))
   
 * Interlude: Garbage Collection
 aka. Automatic memory management
+The memory is freed automatically for you! (Magic!?)
+
 - Allows for much easier OOP
 - Practically impossible to do FP/Logic without it
 * Object-oriented programming
@@ -741,7 +765,7 @@ The layout of the parent class is exactly the same as that of the subclass.
 (Needs the notion of type, which is found later)
 (contra-variance)
 
-*** Extension: function tables
+*** TODO Extension: function tables
 
 - Is the 'pet' function pointer ever modified?
 - How can we save space if there are many methods per class? 
@@ -1175,13 +1199,15 @@ There are more models for concurrency than chanels + processes
 
 ** TODO Paradigm shift:
 * TODO Logic programming
-
+** Syntax
 In this lecture I use the Curry syntax. 
-** Read (as needed): 
-  http://www-ps.informatik.uni-kiel.de/currywiki/documentation/tutorial
+(Similar to Haskell, plus a couple extra features)
+*** Read (as needed) [[http://www-ps.informatik.uni-kiel.de/currywiki/documentation/tutorial][the Curry tutorial]]
 
-** Logic: a crash course
-
+** Interpreter
+- Install PAKCS (recommended)
+- ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
+** Logic: a crash course (⋆⋆⋆⋆)
 *** Question: what is a Logic?
 - Principles of reasoning
 - (Preferrably) sound.
@@ -1245,8 +1271,6 @@ Famously:
  ------------------------------------------------
                    Mortal(socrates)
 
-
-
 *** Proof
 
 derive a theorem from a number of axioms, using the principles.
@@ -1258,23 +1282,12 @@ derive a theorem from a number of axioms, using the principles.
   ----------------------------------------------------------- principle ....
                         bar
 
-** Logic programming:
-- Provide a number of facts (axioms)
-- Let the computer search for a proof 
-
 *** Example: family tree
 
-data People = ... | 
-
-parent : Person -> Person -> Prop
-parent = True
-parent = True
-
-
+file:Family.curry
 
 
 ** Unification
-*** Metavariables
 ** Search
 
 *** List of successes
@@ -1287,6 +1300,24 @@ http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
 Performance of inverted functions can be terrible.
 
 ** TODO Paradigm shift:
+
+Defines predicates instead of functions
+– Y = f(X) is replaced by f(X,Y)
+– X known => Y is computed (f(X))
+– Y known => X is computer (f-1(Y))
+– Compute both directions with one piece of code
+
+
+Dogma: No more function!
+
+– Very cool!!!! (parser/pretty-printer,
+compiler/decompiler...)
+– Sadly, often very inefficient
+
+*** Logic programming:
+- Provide a number of facts (axioms/rules)
+- Let the computer search for a proof 
+
 * Outlook
 
 The following graph is an overview of all the transformations seen in
