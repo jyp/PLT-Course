@@ -5,7 +5,8 @@ How to read this document:
 - Sometimes the difficulty of a section is indicated by a number of stars:
   + (⋆) material required to pass the course
   + (⋆⋆) material for grade 4
-  + (⋆⋆⋆) only for grade 5 (or above)
+  + (⋆⋆⋆) only for grade 5 
+  + (✪) formally part of the course material
 
 * Introduction + Programming Paradigms in General
 
@@ -645,7 +646,7 @@ class Date
 appointment = today;
 appointment.shiftByDays(7);
 
-**** Note: Objects are, almost invariably, passed by reference.
+**** Note: Objects are, almost always, passed by reference.
 
 **** Tranlated into plain records + procedures
 
@@ -654,12 +655,10 @@ record Date
   Month : Integer
   Day : Integer
   
-
 function today : Date;
 
 procedure ShiftByDays(this : Date by reference; days : Integer);
 -- Why is "by reference" important?
-  
 
 -- Example use:
 appointment = today;
@@ -671,7 +670,7 @@ mechanisms to make the fields private
 
 *** Paradigm Shift: Abstract Data Type (ADT) 
  - Example: "stack", "priority queue", ... from your data structures course
- - Every piece data type comes with a specification
+ - Every data type comes with a specification
  - ... maybe in the form of _unit tests_
  - Notion of data-invariant
  - Advantage: it's easy to change representation of data
@@ -687,16 +686,16 @@ class Animal
   method Pet
      print "Undefined"
 
-class Dog inherits Canis
+class Dog inherits Animal
   method Pet
      print "Shake tail"
 
-class Cat inherits Canis 
+class Cat inherits Animal 
   method Pet
      print "Mew"
 
 
-procedure Test(c : Canis)
+procedure Test(c : Animal)
   c.Feed
 
 Test(new Dog);
@@ -708,12 +707,12 @@ The above example gets translated as follows:
 
 record Animal
   field
-    Pet : function pointer;
+    Pet : function;
 
 
 record Dog 
   field
-    Pet : function pointer;
+    Pet : function;
 
 procedure petDog(this : Dog);
   print "Shake tail"  -- (1)
@@ -725,7 +724,7 @@ function createDog : Dog
 
 record Cat
   field 
-     Pet : function pointer;
+     Pet : function;
 
 procedure petCat(this : Cat);
   print "Shake tail"
@@ -752,25 +751,77 @@ Test(cast<Animal> createCat); -- (2)
 The layout of the parent class is exactly the same as that of the subclass.
 (In general, there can be more fields/methods in the subclass, found _after_ the fields of the top class)
  
-**** TODO Liskov substitution principle
+**** TODO Liskov substitution principle and Polymorphism
+
+
+if class B inherits class A, then, for any x,
+
+   x : B  ⇒  x : A
+
+This means that 
+
+1. 'x' has multiple types 
+
+2. Whenever a function 'f' for type 'A', one can pass a value of type
+   'B'. By deriving from 'A', a lot of code is automatically ready to
+   work with 'B'.  (Conversely, inheriting from 'A' make the function
+   'f' more useful.)
+
+This is one instance of an important phenomenon: /polymorphism/.
+
+***** Read (✪) more about [[http://en.wikipedia.org/wiki/Polymorphism_(computer_science)][polymorphism]].
 
  (http://en.wikipedia.org/wiki/Liskov_substitution_principle is badly written)
 
-*** Exercise: add a StrayCat subclass which: 
+*** Exercises 
+
+apply the transformation on each of the following examples:
+
+*** TODO call the function "Vocalise" by default in the Pet method.
+*** add a StrayCat subclass which: 
 - scratches instead of meowing;
 - counts of the number of wounds inflicted.
-- and apply the transformation
 
-*** TODO Exercise (⋆⋆): what happens when functions have arguments:
-(Needs the notion of type, which is found later)
-(contra-variance)
 
-*** TODO Extension: function tables
+
+*** What happens when functions have arguments?
+In many languages, the type of the arguments of derived functions must
+be the SAME as that of the overridden function.
+**** Contra-variance (✪)
+A perhaps natural expectation is that you could make the arguments
+change as the type of the object. Ex.:
+
+class Additive 
+  method Add(Additive)
+
+class Integer
+  method Add(Integer)
+
+... but in fact this violates the substitution principle!
+
+Exercise: use the above two classes in a way that shows violation of
+substitution.
+
+Read: http://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)
+
+*** Extension (✪): function tables
 
 - Is the 'pet' function pointer ever modified?
 - How can we save space if there are many methods per class? 
 
 -> One more indirection!
+**** Example
+record AnimalMethods
+  Pet : function
+  Vocalise : function
+
+record DogMethods
+  Pet : function
+  Vocalise : function
+  
+dogMethods = {Pet := petDog, ...}
+
+
 
 *** Paradigm Shift
 
@@ -783,10 +834,101 @@ The layout of the parent class is exactly the same as that of the subclass.
 ** Reading/Exercise: Javascript prototypes
 http://en.wikipedia.org/wiki/ECMAScript_syntax#Objects
 
-** TODO multiple-inheritance & interfaces
+** Multiple-inheritance & interfaces
+*** Motivation
+class Computer
+class Phone
+class SmartPhone inherits Computer, Phone
+
+
+class Person
+class Student
+class GradStud inherits Person, Student
+
+1. Better reuse of code (possibly the derived class can use code from
+   both its parents)
+2. More polymorphism!
+
+*** Diamond problem
+
+On a conceptual level:
+
+       Person (fields: Name, BirthDate, ...)
+       /    \     
+      /      \
+  Student  Teacher
+      \      /
+       \    /
+      Grad Student
+
+Does a grad student have two names? ... no
+BUT some other fields might need to be duplicated, if they have a
+function specific to (Student, or Teacher class). (eg. A grad student
+has a Boss as a teacher and another boss as a Student)
+
+-> Big headache
+
+On an implementation level:
+
+
+class Person
+  Name
+  BirthDate
+
+
+class Student inherits Person
+  CourseGrade
+  ...
+
+class Teacher inherits Person
+  numberOfStudents 
+  ...
+
+class GradStud inherits Student, Teacher
+  
+
+What is the record corresponding to GradStud?
+If we copy all the fields, we get:
+
+
+Name
+BirthDate
+CourseGrade
+Name
+BirthDate
+numberOfStudents
+
+
+The record can be casted to Student (as normal, the 3 last fields will
+never be accessed by methods in the Student class) or Teacher (by
+adding 3 to the pointer).
+
+But what if a method in the class Student updates the BirthDate? Then
+there is a problem: the gradstudent will end up with 2 different
+names!
+
+*** Interfaces
+
+As it is often the case, the issue appears only if the shared class
+has mutable fields. An important case of immutable fields are methods
+(their code is fixed once an for all for a class). Hence the notion of
+/Interface/: a class without fields. In Java, there is special support
+for interfaces, and one can inherit many of them.
+
+Interfaces:
+ - polymorphism ✓
+ - code-reuse   × 
+
+**** Exercise (⋆⋆)
+Modify the translation above to support interfaces
+
+**** Exercise (✪)
+Translation of interfaces via method tables.
+
 ** Forward reference: ``objects are poor man's [[closures]]''
  Note the similarity between objects and closures: they are both
  encoded as state/environment + fct. pointer.
+** TODO Traits & Objects as fixpoints (✪)
 * Functional programming
 ** Reading (as necessary): "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
@@ -1198,21 +1340,21 @@ There are more models for concurrency than chanels + processes
 (eg. revisions)
 
 ** TODO Paradigm shift:
-* TODO Logic programming
+* Logic programming
 ** Syntax
 In this lecture I use the Curry syntax. 
 (Similar to Haskell, plus a couple extra features)
-*** Read (as needed) [[http://www-ps.informatik.uni-kiel.de/currywiki/documentation/tutorial][the Curry tutorial]]
-
+*** Read (as needed)
+   [[http://www-ps.informatik.uni-kiel.de/currywiki/documentation/tutorial][the Curry tutorial]]
 ** Interpreter
 - Install PAKCS (recommended)
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
-** Logic: a crash course (⋆⋆⋆⋆)
-*** Question: what is a Logic?
-- Principles of reasoning
-- (Preferrably) sound.
+** Logic: a crash course (✪)
+*** Question: what is *a logic*?
 
-*** Propositions:
+  (Sound) rules of reasoning
+
+*** Notion: Proposition:
 - A statement (can be true or false).
 
 (A proposition that can be proved is called a theorem.)
@@ -1227,7 +1369,8 @@ In this lecture I use the Curry syntax.
 
 (The above statements _may_ be made true for some value of the (meta-)variable x)
 
-*** Principles
+*** Notion: Rules
+(An axiom is just a rule without premiss)
 **** Example: conjunction
 
    A        B                   <--- premisses
@@ -1273,7 +1416,7 @@ Famously:
 
 *** Proof
 
-derive a theorem from a number of axioms, using the principles.
+derive a theorem from a number of axioms, using the rules:
 
 
    axiom1   axiom4                              axiom2
@@ -1282,14 +1425,51 @@ derive a theorem from a number of axioms, using the principles.
   ----------------------------------------------------------- principle ....
                         bar
 
-*** Example: family tree
+** Transformation: Functions to relations
+From "classic" math: a function is a graph:
+
+  f : A → B
+
+means
+
+  f : A × B
+  (x,y₁) ∈ f and (x,y₂) ∈ f   ⇒ y₁ = y₂
+
+
+We can turn this around and replace functions by graphs.
+
+| source              | target                                                        |
+|---------------------+---------------------------------------------------------------|
+| f : A -> B          | f : A -> B -> Prop                                            |
+| definition: f x = y | assert: f x y = y                                             |
+| expression: f(x)    | expression: y (new free variable),  with the condition f(x,y) |
+
+file:Lists.curry
+** Paradigm shift:
+- No longer necessary to restrict oneself to relations that describe
+  functions.
+- Dogma: no more functions, only relations
+  + Y = f(X) is replaced by f(X,Y)
+  + if X and Y are known, f(X,Y) is a testable proposition
+- Provide a number of facts (axioms/rules)
+- Let the computer search for an assignment of variables that make
+  some statement true (proof)
+- Invertible programs
+  + if X known, Y is computed (f(X))
+  + if Y known, X is computed (f-1(Y))  
+  + Compute both directions with one piece of code
+  + Very cool!!!! (parser/pretty-printer,
+  compiler/decompiler...)
+- Sadly, often inefficient
+  + Performance of functions inverted using the above receipe can be
+    terrible.
+
+** Other example: family tree
 
 file:Family.curry
+** TODO Unification
 
-
-** Unification
-** Search
-
+** TODO Search
 *** List of successes
 *** Backtracking
 manual search       <-->  constraints
@@ -1297,26 +1477,6 @@ manual search       <-->  constraints
 http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
 
 
-Performance of inverted functions can be terrible.
-
-** TODO Paradigm shift:
-
-Defines predicates instead of functions
-– Y = f(X) is replaced by f(X,Y)
-– X known => Y is computed (f(X))
-– Y known => X is computer (f-1(Y))
-– Compute both directions with one piece of code
-
-
-Dogma: No more function!
-
-– Very cool!!!! (parser/pretty-printer,
-compiler/decompiler...)
-– Sadly, often very inefficient
-
-*** Logic programming:
-- Provide a number of facts (axioms/rules)
-- Let the computer search for a proof 
 
 * Outlook
 
@@ -1347,8 +1507,11 @@ digraph G {
 ** Explore the paradigms you like!
 ** Invent you own paradigm!
 - ... that suits the way you think
-- ... that suits your favourite application domain (AFP Course)
+- ... that suits your favourite application domain
+- -> AFP Course
 ** A lot more to read ...
+*** The essence of functional programming (Wadler)
+ Actually a tutorial on monads.
 *** A poor man's concurrency monad (Claessen)
 *** The essence of list comprehensions (Wadler)
 *** Andre Pang's thesis
@@ -1358,3 +1521,4 @@ http://okmij.org/ftp/continuations/index.html#tutorial1
 ** Formal study of Syntax, Types, and Semantics
    -> Programming Languages Coures
    -> "Types and Programming Languages", Pierce
+   -> Types For Proofs And Programs

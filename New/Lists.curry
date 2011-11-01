@@ -4,6 +4,14 @@
 
 
 -- xs ++ ys = zs
+
+{-
+-- Source:
+
+append []     ys = ys
+append (x:xs) ys = x : append xs ys
+-}
+
 append :: List x -> List x -> List x -> Success
 append []     ys zs = ys =:= zs
 append (x:xs) ys zs = append xs ys zs' &
@@ -23,4 +31,7 @@ append (x:xs) ys zs = append xs ys zs' &
 
 
 -- append xs ys [1,2,3,4,5] where xs ys free 
+
+
+
 

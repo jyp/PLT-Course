@@ -1,31 +1,28 @@
 -- Database programming in Curry: family relationships
 -- (functional logic style with explicit functional dependencies)
 
-data Person = GustafAdolf | Sybilla | CarlGustaf | Silvia | Victoria | CarlPhilip | Madeleine
-data Gender = Male | Female
+data Person = Adolf | Sybilla | Gustaf | Silvia | Victoria | Philip | Madeleine
 
 parent :: Person -> Person -> Success
-parent GustafAdolf   CarlGustaf = success
-parent Sybilla       CarlGustaf = success
+parent Adolf         Gustaf = success
+parent Sybilla       Gustaf = success
 
 parent CarlGustaf    Victoria   = success
-parent CarlGustaf    CarlPhilip = success
+parent CarlGustaf    Philip     = success
 parent CarlGustaf    Madeleine  = success
 
 parent Silvia        Victoria   = success
-parent Silvia        CarlPhilip = success
+parent Silvia        Philip     = success
 parent Silvia        Madeleine  = success
 
 
 
 ---- We can ask who is a parent; who is a child...
 
--- query: parent CarlGustaf x where x free
+-- query: parent Gustaf x where x free
 
 
 -- exercises: define grandparent, grandgrandparent, ancestor, descendents
-
-
 
 sibling x y :: Person -> Person -> Success
 sibling x y = parent z x & parent z y
@@ -33,14 +30,19 @@ sibling x y = parent z x & parent z y
 
 -- exercise: cousin
 
-{-
+
+data Gender = Male | Female
 
 gender :: Person -> Gender
-gender Jack = Male
-gender CarlGustaf = Male
+gender Adolf = Male
+gender Gustaf = Male
 gender Catherine = Female
+gender Sybilla = Female
+gender Silvia = Female
+gender Madeleine = Female
 gender Victoria = Male
-gender CarlPhilip = Male
+gender Philip = Male
+
 
 male :: Person -> Success
 male x = gender x =:= Male
@@ -51,7 +53,8 @@ father y x = male y & parent y x
 
 mother :: Person -> Person -> Success
 mother y x = female y & parent y x
--}
+
+
 
 
 
