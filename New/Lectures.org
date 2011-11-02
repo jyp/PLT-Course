@@ -6,7 +6,7 @@ How to read this document:
   + (⋆) material required to pass the course
   + (⋆⋆) material for grade 4
   + (⋆⋆⋆) only for grade 5 
-  + (✪) formally part of the course material
+  + (✪) not formally part of the course material
 
 * Introduction + Programming Paradigms in General
 
@@ -133,8 +133,8 @@ http://www.info.ucl.ac.be/~pvr/paradigmsDIAGRAMeng108.pdf
 *** The importance of knowing multiple paradigms
 **** Ability to think "big thoughts"
 - Anecdote: MULTICS
-- Further reading: "Language as thought shaper" http://soft.vub.ac.be/~tvcutsem/whypls.html
 
+  + "Language as thought shaper", from http://soft.vub.ac.be/~tvcutsem/whypls.html
 
 Language as thought shaper
 
@@ -1213,8 +1213,17 @@ h (a,b) = g a b
   then what is currification
 **** Extra: can you implement other algebraic laws?
 
-** Paradigm shift: HOT!
+** TODO Paradigm shift: HOT!
 Higher-Order and Typed
+- Much more opportunites for abstraction 
+  + Good for reuse!
+- Types capture a coarse-grained meaning of each function
+  + One does not get lost in keeping track of details (so easily)
+- Further reading (⋆) 
+   + Haskell vs. Ada vs. C++ vs. Awk vs. ... ─ An Experiment in Software Prototyping Productivity
+   + especially, sec. 6.1, 7, 8
+   + http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.117.1208&rep=rep1&type=pdf
+
 ** Purity and its Consequences
 
 Did you know that side effects...
@@ -1469,13 +1478,24 @@ file:Lists.curry
 file:Family.curry
 ** TODO Unification
 
+
+Meaning of =:=
+
+- Metavariable
+- Unbound
+- Bound
+
+*** Trivia (⋆): what are the bindings after...
+2 =:= x
+[x,1] =:= [2,y]
+[x,y,z] =:= [w,x,y] 
+
 ** TODO Search
 *** List of successes
 *** Backtracking
 manual search       <-->  constraints
 
 http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
-
 
 
 * Outlook
