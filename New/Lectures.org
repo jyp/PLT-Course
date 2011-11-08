@@ -331,10 +331,69 @@ done:
 
 *** Exercise: switch/case
 
-** Reverse transformation?
+** Reverse transformation? (Gotos -> Loops)
 
 No general form! (You must be creative)
 
+** Passing by reference 
+*** Reminder: References (aka. pointers)
+**** Addresses
+Assume:
+
+ x : Integer
+
+Then
+
+ addressOf(x) : PointerTo Integer
+   ≃ where in the memory is the variable x
+
+addressOf : Integer -> PointerTo Integer
+
+**** "De-reference"
+
+Assume:
+
+ p : PointerTo Integer
+
+Then:
+
+ variableAt(p) : Integer
+
+------------------------------------
+variableAt : PointerTo Integer -> Integer 
+
+**** Trivia: whats the meaning of addressOf(addressOf(x))?
+ -> none! because addressOf(x) is just a value, there is no location for it in the memory.
+**** Exercise (⋆): re-write the above in C syntax
+*** Example
+**** Source:
+
+(Supposing the language supports passing arguments by reference:)
+
+increment(by ref. x : Int)
+  x := x + 1
+...
+
+increment(y)
+
+**** Target
+
+(Assuming the language supports pointers:)
+
+increment(x : PointerTo Int)
+  variableAt(x) := variableAt(x) + 1
+
+...
+
+increment(addressOf(y))
+*** Exercise (⋆): bubbleSort
+*** Question: Why is passing by reference useful?
+- "expressive power" : you can factor out parts of the computation that update any (sub-part of) the state
+- save time : no need to copy around things
+
+*** Exercise: Does Java use call by reference? 
+  Show example(s) that says yes/no
+  
 ** Transformation: inlining procedures
 *** Source
 procedure g(x,y)
@@ -555,69 +614,11 @@ while n /= 0 do
 result := acc;
 -------------------------
 
-**** Exercise 
+** Exercise
 - Derecursify tree traversal (⋆⋆)
 - Do you really need a stack? (⋆⋆⋆) (hint: you can update the tree as you go)
-
-** Passing by reference 
-*** Reminder: References (aka. pointers)
-**** Addresses
-Assume:
-
- x : Integer
-
-Then
-
- addressOf(x) : PointerTo Integer
-   ≃ where in the memory is the variable x
-
-addressOf : Integer -> PointerTo Integer
-
-**** "De-reference"
-
-Assume:
-
- p : PointerTo Integer
-
-Then:
-
- variableAt(p) : Integer
-
-------------------------------------
-variableAt : PointerTo Integer -> Integer 
-
-**** Trivia: whats the meaning of addressOf(addressOf(x))?
- -> none! because addressOf(x) is just a value, there is no location for it in the memory.
-**** Exercise (⋆): re-write the above in C syntax
-*** Example
-**** Source:
-
-(Supposing the language supports passing arguments by reference:)
-
-increment(by ref. x : Int)
-  x := x + 1
-...
-
-increment(y)
-
-**** Target
-
-(Assuming the language supports pointers:)
-
-increment(x : PointerTo Int)
-  variableAt(x) := variableAt(x) + 1
-
-...
-
-increment(addressOf(y))
-*** Exercise (⋆): bubbleSort
-*** Question: Why is passing by reference useful?
-- "expressive power" : you can factor out parts of the computation that update any (sub-part of) the state
-- save time : no need to copy around things
-
-*** Exercise: Does Java use call by reference? 
-  Show example(s) that says yes/no
-  
+** Exercise
+- Derecursify ackerman function.
 * Interlude: Garbage Collection
 aka. Automatic memory management
 The memory is freed automatically for you! (Magic!?)
@@ -930,16 +931,19 @@ Translation of interfaces via method tables.
  encoded as state/environment + fct. pointer.
 ** TODO Traits & Objects as fixpoints (✪)
 * Functional programming
-** Reading (as necessary): "Learn you a Haskell, for great good!"
+** Reading (as necessary to understand Haskell syntax): "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
 
 ** A bit of syntax
 
 *** Function definitions
 
+Similar to mathematical notation:
+
 minimum (x,y) = if x < y 
                   then x
                   else y
+
 
 *** (λ) abstractions / local functions
 
@@ -957,14 +961,17 @@ minimum = \(x,y) -> if x < y
                       else y
 
 
-
 *** Application BINDS TO THE LEFT.
+
+No need for parentheses:
 
 f x   ==  f(x)
 
+Left leaning:
+
 f x y == (f x) y  ==  (f(x))(y)
 
-** Algebraic Data
+** Algebraic Types
    
 If A and B are data types, then...
 
@@ -974,19 +981,17 @@ what is  A + B ?
 
          A × B ?
 
-         similar to records in C
+         similar to records in C (difference?)
 
 
 Let's count the number of inhabitants of the type:
-
 
     #(A + B) = #A + #B
     #(A × B) = #A × #B
 
 To "bootstrap" we also need types 0 (empty type, unit of +) and 1 (singleton, unit of ×)
 
-*** Exercise (⋆⋆⋆): what is A → B, algebraically ?
-
+*** Trivia (✪): what is A → B, algebraically ?
 *** Examples
 
 Bool = 1 + 1
@@ -1010,13 +1015,15 @@ data List a = Nil a | Cons a (List a)
 
 Lists as a
 
-*** Exercise: define an algebraic type for binary trees
-
+*** Exercise
+ - define an algebraic type for binary trees
+ - define an algebraic type for arithmetic expressions
+ - simple interpreter
 *** Transformation: Algebraic data type -> inheritance
 
 ** Higher-order functions
 
-*** Example: fold/reduce
+*** Example: fold (sometimes called reduce)
 
 -- sum the elements in a list
 sum Nil          = 0
@@ -1028,23 +1035,35 @@ product Nil         = 1
 product (Cons x xs) = 1 * product xs
 
 
-ABSTRACT! ABSTRACT! ABSTRACT! (Parameterize)
+Same pattern -> Abstract out the difference ! (Parameterize)
 
 
 foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr = ?
+
+
+sum xs = foldr (\x y -> x + y) 0 xs
+
 
 A function taking another function in parameter: a higher order function.
 
 *** TODO Example: map
 
+multiplyBy n Nil = Nil
+multiplyBy n (Cons x xs) = Cons (n*x) (multiplyBy n xs)
+
+
+map :: (a -> b) -> List a -> List b
+
 *** Exercise: write a function that does the dot-product of a vector; then Abstract.
 
 What do you get?    
 
-*** Reading: (1st part compulsory)
+*** Reading: 
 "Can Programming Be Liberated From the von Neumann Style?", John
 Backus, 1977 Turing Award Lecture
 http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
+(recommended to read up to p. 620).
 
 ** Removing Higher-Order functions
 *** Transformation: Inlining higher-order functions
@@ -1092,7 +1111,7 @@ map f [] = []
 map f (x:xs) = f x : map f xs
 
 
-multiply n = map (\x -> x * n) 
+multiplyBy n = map (\x -> x * n) 
 
 
 map : Closure -> List a -> List b
@@ -1100,7 +1119,7 @@ map f [] = []
 map f (x:xs) = apply f x : map f xs
 
 
-multiply n = map (Multiply n)
+multiplyBy n = map (Multiply n)
 
 apply (Multiply n) x = x * n
 
@@ -1122,18 +1141,21 @@ Hint: Instead of a tag, make a derived class ('apply' is a method)
 
 ** Transformation: Explicit State
 
-Idea: pass around the "state of the world" explicitly
+- Can we represent imperative program without using side effects?
+- Idea: pass around the "state of the world" explicitly
+- Functions are transformed as follows:
 
-print : () -- in an imperative language, the state is implicit
+  print : () -- in an imperative language, the state is implicit
 
-print : State -> State × () -- after making the state explicit
+  print : State -> State × () -- after making the state explicit
 
 
 
 Assuming the "state of the world" is only the contents of the output
 file, then print does what?
 
-Exercise: implement "safePrint" functionally...
+
+*** Exercise: implement "safePrint" functionally...
 
 procedure safePrint(line) : ErrorCode
   if outOfInk then
@@ -1198,16 +1220,16 @@ safePrint line =
 
 ** Transformation: Currification
 
-
 f : (A × B) → C
 f = ...
 
 g : A → (B → C)
 g a = \b -> f (a,b)
 
-
 h : (A × B) → C
 h (a,b) = g a b
+
+Remark: f ≡ h
 
 *** Note: try to read A → B as B^A
   then what is currification
@@ -1507,8 +1529,9 @@ the course.
 
 #+begin_src dot :file some_filename.png :cmdline -Kdot -Tpng
 digraph G {
+   Imperative -> Machine [label=explicit gotos]
    Imperative -> Machine [label=explicit stack\n(derecursification)]
-   Object-Oriented -> Imperative [label=explicit dispatch]
+   Object-Oriented -> Imperative [label=explicit method pointers]
    Functional -> Imperative [label=explicit closures\n(defunctionalization)]
    Functional -> Imperative [label=inline higher-order fct.]
    Imperative -> Functional [label=explicit state]
