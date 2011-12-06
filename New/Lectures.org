@@ -1,7 +1,11 @@
+Programming Paradigms: Lecture notes
+
 How to read this document: 
 - Simple: plain text, header level is indicated by number of *
-- Better: Use emacs [[http://orgmode.org/][org mode]]. Use <TAB> to expand/collapse nodes. Check out the
-  [[http://orgmode.org/orgcard.txt][reference card]].
+- Better: Use emacs [[http://orgmode.org/][org mode]]. 
+  + Use <TAB> to expand/collapse nodes. 
+  + C-c C-e b to do HTML rendering and open in your browser
+  + Check out the [[http://orgmode.org/orgcard.txt][reference card]].
 - Sometimes the difficulty of a section is indicated by a number of stars:
   + (⋆) material required to pass the course
   + (⋆⋆) material for grade 4
@@ -17,13 +21,15 @@ How to read this document:
 ** The teaching team
 *** JP Bernardy
 Course responsible & Lecturer
-Room: 6126
-E-mail: bernardy@chalmers.se
+
+Contact:
+- Room: 6126
+- E-mail: bernardy@chalmers.se
 
 CV:
-1996-2000: Master in CS (Free University of Brussels)
-2000-2007: Software engineer at various places
-2007-2011: PhD (Chalmers)
+- 1996-2000: Master in CS (Free University of Brussels)
+- 2000-2007: Software engineer at various places
+- 2007-2011: PhD (Chalmers)
 
 *** Ramona Enache
 Assistant
@@ -47,12 +53,13 @@ JP:
 Ramona:
 Michal:
 *** Course evaluation
-https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
+
+See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
+
 2-6 Volunteers needed
 - Discuss the course with other students, represent their views to the teachers.
 - Cremona voucher for 200SEK
 - Volunteer _today_ !
-
 
 *** Reading material
 - Scattered across this document
@@ -83,44 +90,47 @@ philosophical or theoretical framework of any kind"
 
 see also: http://en.wikipedia.org/wiki/Programming_paradigm
 
-*** "Way of organising thought"
+*** Paradigms as "ways of organising thought"
 
+:             Programming paradigm 
+:                        = 
+: The basic structuration of thought underlying the programming activity.
 
-      Paradigms
+eg. when you think of a programming problem, what are you thinking of?
 
-         ^
-         |
+- the sequence of actions to perform (first download the file, then
+  display it)
+- how to divide the problem-space into sub-tasks (to compute the
+  spanning tree, i can divide the graph arbitrarily in two, and then
+  ...)
+- what are the agents involved (sensors, a simulator, a renderer, ...)
+- what data do we need to handle? do we need intermediate
+  representations? what are the relations between the different forms?
 
-    Design Patterns
+Note that the same way of thinking is not adapted to all problems.
 
-         ^
-         |
+*** To each paradigm corresponds a "mental model of the computer"
 
-      Programs
+How do you think of your computer?
 
-(I cannot teach you so many ways to organise your brain in 7 weeks!
-But fear not... You have other courses :) )
-
-*** "Mental model of the computer"
-
-- von Neumann model
+- Memory + instructions (von Neumann model)
 - Rewriting engine
-- Mathematical functions
-
-
-*** Languages
+- Mathematical function
+- ...
+  
+*** Paradigms and Languages
 **** (Do not reveal:) Discussion: What languages do you know? 
 
 Regexp / Excell formulas / sql queries / Haskell / C / Asm / ...
 
---> clouds / recognise paradigms / discussions
+ ⟶ clouds / recognise paradigms / discussions
 
 - Paradigms build on top of features
 - Languages implement features
 
 http://www.info.ucl.ac.be/~pvr/paradigmsDIAGRAMeng108.pdf
 
-*** Features
+**** PL Features
 - Structured data / Records
 - Naming and abstraction (2nd order, etc).
 - Memory (cell) / State
@@ -129,24 +139,72 @@ http://www.info.ucl.ac.be/~pvr/paradigmsDIAGRAMeng108.pdf
 - Recursion
 - Search
 
+*** Notion of paradigm shift
+After writing many programs, you may notice patterns emerging. These
+patterns may become codified, either informally (see the book of the
+Gang of Four) or formally within the language (cf. Haskell Monads).
+
+Eventually, all programming may revolve around a number of patterns;
+the old ways are abandonned.  This is the paradigm shift: a new way of
+thinking appears. Eventually, a new programming language may be
+developed to support the "patterns" directly.
+
+#+begin_src dot :file shift.png :cmdline -Kdot -Tpng
+digraph G {
+   "Programming habits" -> "(Design) patterns" -> "New Paradigm"
+}
+#+end_src
+
+#+results:
+[[file:shift.png]]
 
 *** The importance of knowing multiple paradigms
 **** Ability to think "big thoughts"
 - Anecdote: MULTICS
+- "Language as thought shaper", from http://soft.vub.ac.be/~tvcutsem/whypls.html
 
-  + "Language as thought shaper", from http://soft.vub.ac.be/~tvcutsem/whypls.html
+  To quote Alan Perlis: "a language that doesn't affect the way you
+  think about programming, is not worth knowing."
+  
+  The goal of a thought shaper language is to change the way a
+  programmer thinks about structuring his or her program. The basic
+  building blocks provided by a programming language, as well as the
+  ways in which they can (or cannot) be combined, will tend to lead
+  programmers down a "path of least resistance", for some unit of
+  resistance. For example, an imperative programming style is definitely
+  the path of least resistance in C. It's possible to write functional C
+  programs, but as C does not make it the path of least resistance, most
+  C programs will not be functional.
 
-Language as thought shaper
+  Functional programming languages, by the way, are a good example of
+  thought shaper languages. By taking away assignment from the
+  programmer's basic toolbox, the language really forces programmers
+  coming from an imperative language to change their coding habits. I'm
+  not just thinking of purely functional languages like
+  Haskell. Languages like ML and Clojure make functional programming the
+  path of least resistance, yet they don't entirely abolish
+  side-effects. Instead, by merely de-emphasizing them, a program
+  written in these languages can be characterized as a sea of
+  immutability with islands of mutability, as opposed to a sea of
+  mutability with islands of immutability. This subtle shift often makes
+  it vastly easier to reason about the program.
 
-To quote Alan Perlis: "a language that doesn't affect the way you think about programming, is not worth knowing."
+  Erlang's concurrency model based on isolated processes communicating
+  by messages is another example of a language design that leads to
+  radically different program structure, when compared to mainstream
+  multithreading models. Dijkstra's "GOTO considered harmful" and
+  Hoare's Communicating Sequential Processes are pioneering examples of
+  the use of language design to reshape our thoughts on programming. In
+  a more recent effort, Fortress wants to steer us towards writing
+  parallel(izable) programs by default.
 
-The goal of a thought shaper language is to change the way a programmer thinks about structuring his or her program. The basic building blocks provided by a programming language, as well as the ways in which they can (or cannot) be combined, will tend to lead programmers down a "path of least resistance", for some unit of resistance. For example, an imperative programming style is definitely the path of least resistance in C. It's possible to write functional C programs, but as C does not make it the path of least resistance, most C programs will not be functional.
-
-Functional programming languages, by the way, are a good example of thought shaper languages. By taking away assignment from the programmer's basic toolbox, the language really forces programmers coming from an imperative language to change their coding habits. I'm not just thinking of purely functional languages like Haskell. Languages like ML and Clojure make functional programming the path of least resistance, yet they don't entirely abolish side-effects. Instead, by merely de-emphasizing them, a program written in these languages can be characterized as a sea of immutability with islands of mutability, as opposed to a sea of mutability with islands of immutability. This subtle shift often makes it vastly easier to reason about the program.
-
-Erlang's concurrency model based on isolated processes communicating by messages is another example of a language design that leads to radically different program structure, when compared to mainstream multithreading models. Dijkstra's "GOTO considered harmful" and Hoare's Communicating Sequential Processes are pioneering examples of the use of language design to reshape our thoughts on programming. In a more recent effort, Fortress wants to steer us towards writing parallel(izable) programs by default.
-
-Expanding the analogy with natural languages, languages as thought shapers are not about changing the vocabulary or the grammar, but primarily about changing the concepts that we talk about. Erlang inherits most of its syntax from Prolog, but Erlang's concepts (processes, messages) are vastly different from Prolog's (unification, facts and rules, backtracking). As a programing language researcher, I really am convinced that language shapes thought.
+  Expanding the analogy with natural languages, languages as thought
+  shapers are not about changing the vocabulary or the grammar, but
+  primarily about changing the concepts that we talk about. Erlang
+  inherits most of its syntax from Prolog, but Erlang's concepts
+  (processes, messages) are vastly different from Prolog's (unification,
+  facts and rules, backtracking). As a programing language researcher, I
+  really am convinced that language shapes thought.
 
 **** Altenative paradigms in the industry:
 - "Excell is the most used programming language"
@@ -159,16 +217,22 @@ http://tauday.com/
 
 ** Outline of the course
 *** Brief exposition of each paradigm
-- Functional (requirement: "introduction to functional programming" TDA555)
-- Imperative (not a requirement: "machine-oriented programming" EDA480)
-- Concurrent (not a requirement: "concurrent programming" TDA381)
-- Object oriented (requirement: "Object oriented programming" DAT042)
-- Logic (not a requirement: ?)
+
+Can I teach you so 5 differrent ways of thinking in 7 weeks? 
+Each of these would require major rewiring of your brain. Difficult!
+But fear not... Other courses are available:
+
+- Functional ("introduction to functional programming" TDA555)
+- Imperative ("machine-oriented programming" EDA480)
+- Concurrent ("concurrent programming" TDA381)
+- Object oriented ("Object oriented programming" DAT042)
+- Logic (?)
 *** (Some) Transformations between paradigms
+*This is the focus of the course.*
 *** Learning outcomes
 **** Awareness of multiple paradigms
-First question of the design phase: "How should I think about this
-problem?"
+First questions of the design phase: "How should I think about this
+problem? (Do I know a paradigm suitable to express the solution?)"
 **** Recognise "encoded" thoughts:
 ***** what is the natural paradigm
 ***** decode them
@@ -188,18 +252,18 @@ Here I use the colon ':' to denote the typing relation.
 
 *** Some examples:
 
-0 : Int
-1 : Int
-'c' : Char
-"hello" : String
-(1/2) : Rational
+1. 0 : Int
+2. 1 : Int
+3. 'c' : Char
+4. "hello" : String
+5. (1/2) : Rational
 
 *** Paramerisation of programs / Abstraction / Function types
 
 Take a simple value like this:
 
-    greetMe = "Hello, Jean-Philippe! How are you today?" 
-    greetMe : String
+:    greetMe = "Hello, Jean-Philippe! How are you today?" 
+:    greetMe : String
 
 
 That's very useless as a program! We want to be able to greet more
@@ -207,26 +271,26 @@ than one person, and parametrize (or abstract) over the name of the
 person greeted:
 
 
-greet(name) = "Hello, " ++ name ++ " How are you today?" 
+:    greet(name) = "Hello, " ++ name ++ " How are you today?" 
 
 
 The above makes sense only when 'name' is a string, and in that case
 greet(name) is a string. 
 
-name : String    ⊢    "Hello, " ++ name ++ " How are you today?" : String
+:    name : String    ⊢    "Hello, " ++ name ++ " How are you today?" : String
 
 We can then deduce that "greet" is a function taking a string into a
 string, written formally as follows:
 
-greet : String -> String
+:   greet : String → String
 
 *** Trivia: types of the following
-- factorial : ?  
-- π : ?  
-- sin : ?
-- × : ?
-- derivative : ? (or ∫ : ?) (answer this question after FP paradigm...)
-
+1. factorial : ?  
+2. π : ?  
+3. sin : ?
+4. × : ?   (multiplicaton)
+5. derivative : ? (or ∫ : ?) (review this question after FP paradigm...)
+   - hint: remember that derivative maps sin to cos.
 * Imperative programming
 ** Paradigm
 
@@ -248,6 +312,7 @@ greet : String -> String
 
 *** Gotos
 
+#+begin_example
    -- Assume A : list of sortable items
 
    begin:
@@ -261,9 +326,11 @@ greet : String -> String
         i := i+1
         if i < n then goto loop
         if swapped goto begin
+#+end_example
 
 *** Loops & Ifs
 
+#+begin_example
    -- Assume A : list of sortable items
 
       while swapped
@@ -274,9 +341,10 @@ greet : String -> String
             swapped = true
           end if
         end for
+#+end_example
 
 *** Wrapping in a procedure for good measure
-
+#+begin_example
     procedure bubbleSort( A : list of sortable items )
       do
         swapped = false
@@ -288,24 +356,29 @@ greet : String -> String
         end for
       while swapped
     end procedure
+#+end_example
 
 ** Discussion: When are gotos appropriate?
 extra reading: "goto statement considered harmful", E. G. Dijkstra
 http://portal.acm.org/citation.cfm?id=362947
 
-** Transformation: Loops -> Gotos
+** Transformation: Loops ⟶ Gotos
 
 *** Source: 
+#+begin_example
 while cond do
   body
+#+end_example
 
 *** Target
+#+begin_example
 test:
   p := cond
   if p goto done
   body
   goto test
 done:
+#+end_example
 
 *** Exercise: translate the following
 
@@ -313,7 +386,7 @@ do
    body
 until cond
 
-** Transformation: If then else -> Gotos
+** Transformation: If then else ⟶ Gotos
 *** Source
 if cond then
   part1
@@ -331,7 +404,7 @@ done:
 
 *** Exercise: switch/case
 
-** Reverse transformation? (Gotos -> Loops)
+** Reverse transformation? (Gotos ⟶ Loops)
 
 No general form! (You must be creative)
 
@@ -340,30 +413,32 @@ No general form! (You must be creative)
 **** Addresses
 Assume:
 
+#+begin_example
  x : Integer
+#+end_example
 
 Then
 
+#+begin_example
  addressOf(x) : PointerTo Integer
+#+end_example
    ≃ where in the memory is the variable x
 
-addressOf : Integer -> PointerTo Integer
+hence:
+: addressOf : Integer → PointerTo Integer
 
 **** "De-reference"
 
-Assume:
+Assuming
+: p : PointerTo Integer
+Then
+: variableAt(p) : Integer
 
- p : PointerTo Integer
-
-Then:
-
- variableAt(p) : Integer
-
-------------------------------------
-variableAt : PointerTo Integer -> Integer 
+Hence:
+: variableAt : PointerTo Integer → Integer 
 
 **** Trivia: whats the meaning of addressOf(addressOf(x))?
- -> none! because addressOf(x) is just a value, there is no location for it in the memory.
+ ⟶ none! because addressOf(x) is just a value, there is no location for it in the memory.
 **** Exercise (⋆): re-write the above in C syntax
 *** Example
 **** Source:
@@ -423,13 +498,14 @@ a := a + 1
 b := b + x
 
 *** Question: What happens when the original program is recursive?
-** Transformation: Procedures -> Gotos & Variables
-
---------------------------------------
+** Transformation: Procedures ⟶ Gotos & Variables
+Source:
+#+begin_example
 function sqrt(x : Float) : Float
   result := x / 2 
-  while ...
+  while distance (result * result, x) > ε
     -- Newton approx to refine the result
+    ...
   return result;
 
 -- the calls:
@@ -437,11 +513,10 @@ sqrt(12345)
 ...
 ...
 sqrt(6789);
+#+end_example
 
-------------------------------------
-
-
-----------------------------------
+Target:
+#+begin_example
 sqrt:
 -- argument in global variable 'sqrtArgument'
 sqrtResult := sqrtArgument / 2;
@@ -451,7 +526,6 @@ sqrtResult := sqrtArgument / 2;
 -- at this point, sqrtResult contains the result.
 goto sqrtCaller;
 
-
 sqrtArgument := 12345;
 sqrtCaller := out1;
 goto sqrt;
@@ -459,10 +533,10 @@ out1:
 ...
 ...
 sqrtArgument := 6789;
-sqrtCaller := out1;
+sqrtCaller := out2;
 goto sqrt;
-out1:
----------------------------------------
+out2:
+#+end_example
 
 *** Trivia: What happens when the original program is recursive?
 
@@ -752,8 +826,7 @@ Test(cast<Animal> createCat); -- (2)
 The layout of the parent class is exactly the same as that of the subclass.
 (In general, there can be more fields/methods in the subclass, found _after_ the fields of the top class)
  
-**** TODO Liskov substitution principle and Polymorphism
-
+**** Liskov substitution principle and Polymorphism
 
 if class B inherits class A, then, for any x,
 
@@ -765,25 +838,28 @@ This means that
 
 2. Whenever a function 'f' for type 'A', one can pass a value of type
    'B'. By deriving from 'A', a lot of code is automatically ready to
-   work with 'B'.  (Conversely, inheriting from 'A' make the function
-   'f' more useful.)
+   work with 'B'.  (Inheriting from 'A' make the function 'f' more
+   useful.)
 
-This is one instance of an important phenomenon: /polymorphism/.
+This is one instance of an important phenomenon: /polymorphism/. The
+kind of polymorphism linked with inheritance is /inclusion
+polymorphism/. Recall the definition of set-inclusion:
+
+
+         B ⊆ A     iff     x ∈ B  ⇒  x ∈ A
+
 
 ***** Read (✪) more about [[http://en.wikipedia.org/wiki/Polymorphism_(computer_science)][polymorphism]].
 
  (http://en.wikipedia.org/wiki/Liskov_substitution_principle is badly written)
 
 *** Exercises 
+Apply the transformation on each of the following examples:
 
-apply the transformation on each of the following examples:
-
-*** TODO call the function "Vocalise" by default in the Pet method.
-*** add a StrayCat subclass which: 
-- scratches instead of meowing;
-- counts of the number of wounds inflicted.
-
-
+- call the function 'Vocalise' by default in the 'Pet' method
+- add a StrayCat subclass which: 
+  + scratches instead of meowing;
+  + counts of the number of wounds inflicted.
 
 *** What happens when functions have arguments?
 In many languages, the type of the arguments of derived functions must
@@ -810,7 +886,7 @@ Read: http://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_scien
 - Is the 'pet' function pointer ever modified?
 - How can we save space if there are many methods per class? 
 
--> One more indirection!
+⟶ One more indirection!
 **** Example
 record AnimalMethods
   Pet : function
@@ -867,7 +943,7 @@ BUT some other fields might need to be duplicated, if they have a
 function specific to (Student, or Teacher class). (eg. A grad student
 has a Boss as a teacher and another boss as a Student)
 
--> Big headache
+⟶ Big headache
 
 On an implementation level:
 
@@ -1019,10 +1095,9 @@ Lists as a
  - define an algebraic type for binary trees
  - define an algebraic type for arithmetic expressions
  - simple interpreter
-*** Transformation: Algebraic data type -> inheritance
+*** Transformation: Algebraic data type ⟶ inheritance
 
 ** Higher-order functions
-
 *** Example: fold (sometimes called reduce)
 
 -- sum the elements in a list
@@ -1035,7 +1110,7 @@ product Nil         = 1
 product (Cons x xs) = 1 * product xs
 
 
-Same pattern -> Abstract out the difference ! (Parameterize)
+Same pattern ⟶ Abstract out the difference ! (Parameterize)
 
 
 foldr :: (a -> b -> b) -> b -> [a] -> b
@@ -1045,15 +1120,16 @@ foldr = ?
 sum xs = foldr (\x y -> x + y) 0 xs
 
 
-A function taking another function in parameter: a higher order function.
+'foldr' is a function taking another function in parameter: a higher order function.
 
 *** TODO Example: map
 
 multiplyBy n Nil = Nil
 multiplyBy n (Cons x xs) = Cons (n*x) (multiplyBy n xs)
 
-
 map :: (a -> b) -> List a -> List b
+
+
 
 *** Exercise: write a function that does the dot-product of a vector; then Abstract.
 
@@ -1173,7 +1249,7 @@ outOfInk : Bool
 *** Imperative syntax in Haskell
 
 -- "IP a": type of imperative programs returning a value of type a.
-type IP a = State -> State × a
+: type IP a = State -> State × a
 
 Generic way to sequence two "IP a":
 
@@ -1201,22 +1277,25 @@ instance Monad IP where
 
 Then the following is valid:
 
-
-safePrint line = do
-  condition <- outOfInk  
-  if outOfInk 
-    then return -1
-    else do print line
-            return 0
+#+begin_src haskell
+  safePrint line = do
+    condition <- outOfInk  
+    if outOfInk 
+      then return -1
+      else do print line
+              return 0
+#+end_src
             
 In fact, the meaning of "imperative" is given by that function -- andThen in our case:
 
+#+begin_src haskell 
 safePrint line = 
   outOfInk `andThen` \condition ->
   if outOfInk 
     then return -1
     else print line `andThen` \() ->
          return 0
+#+end_src
 
 ** Transformation: Currification
 
@@ -1232,7 +1311,7 @@ h (a,b) = g a b
 Remark: f ≡ h
 
 *** Note: try to read A → B as B^A
-  then what is currification
+... then, what is currification?
 **** Extra: can you implement other algebraic laws?
 
 ** TODO Paradigm shift: HOT!
@@ -1297,7 +1376,7 @@ Example: tree update
 
 **** Same question, but assume 'l' is no longer used in the rest of the program.
 
--> Some say: "in Haskell, lists are a _control structure_".
+⟶ Some say: "in Haskell, lists are a _control structure_".
 
 ** Paradigm shift: composition of transformations
 
@@ -1471,7 +1550,7 @@ We can turn this around and replace functions by graphs.
 
 | source              | target                                                        |
 |---------------------+---------------------------------------------------------------|
-| f : A -> B          | f : A -> B -> Prop                                            |
+| f : A → B          | f : A → B → Prop                                            |
 | definition: f x = y | assert: f x y = y                                             |
 | expression: f(x)    | expression: y (new free variable),  with the condition f(x,y) |
 
@@ -1527,31 +1606,34 @@ the course.
 
 (NOTE: You should know also how to "revert" a transformation!)
 
-#+begin_src dot :file some_filename.png :cmdline -Kdot -Tpng
+#+begin_src dot :file transformations.png :cmdline -Kdot -Tpng 
 digraph G {
-   Imperative -> Machine [label=explicit gotos]
-   Imperative -> Machine [label=explicit stack\n(derecursification)]
-   Object-Oriented -> Imperative [label=explicit method pointers]
-   Functional -> Imperative [label=explicit closures\n(defunctionalization)]
-   Functional -> Imperative [label=inline higher-order fct.]
-   Imperative -> Functional [label=explicit state]
-   Functional -> Functional [label=explicit thunks]
-   Imperative -> Concurrent [label=state-managing process]
-   Concurrent -> Functional [label=explicit continuations]   
-   Functional -> Logic [label=explicit result\n(embedding functions into relations)]
-   Logic -> Functional [label=explicit list of successes]
+   Imperative -> Machine [label="explicit gotos"]
+   Imperative -> Machine [label="explicit stack\n(derecursification)"]
+   "Object-Oriented" -> Imperative [label="explicit method pointers"]
+   Functional -> Imperative [label="explicit closures\n(defunctionalization)"]
+   Functional -> Imperative [label="inline higher-order fct."]
+   Imperative -> Functional [label="explicit state"]
+   Functional -> Functional [label="explicit thunks"]
+   Imperative -> Concurrent [label="state-managing process"]
+   Concurrent -> Functional [label="explicit continuations"]   
+   Functional -> Logic [label="explicit result\n(embedding functions into relations)"]
+   Logic -> Functional [label="explicit list of successes"]
 }
 #+end_src
+
+#+results:
+[[file:transformations.png]]
 
 * Postlude: Where to go from here?
 ** Exam :)
 - re-do the exercises
 - exam will be in the same style
 ** Explore the paradigms you like!
-** Invent you own paradigm!
+** Invent your own paradigm!
 - ... that suits the way you think
 - ... that suits your favourite application domain
-- -> AFP Course
+- → AFP Course
 ** A lot more to read ...
 *** The essence of functional programming (Wadler)
  Actually a tutorial on monads.
@@ -1565,3 +1647,9 @@ http://okmij.org/ftp/continuations/index.html#tutorial1
    -> Programming Languages Coures
    -> "Types and Programming Languages", Pierce
    -> Types For Proofs And Programs
+
+
+
+
+
+#+STYLE: <link rel="stylesheet" type="text/css" href="pp.css" />
