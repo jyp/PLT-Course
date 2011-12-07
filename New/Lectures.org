@@ -1,16 +1,20 @@
 Programming Paradigms: Lecture notes
 
-How to read this document: 
-- Simple: plain text, header level is indicated by number of *
-- Better: Use emacs [[http://orgmode.org/][org mode]]. 
-  + Use <TAB> to expand/collapse nodes. 
-  + C-c C-e b to do HTML rendering and open in your browser
-  + Check out the [[http://orgmode.org/orgcard.txt][reference card]].
-- Sometimes the difficulty of a section is indicated by a number of stars:
-  + (⋆) material required to pass the course
-  + (⋆⋆) material for grade 4
-  + (⋆⋆⋆) only for grade 5 
-  + (✪) not formally part of the course material
+How to read this document
+ + As html (beta) http://cse.chalmers.se/pp/Lectures.html
+ + Use [[file:Lectures.org][the source]], Luke:
+   - Simple: plain text, header level is indicated by number of *
+   - Better: Use emacs [[http://orgmode.org/][org mode]]. 
+     + Use <TAB> to expand/collapse nodes. 
+     + C-c C-e b to do HTML rendering and open in your browser
+     + Check out the [[http://orgmode.org/orgcard.txt][reference card]].
+ + Sometimes the difficulty of a section is indicated by a number of stars:
+   + (⋆) material required to pass the course
+   + (⋆⋆) material for grade 4
+   + (⋆⋆⋆) only for grade 5 
+   + (✪) not formally part of the course material
+
+
 
 * Introduction + Programming Paradigms in General
 
@@ -37,21 +41,24 @@ Assistant
 Assistant
 
 ** Schedule & Organisation
-*** Formal requirements:
+*** Formal requirements
 - Pass the exam
 - Participate in the exercises correction sessions (bonus points)
 - Do the exercises
 - Attend the lectures
 - Prepare lectures by reading lecture notes
 *** Lectures
-Please interrupt me during lectures!
+- The lecture notes (this document) can be accessed at
+  http://cse.chalmers.se/pp/Lectures.html
+- You can also use the source if you fancy emacs org-mode.
+- Please interrupt me during lectures!
 *** TODO Exercises
 Time:
-Your group:
+Your group: subscribe by filling in this form:
 *** TODO Office hours
-JP:
-Ramona:
-Michal:
+- JP:
+- Ramona:
+- ...
 *** Course evaluation
 
 See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
@@ -59,10 +66,10 @@ See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 2-6 Volunteers needed
 - Discuss the course with other students, represent their views to the teachers.
 - Cremona voucher for 200SEK
-- Volunteer _today_ !
+- Volunteer _today_, by seeing me at the break.
 
 *** Reading material
-- Scattered across this document
+- Many links scattered across this document
 - Single most relevant textbook: probably
 
   "Programming Languages -- Application and Interpretation", Shriram Krishnamurthi.
