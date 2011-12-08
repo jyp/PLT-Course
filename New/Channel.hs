@@ -17,5 +17,3 @@ main = do
   c <- newStringChan
   forkIO (reader c)
   writer c
-  
--- interactively  

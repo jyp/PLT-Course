@@ -1,10 +1,11 @@
 Programming Paradigms: Lecture notes
 
 How to read this document
- + As html (beta) http://cse.chalmers.se/pp/Lectures.html
- + Use [[file:Lectures.org][the source]], Luke:
-   - Simple: plain text, header level is indicated by number of *
-   - Better: Use emacs [[http://orgmode.org/][org mode]]. 
+ + As html http://cse.chalmers.se/~bernardy/pp/Lectures.html (beta)
+ + Use the source, Luke: 
+   - replace .html by .org in the above link
+   - Plain text: header level is indicated by number of *
+   - Or better: Use emacs [[http://orgmode.org/][org mode]]. 
      + Use <TAB> to expand/collapse nodes. 
      + C-c C-e b to do HTML rendering and open in your browser
      + Check out the [[http://orgmode.org/orgcard.txt][reference card]].
@@ -387,20 +388,26 @@ test:
 done:
 #+end_example
 
-*** Exercise: translate the following
-
+*** Exercise (⋆)
+Translate the following to explicit gotos:
+1. 
+#+begin_example
 do
    body
 until cond
+#+end_example
+2. bubbleSort
 
 ** Transformation: If then else ⟶ Gotos
 *** Source
+#+begin_example
 if cond then
   part1
 else
   part2
-
+#+end_example
 *** Target
+#+begin_example
   p := not(cond)
   if p then goto label2
   part1
@@ -408,8 +415,10 @@ else
 label2:
   part2
 done:
+#+end_example
+*** Exercise (⋆⋆)
 
-*** Exercise: switch/case
+Do the same job with the switch/case construct.
 
 ** Reverse transformation? (Gotos ⟶ Loops)
 
@@ -446,29 +455,31 @@ Hence:
 
 **** Trivia: whats the meaning of addressOf(addressOf(x))?
  ⟶ none! because addressOf(x) is just a value, there is no location for it in the memory.
-**** Exercise (⋆): re-write the above in C syntax
+**** Exercise (⋆)
+re-write the above in C syntax
 *** Example
 **** Source:
 
 (Supposing the language supports passing arguments by reference:)
 
-increment(by ref. x : Int)
-  x := x + 1
-...
 
-increment(y)
+: increment(by ref. x : Int)
+:   x := x + 1
+
+with a call
+
+: increment(y)
 
 **** Target
 
 (Assuming the language supports pointers:)
 
-increment(x : PointerTo Int)
-  variableAt(x) := variableAt(x) + 1
+: increment(x : PointerTo Int)
+:  variableAt(x) := variableAt(x) + 1
 
-...
+and the call
 
-increment(addressOf(y))
-*** Exercise (⋆): bubbleSort
+: increment(addressOf(y))
 *** Question: Why is passing by reference useful?
 - "expressive power" : you can factor out parts of the computation that update any (sub-part of) the state
 - save time : no need to copy around things
@@ -478,6 +489,7 @@ increment(addressOf(y))
   
 ** Transformation: inlining procedures
 *** Source
+#+begin_example
 procedure g(x,y)
   x := x + y
 
@@ -487,9 +499,11 @@ procedure f(x,y)
   g(y,x)
 
 f(a,b)
+#+end_example
 
 *** Intermediate
 
+#+begin_example
 procedure f(x,y)
   x := x + y
   x := x + 1
@@ -497,12 +511,15 @@ procedure f(x,y)
 
 
 f(a,b)
+#+end_example
 
 *** Final
 
+#+begin_example
 a := a + b
 a := a + 1
 b := b + x
+#+end_example
 
 *** Question: What happens when the original program is recursive?
 ** Transformation: Procedures ⟶ Gotos & Variables
@@ -557,17 +574,18 @@ Translation of a recursive call:
  - goto
  - pop local variables
 
------------------------------------
+#+begin_example
 function fact (n:Int)
   if n = 0 then
     return 1
   else
     return n * fact(n-1)
------------------------------------
+#+end_example
 
 Straightforward application of rules:
 
----------------------------------------
+
+#+begin_example
 -- Call to 'fact'
 caller := out;
 n := 12;
@@ -591,22 +609,20 @@ continue:                                         |
   pop(n,caller);          -- restore locals       /
   result := n * result;   -- result (on the rhs of :=) is the result of the recursive call.
   goto caller;            
-------------------------------------------------
+#+end_example
 
 *** 2nd example: factorial (alternative algorithm)
 **** Source
---------------------------------
+#+begin_example
 function fact (n:Int,acc:Int)
   if n = 0 then
     return acc
   else
     return fact(n-1,n * acc)
---------------------------------
-
+#+end_example
 **** Question: explain the algorithm.
-
 **** Target (by straightforward application of rules)
---------------------------------
+#+begin_example
 fact: -- n,acc,caller are defined here.
 if n = 0 then
   result := acc;
@@ -621,8 +637,7 @@ else
   pop (n,acc,caller)
   result := result; -- just forward the result of the recursive call.
   goto caller;
---------------------------------
-
+#+end_example
 **** Improvement:
 But:
  - The local variables are saved for nothing: they are not used after they are popped!
@@ -630,8 +645,7 @@ But:
 
 Hence we obtain:
 
-
---------------------------------
+#+begin_example
 fact: -- n,acc,caller are defined here.
 if n = 0 then
   result := acc;
@@ -645,17 +659,17 @@ else
   continue:
   pop (caller)
   goto caller;
---------------------------------
+#+end_example
 
 What is the effect of the following?
 
-  push (caller)
-  caller := continue
-  goto fact
+:  push (caller)
+:  caller := continue
+:  goto fact
 
 It fact, it is the same as 
 
-  goto fact
+:  goto fact
 
 Indeed, after returning to "continue", the caller will just be popped
 from the stack; and we'll jump to it.  This would also be done by the
@@ -667,7 +681,7 @@ Hence, the stack can be removed altogether! This is called /tail-call optimisati
 
 
 We get:
------------------
+#+begin_example
 acc := 1;
 caller := out;
 goto fact
@@ -681,25 +695,23 @@ else
   acc := n * acc; -- note the order of assignments
   n := n-1;
   goto fact:
------------------
+#+end_example
 
 **** Final version
 Finally we can reconstruct a loop:
 
-
--------------------------
+#+begin_example
 acc := 1;
 while n /= 0 do
   acc := n * acc;
   n := n-1;
 result := acc;
--------------------------
+#+end_example
 
-** Exercise
-- Derecursify tree traversal (⋆⋆)
-- Do you really need a stack? (⋆⋆⋆) (hint: you can update the tree as you go)
-** Exercise
-- Derecursify ackerman function.
+** Exercises
+1. Derecursify tree traversal (⋆⋆)
+   - Do you really need a stack? (⋆⋆⋆) (hint: you can update the tree as you go)
+2. Derecursify the [[http://en.wikipedia.org/wiki/Ackermann_function][Ackermann function]] (⋆)
 * Interlude: Garbage Collection
 aka. Automatic memory management
 The memory is freed automatically for you! (Magic!?)
@@ -710,6 +722,7 @@ The memory is freed automatically for you! (Magic!?)
 ** Coupling data and related code
 *** Toy example: Date
 
+#+begin_example
 class Date
 
   field
@@ -727,11 +740,13 @@ class Date
 -- Example use:
 appointment = today;
 appointment.shiftByDays(7);
+#+end_example
 
 **** Note: Objects are, almost always, passed by reference.
 
 **** Tranlated into plain records + procedures
 
+#+begin_example
 record Date
   Year : Integer
   Month : Integer
@@ -745,6 +760,7 @@ procedure ShiftByDays(this : Date by reference; days : Integer);
 -- Example use:
 appointment = today;
 shiftByDays(appointment,7);
+#+end_example
 
 ** Encapsulation 
 
@@ -764,6 +780,7 @@ mechanisms to make the fields private
 ** Inheritance
 *** Toy example:
 
+#+begin_example
 class Animal
   method Pet
      print "Undefined"
@@ -782,11 +799,13 @@ procedure Test(c : Animal)
 
 Test(new Dog);
 Test(new Cat);
+#+end_example
 
 *** Transformation: embed method pointers
 
 The above example gets translated as follows:
 
+#+begin_example
 record Animal
   field
     Pet : function;
@@ -822,6 +841,7 @@ procedure Test(c : Animal by reference)
 
 Test(cast<Animal> createDog); -- (2)
 Test(cast<Animal> createCat); -- (2)
+#+end_example
 
 **** Question: what happens on line (1)
 
@@ -837,7 +857,7 @@ The layout of the parent class is exactly the same as that of the subclass.
 
 if class B inherits class A, then, for any x,
 
-   x : B  ⇒  x : A
+:   x : B  ⇒  x : A
 
 This means that 
 
@@ -853,12 +873,13 @@ kind of polymorphism linked with inheritance is /inclusion
 polymorphism/. Recall the definition of set-inclusion:
 
 
-         B ⊆ A     iff     x ∈ B  ⇒  x ∈ A
+:         B ⊆ A     iff     x ∈ B  ⇒  x ∈ A
 
 
-***** Read (✪) more about [[http://en.wikipedia.org/wiki/Polymorphism_(computer_science)][polymorphism]].
-
- (http://en.wikipedia.org/wiki/Liskov_substitution_principle is badly written)
+Read (✪) more about polymorphism on Wikipedia.  (I prefer the
+article on [[http://en.wikipedia.org/wiki/Polymorphism_(computer_science)][polymorphism]],
+http://en.wikipedia.org/wiki/Liskov_substitution_principle is badly
+written)
 
 *** Exercises 
 Apply the transformation on each of the following examples:
@@ -875,18 +896,19 @@ be the SAME as that of the overridden function.
 A perhaps natural expectation is that you could make the arguments
 change as the type of the object. Ex.:
 
-class Additive 
-  method Add(Additive)
 
-class Integer
-  method Add(Integer)
+: class Additive 
+:   method Add(Additive)
+: 
+: class Integer
+:   method Add(Integer)
 
 ... but in fact this violates the substitution principle!
 
 Exercise: use the above two classes in a way that shows violation of
 substitution.
 
-Read: http://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)
+See also the [[http://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)][wikipedia article]].
 
 *** Extension (✪): function tables
 
@@ -1020,127 +1042,148 @@ http://learnyouahaskell.com/
 ** A bit of syntax
 
 *** Function definitions
-
 Similar to mathematical notation:
 
-minimum (x,y) = if x < y 
-                  then x
-                  else y
+: minimum (x,y) = if x < y 
+:                   then x
+:                   else y
 
 
 *** (λ) abstractions / local functions
 
 In the literature:
 
-minimum = λ(x,y). if x < y 
-                      then x
-                      else y
+: minimum = λ(x,y). if x < y 
+:                       then x
+:                       else y
 
 
 In Haskell:
 
-minimum = \(x,y) -> if x < y 
-                      then x
-                      else y
-
+: minimum = \(x,y) -> if x < y 
+:                       then x
+:                       else y
 
 *** Application BINDS TO THE LEFT.
-
-No need for parentheses:
-
-f x   ==  f(x)
-
-Left leaning:
-
-f x y == (f x) y  ==  (f(x))(y)
+- No need for parentheses:
+  : f x   ==  f(x)
+- Left leaning:
+  : f x y == (f x) y  ==  (f(x))(y)
 
 ** Algebraic Types
    
 If A and B are data types, then...
 
-what is  A + B ?
+- what is  A + B ?
+  + similar to union in C (what is the difference?)
 
-         similar to union in C (what is the difference?)
-
-         A × B ?
-
-         similar to records in C (difference?)
+- what is A × B ?
+  + similar to records in C (difference?)
 
 
 Let's count the number of inhabitants of the type:
 
-    #(A + B) = #A + #B
-    #(A × B) = #A × #B
+:    #(A + B) = #A + #B
+:    #(A × B) = #A × #B
 
 To "bootstrap" we also need types 0 (empty type, unit of +) and 1 (singleton, unit of ×)
 
 *** Trivia (✪): what is A → B, algebraically ?
 *** Examples
 
-Bool = 1 + 1
+: Bool = 1 + 1
 
 Giving a name to the cases:
 
-Bool = (True : 1) + (False : 1)
+: Bool = (True : 1) + (False : 1)
 
 In Haskell syntax:
 
-data Bool = True | False
+: data Bool = True | False
 
 Lists can be defined as follows, using _recursion_:
-List a = (Nil : a) + (Cons : a × List a)
+
+: List a = (Nil : a) + (Cons : a × List a)
 
 
 Haskell syntax:
 
-data List a = Nil a | Cons a (List a)
+: data List a = Nil a | Cons a (List a)
 
-
-Lists as a
-
-*** Exercise
- - define an algebraic type for binary trees
- - define an algebraic type for arithmetic expressions
- - simple interpreter
-*** Transformation: Algebraic data type ⟶ inheritance
+*** Exercises
+ - define an algebraic type for binary trees (⋆)
+ - define an algebraic type for arithmetic expressions (⋆)
+   - simple interpreter for the above type (⋆)
+*** TODO Transformation: Algebraic data type ⟶ inheritance
 
 ** Higher-order functions
 *** Example: fold (sometimes called reduce)
 
--- sum the elements in a list
+Consider the following function, to sum the elements in a list:
+#+begin_src haskell
 sum Nil          = 0
 sum (Cons x xs)  = x + sum xs
+#+end_src
 
-
--- multiply the elements in a list
+Consider now the following function, which multiplies the elements in
+a list:
+#+begin_src haskell
 product Nil         = 1
 product (Cons x xs) = 1 * product xs
+#+end_src
 
+*Same pattern ⟶ Abstract out the difference ! (Parameterize)*
 
-Same pattern ⟶ Abstract out the difference ! (Parameterize)
-
-
+Exercise: fill in the question mark in the following snippet
+#+begin_src haskell
 foldr :: (a -> b -> b) -> b -> [a] -> b
 foldr = ?
+#+end_src
+such that
+
+: sum     xs = foldr (\x y -> x + y) 0 xs
+and
+: product xs = foldr (\x y -> x * y) 1 xs
 
 
-sum xs = foldr (\x y -> x + y) 0 xs
-
-
-'foldr' is a function taking another function in parameter: a higher order function.
+- Notes
+  + I give some help by writing the type of the foldr function; but 
+    you can ignore it for now.
+  + 'foldr' is a function taking another function in parameter: a
+    higher order function.
 
 *** TODO Example: map
 
-multiplyBy n Nil = Nil
-multiplyBy n (Cons x xs) = Cons (n*x) (multiplyBy n xs)
+Consider those two examples:
+: multiplyBy n Nil = Nil
+: multiplyBy n (Cons x xs) = Cons (n*x) (multiplyBy n xs)
 
-map :: (a -> b) -> List a -> List b
+: squareAll n Nil = Nil
+: squareAll n (Cons x xs) = Cons (x^2) (squareAll n xs)
 
 
+Capture the pattern in the following 
+: map :: (a -> b) -> List a -> List b
+: map f xs = ?
 
-*** Exercise: write a function that does the dot-product of a vector; then Abstract.
+*** Polymorphism comes back (⋆⋆⋆)
 
-What do you get?    
+Note that, both in foldr and map, by abstracting over the functions to
+apply on the elements on the list, the resulting code is also
+abstracted from the /type/ of the elements in the list. That is, (eg.)
+map works on lists of /anything/, as long as the type of function that
+we pass to map (1st argument) matches. This is captured formally in
+the type of map.
+
+Effectively, map has mutliple types. Because the type is parameterized
+over any types (a,b), this is called /parametric polymorphism/.
+
+*** Exercise (⋆)
+
+- write a function that does the dot-product of a vector;
+- then /abstract/.
+- Can you find the function you created in the Haskell Data.List
+  module? (⋆⋆)
 
 *** Reading: 
 "Can Programming Be Liberated From the von Neumann Style?", John
@@ -1153,66 +1196,82 @@ http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
 
 Example/Exercise: from "filter/map" to for loop...
 
+This transformation is essentially the inverse of abstraction.
 
-
-inverse of abstraction
-
+#+begin_src haskell
 map : (a -> b) -> List a -> List b
 map f xs = case xs of 
    [] ->  []
    (x:xs) -> f x : map f xs
 
-
 multiply n xs = map (\x -> x * n) xs
+#+end_src
 
+Substitute the formal parameter 'f' by its argument '(\x -> x * n)' in
+the code of 'map' (this is called β-recuction):
 
-replace 'f' by its value in the code of 'map':
-
-
+#+begin_src haskell
 multiply n xs = case xs of
     [] ->  []
-    (x:xs) -> (\x -> x * n) x : recursiveCall f xs
+    (x:xs) -> (\x -> x * n) x : map (\x -> x * n) xs
+#+end_src
 
+But we know that multiply n xs == map (\x -> x * n) xs
 
-β-reduce:
+#+begin_src haskell
+multiply n xs = case xs of
+    [] ->  []
+    (x:xs) -> (\x -> x * n) x : multiply n xs
+#+end_src
 
+β-reduce again:
+
+#+begin_src haskell
 multiply n xs = case xs of
     [] ->  []
     (x:xs) -> x * n : recursiveCall f xs
-
+#+end_src
 
 Downside: 
 - explosion of the code size
 - maybe impossible! (eg. the code of map is not available -- map itself is abstract)
 
-*** Transformation: Defunctionalisation (explicit closures)
-# <<closures>>
+*** Transformation: Defunctionalisation (explicit <<closures>>)
 **** Example
-
+- Source
+#+begin_src haskell
 map : (a -> b) -> List a -> List b
 map f [] = []
 map f (x:xs) = f x : map f xs
 
-
 multiplyBy n = map (\x -> x * n) 
+#+end_src
 
-
+- Target
+#+begin_src haskell
 map : Closure -> List a -> List b
 map f [] = []
 map f (x:xs) = apply f x : map f xs
-
 
 multiplyBy n = map (Multiply n)
 
 apply (Multiply n) x = x * n
 
-data Closure = Multiply Int | ...
+data Closure = Multiply Int | ...      -- (ref:closure definition)
+#+end_src
+
+The trick is to replace each function argument by a data-type. The
+constructors of the data type are made to represent the possible
+arguments.
+
+Note that there may be more kind of closures, so there may be more
+cases in [[(ref:closure definition)]].
 
 **** Read: 
 http://en.wikipedia.org/wiki/Closure_(computer_science)
 
 
-**** Exercise: Implement the above example C. 
+**** Exercise (⋆⋆): Implement the above example C. 
 Hint: Instead of a 'tag', use a function pointer.
 
 ....
@@ -1228,9 +1287,9 @@ Hint: Instead of a tag, make a derived class ('apply' is a method)
 - Idea: pass around the "state of the world" explicitly
 - Functions are transformed as follows:
 
-  print : () -- in an imperative language, the state is implicit
+:  print : () -- in an imperative language, the state is implicit
 
-  print : State -> State × () -- after making the state explicit
+:  print : State -> State × () -- after making the state explicit
 
 
 
@@ -1240,47 +1299,55 @@ file, then print does what?
 
 *** Exercise: implement "safePrint" functionally...
 
+#+begin_example
 procedure safePrint(line) : ErrorCode
   if outOfInk then
     return -1
   else
     print(line)
+#+end_example
 
 ... given the imperative function
 
-outOfInk : Bool
+: outOfInk : Bool
 
+**** Questions
  1. What is the type of outOfInk in the functional representation ?
  2. What is the translation ?
 
 *** Imperative syntax in Haskell
 
--- "IP a": type of imperative programs returning a value of type a.
+'IP a' = type of imperative programs returning a value of type a.
+
 : type IP a = State -> State × a
 
-Generic way to sequence two "IP a":
+Generic way to sequence two 'IP a':
 
+#+begin_src haskell
 andThen : IP a -> IP b -> IP b
 f `andThen` g = \s0 -> let (s1,a) = f s0
                            (s2,b) = g s1
                        in  (s2,b)
-
+#+end_src
 
 But what if the 2nd program uses the returned value of the 1st?
 Then (in general) the 2nd program must depend on 'a':
 
+#+begin_src haskell
 andThen : IP a -> (a -> IP b) -> IP b
 f `andThen` g = \s0 -> let (s1,a) = f s0
                            (s2,b) = g a s1
                        in  (s2,b)
+#+end_src
 
 If you _can_ define a function with the above type, then Haskell gives
 you special syntax for imperative programming. If you give:
 
+#+begin_src haskell
 instance Monad IP where
   (>>=) = andThen
   return x = -- when x does not depend on the state:
-
+#+end_src
 
 Then the following is valid:
 
@@ -1306,6 +1373,7 @@ safePrint line =
 
 ** Transformation: Currification
 
+#+begin_example
 f : (A × B) → C
 f = ...
 
@@ -1314,6 +1382,7 @@ g a = \b -> f (a,b)
 
 h : (A × B) → C
 h (a,b) = g a b
+#+end_example
 
 Remark: f ≡ h
 
@@ -1342,22 +1411,26 @@ Did you know that side effects...
  - cause cancer?
 
 *** Referential transparency
+    Note the difference:
 
-    Mathematical function (sin)
+| Concept                | Example |
+|------------------------+---------|
+| Mathematical function  | sin     |
+| Function in (say) Java | getChar |
 
-     vs. 
-
-    Function in (say) Java (getChar)
+The behaviour of sin depends only on its arguments; whereas the
+behaviour of getChar depends on an (implicit) environment.
 
 *** Testing is MUCH easier
 
-       (no guesswork to know what a function depends on)
+- no guesswork to know what a function depends on
+- can (relatively) easily explore the input space of the function
 
 *** More optimisations possible (which ones?)
 *** Easier concurrency (cf. Erlang)
 
-    x = 0
-    x = x+1 |in parallel with| x = x + 1
+:    x = 0
+:    x = x+1 |in parallel with| x = x + 1
   
     Value of x ?     
 
@@ -1427,31 +1500,79 @@ In summary:
 - parallelism: SPEED!
 - concurrency: distribution, redundancy, ...
 
-** "The world is concurrent!"
-"
+** Motivation: the world is concurrent
+#+begin_quote
 The world is concurrent
-Things in the world don't share data
-Things communicate with messages
-Things fail                                      <- (the part we will not discuss)
-" -- Joe Armstrong 
-     (After his 7th victory in Tour de France)
 
+Things in the world don't share data
+
+Things communicate with messages
+
+Things fail                                      ⟵ the part we will not discuss in this course
+#+end_quote
+  — Joe Armstrong 
+       (After his 7th victory in Tour de France)
 ** Process
-A process is an independent thread of computation
-file:Process.hs
+A process is an independent thread of computation. In Haskell, we can
+create new processes using Control.Concurrent.forkIO.
+
+For [[file:Process.hs][example]]:
+#+INCLUDE "Process.hs" src haskell
+
+*** Exercise (⋆)
+- Run the above example
+- What is the output?
 ** Channel
-A medium for communication between processes.
-file:Channel.hs
+A channel is a medium for communication between processes. In Haskell,
+channels can be created with the newChan function. (Note that the
+channel is polymorphic, you may need to force the type to what you
+need.)  For [[file:Channel.hs][example]], in the following snippet, two processes
+communicate via a channel (c).
+#+INCLUDE "Channel.hs" src haskell
+*** Exercise:
+Execute each line of the main function in ghci, and try to guess what
+will happen.
 ** Transformation: variable-managing process
-file:CSPVariable.hs
+Reading/Writing to a channel is a harmless kind of side effect... Or is it?
++ Yes!
+  - Nothing is "overwritten"
+  - in particular the integrity of data structures in never
+    compromised.
++ No!
+  - Referential transparency is broken
+  - reading from a channel is not a proper function
+
+In fact, one can simulate an updatable variable using channels and
+processes. file:CSPVariable.hs
+#+INCLUDE "CSPVariable.hs" src haskell
+
+*** Exercises
+- Use newVariable, set and get in the ghci prompt.
+- How many processes are running?
+- Transform the handler function to do a sum instead of overwriting
+  when 'set' is called.
+- Can you change the program so that the get command does not need to
+  create a channel? (⋆⋆)
+- Write a "bank account" handler function.
+
 ** Transformation: explicit continuations
 *** What is a continuation?
+A continuation is simply the part of the program /execution/ that will
+take place after some given point.
 *** Example
 A (trivial) server:
 file:Server.hs
 Same with explicit continuations:
 file:ServerWithContinuations.hs
-*** Exercise: make continuations explicit closures
+
+
+*** Exercise
+- How many processes are created in the 1st version of the server?
+- How many are created in the transformed version?
+- What are the tradeoffs of the transformation?
+- (⋆⋆⋆) make continuations explicit closures
+- (⋆⋆⋆) Could you write the above server in C? How would you go about
+  it?
 ** Closing
 There are more models for concurrency than chanels + processes
 (eg. revisions)
@@ -1637,23 +1758,22 @@ digraph G {
 - re-do the exercises
 - exam will be in the same style
 ** Explore the paradigms you like!
+⟶ Take the dedicated courses 
 ** Invent your own paradigm!
 - ... that suits the way you think
 - ... that suits your favourite application domain
 - → AFP Course
-** A lot more to read ...
-*** The essence of functional programming (Wadler)
- Actually a tutorial on monads.
-*** A poor man's concurrency monad (Claessen)
-*** The essence of list comprehensions (Wadler)
-*** Andre Pang's thesis
-*** Introduction to programming with shift and reset
-http://okmij.org/ftp/continuations/index.html#tutorial1
-*** Transforming failure into a list of successes (Wadler)
+** A lot more to read
+- The essence of functional programming (Wadler) — Actually a tutorial on monads.
+- Poor man's concurrency monad (Claessen)
+- The essence of list comprehensions (Wadler)
+- Andre Pang's thesis
+- Introduction to programming with shift and reset http://okmij.org/ftp/continuations/index.html#tutorial1
+- Transforming failure into a list of successes (Wadler)
 ** Formal study of Syntax, Types, and Semantics
-   -> Programming Languages Coures
-   -> "Types and Programming Languages", Pierce
-   -> Types For Proofs And Programs
+   + Programming Languages Course
+   + "Types and Programming Languages", Pierce
+   + Types For Proofs And Programs Course
 
 
 

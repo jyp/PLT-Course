@@ -12,5 +12,3 @@ twos = do
 main = do
   forkIO twos -- create a new process
   ones
-  
-  

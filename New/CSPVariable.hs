@@ -33,7 +33,7 @@ set v a = do
   
 
 main = do
-  v <- newVariable ""
+  v <- newVariable "initial value"
   set v "new value"
   get v >>= putStrLn
   
