@@ -15,7 +15,7 @@
 * Meeting 1  
 * Meeting 2
 * Meeting 3 
-
+  
 * Timetable
 
   1. Intro (+ Types)
@@ -34,12 +34,12 @@
   14. OO 2 (Traits -- Maybe should be removed)
 
 
-| Week # | Lecture 1 | Exercises | Lecture 2 |
-|--------+-----------+-----------+-----------|
-|      1 | Intro     |           | IP 1      |
-|      2 | IP 2      |           | OO 2      |
-|      3 |           |           |           |
-|      4 |           |           |           |
-|      5 |           |           |           |
-|      6 |           |           |           |
-|      7 |           |           |           |
+| Week # | Lecture 1     | Exercises                   | Lecture 2 |
+|--------+---------------+-----------------------------+-----------|
+|      1 | Intro + Types | general discussion + types  | IP 1      |
+|      2 | IP 2          |                             | OO 2      |
+|      3 |               |                             |           |
+|      4 |               |                             |           |
+|      5 |               |                             |           |
+|      6 |               |                             |           |
+|      7 |               |                             |           |

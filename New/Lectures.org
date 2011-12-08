@@ -1,7 +1,9 @@
-Programming Paradigms: Lecture notes
+#+TITLE: Programming Paradigms: Lecture Notes
+#+EMAIL: bernardy@chalmers.se
+#+STYLE: <link rel="stylesheet" type="text/css" href="pp.css" />
 
 How to read this document
- + As html http://cse.chalmers.se/~bernardy/pp/Lectures.html (beta)
+ + As html http://www.cse.chalmers.se/~bernardy/pp/Lectures.html (beta)
  + Use the source, Luke: 
    - replace .html by .org in the above link
    - Plain text: header level is indicated by number of *
@@ -9,37 +11,35 @@ How to read this document
      + Use <TAB> to expand/collapse nodes. 
      + C-c C-e b to do HTML rendering and open in your browser
      + Check out the [[http://orgmode.org/orgcard.txt][reference card]].
- + Sometimes the difficulty of a section is indicated by a number of stars:
+ + Sometimes the difficulty/relevance of a section is indicated by a number of stars:
    + (⋆) material required to pass the course
    + (⋆⋆) material for grade 4
    + (⋆⋆⋆) only for grade 5 
    + (✪) not formally part of the course material
 
 
-
 * Introduction + Programming Paradigms in General
 
 - Programming paradigms
  (pronounciation: ˈpærədaɪm (us?)) 
-- DAT121 / DIT...
+- Chalmers Course code: DAT121
 
 ** The teaching team
-*** JP Bernardy
-Course responsible & Lecturer
++ JP Bernardy
+  - Course responsible & Lecturer
+  - Contact:
+    - Room: 6126
+    - E-mail: bernardy@chalmers.se
+    - office hours: 
 
-Contact:
-- Room: 6126
-- E-mail: bernardy@chalmers.se
+  - CV:
+    + 1996-2000: Master in CS (Free University of Brussels)
+    + 2000-2007: Software engineer at various places
+    + 2007-2011: PhD (Chalmers)
 
-CV:
-- 1996-2000: Master in CS (Free University of Brussels)
-- 2000-2007: Software engineer at various places
-- 2007-2011: PhD (Chalmers)
-
-*** Ramona Enache
-Assistant
-*** Michal Pałka
-Assistant
++ Ramona Enache
++ Nick Forlov
++ Arash Rouhani
 
 ** Schedule & Organisation
 *** Formal requirements
@@ -48,18 +48,19 @@ Assistant
 - Do the exercises
 - Attend the lectures
 - Prepare lectures by reading lecture notes
+- IMPORTANT. Subscribe to the course here
+  https://docs.google.com/spreadsheet/viewform?hl=en_GB&formkey=dDBUT1FtVWgyelBXdFZCQkRUNzFWOHc6MQ#gid=0
+  (we can't get an accurate list from the administration) This is so
+  you get assigned to groups, get exercise sheets, important
+  announcements, etc.
 *** Lectures
-- The lecture notes (this document) can be accessed at
-  http://cse.chalmers.se/pp/Lectures.html
+- The lecture notes (this document) can be accessed at the URL given
+  on top.
 - You can also use the source if you fancy emacs org-mode.
 - Please interrupt me during lectures!
 *** TODO Exercises
-Time:
-Your group: subscribe by filling in this form:
-*** TODO Office hours
-- JP:
-- Ramona:
-- ...
+Times:
+Your group: will be emailed to you later (remember to subscribe)
 *** Course evaluation
 
 See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
@@ -85,6 +86,8 @@ See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 - "Concepts, Techniques, and Models of Computer Programming", Van Roy (http://www.info.ucl.ac.be/~pvr/book.html)
 - ...
 
+*** Course homepage
+ ⟶ check announcements, etc.
 ** What is a "programming paradigm"?
 
 *** Definition
@@ -1411,7 +1414,6 @@ Did you know that side effects...
  - cause cancer?
 
 *** Referential transparency
-    Note the difference:
 
 | Concept                | Example |
 |------------------------+---------|
@@ -1726,7 +1728,6 @@ manual search       <-->  constraints
 
 http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
 
-
 * Outlook
 
 The following graph is an overview of all the transformations seen in
@@ -1778,5 +1779,3 @@ digraph G {
 
 
 
-
-#+STYLE: <link rel="stylesheet" type="text/css" href="pp.css" />
