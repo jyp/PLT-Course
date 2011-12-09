@@ -17,9 +17,9 @@ http://undergraduate.csse.uwa.edu.au/units/CITS3242/
 ** Van Roy's
 http://www.info.ucl.ac.be/~pvr/VanRoyChapter.pdf
 
-* Exam questions
+* TODO Exam questions
 map/fold          <-->  loops
-* Course Evaluation
+* TODO Course Evaluation
 https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 
 ** Representatives:
@@ -38,8 +38,11 @@ https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 + Nick Frolov  80 hours
 + Arash Rouhani  80 hours
 
-* Exam corrections
+* TODO Exam corrections
  - war-room method.
 
 
 
+
+* Tasks:
+** DONE Create course homepage
