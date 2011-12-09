@@ -22,7 +22,7 @@ How to read this document
 
 - Programming paradigms
  (pronounciation: ˈpærədaɪm (us?)) 
-- Chalmers Course code: DAT121
+- Chalmers Course code: DAT121/DIT330
 
 ** The teaching team
 + JP Bernardy
@@ -88,6 +88,7 @@ See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 
 *** Course homepage
  ⟶ check announcements, etc.
+https://www.student.chalmers.se/hp/index_html?hp_id=8977
 ** What is a "programming paradigm"?
 
 *** Definition
