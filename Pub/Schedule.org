@@ -6,10 +6,10 @@
 * Examination
   SCHEDULED:  <2013-03-02 Sat>--<2011-07-02 Sat> 
 
-* Lecture time 1:
+* Lecture 1
   SCHEDULED: <2012-01-16 Mon 10:00 +1w>
 
-* Lecture time 2:
+* Lecture 2
   SCHEDULED: <2012-01-16 Mon 10:00 +1w>
 
 * Meeting 1  

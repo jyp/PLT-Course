@@ -5,7 +5,25 @@ import Cake
 rules :: Rule
 rules = empty
 
+agenda = do
+  produce "Agenda.html" $ do
+    need "Schedule.org"
+    cut $ do
+      system ["emacs",
+--              "--batch",
+              "--eval",  "(org-batch-store-agenda-views " ++             
+                          "org-agenda-span month "++                   
+                          "org-agenda-start-day \"2011-11-01\" "++
+                          "org-agenda-include-diary nil "++ 
+                          "org-agenda-files (quote (\"Schedule.org\")))"
+      --              "--kill"
+              ]
+        
+
 action = do
+
+    
+
   produce "Lectures.html" $ do
     need "Lectures.org"
     -- todo: chase includes
