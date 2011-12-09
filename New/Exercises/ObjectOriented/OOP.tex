@@ -1,0 +1,235 @@
+\documentclass{article}
+
+\usepackage{todonotes}
+\usepackage[latin1]{inputenc}
+\usepackage{fancyvrb}
+\usepackage{pstricks,pst-node,pst-text,pst-3d, pst-tree}
+\usepackage{hyperref}
+\usepackage{graphicx}
+%\pagestyle{fancy}
+%\lhead{S. Schupp} %}
+
+%\oddsidemargin 0.35in
+%\textwidth 5.0in
+%\textheight 9.5in
+%\topmargin -0.5in
+
+\newcommand{\Cpp}{C\kern-0.05em\texttt{+\kern-0.03em+}}
+\newcommand{\cpp}{\Cpp}
+
+
+\usepackage{listings}
+\lstset{language=java,basicstyle=\small}
+\lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
+\lstnewenvironment{java}
+    {\lstset{language=java,frame=tb}}
+    {}
+\lstnewenvironment{java2}
+    {\lstset{language=java}}
+    {}
+\lstnewenvironment{cplus}
+    {\lstset{language=c++,frame=tb}}
+    {}
+\lstnewenvironment{cplus2}
+    {\lstset{language=c++}}
+    {}
+\lstnewenvironment{perl}
+    {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip}}
+    {}
+
+
+\lstdefinelanguage{FSharp}
+      {morekeywords={let, new, match, with, rec, open, module,
+           namespace, type, of, member, and, for, in, do,  
+           begin, end, fun, function, try, mutable, if, then, else, class, end},
+    keywordstyle=\color{blue},
+    sensitive=false,
+    morecomment=[l][\color{green!50!black!80}]{///},
+    morecomment=[l][\color{green!50!black!80}]{//},
+    morecomment=[s][\color{green!50!black!80}]{{(*}{*)}},
+    morestring=[b]",
+    stringstyle=\color{red},
+    columns=fullflexible
+}
+
+\begin{document}
+\title{Exercises on Imperative Programming\\
+  \large Programming Paradigms}
+\date{}
+
+\maketitle
+
+
+
+\section{Co-, Contra-, Nonvariance[*]}
+
+\begin{java}
+interface Monoid {
+   Monoid op(Monoid second);
+   Monoid id();
+};
+
+struct IntegerAdditiveMonoid : Monoid {
+    public IntegerAdditiveMonoid(int x) { 
+         elt = x;
+    }    
+    public IntegerAdditiveMonoid op(IntegerAdditiveMonoid second) { 
+         return new IntegerAdditiveMonoid(
+             elt + second.elt); 
+    }
+    public IntegerAdditiveMonoid id(){ 
+         return new IntegerAdditiveMonoid(0);
+    }
+    int elt;
+};
+
+> gmcs Monoids.cs 
+Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement 
+  interface member `Monoid.op(Monoid)'
+Monoids.cs(2,11): (Location of the symbol related to previous error)
+Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement 
+  interface member `Monoid.id()'
+Monoids.cs(3,11): (Location of the symbol related to previous error)
+Compilation failed: 2 error(s), 0 warnings
+
+\end{java}
+%
+Your task:
+\begin{enumerate}
+\item Briefly recap: what is a \textit{monoid}, mathematically? Give two examples
+of data types that can be considered monoids.
+\item The C\#-code above does not compile. Explain the error message
+in terms of co-/contra-/nonvariance.
+\item What if the method \textsf{op} \textit{would} compile? 
+Introduce instances \textsf{a,b} of appropriate types so that
+\textsf{a.op(b)}, if compiled, would result in a run-time error.
+What if the method 
+\textsf{id} would compile? Could you construct a similar run-time
+error? 
+\item The corresponding program in Java behaves differently. Briefly
+explain how, consult the Java Language Specification (JLS), and back your answer
+with the appropriate clause(s) in the JLS.
+\item Suppose you changed the code so that 
+the (current) C\#-compiler accepts it. What is the problem then? 
+\end{enumerate}
+
+
+
+\newpage
+\section{Dynamic dispatching \& the visitor [*]}
+
+Suppose the three classes \textsf{Shape}, \textsf{Rectangle}, and 
+\textsf{Circle}, and the appropriate inheritance relation between them.
+Further assume a method \textsf{intersect()} that can determine whether two
+shapes overlap. Obviously, the implementation of \textsf{intersect()} 
+depends on the actual shapes involved. 
+
+\begin{enumerate}
+\item Implement  and design  the 3 classes so that all possible
+  intersections of shapes can be properly handled using Smalltalk.
+  What is the problem with single dispatching? Name at least 2 issues.
+\item The following Java snippet redesigns the
+  class hierarchy using \textit{double dispatch}. 
+  Explain how double dispatching works by
+  giving the sequence of calls for the line marked (*) in \textsf{Main}.
+  Name two problems with double dispatching.
+  
+\begin{java}
+class Shape {
+    public  boolean intersect(Shape s) {
+         return s.intersectShape(this);
+    }
+    protected  boolean intersectShape(Shape s) {
+        // intersect Shape x Shape
+    }
+    protected  boolean intersectRectangle(Rectangle r) {
+        // no special code for Shape x Rectangle
+        return intersectShape(r);
+    }
+    protected  boolean intersectCircle(Circle c) {
+        return intersectShape(c);
+   }
+}
+class Rectangle extends Shape {
+    public  boolean intersect(Shape s) {
+        return s.intersectRectangle(this);  
+    }
+    protected  boolean intersectRectangle(Rectangle r) {
+        // Rectangle x Rectangle
+        ..
+    }
+}
+class Circle extends Shape {
+    public  boolean intersect(Shape s) {
+        return s.intersectCircle(this);  
+    }
+    protected  boolean intersectCircle(Circle c) {
+        // Circle x Circle 
+   }   
+}
+
+class Intersect {
+   public static void Main() {
+      Shape s1 = new Rectangle(); 
+      Shape s2 = new Circle();
+      boolean b = s2.intersect(s1);        // *
+   }
+}
+\end{java}
+
+\item The \textit{Visitor pattern} provides an alternative workaround,
+also based on double dispatching. In difference
+to the solution above, the pattern 
+introduces two hierarchies, the visited
+hierarchy and the visitor hierarchy. In the example,
+ \textsf{Shape, Rectangle, Circle}
+form the visited hierarchy, \textsf{IntersectVisitor} and its two
+subclasses \textsf{RectangleIntersectVisitor} and \textsf{CircleIntersectVisitor}
+form the visiting hierarchy. The visited classes are
+augmented with a method \textsf{accept}, which uses double dispatching
+to call the appropriate ShapeVisitor (and to invoke the
+right computation). 
+\\
+Your task
+\begin{itemize}
+\item Complete the code for the two class hierarchies and the client.
+\item Name two problems of the visitor approach.
+\end{itemize}
+
+\begin{java2}
+class Shape {
+    public void accept(IntersectVisitor v) {
+	v.visitShape(this);
+    }
+}
+class Rectangle extends Shape {
+public  void accept(IntersectVisitor v) { 
+        // your job
+    }
+}
+class Circle extends Shape {
+   // your job
+}
+ 
+// visitor hierarchy
+abstract class IntersectVisitor { 
+    boolean intersects; 
+    public abstract void visitShape(Shape s);
+    public abstract void visitRectangle(Rectangle r); 
+    public abstract void visitCircle(Circle c); 
+} 
+
+// client code
+  Shape s1 = new ..
+  IntersectVisitor v = new RectangleIntersectVisitor();
+  s1.accept(v);
+  if (v.intersects) ...
+\end{java2}
+\end{enumerate}
+
+\todo[inline]{add an ADT implemented as a class hiearchy}
+\todo[inline]{maybe other things...}
+
+
+\end{document}
+
