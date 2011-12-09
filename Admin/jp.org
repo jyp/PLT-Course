@@ -1,0 +1,45 @@
+Programming paradigms DAT121
+
+https://www.student.chalmers.se/sp/programplan?program_id=771
+
+* Courses elsewhere
+** Stanford cs107 
+ http://see.stanford.edu/see/courseinfo.aspx?coll=2d712634-2bf1-4b55-9a3a-ca9d470755ee
+ http://www.youtube.com/watch?v=Ps8jOj7diA0
+
+** http://www.cs.aau.dk/~normark/prog3-03/html/notes/theme-index.html
+
+** University of western australia CITS3242 
+http://undergraduate.csse.uwa.edu.au/units/CITS3242/
+
+* Books
+** SICP (Borrow from Patrik)
+** Van Roy's
+http://www.info.ucl.ac.be/~pvr/VanRoyChapter.pdf
+
+* Exam questions
+map/fold          <-->  loops
+* Course Evaluation
+https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
+
+** Representatives:
+
+** Meeting 1
+   SCHEDULED: <2012-01-18 Wed>
+** Meeting 2
+** Meeting 3
+* Budget
+
++ Jean-Philippe Bernardy  300 hours
+  - Lectures
+  - Exam questions
+
++ Ramona Enache  105 hours
++ Nick Frolov  80 hours
++ Arash Rouhani  80 hours
+
+* Exam corrections
+ - war-room method.
+
+
+

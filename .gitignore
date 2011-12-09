@@ -1,5 +1,7 @@
 #Ignore
 .svn 
+.curry
+.cake
 _darcs
 
 # Ignore loads of file types.
