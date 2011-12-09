@@ -1,31 +1,29 @@
 
-
--- data List x = Nil | Cons x (List x)
-
-
--- xs ++ ys = zs
+-- data List x = [] 
+               | x : (List x)
 
 {-
 -- Source:
-
 append []     ys = ys
 append (x:xs) ys = x : append xs ys
 -}
 
+-- Target:
 append :: List x -> List x -> List x -> Success
 append []     ys zs = ys =:= zs
 append (x:xs) ys zs = append xs ys zs' &
                       zs =:= x:zs'
    where zs' free
 
+
 {-
 -- Source:
-
-
 reverse :: List x -> List x
 reverse [] = []
 reverse (x:xs) = reverse xs ++ [x]
 
+
+-- Steps:
 -- rev (x:xs) (reverse xs ++ [x]) = Success
 -- rev (x:xs) ys = Success & ys =:= (reverse xs ++ [x])
 -- rev (x:xs) ys = ys =:= (reverse xs ++ [x])
@@ -36,6 +34,7 @@ reverse (x:xs) = reverse xs ++ [x]
 -}
 
 
+-- Example queries:
 
 -- suffix follows a given prefix?
 -- append [1,2,3] ys [1,2,3,4,5] where ys free 
@@ -46,10 +45,4 @@ reverse (x:xs) = reverse xs ++ [x]
 
 
 -- splitting a list
-
-
--- append xs ys [1,2,3,4,5] where xs ys free 
-
-
-
-
+-- append xs ys [1,2,3,4,5] where xs ys free

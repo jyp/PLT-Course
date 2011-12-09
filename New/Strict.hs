@@ -7,6 +7,3 @@ crash = error "I refuse, my Lord."
 theList = Cons "a" (Cons "b" crash)
 
 test = hd theList
-
-
----------------------------------------------------
