@@ -1498,6 +1498,8 @@ mark.  For [[file:Strict.hs][example]]:
 It's possible to recover laziness by introduction of /explicit thunks/:
 #+INCLUDE "Lazy.hs" src haskell
 
+*** TODO: Note that explicit thunks are not as good as support for lazyness as in haskell. Why?
+
 *** Question: What if we want to encode laziness in an imperative language?
 - First introduce explicit thunks,
 - Then transform them into closures!
