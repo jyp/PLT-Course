@@ -22,9 +22,13 @@ How to read this document
 
 - Programming paradigms
  (pronounciation: ˈpærədaɪm (us?)) 
-- Chalmers Course code: DAT121/DIT330
+- Chalmers Course code: DAT121
+- G.U. Course Code: DIT330
 
 ** The teaching team
++ Ramona Enache
++ Nick Frolov
++ Arash Rouhani
 + JP Bernardy
   - Course responsible & Lecturer
   - Contact:
@@ -37,11 +41,9 @@ How to read this document
     + 2000-2007: Software engineer at various places
     + 2007-2011: PhD (Chalmers)
 
-+ Ramona Enache
-+ Nick Forlov
-+ Arash Rouhani
-
 ** Schedule & Organisation
+*** Schedule
+See [[https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=20120116.x,20120331.x&objects=201044.182&ox=0&types=0&fe=0][timeedit]].
 *** Formal requirements
 - Pass the exam
 - Participate in the exercises correction sessions (bonus points)
@@ -59,8 +61,18 @@ How to read this document
 - You can also use the source if you fancy emacs org-mode.
 - Please interrupt me during lectures!
 *** TODO Exercises
-Times:
-Your group: will be emailed to you later (remember to subscribe)
+Groups: 
+
+  1. Tue. 13.15-15.00
+  2. Tue. 15.15-17.00
+
+Your group: will be emailed to you later (remember to subscribe; see link above)
+
+- Prepare exercise
+- Go to session
+- Subscribe
+- No cheating
+
 *** Course evaluation
 
 See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
@@ -92,7 +104,6 @@ https://www.student.chalmers.se/hp/index_html?hp_id=8977
 ** What is a "programming paradigm"?
 
 *** Definition
-
 http://www.merriam-webster.com/dictionary/paradigm
 
 "A philosophical and theoretical framework of a scientific school or
@@ -106,7 +117,7 @@ see also: http://en.wikipedia.org/wiki/Programming_paradigm
 
 :             Programming paradigm 
 :                        = 
-: The basic structuration of thought underlying the programming activity.
+: The basic structuration of thought underlying the programming activity
 
 eg. when you think of a programming problem, what are you thinking of?
 
@@ -224,7 +235,7 @@ digraph G {
 - F# officially supported by MicroSoft
 - Exponential growth of Erlang / Haskell
 
-**** Fun reading on the importance of using the right language:
+**** (✪) Fun reading on the importance of using the right language:
 http://tauday.com/
 
 ** Outline of the course
@@ -1790,7 +1801,7 @@ We can turn this around and replace functions by graphs.
 
 | source              | target                                                        |
 |---------------------+---------------------------------------------------------------|
-| f : A → B           | f : A → B → Prop                                              |
+| f : A → B           | f : A → B → Success                                           |
 | definition: f x = y | assert: f x y = y                                             |
 | expression: f(x)    | expression: y (new free variable),  with the condition f(x,y) |
 
