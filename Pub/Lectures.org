@@ -1138,7 +1138,51 @@ Haskell syntax:
  - define an algebraic type for binary trees (⋆)
  - define an algebraic type for arithmetic expressions (⋆)
    - simple interpreter for the above type (⋆)
-*** TODO Transformation: Algebraic data type ⟶ inheritance
+*** Transformation: Algebraic data type ⟶ inheritance
+
+- ×: supported by records
+- +: one can use inheritance to implement sum types, as follows.
+
+#+begin_src haskell
+data List a = Cons a (List a) | Nil
+
+fold k f Nil = k
+fold k f (Cons a xs) = f a (fold k f xs)
+#+end_src
+
+#+begin_example
+interface List<A> {
+  B fold<B>(B k¸ Function<A,B> f)
+}
+
+class Cons<A> extends List<A> {
+  A head;
+  List<A> tail;
+
+  B fold<B>(k,f) {
+    return f.apply(head,xs.fold(k,f));
+  }
+}
+
+class Nil<A> extends List<A> {
+ -- no field
+ 
+  B fold<B>(k,f) {
+    return k;
+  }
+}
+
+-- missing aspect: one should not allow to implement other instance of the List interface.
+#+end_example
+
+**** Remark: the expression problem
+
+- In an OO language such as Java, it is convenient to add new cases to
+  sum types, but it is cumbersome to add a new algorithm. (In the
+  above example, 'fold' is scatered among 3 classes/interfaces)
+- In a language such as Haskell, it is convenient to add a new
+  algorithm (the fold function is localised at a single place), but
+  cumbersome to add a case in a sum type (why?).
 
 ** Higher-order functions
 *** Example: fold (sometimes called reduce)
@@ -1176,9 +1220,9 @@ and
   + 'foldr' is a function taking another function in parameter: a
     higher order function.
 
-*** TODO Example: map
+*** Example: map
 
-Consider those two examples:
+Consider these two examples:
 : multiplyBy n Nil = Nil
 : multiplyBy n (Cons x xs) = Cons (n*x) (multiplyBy n xs)
 
@@ -1414,12 +1458,16 @@ Remark: f ≡ h
 ... then, what is currification?
 **** Extra: can you implement other algebraic laws?
 
-** TODO Paradigm shift: HOT!
+** Paradigm shift: HOT!
 Higher-Order and Typed
-- Much more opportunites for abstraction 
+- Any part of a function can be abstracted over (before one could not abstract over functions)
+  + Possibility to make the code more clear
   + Good for reuse!
 - Types capture a coarse-grained meaning of each function
   + One does not get lost in keeping track of details (so easily)
+  + Can use function types to represent objects that were before complex data structures.
+    - example: A set can be represented by its characteristic function
+    - There are tradeoffs (performance!)
 - Further reading (⋆) 
    + Haskell vs. Ada vs. C++ vs. Awk vs. ... ─ An Experiment in Software Prototyping Productivity
    + especially, sec. 6.1, 7, 8
@@ -1509,8 +1557,6 @@ mark.  For [[file:Strict.hs][example]]:
 
 It's possible to recover laziness by introduction of /explicit thunks/:
 #+INCLUDE "Lazy.hs" src haskell
-
-*** TODO: Note that explicit thunks are not as good as support for lazyness as in haskell. Why?
 
 *** Question: What if we want to encode laziness in an imperative language?
 - First introduce explicit thunks,
@@ -1605,7 +1651,13 @@ Same with explicit continuations:
 There are more models for concurrency than chanels + processes
 (eg. revisions)
 
-** TODO Paradigm shift:
+** Paradigm shift:
+- use ONLY relations (no more functions)
+- everything is invertible!
+- everything is slow 
+  + As far as I know, there does not exist a "sufficiently smart
+    compiler" for logic programming yet.
+  + restricted to very specific domains
 * Logic programming
 ** Logic: a crash course (✪)
 *** Question: what is *a logic*?

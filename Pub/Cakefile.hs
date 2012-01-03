@@ -20,10 +20,7 @@ agenda = do
               ]
         
 
-action = do
-
-    
-
+html = do
   produce "Lectures.html" $ do
     need "Lectures.org"
     -- todo: chase includes
@@ -34,6 +31,8 @@ action = do
                 "--visit=Lectures.org",
                 "--funcall", "org-export-as-html-batch"]
 
+action = do
+  html
   system ["rsync", "-r", ".",
           "bernardy@remote11.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
 
