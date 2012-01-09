@@ -1,0 +1,443 @@
+\documentclass{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{pdfpages}
+\usepackage{todonotes}
+\usepackage{t1enc}         
+\usepackage[english]{babel}
+\usepackage{times}
+\usepackage{url}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{textcomp}
+
+\newcommand{\percents}[1]{\protect \marginpar[l]{\bf [#1]}}
+\newcounter{question}
+\newcommand{\question}[1]{
+  \addtocounter{question}{1}
+  % {\bf Exercise~\arabic{question}} \percents{#1}
+  \paragraph{Exercise~\arabic{question}  \percents{#1}}
+ }
+
+
+\usepackage{listings}
+\lstset{language=java,basicstyle=\small}
+\lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
+\lstnewenvironment{java}
+    {\lstset{language=java,frame=tb}}
+    {}
+\lstnewenvironment{java2}
+    {\lstset{language=java}}
+    {}
+\lstnewenvironment{cplus}
+    {\lstset{language=c++,frame=tb}}
+    {}
+\lstnewenvironment{cplus2}
+    {\lstset{language=c++}}
+    {}
+\lstnewenvironment{perl}
+    {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip}}
+    {}
+
+
+\lstdefinelanguage{FSharp}
+      {morekeywords={let, new, match, with, rec, open, module,
+           namespace, type, of, member, and, for, in, do,  
+           begin, end, fun, function, try, mutable, if, then, else, class, end},
+    keywordstyle=\color{blue},
+    sensitive=false,
+    morecomment=[l][\color{green!50!black!80}]{///},
+    morecomment=[l][\color{green!50!black!80}]{//},
+    morecomment=[s][\color{green!50!black!80}]{{(*}{*)}},
+    morestring=[b]",
+    stringstyle=\color{red},
+    columns=fullflexible
+}
+
+
+\begin{document}
+%\listoftodos
+
+\title{Programming Paradigms}
+\author{Ramona Enache, Jean-Philippe Bernardy\footnote{with thanks to previous teams in charge of the course.}}
+\maketitle
+
+%\newcommand{\answer}[1]{} %{\begin{quote}{\bf Answer:} #1\end{quote}}
+\newcommand{\percent}[1]{} %{\marginpar{\bf #1 }}
+
+\section{Generalities}
+
+\subsection{Paradigms, Languages, Features}
+Consider the language C++ (or your favourite programming language,
+...).
+
+\question{*} Write a list of features (programming constructs)
+implemented in C++. Be as exhaustive as you can (list at least 10
+features).
+
+\question{*} For each programming paradigm (Imperative, OO, etc.),
+evaluate how well C++ supports that paradigm. Argue using the list
+compiled in the previous answer.
+
+\question{***} Can you identify a paradigm not studied in the course
+which is supported by C++?
+
+\subsection{Types}
+
+\question{*} Give a meaningful type to the following values.
+
+\begin{enumerate}
+\item 4
+\item 123.53
+\item 1/3
+\item $\pi$
+\item 'c'
+\item ``Hello, world!''
+\item -3
+\item (unary) -  
+\item (binary) + 
+\item sin
+\item derivative
+\end{enumerate}
+
+\question{*} Explain the meaning of the following types. (Hint: what
+kind of values can inhabit those types?)
+
+\begin{enumerate}
+\item String
+\item String → String
+\item String → String → String
+\item (String → String) → String
+\item String → (String → String)
+\item (String → String) → (String → String)
+\end{enumerate}
+
+One can not only parameterize over values, but also over
+types. (Eg. in Java, generic classes).
+
+For example, the following type is a suitable type for a sorting
+function: it expresses that the function works for any element type,
+as long as you can compare its inhabitants.
+
+∀ a. (a → a → Bool) → Array a → Array a
+
+
+\question{**} Does sort in your favourite language have a similar
+type? How close/far is it?
+
+Consider the type
+\[∀ a\,b. \mathsf{Pair}\,a\,b → \mathsf{Pair}\,b\,a\]
+\question{***} What can possibly inhabit it?
+
+
+
+\section{Imperative Programming}
+
+\subsection{Gotos to loops}
+
+Consider the algorithm:
+
+\begin{enumerate}
+\item \textbf {Preliminary:} {\it A} is an array of integers of length
+  {\it n} and {\it B} is an array of integers of length {\it m}. Also
+  the elements from both arrays are distinct (from the elements in
+  both arrays) and in ascending order. 
+
+\item \textbf{Step1:} if {\it n} or {\it m} is zero
+  \textbf{STOP}. Otherwise if  $m\textgreater n$, set $t := \lfloor log
+    \left ( m \slash n \right ) \rfloor $  and go to \textbf{Step4},
+    else set $t := \lfloor log
+    \left ( n \slash m \right ) \rfloor $.
+
+\item \textbf{Step2:} compare {\it A[m]} with {\it B[n + 1 -
+    $2^t$]}. If {\it A[m]} is smaller, set {\it n := n - $2^t$} and
+  return to \textbf{Step1}.
+
+\item \textbf{Step3:} using binary search(which requires exactly {\it
+    t} more comparisons), insert {\it A[m]} into its proper place
+  among {\it B[n + 1 -$2^t$] ... B[n]}. If {\it k} is maximal such
+  that {\it B[k] \textless A[m]}, set {\it m := m - 1} and {\it n :=
+    k}. Return to \textbf{Step1}.
+
+\item \textbf{Step4:}(Step 4 and 5 are like 2 and 4, interchanging the
+  roles of {\it n} and {\it m}, {\it A} and {\it B}) if {\it B[n]
+    \textless A[m+1-$2^t$]}, set {\it m := m - $2^t$} and return to
+  \textbf{Step1}.
+
+\item \textbf{Step5:} insert {\it B[n]} into its proper place among
+  the {\it A}s. If {\it k} is maximal such that {\it A[k] \textless
+    B[n]}, set {\it m := k} and {\it n := n - 1}. Return to \textbf{Step1}.
+
+
+\end{enumerate}
+
+
+\question{*} 
+
+implement binary search without gotos in the context of the
+algorithm. There is a slight change compared to the classical
+algorithm, since the scope of the search is different. Keep in mind! 
+\todo[noline]{or} 
+
+\question{*} 
+
+\textbf{Step1} may require the calculation of the expression $\lfloor log
+    \left ( m \slash n \right ) \rfloor $, for $n \geq m$. Explain how
+    to compute this easily without division or calculation of a
+    logarithm.  \todo[inline]{with gotos or explicit stack}
+
+\question{*} 
+
+Why does the binary search mentioned in the algorithm
+always take {\it t} steps ?
+
+\question{*} 
+
+Explain the behaviour of the algorithm for the arrays 
+{\it A} = \{87, 503, 512\} and {\it B} = \{61, 154, 170, 275, 426, 509,
+  612, 653, 677, 703, 765, 897, 908\}.
+
+\question{**} 
+
+Implement the above-mentioned algorithm without using
+{\it gotos} in a programming language of your choice. Check your
+implementation with the {\it A} and {\it B} from the previous question. 
+
+  
+\subsection{Loops to gotos}
+\question{*}
+
+Translate the following \textbf{for} loop with explicit gotos:
+\\
+\\
+{\it for (statement; condition; statement)
+
+$\ \ \ \ $loop$\_$body}
+
+\question{*}
+Translate the do/while construct.
+
+\question{*}
+Translate the switch/case construct.
+
+\question{*}
+Translate the bubble sort algorithm.
+
+\subsection{Pointers}
+\question{*}
+
+Create a binary search tree where nodes contain integer number in
+C/C++. Implement a function that adds a value to the tree and one that
+deletes a certain value from the tree. 
+\todo[inline]{maybe smth more interesting, red-black/Fibonacci tree...}
+
+
+\question{*}
+Write a recursive traversal of the above tree.
+ 
+\question{*} Does Java use call by reference? Give examples to support your answer.
+
+\subsection{Explicit stacks}
+Consider the following recursive relation for computing Fibonacci
+numbers:
+\\
+\\
+{\it $fib_{n+2} = fib_{n+1} + fib_{n}$}
+
+\question{*}
+
+Implement the recursive function computing the n-th Fibonacci number based on
+the expression above. Why is it not efficient ?
+
+\question{*}
+
+Implement a slightly-optimized recursive function for the same
+purpose. (Hint: use an accumulator parameter).
+
+\question{**}
+
+Implement a version of one of the two functions above by using an
+explicit stack.  
+
+\question{**}
+Re-implement the tree traversal as above, but using explicit stacks.
+
+\question{**}
+Implement the Ackermann function without recursion.
+(See \url{http://en.wikipedia.org/wiki/Ackermann_function}).
+
+
+\section{Object-Oriented Programming}
+
+\subsection{Co-, Contra-, Nonvariance[*]}
+
+\begin{java}
+interface Monoid {
+   Monoid op(Monoid second);
+   Monoid id();
+};
+
+struct IntegerAdditiveMonoid : Monoid {
+    public IntegerAdditiveMonoid(int x) { 
+         elt = x;
+    }    
+    public IntegerAdditiveMonoid op(IntegerAdditiveMonoid second) { 
+         return new IntegerAdditiveMonoid(
+             elt + second.elt); 
+    }
+    public IntegerAdditiveMonoid id(){ 
+         return new IntegerAdditiveMonoid(0);
+    }
+    int elt;
+};
+
+> gmcs Monoids.cs 
+Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement 
+  interface member `Monoid.op(Monoid)'
+Monoids.cs(2,11): (Location of the symbol related to previous error)
+Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement 
+  interface member `Monoid.id()'
+Monoids.cs(3,11): (Location of the symbol related to previous error)
+Compilation failed: 2 error(s), 0 warnings
+
+\end{java}
+%
+
+\question{*} Translate the above code using explicit method
+pointers. (Hint: you can simply consider the interface as a class
+without fields.)
+
+\question{*} Briefly recap: what is a \textit{monoid}, mathematically?
+Give two examples of data types that can be considered monoids.
+
+\question{*} The C\#-code above does not compile. Explain the error message
+in terms of co-/contra-/nonvariance.
+\question{*} What if the method \textsf{op} \textit{would} compile? 
+Introduce instances \textsf{a,b} of appropriate types so that
+\textsf{a.op(b)}, if compiled, would result in a run-time error.
+
+\question{*} 
+What if the method 
+\textsf{id} would compile? Could you construct a similar run-time
+error? 
+\question{*} The corresponding program in Java behaves differently. Briefly
+explain how, consult the Java Language Specification (JLS), and back your answer
+with the appropriate clause(s) in the JLS.
+\question{*} Suppose you changed the code so that 
+the (current) C\#-compiler accepts it. What is the problem then? 
+
+
+\subsection{Dynamic dispatching \& the visitor [*]}
+
+Suppose the three classes \textsf{Shape}, \textsf{Rectangle}, and 
+\textsf{Circle}, and the appropriate inheritance relation between them.
+Further assume a method \textsf{intersect()} that can determine whether two
+shapes overlap. Obviously, the implementation of \textsf{intersect()} 
+depends on the actual shapes involved. 
+
+\question{*} Implement  and design  the 3 classes so that all possible
+  intersections of shapes can be properly handled using Smalltalk.
+  What is the problem with single dispatching? Name at least 2 issues.
+
+
+  The following Java snippet redesigns the
+  class hierarchy using \textit{double dispatch}. 
+  Explain how double dispatching works by
+  giving the sequence of calls for the line marked (*) in \textsf{Main}.
+  Name two problems with double dispatching.
+  
+\begin{java}
+class Shape {
+    public  boolean intersect(Shape s) {
+         return s.intersectShape(this);
+    }
+    protected  boolean intersectShape(Shape s) {
+        // intersect Shape x Shape
+    }
+    protected  boolean intersectRectangle(Rectangle r) {
+        // no special code for Shape x Rectangle
+        return intersectShape(r);
+    }
+    protected  boolean intersectCircle(Circle c) {
+        return intersectShape(c);
+   }
+}
+class Rectangle extends Shape {
+    public  boolean intersect(Shape s) {
+        return s.intersectRectangle(this);  
+    }
+    protected  boolean intersectRectangle(Rectangle r) {
+        // Rectangle x Rectangle
+        ..
+    }
+}
+class Circle extends Shape {
+    public  boolean intersect(Shape s) {
+        return s.intersectCircle(this);  
+    }
+    protected  boolean intersectCircle(Circle c) {
+        // Circle x Circle 
+   }   
+}
+
+class Intersect {
+   public static void Main() {
+      Shape s1 = new Rectangle(); 
+      Shape s2 = new Circle();
+      boolean b = s2.intersect(s1);        // *
+   }
+}
+\end{java}
+
+The \textit{Visitor pattern} provides an alternative workaround,
+also based on double dispatching. In difference
+to the solution above, the pattern 
+introduces two hierarchies, the visited
+hierarchy and the visitor hierarchy. In the example,
+ \textsf{Shape, Rectangle, Circle}
+form the visited hierarchy, \textsf{IntersectVisitor} and its two
+subclasses \textsf{RectangleIntersectVisitor} and \textsf{CircleIntersectVisitor}
+form the visiting hierarchy. The visited classes are
+augmented with a method \textsf{accept}, which uses double dispatching
+to call the appropriate ShapeVisitor (and to invoke the
+right computation). 
+
+\question{*} Complete the code for the two class hierarchies and the client.
+\question{*} Name two problems of the visitor approach.
+
+\begin{java2}
+class Shape {
+    public void accept(IntersectVisitor v) {
+	v.visitShape(this);
+    }
+}
+class Rectangle extends Shape {
+public  void accept(IntersectVisitor v) { 
+        // your job
+    }
+}
+class Circle extends Shape {
+   // your job
+}
+ 
+// visitor hierarchy
+abstract class IntersectVisitor { 
+    boolean intersects; 
+    public abstract void visitShape(Shape s);
+    public abstract void visitRectangle(Rectangle r); 
+    public abstract void visitCircle(Circle c); 
+} 
+
+// client code
+  Shape s1 = new ..
+  IntersectVisitor v = new RectangleIntersectVisitor();
+  s1.accept(v);
+  if (v.intersects) ...
+\end{java2}
+
+\todo[inline]{add an ADT implemented as a class hiearchy}
+\todo[inline]{maybe other things...}
+
+
+\end{document}

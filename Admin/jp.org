@@ -38,11 +38,17 @@ https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 + Nick Frolov  80 hours
 + Arash Rouhani  80 hours
 
+Rough budget:
+
+- Exercices prep   (15)
+- Exercices 2h * 7 (15)
+- Admin            (10)
+- Office hours (2h*7 ~ 15) 
+- Email from students (~10) 
+- Exam correction (15h)
+
 * TODO Exam corrections
  - war-room method.
-
-
-
 
 * Tasks:
 ** DONE Create course homepage
