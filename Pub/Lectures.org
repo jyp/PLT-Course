@@ -161,14 +161,14 @@ the old ways are abandonned.  This is the paradigm shift: a new way of
 thinking appears. Eventually, a new programming language may be
 developed to support the "patterns" directly.
 
-#+begin_src dot :file shift.png :cmdline -Kdot -Tpng
+#+begin_src dot :file shift.svg :cmdline -Kdot -Tsvg
 digraph G {
    "Programming habits" -> "(Design) patterns" -> "New Paradigm"
 }
 #+end_src
 
 #+results:
-[[file:shift.png]]
+[[file:shift.svg]]
 
 *** The importance of knowing multiple paradigms
 **** Ability to think "big thoughts"
@@ -966,17 +966,17 @@ class GradStud inherits Person, Student
 
 *** Diamond problem
 
-On a conceptual level:
+#+begin_src dot :file diamond.svg :cmdline -Kdot -Tsvg
+digraph G {
+   node [shape="record"];
+   "Person" [label="{Person | { fields | {name | birthDate | ...}}}"];
+   Person -> Student -> "Grad. Student"
+   Person -> Teacher -> "Grad. Student"
+}
+#+end_src
 
-#+begin_example
-       Person (fields: Name, BirthDate, ...)
-       /    \     
-      /      \
-  Student  Teacher
-      \      /
-       \    /
-      Grad Student
-#+end_example
+#+results:
+[[file:diamond.svg]]
 
 Does a grad student have two names? ... no
 BUT some other fields might need to be duplicated, if they have a
@@ -1730,8 +1730,8 @@ we have
 : x = 1
 : y = Bin (Leaf 2) (Leaf 3)
 
-Finally, metavariables can be bound to each other. That is,
-if we have
+Finally, metavariables can be bound to each other (we say that they
+are aliased). That is, if we have
 : x =:= y 
 
 and later
@@ -1740,7 +1740,7 @@ and later
 then
 : x = 2
 
-
+Note that aliassing is symmetric.
 
 
 - Terminology: 
@@ -1754,9 +1754,12 @@ fails
 
 *** Trivia (⋆): what are the bindings after...
 
- 1) 2 =:= x
- 2) [x,1] =:= [2,y]
- 3) [x,y,z] =:= [w,x,y] 
+ 1) 
+    : 2 =:= x
+ 2) 
+    : [x,1] =:= [2,y]
+ 3) 
+    : [x,y,z] =:= [w,x,y] 
 
 *** Unification failures
 
@@ -1775,6 +1778,22 @@ fails, because x cannot be unified with something where occurs.
 
 (✪) Could it make sense to succeed though?
 
+*** A specification of unification 
+- A variable which is uninstantiated—i.e. no previous unifications
+  were performed on it—can be unified with an atom, a term, or another
+  uninstantiated variable, thus effectively becoming its alias. A
+  variable cannot be unified with a term that contains it; this is the
+  so called occurs check.
+- Two atoms can only be unified if they are identical.
+- Similarly, a term can be unified with another term if the top
+  function symbols and arities of the terms are identical and if the
+  parameters can be unified simultaneously. Note that this is a
+  recursive behavior.
+*** Exercise (⋆⋆)
+Write an algorithm implementing the above specification.
+*** TODO Implementing unification in an imperative language (a sketch)
+*** (✪) Reading
+Wikipedia has a [[http://en.wikipedia.org/wiki/Unification_(computer_science)][good article]] on unification.
 ** Transformation: Functions to relations
 From "classic" math: a function is a graph:
 
@@ -1836,7 +1855,7 @@ the course.
 
 (NOTE: You should know also how to "revert" a transformation!)
 
-#+begin_src dot :file transformations.png :cmdline -Kdot -Tpng 
+#+begin_src dot :file transformations.svg :cmdline -Kdot -Tsvg
 digraph G {
    Imperative -> Machine [label="explicit gotos"]
    Imperative -> Machine [label="explicit stack\n(derecursification)"]
@@ -1853,7 +1872,7 @@ digraph G {
 #+end_src
 
 #+results:
-[[file:transformations.png]]
+[[file:transformations.svg]]
 
 * Postlude: Where to go from here?
 ** Exam :)
@@ -1872,6 +1891,7 @@ digraph G {
 - Andre Pang's thesis
 - Introduction to programming with shift and reset http://okmij.org/ftp/continuations/index.html#tutorial1
 - Transforming failure into a list of successes (Wadler)
+- Typed logical variables in Haskell
 ** Formal study of Syntax, Types, and Semantics
    + Programming Languages Course
    + "Types and Programming Languages", Pierce
