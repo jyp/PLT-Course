@@ -6,7 +6,9 @@ https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=201
 * CHARM
   SCHEDULED: <2012-02-07 Tue>--<2012-02-08 Wed>
 * Examination
-  SCHEDULED:  <2013-03-02 Sat>--<2011-07-02 Sat> 
+  SCHEDULED:  <2012-03-09 Fri 14:00>
+* Re-Examination
+  SCHEDULED:  <2012-08-30 Thu 14:00>
 
 * Lecture 1
   SCHEDULED: <2012-01-16 Mon 10:00 +1w>
@@ -14,10 +16,9 @@ https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=201
 * Lecture 2
   SCHEDULED: <2012-01-16 Mon 10:00 +1w>
 
-* Meeting 1  
-* Meeting 2
-* Meeting 3 
-  
+* Evaluation Meeting 1  
+* Evaluation Meeting 2
+* Evaluation Meeting 3   
 * Timetable
 
   1. Intro (+ Types)
@@ -32,16 +33,18 @@ https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=201
   10. CP 2 (Explicit continuations)
   11. LP 1 (Unification)
   12. LP 2 (Search as list of successes)
-  13. Guest lecture: some awesome topic.
-  14. OO 2 (Traits -- Maybe should be removed)
+  13. Extra 
+  14. OO 2 (Traits -- Removed)
 
 
-| Week # | Lecture 1     | Exercises                   | Lecture 2 |
-|--------+---------------+-----------------------------+-----------|
-|      1 | Intro + Types | general discussion + types  | IP 1      |
-|      2 | IP 2          |                             | OO 2      |
-|      3 |               |                             |           |
-|      4 |               |                             |           |
-|      5 |               |                             |           |
-|      6 |               |                             |           |
-|      7 |               |                             |           |
+| Week | Lecture 1     | Lecture 2 | Exercises                             |
+|------+---------------+-----------+---------------------------------------|
+|    1 | Intro + Types | IP 1      | general discussion + types + ip1      |
+|    2 | IP 2          | OO 2      | ip2 + oo                              |
+|    3 | FP 1          | FP 2      | ADT, pattern matching, HOF, Closures  |
+|    4 | Charm         | FP 3      | Closures, Currification               |
+|    5 | FP 4          | CP 1      | Explict state, Channels and Processes |
+|    6 | CP 2          | LP 1      | Explicit continuations, unification   |
+|    7 | LP 2          | Extra     | Relations, explicit search            |
+
+
