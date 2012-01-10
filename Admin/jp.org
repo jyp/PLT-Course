@@ -50,5 +50,17 @@ Rough budget:
 * TODO Exam corrections
  - war-room method.
 
+* To discuss:
+
+- schedule
+  + office hours
+  + weekly 
+    * meeting
+    * exercises
+- assignment of tasks
+  + who takes what week
+  + arash: email?
+  + exam correction
+
 * Tasks:
 ** DONE Create course homepage

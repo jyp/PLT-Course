@@ -43,7 +43,7 @@ How to read this document
 
 ** Schedule & Organisation
 *** Schedule
-See [[https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=20120116.x,20120331.x&objects=201044.182&ox=0&types=0&fe=0][timeedit]].
+See file:Schedule.org
 *** Formal requirements
 - Pass the exam
 - Participate in the exercises correction sessions (bonus points)
@@ -907,7 +907,7 @@ Apply the transformation on each of the following examples:
 *** What happens when functions have arguments?
 In many languages, the type of the arguments of derived functions must
 be the SAME as that of the overridden function.
-**** Contra-variance (✪)
+**** Contra-variance (⋆⋆)
 A perhaps natural expectation is that you could make the arguments
 change as the type of the object. Ex.:
 
@@ -915,7 +915,7 @@ change as the type of the object. Ex.:
 : class Additive 
 :   method Add(Additive)
 : 
-: class Integer
+: class Integer extends Additive
 :   method Add(Integer)
 
 ... but in fact this violates the substitution principle!
@@ -1248,7 +1248,7 @@ over any types (a,b), this is called /parametric polymorphism/.
 
 *** Exercise (⋆)
 
-- write a function that does the dot-product of a vector;
+- write a function that does the dot-product of two vectors;
 - then /abstract/.
 - Can you find the function you created in the Haskell Data.List
   module? (⋆⋆)
@@ -1852,9 +1852,14 @@ fails, because x cannot be unified with something where occurs.
   function symbols and arities of the terms are identical and if the
   parameters can be unified simultaneously. Note that this is a
   recursive behavior.
-*** Exercise (⋆⋆)
+*** Exercise (⋆⋆⋆)
 Write an algorithm implementing the above specification.
 *** TODO Implementing unification in an imperative language (a sketch)
+
+Have indirection for meta-variables occurences; indirection for meta
+(meta = unbound / ground / meta).  After unifying, overwrite the
+meta-variable with its value
+
 *** (✪) Reading
 Wikipedia has a [[http://en.wikipedia.org/wiki/Unification_(computer_science)][good article]] on unification.
 ** Transformation: Functions to relations

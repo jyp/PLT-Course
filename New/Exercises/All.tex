@@ -224,7 +224,7 @@ Translate the switch/case construct.
 \question{*}
 Translate the bubble sort algorithm.
 
-\subsection{Pointers}
+\subsection{Pointers and call by reference}
 \question{*}
 
 Create a binary search tree where nodes contain integer number in
@@ -235,10 +235,20 @@ deletes a certain value from the tree.
 
 \question{*}
 Write a recursive traversal of the above tree.
- 
-\question{*} Does Java use call by reference? Give examples to support your answer.
 
-\subsection{Explicit stacks}
+\question{*}
+Write a swap function using call by reference.
+
+\question{*}
+Write a swap function using call by value. 
+
+\question{**} Does Java use call by reference? Give examples to support
+your answer.
+
+\question{**} Write down pros and cons of using call by reference
+vs. call by value. (Ease of use, performance, ...)
+
+\subsection{From recursion to explicit stack}
 Consider the following recursive relation for computing Fibonacci
 numbers:
 \\
@@ -270,8 +280,7 @@ Implement the Ackermann function without recursion.
 
 \section{Object-Oriented Programming}
 
-\subsection{Co-, Contra-, Nonvariance[*]}
-
+Consider the following code, in C\# syntax:
 \begin{java}
 interface Monoid {
    Monoid op(Monoid second);
@@ -292,6 +301,35 @@ struct IntegerAdditiveMonoid : Monoid {
     int elt;
 };
 
+\end{java}
+%
+
+\subsection{Explicit method pointers}
+
+\question{*} Translate the above code to a C-like language, using
+explicit method pointers. (Hint: you can simply consider the interface
+as a class without fields.)
+
+\question{-} Briefly recap: what is a \textit{monoid}, mathematically?
+
+\question{-} Give two examples of data types that can be considered monoids.
+(Hint: Strings would form a monoid under the appropriate structure; what is the structure?
+
+\question{*} Write another instance of the monoid interface, using one
+of the examples you found. Also write its translation to a C-like
+language.
+
+\question{*} Assume variables \textsf{a,b} of type \textsf{Monoid}. Translate
+the expression \textsf{a.op(b)}.
+
+\question{*} Assume to objects \textsf{x,y} of two different instances
+of Monoid are bound to the variables \textsf{a,b}. Explain what
+happens at runtime when the expression is evaluated. (Which code is executed?)
+
+\subsection{Co/Contra variance}
+
+Surprise: the above code is refused by the C\# compiler:
+\begin{verbatim}
 > gmcs Monoids.cs 
 Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement 
   interface member `Monoid.op(Monoid)'
@@ -300,35 +338,28 @@ Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement
   interface member `Monoid.id()'
 Monoids.cs(3,11): (Location of the symbol related to previous error)
 Compilation failed: 2 error(s), 0 warnings
+\end{verbatim}
 
-\end{java}
-%
 
-\question{*} Translate the above code using explicit method
-pointers. (Hint: you can simply consider the interface as a class
-without fields.)
+\question{*} What if the method \textsf{op} \textit{would} compile?
+Define objects \textsf{a,b}, of appropriate types, so that
+\textsf{a.op(b)}, if is run, would result in a run-time error.
 
-\question{*} Briefly recap: what is a \textit{monoid}, mathematically?
-Give two examples of data types that can be considered monoids.
+\question{*} What if the method \textsf{id} would compile? Could you
+construct a similar run-time error? (Hint: do the translation job if
+the answer is not obvious to you.)
 
-\question{*} The C\#-code above does not compile. Explain the error message
-in terms of co-/contra-/nonvariance.
-\question{*} What if the method \textsf{op} \textit{would} compile? 
-Introduce instances \textsf{a,b} of appropriate types so that
-\textsf{a.op(b)}, if compiled, would result in a run-time error.
+\question{**} Explain the error messages in terms of co-/contra-/nonvariance.
 
-\question{*} 
-What if the method 
-\textsf{id} would compile? Could you construct a similar run-time
-error? 
-\question{*} The corresponding program in Java behaves differently. Briefly
+\question{***} The corresponding program in Java behaves differently. Briefly
 explain how, consult the Java Language Specification (JLS), and back your answer
 with the appropriate clause(s) in the JLS.
-\question{*} Suppose you changed the code so that 
-the (current) C\#-compiler accepts it. What is the problem then? 
 
+\question{-} Can you change the code so that the (current)
+C\#-compiler accepts it? What is the problem then?
 
-\subsection{Dynamic dispatching \& the visitor [*]}
+\removed{
+\subsection{Dynamic dispatching \& the visitor}
 
 Suppose the three classes \textsf{Shape}, \textsf{Rectangle}, and 
 \textsf{Circle}, and the appropriate inheritance relation between them.
@@ -336,9 +367,9 @@ Further assume a method \textsf{intersect()} that can determine whether two
 shapes overlap. Obviously, the implementation of \textsf{intersect()} 
 depends on the actual shapes involved. 
 
-\question{*} Implement  and design  the 3 classes so that all possible
-  intersections of shapes can be properly handled using Smalltalk.
-  What is the problem with single dispatching? Name at least 2 issues.
+\question{*} Implement and design the 3 classes so that all possible
+intersections of shapes can be properly handled using Smalltalk.  What
+is the problem with single dispatching? Name at least 2 issues.
 
 
   The following Java snippet redesigns the
@@ -435,9 +466,152 @@ abstract class IntersectVisitor {
   s1.accept(v);
   if (v.intersects) ...
 \end{java2}
+}
 
-\todo[inline]{add an ADT implemented as a class hiearchy}
-\todo[inline]{maybe other things...}
+\section{Functional Programming}
+\subsection{Algebraic Data Types and Pattern Matching}
+
+\question{*} define an algebraic type for binary trees 
+\question{*} define an algebraic type for arithmetic expressions 
+\question{*} define a simple interpreter for the above type 
+
+\question{*} Translate the above 2 structures to an OO language. (Hint: One
+class corresponds to leaves, one to branching.)
+
+\question{*} Translate the interpreter. You are not allowed to use 'instanceof'
+
+\question{*} Translate the interpreter. You must use 'instanceof'.
+
+\subsection{Currification and partial application}
+
+\question{*} Define a function f following this spec.  Given a integer, return it
+unchanged if it is greater than zero, and zero otherwise. (The type must be Int → Int.)
+
+\question{*} Assuming a function max : (Int × Int) → Int, define the same function.
+
+\question{*} Define max' by currifying the function max.
+
+\question{*} Define f using max'.
+
+\subsection{Higher-order functions}
+
+Assume the filter, map, foldr functions as in the Haskell prelude. f
+comes from the previous section.
+
+\question{*} Unfold the following expressions:
+\begin{enumerate}
+\item map f
+\item filter (>= 0)
+\item foldr [] (++)
+\end{enumerate}
+
+\question{*} write a function that does the dot-product of two
+vectors; 
+
+\question{*} make an abstract version of the above.
+
+\question{**} Can you find the function you created in the Haskell
+Data.List module?
+
+
+\subsection{Closures}
+
+The following definition returns the list of prime numbers smaller than 1000:
+
+\begin{verbatim}
+primes = cribble [2..1000]
+cribble (n:ns) = n:cribble (filter (not . (`isDivisibleBy` n)) ns)
+x `isDivisibleBy` y = x `div` y == 0
+\end{verbatim}
+
+\question{*} Inline the call of function composition in the above.
+
+The only remaining higher-order function is filter. 
+
+\question{*} Write a version of filter which takes an explicit closure as an argument.
+
+\question{*} Re-write cribble using the above.
+
+\question{**} Write a version of cribble in imperative (or OO)
+language. (You can not use arrays instead of lists).
+
+\subsection{Explicit state}
+
+Consider the binary tree structure written above. Assume the payload are integers.
+
+\question{*} In the Java version, write a function that replaces each
+element with its index in preorder traversal of the tree.
+\question{*} Translate to Haskell.
+The above can be seen as an imperative algorithm. 
+\question{*} What is the ``state of the world'' in this case?
+
+\question{*} Rewrite the Haskell version, in such a way that passing
+``state of the world'' is made visible as such.
+
+
+\subsection{Laziness}
+
+Remember the cribble algorithm. Let us call it with an infinite list:
+\begin{verbatim}
+primes = cribble [2..]
+\end{verbatim}
+
+\question{*} Translate cribble to use explicit thunks (as in the lecture)
+
+Oh noes, this introduced a higher-order function. 
+
+\question{**} Where is the new higher-order function?
+
+You know what's coming...
+
+\question{***} Remove higher-orderness using the best technique available.
+
+\question{***} Write a version of lazy cribble in imperative (or OO)
+language.
+
+\section{Concurrent Programming}
+\subsection{Channels and Processes}
+
+TODO
+
+\subsection{State-carrying processes}
+
+TODO
+
+\subsection{Explicit continuations}
+
+\paragraph{Removing recursion using continuations}
+
+Remember your interpreter for arithmetic expressions. It should have type:
+
+Expr → Int
+
+Let's make continuations explicit. In this case, the result is not returned, but 
+applied to a continuation. Hence, the type becomes:
+
+Expr → (Int → a) → a
+
+\question{*} Write a wapper for the interpreter which has the above type
+
+% wrapper expr k = k (eval expr)
+
+\question{***} Replace every recursive call in the interpreter by a call to the wrapper.
+(Hint: you must choose an order of evaluation!)
+% eval (Add x y) = wrapper x (\a -> wrapper y (\b -> a + b))
+
+\question{***} Unfold the usage of the interpreter in the wrapper.
+
+% wrapper (Add x y) k = k (w x $ \a -> w y $ \ b -> a + b)
+
+% Also possible: (wrapper x (\a -> wrapper y (\b -> k (a + b))))
+% (but does not follow the exercise)
+
+\section{Logic Programming}
+\subsection{Metavariables and unification}
+\subsection{Functions to Relations}
+\subsection{Explicit Relations}
+\subsection{Explicit Search}
+
 
 
 \end{document}
