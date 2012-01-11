@@ -2,15 +2,15 @@
 
 \usepackage[utf8x]{inputenc}
 \usepackage[pdftex]{graphicx}
-\usepackage{pdfpages}
 \usepackage{todonotes}
-\usepackage{t1enc}         
 \usepackage[english]{babel}
-\usepackage{times}
+%\usepackage{times}
 \usepackage{url}
 \usepackage{enumerate}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage{verbatim}
+\usepackage{hyperref}
 
 \newcommand{\percents}[1]{\protect \marginpar[l]{\bf [#1]}}
 \newcounter{question}
@@ -19,10 +19,17 @@
   % {\bf Exercise~\arabic{question}} \percents{#1}
   \paragraph{Exercise~\arabic{question}  \percents{#1}}
  }
-\newenvironment{\ex}[1]{\question{#1}}{\paragraph{}}
+\newenvironment{ex}[1]{\question{#1}}{\paragraph{}}
 \newcommand{\removed}[1]{}
 
+\newcommand{\answer}[1]{}
+
+% Uncomment to show answers
+% \renewcommand{\answer}[1]{#1}
+ 
+
 \usepackage{listings}
+
 \lstset{language=java,basicstyle=\small}
 \lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
 \lstnewenvironment{java}
@@ -56,6 +63,9 @@
     columns=fullflexible
 }
 
+\lstnewenvironment{prolog}
+    {\lstset{language=prolog,frame=tb}}
+    {}
 
 \begin{document}
 %\listoftodos
@@ -64,8 +74,6 @@
 \author{Ramona Enache, Jean-Philippe Bernardy\footnote{with thanks to previous teams in charge of the course.}}
 \maketitle
 
-%\newcommand{\answer}[1]{} %{\begin{quote}{\bf Answer:} #1\end{quote}}
-\newcommand{\percent}[1]{} %{\marginpar{\bf #1 }}
 
 \section{Generalities}
 
@@ -102,7 +110,7 @@ which is supported by C++?
 \item derivative
 \end{enumerate}
 
-\question{*} Explain the meaning of the following types. (Hint: what
+\question{**} Explain the meaning of the following types. (Hint: what
 kind of values can inhabit those types?)
 
 \begin{enumerate}
@@ -502,7 +510,7 @@ comes from the previous section.
 \question{*} Unfold the following expressions:
 \begin{enumerate}
 \item map f
-\item filter (>= 0)
+\item filter ($>=$ 0)
 \item foldr [] (++)
 \end{enumerate}
 
@@ -517,7 +525,28 @@ Data.List module?
 
 \subsection{Closures}
 
-The following definition returns the list of prime numbers smaller than 1000:
+Lazy lists can be (potentially) infinite, although of course no
+program can evaluate {\em all} the elements of an infinite
+list. Nevertheless, using lazy lists can help us avoid building
+unnecessary limitations into our code.
+
+Eratosthenes' sieve is a method for finding prime numbers, dating from
+ancient Greece. We start by writing down all the numbers from 2 up to
+some limit, such as 100. Then we repeatedly do the following:
+\begin{itemize}
+\item
+The {\em first} number in the list is a prime. We generate it as an
+output.
+\item
+We {\em remove all multiples} of the first number from the
+list---including that number itself.
+\item
+Loop.
+\end{itemize}
+We terminate when no numbers remain in our list. At this point, all
+prime numbers up to the limit have been found.
+
+The algorithm can be implemented in Haskell as follows:
 
 \begin{verbatim}
 primes = sieve [2..1000]
@@ -552,23 +581,56 @@ The above can be seen as an imperative algorithm.
 
 \subsection{Laziness}
 
-Remember the sieve algorithm. Let us call it with an infinite list:
-\begin{verbatim}
-primes = sieve [2..]
-\end{verbatim}
+\subsubsection{Lazy Dynamic Programming}
+
+\question{*} Write the Floyd-Warshall algorithm in your favourite
+imperative language. Assume that there is no weight on edges; and
+you're only interested in whether there is a path between two given
+nodes, not the number of steps in the path.
+
+Note that the best-case performance is Cubic.
+
+\question{*} Using the same formula, fill the Roy-Warshall matrix
+using an array comprehension in a lazy language (optionally use
+explicit thunks for the contents of each cell.)
+
+\question{**} Discuss the best-case performance.
+
+\question{-} Does your favourite spreadsheet program have strict, or
+lazy logical disjunction operator? Test it.
+
+\question{-} Can you write the Roy-Warshall algorithm in it?
+
+\subsubsection{Lazy Lists (Streams)}
+
+Remember the sieve algorithm.  Check that the \verb!sieve! function
+also works given the {\em infinite} list \verb![2..]!---the output
+should be the {\em infinite} list of all prime numbers.
+
+\question{*} How would you find the first 100 prime numbers? 
+
+Remark: start by answering the following questions on a simpler
+algorithm, for example the function \textsf{enumFrom} which generates
+the infinite list of numbers starting at a given one.
 
 \question{*} Translate sieve to use explicit thunks (as in the lecture)
 
 Oh noes, this introduced a higher-order function. 
 
-\question{**} Where is the new higher-order function?
+\question{**} Where are the new higher-order functions?
 
 You know what's coming...
 
 \question{***} Remove higher-orderness using the best technique available.
 
 \question{***} Write a version of lazy sieve in imperative (or OO)
-language.
+language. 
+
+Since there are no more functions in the data, you can display your
+infinite lists!
+
+\question{***} Interpret what you see.
+
 
 \section{Concurrent Programming}
 \subsection{Channels and Processes}
@@ -609,7 +671,158 @@ Expr → (Int → a) → a
 
 \section{Logic Programming}
 \subsection{Metavariables and unification}
+
+\begin{ex}{*}
+What is the result of the following unifications? 
+Try to come up with the result without using the prolog interpreter!
+
+\begin{tabular}{c}
+a(X,Y) = a(b,c) \\
+a(X,Y) = a(Z,Z) \\
+a(X,X) = a(b,c) \\
+a(X) = a(b,b) \\
+a(X,X,Y) = a(Z,W,W) \\
+\end{tabular}
+
+\answer{
+
+\begin{tabular}{c}
+X = b, Y = c \\
+X = Y = Z \\
+fail \\
+fail \\
+X = Y = Z = W \\
+\end{tabular}
+    
+}
+
+
+\end{ex}
+
+\subsubsection{Difference Lists}
+
+A difference list is a special structure that can support efficient
+concatenation (Recall the discussion on \texttt{append/3} predicate in
+the lectures). It uses unification in a clever way to that end.
+
+The difference-list representation for a list can be obtained as follows:
+
+\begin{prolog}
+fromList([],d(X,X)).
+fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
+\end{prolog}
+
+
+A structure of the form \textsf{d(Out,In)} will represent the list
+\textsf{L} if \textsf{Out} unifies with \textsf{L} concatenated with
+\textsf{In}. Or, less technically, a list L will be represented as the
+difference between Out and In: so for instance,
+
+$$[1,2] \longrightarrow d(1:2:3:4:[],3:4:[])$$
+
+You can check how fromList works by testing it: 
+\begin{prolog}
+fromList([1,2,3],X).
+\end{prolog}
+
+Note that the same metavariable (G271 in my implementation) is present twice in
+the result. Note that we can get the original result back by unifying this
+metavariable with the empty list.
+
+\begin{question}{**}
+Write a predicate toList/2 to get back to the normal list representation.
+
+\answer{
+\begin{prolog}
+toList(d(X,X),[]).
+toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
+\end{prolog}
+}
+
+\end{question}
+
+Given that representation for lists, it is possible to perform concatenation by
+doing unification only!
+
+\begin{question}{**}
+Write a predicate dconcat/3 to concatenate two difference lists, without
+using the direct representation.
+
+\begin{prolog}
+dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
+\end{prolog}
+
+
+should produce:
+
+\begin{verbatim}
+Final = [1,2,3,4,5].
+\end{verbatim}
+
+\answer{
+\begin{prolog}
+dconcat(d(Out2,In2),d(Out1,In1),d(Out,In)) :- Out = Out2, In2 = Out1, In = In1.
+\end{prolog}
+
+or
+
+\begin{prolog}
+dconcat(d(Out,Intermediate),d(Intermediate,In),d(Out,In)).
+\end{prolog}
+
+}
+
+
+\end{question}
+
+\end{document}
+\begin{question}{***}
+What happens when you concatenate a difference list with itself?
+\answer{The difference list will contain circular, infinite lists.}
+\end{question}
+
+
+
+
+
+
+
 \subsection{Functions ↔ Relations}
+
+
+Consider a predicate \textsf{split/3}, that splits a list of integers into two lists: one containing the positive ones (and zero), the other containing the negative ones.
+
+\begin{verbatim}
+split([3,4,-5,-1,0,4,-9],P,N)
+\end{verbatim}
+
+should return:
+
+\begin{verbatim}
+P = [3,4,0,4]
+N = [-5,-1,-9].
+\end{verbatim}
+
+
+\begin{question}{1}
+    Write the predicate \textsf{split/3}. Make sure that it is \emph{reversible}. That is,
+    you can recover the original list if you pass it the split lists.
+\answer{
+\begin{prolog}
+split([],[],[]).
+split([X|A],[X|P],N) :- X >= 0, split(A,P,N).
+split([X|A],P,[X|N]) :- X <  0, split(A,P,N).
+\end{prolog}
+}
+\end{question}    
+
+\begin{question}{1}
+    What are the lists that are returned by \textsf{split/3} when used in reverse?
+\answer{All the possible interleavings of the inputs. If a number of the wrong class is
+in either of the inputs, it will fail.}
+\end{question}
+
+
 \subsection{Explicit Search}
 
 
