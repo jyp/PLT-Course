@@ -519,9 +519,9 @@ Data.List module?
 The following definition returns the list of prime numbers smaller than 1000:
 
 \begin{verbatim}
-primes = cribble [2..1000]
-cribble (n:ns) = n:cribble (filter (not . (`isDivisibleBy` n)) ns)
-x `isDivisibleBy` y = x `div` y == 0
+primes = sieve [2..1000]
+sieve (n:ns) = n:sieve (filter (not . (`isDivisibleBy` n)) ns)
+x `isDivisibleBy` y = x `mod` y == 0
 \end{verbatim}
 
 \question{*} Inline the call of function composition in the above.
@@ -530,9 +530,9 @@ The only remaining higher-order function is filter.
 
 \question{*} Write a version of filter which takes an explicit closure as an argument.
 
-\question{*} Re-write cribble using the above.
+\question{*} Re-write sieve using the above.
 
-\question{**} Write a version of cribble in imperative (or OO)
+\question{**} Write a version of sieve in imperative (or OO)
 language. (You can not use arrays instead of lists).
 
 \subsection{Explicit state}
@@ -551,12 +551,12 @@ The above can be seen as an imperative algorithm.
 
 \subsection{Laziness}
 
-Remember the cribble algorithm. Let us call it with an infinite list:
+Remember the sieve algorithm. Let us call it with an infinite list:
 \begin{verbatim}
-primes = cribble [2..]
+primes = sieve [2..]
 \end{verbatim}
 
-\question{*} Translate cribble to use explicit thunks (as in the lecture)
+\question{*} Translate sieve to use explicit thunks (as in the lecture)
 
 Oh noes, this introduced a higher-order function. 
 
@@ -566,7 +566,7 @@ You know what's coming...
 
 \question{***} Remove higher-orderness using the best technique available.
 
-\question{***} Write a version of lazy cribble in imperative (or OO)
+\question{***} Write a version of lazy sieve in imperative (or OO)
 language.
 
 \section{Concurrent Programming}
