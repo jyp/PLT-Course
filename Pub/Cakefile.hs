@@ -36,7 +36,7 @@ html = do
                 "--funcall", "org-export-as-html-batch"]
 
 pub = system ["rsync", "-r", ".",
-          "bernardy@remote11.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
+          "bernardy@remote13.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
 
 action = do
   exercises
