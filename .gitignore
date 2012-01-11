@@ -6,6 +6,7 @@ _darcs
 
 # Ignore loads of file types.
 
+*.swp
 *#
 *.class
 *.exe
