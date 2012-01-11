@@ -19,7 +19,8 @@
   % {\bf Exercise~\arabic{question}} \percents{#1}
   \paragraph{Exercise~\arabic{question}  \percents{#1}}
  }
-
+\newenvironment{\ex}[1]{\question{#1}}{\paragraph{}}
+\newcommand{\removed}[1]{}
 
 \usepackage{listings}
 \lstset{language=java,basicstyle=\small}
@@ -608,8 +609,7 @@ Expr → (Int → a) → a
 
 \section{Logic Programming}
 \subsection{Metavariables and unification}
-\subsection{Functions to Relations}
-\subsection{Explicit Relations}
+\subsection{Functions ↔ Relations}
 \subsection{Explicit Search}
 
 
