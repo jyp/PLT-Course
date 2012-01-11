@@ -29,7 +29,7 @@ https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=201
 
 See table below for detail of contents.
 
-| Code  | Contents                                                           |
+| Abbrev | Contents                                                           |
 |-------+--------------------------------------------------------------------|
 | Intro | Generalities                                                       |
 | IP 1  | Goto ↔ Loops, Pointers and passing by reference, Inline procedures |
@@ -49,7 +49,7 @@ See table below for detail of contents.
 | LP 1  | Unification                                                        |
 | EX 6  |                                                                    |
 | LP 2  | Relations, Search as list of successes                             |
-| Q&A   | Quesions and answers                                               |
+| Q&A   | Questions and answers                                              |
 
 Note: the contents of each exercise session will be about the topics
 covered in the two previous lectures.

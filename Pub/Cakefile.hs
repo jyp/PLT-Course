@@ -19,6 +19,10 @@ agenda = do
       --              "--kill"
               ]
         
+cp a b = system ["cp",a,b]        
+        
+exercises = do    
+  _pdflatex "../New/Exercises/All.tex"
 
 html = do
   produce "Lectures.html" $ do
@@ -31,9 +35,13 @@ html = do
                 "--visit=Lectures.org",
                 "--funcall", "org-export-as-html-batch"]
 
-action = do
-  html
-  system ["rsync", "-r", ".",
+pub = system ["rsync", "-r", ".",
           "bernardy@remote11.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
+
+action = do
+  exercises
+  html
+  pub
+  
 
 

@@ -27,14 +27,22 @@ How to read this document
 
 ** The teaching team
 + Ramona Enache
+  - Exercise tutor
+    - Room: 6...
+    - E-mail: enache@chalmers.se
 + Nick Frolov
+  - Exercise tutor
+  - Contact:
+    - Room: 5...
+    - E-mail: frolov@chalmers.se
 + Arash Rouhani
+  - Exercise tutor
+  - E-mail: rarash@chalmers.se
 + JP Bernardy
   - Course responsible & Lecturer
   - Contact:
     - Room: 6126
     - E-mail: bernardy@chalmers.se
-    - office hours: 
 
   - CV:
     + 1996-2000: Master in CS (Free University of Brussels)
@@ -47,9 +55,9 @@ See file:Schedule.org
 *** Formal requirements
 - Pass the exam
 - Participate in the exercises correction sessions (bonus points)
-- Do the exercises
+- Do the exercises: file:All.pdf
 - Attend the lectures
-- Prepare lectures by reading lecture notes
+- Prepare lectures by reading lecture notes (this document) and follow relevant links.
 - IMPORTANT. Subscribe to the course here
   https://docs.google.com/spreadsheet/viewform?hl=en_GB&formkey=dDBUT1FtVWgyelBXdFZCQkRUNzFWOHc6MQ#gid=0
   (we can't get an accurate list from the administration) This is so
