@@ -70,8 +70,8 @@
 \begin{document}
 %\listoftodos
 
-\title{Programming Paradigms}
-\author{Ramona Enache, Jean-Philippe Bernardy\footnote{with thanks to previous teams in charge of the course.}}
+\title{Programming Paradigms: Exercises}
+% \author{Ramona Enache, Jean-Philippe Bernardy\footnote{with thanks to previous teams in charge of the course.}}
 \maketitle
 
 
@@ -140,7 +140,7 @@ Consider the type
 \question{***} What can possibly inhabit it?
 
 
-
+\newpage % so the algorithm below is not broken
 \section{Imperative Programming}
 
 \subsection{Gotos to loops}
@@ -187,14 +187,15 @@ Consider the algorithm:
 implement binary search without gotos in the context of the
 algorithm. There is a slight change compared to the classical
 algorithm, since the scope of the search is different. Keep in mind! 
-\todo[noline]{or} 
+\footnote{If that is too easy, do it for red-black trees.}
+
 
 \question{*} 
 
 \textbf{Step1} may require the calculation of the expression $\lfloor log
     \left ( m \slash n \right ) \rfloor $, for $n \geq m$. Explain how
     to compute this easily without division or calculation of a
-    logarithm.  \todo[inline]{with gotos or explicit stack}
+    logarithm.  % \todo[inline]{with gotos or explicit stack}
 
 \question{*} 
 
@@ -234,13 +235,11 @@ Translate the switch/case construct.
 Translate the bubble sort algorithm.
 
 \subsection{Pointers and call by reference}
-\question{*}
 
+\question{*}
 Create a binary search tree where nodes contain integer number in
 C/C++. Implement a function that adds a value to the tree and one that
 deletes a certain value from the tree. 
-\todo[inline]{maybe smth more interesting, red-black/Fibonacci tree...}
-
 
 \question{*}
 Write a recursive traversal of the above tree.
@@ -258,16 +257,23 @@ your answer.
 vs. call by value. (Ease of use, performance, ...)
 
 \subsection{From recursion to explicit stack}
-Consider the following recursive relation for computing Fibonacci
+\begin{ex}{**}
+Re-implement the tree traversal (from above), but using explicit stacks.
+\end{ex}
+
+
+Consider the following recursive equation for computing Fibonacci
 numbers:
-\\
-\\
-{\it $fib_{n+2} = fib_{n+1} + fib_{n}$}
+\providecommand{\fib}{\mathnormal{fib}}
+\[
+\fib_{n+2} = \fib_{n+1} + \fib_{n}
+\]
 
 \question{*}
-
 Implement the recursive function computing the n-th Fibonacci number based on
-the expression above. Why is it not efficient ?
+the expression above. 
+
+\question{*} Why is it not efficient?
 
 \question{*}
 
@@ -280,12 +286,11 @@ Implement a version of one of the two functions above by using an
 explicit stack.  
 
 \question{**}
-Re-implement the tree traversal as above, but using explicit stacks.
-
-\question{**}
 Implement the Ackermann function without recursion.
 (See \url{http://en.wikipedia.org/wiki/Ackermann_function}).
 
+\question{**} Implement the algorithm from the previous section
+without loops (only recursion allowed).
 
 \section{Object-Oriented Programming}
 
@@ -580,6 +585,7 @@ The above can be seen as an imperative algorithm.
 
 
 \subsection{Laziness}
+There are no lazy languages that permit mutation.  \question{***} Why not?
 
 \subsubsection{Lazy Dynamic Programming}
 
@@ -589,6 +595,10 @@ you're only interested in whether there is a path between two given
 nodes, not the number of steps in the path.
 
 Note that the best-case performance is Cubic.
+
+\question{*} Repeat the above, but make sure you never overwrite a
+cell in a matrix. (What do you need to do to make this at all
+possible?)
 
 \question{*} Using the same formula, fill the Roy-Warshall matrix
 using an array comprehension in a lazy language (optionally use
@@ -600,6 +610,42 @@ explicit thunks for the contents of each cell.)
 lazy logical disjunction operator? Test it.
 
 \question{-} Can you write the Roy-Warshall algorithm in it?
+
+\question{**} Repeat the above steps with the algorithm to compute the
+least-edit distance. \url{http://en.wikipedia.org/wiki/Levenshtein_distance}
+
+\begin{verbatim}
+int LevenshteinDistance(char s[1..m], char t[1..n])
+{
+  // for all i and j, d[i,j] will hold the Levenshtein distance between
+  // the first i characters of s and the first j characters of t;
+  // note that d has (m+1)x(n+1) values
+  declare int d[0..m, 0..n]
+
+  for i from 0 to m
+    d[i, 0] := i // the distance of any first string to an empty second string
+  for j from 0 to n
+    d[0, j] := j // the distance of any second string to an empty first string
+
+  for j from 1 to n
+  {
+    for i from 1 to m
+    {
+      if s[i] = t[j] then  
+        d[i, j] := d[i-1, j-1]       // no operation required
+      else
+        d[i, j] := minimum
+                   (
+                     d[i-1, j] + 1,  // a deletion
+                     d[i, j-1] + 1,  // an insertion
+                     d[i-1, j-1] + 1 // a substitution
+                   )
+    }
+  }
+
+  return d[m,n]
+}
+\end{verbatim}
 
 \subsubsection{Lazy Lists (Streams)}
 

@@ -29,20 +29,20 @@ How to read this document
 + Ramona Enache
   - Exercise tutor
     - Room: 6...
-    - E-mail: enache@chalmers.se
+    - E-mail: enache (chalmers.se)
 + Nick Frolov
   - Exercise tutor
   - Contact:
     - Room: 5...
-    - E-mail: frolov@chalmers.se
+    - E-mail: frolov (chalmers.se)
 + Arash Rouhani
   - Exercise tutor
-  - E-mail: rarash@chalmers.se
+  - E-mail: rarash (student.chalmers.se)
 + JP Bernardy
   - Course responsible & Lecturer
   - Contact:
     - Room: 6126
-    - E-mail: bernardy@chalmers.se
+    - E-mail: bernardy (chalmers.se)
 
   - CV:
     + 1996-2000: Master in CS (Free University of Brussels)
@@ -94,11 +94,22 @@ See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 - Many links scattered across this document
 - Single most relevant textbook: probably
 
-  "Programming Languages -- Application and Interpretation", Shriram Krishnamurthi.
-  http://www.plai.org/
-  http://www.cs.brown.edu/~sk/Publications/Books/ProgLangs/2007-04-26/
+  + "Programming Languages -- Application and Interpretation", Shriram Krishnamurthi.
 
- ... but uses different structure, and scheme (LISP) syntax.
+  http://www.plai.org/
+#  http://www.cs.brown.edu/~sk/Publications/Books/ProgLangs/2007-04-26/
+ 
+  + but
+    * uses different structure
+    * uses scheme (LISP) syntax
+    * is written with MS and PhD students in mind
+
+  + Relevant parts
+    * Shreds of part II 
+    * Parts III, IV, VI, VII
+    * Part X (Ch. 24, 25) 
+    * Part XI
+
 
 **** Other relevant books
 
@@ -1574,6 +1585,9 @@ than once: after computation the thunk is overwritten by the
 value. (As opposed to re-evaluate it every time its value is neeed).
 If you need to evaluate thunks many times, it's a good idea to have
 explicit memoization.
+
+Subnote: this crucially relies on the absence of side-effects.
+
 *** Question: What if we want to encode laziness in an imperative language?
 - First introduce explicit thunks,
 - Then transform them into closures!

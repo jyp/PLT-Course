@@ -21,8 +21,10 @@ agenda = do
         
 cp a b = system ["cp",a,b]        
         
-exercises = do    
-  _pdflatex "../New/Exercises/All.tex"
+exercises = produce "All.pdf" $ do    
+  let input =  "../New/Exercises/All.tex"
+  need input
+  _pdflatex input
 
 html = do
   produce "Lectures.html" $ do
@@ -36,7 +38,7 @@ html = do
                 "--funcall", "org-export-as-html-batch"]
 
 pub = system ["rsync", "-r", ".",
-          "bernardy@remote11.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
+          "bernardy@remote13.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
 
 action = do
   exercises
