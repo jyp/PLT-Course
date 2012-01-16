@@ -785,18 +785,25 @@ What happens when you concatenate a difference list with itself?
 
 
 
-
-
 \subsection{Functions ↔ Relations}
 
-
-Consider a predicate \textsf{split/3}, that splits a list of integers into two lists: one containing the positive ones (and zero), the other containing the negative ones.
-
+Consider the following haskell function, that splits a list of
+integers into two lists: one containing the positive ones (and zero),
+the other containing the negative ones.
 \begin{verbatim}
-split([3,4,-5,-1,0,4,-9],P,N)
+split [] = ([],[])
+split (x:xs) | x >= 0 = (x:p,n)
+             | x <  0 = (p,x:n)
+  where (p,n) = split xs        
 \end{verbatim}
 
-should return:
+If written as a predicate, it is natural if it takes 3 arguments. For example,
+
+\begin{verbatim}
+split([3,4,-5,-1,0,4,-9],p,n)
+\end{verbatim}
+
+should bind:
 
 \begin{verbatim}
 P = [3,4,0,4]
@@ -804,8 +811,8 @@ N = [-5,-1,-9].
 \end{verbatim}
 
 
-\begin{question}{1}
-    Write the predicate \textsf{split/3}. Make sure that it is \emph{reversible}. That is,
+\begin{question}{**}
+    Write the predicate \textsf{split}. Make sure that it is \emph{reversible}. That is,
     you can recover the original list if you pass it the split lists.
 \answer{
 \begin{prolog}
@@ -816,14 +823,38 @@ split([X|A],P,[X|N]) :- X <  0, split(A,P,N).
 }
 \end{question}    
 
-\begin{question}{1}
-    What are the lists that are returned by \textsf{split/3} when used in reverse?
+\begin{question}{**}
+    What are the lists that are returned by \textsf{split/3} when used in reverse? Can it fail?
 \answer{All the possible interleavings of the inputs. If a number of the wrong class is
 in either of the inputs, it will fail.}
 \end{question}
 
-
 \subsection{Explicit Search}
+
+
+Consider the following list comprehension:
+\begin{verbatim}
+c = [f x | z <- a, y <- g z, x <- h y, p v]
+\end{verbatim}
+
+\begin{ex}{*}
+  Write down possible types for f, a, g, h and p.
+\end{ex}
+
+\begin{ex}{*}
+  Assume that the above functions are translated to relational
+  style. What would be natural types for them?
+\end{ex}
+
+\begin{ex}{*}
+  Translate the list comprehension to relational style.
+\end{ex}
+
+\begin{ex}{**}
+  Translate all the functions from Family.curry in the ``list of
+  successes'' style, for all directions.
+\end{ex}
+
 
 
 

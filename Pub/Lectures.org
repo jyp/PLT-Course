@@ -46,7 +46,7 @@ How to read this document
 
   - CV:
     + 1996-2000: Master in CS (Free University of Brussels)
-    + 2000-2007: Software engineer at various places
+    + 2000-2007: Software engineer (Various places)
     + 2007-2011: PhD (Chalmers)
 
 ** Schedule & Organisation
@@ -146,7 +146,7 @@ How do you think of your computer?
 
 - Memory + instructions (von Neumann model)
 - Rewriting engine
-- Mathematical function
+- (evaluator of) Mathematical functions
 - ...
   
 *** Paradigms and Languages
@@ -249,7 +249,7 @@ http://tauday.com/
 ** Outline of the course
 *** Brief exposition of each paradigm
 
-Can I teach you so 5 differrent ways of thinking in 7 weeks? 
+Can I teach you 5 differrent ways of thinking in 7 weeks? 
 Each of these would require major rewiring of your brain. Difficult!
 But fear not... Other courses are available:
 
@@ -277,7 +277,8 @@ Note in particular that exercises are integral part of the course material.
 Types are essential to get a quick overview of what a program is
 "about". Very useful when facing abstract programs! Hence, they are
 important in this course since some paradigms have high "expression
-power".
+power" (ie. programs can be esoteric if one doesn't know their
+purpose).
 
 Here I use the colon ':' to denote the typing relation. 
 
@@ -331,6 +332,7 @@ string, written formally as follows:
 4. if not done, then repeat 2. and 3. 
 
 (cf. cookbook...
+
    ... for beginner cooks :)
 
 *** Computing model
@@ -1066,7 +1068,7 @@ Translation of interfaces via method tables.
 ** Forward reference: ``objects are poor man's [[closures]]''
  Note the similarity between objects and closures: they are both
  encoded as state/environment + fct. pointer.
-** TODO Traits & Objects as fixpoints (✪)
+** Traits & Objects as fixpoints (✪)
 * Functional programming
 ** Reading (as necessary to understand Haskell syntax): "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
@@ -1566,6 +1568,12 @@ mark.  For [[file:Strict.hs][example]]:
 It's possible to recover laziness by introduction of /explicit thunks/:
 #+INCLUDE "Lazy.hs" src haskell
 
+*** Note: laziness as implemented in Haskell is more efficient than explicit thunks as presented above. Why?
+Because Haskell garantees that a given thunk is never evaluated more
+than once: after computation the thunk is overwritten by the
+value. (As opposed to re-evaluate it every time its value is neeed).
+If you need to evaluate thunks many times, it's a good idea to have
+explicit memoization.
 *** Question: What if we want to encode laziness in an imperative language?
 - First introduce explicit thunks,
 - Then transform them into closures!
@@ -1881,7 +1889,7 @@ means
 :  (x,y₁) ∈ f and (x,y₂) ∈ f   ⇒ y₁ = y₂
 
 
-We can turn this around and replace functions by graphs.
+We can turn this around and encode functions as their graphs.
 
 | source              | target                                                        |
 |---------------------+---------------------------------------------------------------|
@@ -1918,11 +1926,44 @@ file:Family.curry
 
 ** TODO Search
 There are sometimes more than one way to satisfy a relation!
-*** List of successes
 *** Backtracking
-manual search       <-->  constraints
 
-http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
+If at some point one encounters a failure (for example unification
+fails), *backtrack* to the last dijunction and try the other branch.
+
+This requires that you remember the "state of the world" at each
+disjuction point.
+
+*** TODO List of successes
+
+Explicit representation of disjunction. That is, suppose we want to
+encode the (inverse) of the Parent relation from file:Family.curry as
+a function children, such as:
+
+: parent x y ⇔ y ∈ children x
+
+#+begin_src haskell
+children :: Person -> [Person]
+children Gustaf = [Victoria,Philippe,Madeleine]
+children Adolf  = ...
+#+end_src
+
+exercise: write the function "parents", such as 
+
+: parent x y ⇔ x ∈ parents y
+
+We can now translate sibling function as follows:
+
+: siblings x  :: Person -> [Person]
+: siblings x = [ y | z <- parents x,  y <- children z]
+
+Each free variable must range over its possible values.
+
+**** TODO Translate unification
+
+*** Note: there are clever ways to implement logic programming.
+We won't discuss those here; there is lots of literature for the
+interested.
 
 * Outlook
 
