@@ -68,7 +68,7 @@ See file:Schedule.org
   on top.
 - You can also use the source if you fancy emacs org-mode.
 - Please interrupt me during lectures!
-*** TODO Exercises
+*** Exercises
 Groups: 
 
   1. Tue. 13.15-15.00
@@ -91,8 +91,11 @@ See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 - Volunteer _today_, by seeing me at the break.
 
 *** Reading material
-- Many links scattered across this document
-- Single most relevant textbook: probably
++ Unfortunately, I do not know of a single textbook covering all the
+  material in a suitable way. Therefore, this document is the "master"
+  source for the course. Still...
++ Do follow the links scattered across this document
++ Single most relevant textbook: probably
 
   + "Programming Languages -- Application and Interpretation", Shriram Krishnamurthi.
 
@@ -109,7 +112,7 @@ See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
     * Parts III, IV, VI, VII
     * Part X (Ch. 24, 25) 
     * Part XI
-
++ Note that the exercises (file:All.pdf) are also part of the course material.
 
 **** Other relevant books
 
@@ -1658,7 +1661,6 @@ processes. file:CSPVariable.hs
   when 'set' is called.
 - Can you change the program so that the get command does not need to
   create a channel? (⋆⋆)
-- Write a "bank account" handler function.
 
 ** Transformation: explicit continuations
 *** What is a continuation?

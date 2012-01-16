@@ -19,7 +19,7 @@
   % {\bf Exercise~\arabic{question}} \percents{#1}
   \paragraph{Exercise~\arabic{question}  \percents{#1}}
  }
-\newenvironment{ex}[1]{\question{#1}}{\paragraph{}}
+\newenvironment{ex}[1]{\question{#1}}{\vspace{1em}}
 \newcommand{\removed}[1]{}
 
 \newcommand{\answer}[1]{}
@@ -537,7 +537,7 @@ unnecessary limitations into our code.
 
 Eratosthenes' sieve is a method for finding prime numbers, dating from
 ancient Greece. We start by writing down all the numbers from 2 up to
-some limit, such as 100. Then we repeatedly do the following:
+some limit, such as 1000. Then we repeatedly do the following:
 \begin{itemize}
 \item
 The {\em first} number in the list is a prime. We generate it as an
@@ -553,6 +553,9 @@ prime numbers up to the limit have been found.
 
 The algorithm can be implemented in Haskell as follows:
 
+\question{*} Write the algorithm in Haskell.
+
+Consider the following (totally unrelated) algorithm:
 \begin{verbatim}
 primes = sieve [2..1000]
 sieve (n:ns) = n:sieve (filter (not . (`isDivisibleBy` n)) ns)
@@ -567,8 +570,9 @@ The only remaining higher-order function is filter.
 
 \question{*} Re-write sieve using the above.
 
-\question{**} Write a version of sieve in imperative (or OO)
-language. (You can not use arrays instead of lists).
+\question{**} Write a version of sieve in imperative (or OO) language,
+by translation of the answer to the previous exercise. (eg. you can
+not use arrays instead of lists).
 
 \subsection{Explicit state}
 
@@ -612,7 +616,7 @@ lazy logical disjunction operator? Test it.
 \question{-} Can you write the Roy-Warshall algorithm in it?
 
 \question{**} Repeat the above steps with the algorithm to compute the
-least-edit distance. \url{http://en.wikipedia.org/wiki/Levenshtein_distance}
+least edit distance. \url{http://en.wikipedia.org/wiki/Levenshtein_distance}
 
 \begin{verbatim}
 int LevenshteinDistance(char s[1..m], char t[1..n])
@@ -669,25 +673,76 @@ You know what's coming...
 
 \question{***} Remove higher-orderness using the best technique available.
 
-\question{***} Write a version of lazy sieve in imperative (or OO)
+\begin{ex}{**}
+  Write a version of lazy sieve in imperative (or OO)
 language. 
+\end{ex}
 
-Since there are no more functions in the data, you can display your
-infinite lists!
+Since there are no more functions in the data, you can now display your
+infinite lists. 
 
-\question{***} Interpret what you see.
+\question{***} Do so for a few meaningful inputs, and interpret what
+you see.
 
 
 \section{Concurrent Programming}
+
 \subsection{Channels and Processes}
 
-TODO
+\begin{ex}{*}
+  Write a process that manages a bank account. It has a channel for
+  queries; which can be deposits and withdrawals. The answer is posted
+  to a channel that comes with the query.  (Note: you cannot use
+  references to store any state -- see variable-managing process for inspiration)
+\end{ex}
 
-\subsection{State-carrying processes}
+\begin{ex}{*}
+  Write a client for the above process that move ``money'' from an
+  account to another. 
+\end{ex}
 
-TODO
+\begin{ex}{*}
+  Assume that withdrawals/deposits can fail. (For example if there is
+  too much/litte on the account). Modify the server process
+  accordingly.
+\end{ex}
+
+\begin{ex}{**}
+  Is the total amount of money a constant of your system? How can you
+  ensure that it is? Write the corresponding code. 
+\end{ex}
 
 \subsection{Explicit continuations}
+
+Consider the following outline for the ``business logic'' of a
+web-application:
+\begin{verbatim}
+session = do
+   items <- webForm "What do you want to buy?"
+   address <- webForm "Where do you want your stuff delivered?"
+   daMoney <- webForm "Enter your credit card details, now."
+   secureInDatabase daMoney (priceOf items)
+   placeOrder items address
+\end{verbatim}
+
+\begin{ex}{*}
+  What is the purpose, and type of the webForm primitive?
+\end{ex}
+
+\begin{ex}{**}
+  Transform the type of webForm to take a continuation.
+\end{ex}
+
+\begin{ex}{**}
+  Break the above code into continuations, linked by the webForm primitive.
+\end{ex}
+
+\begin{ex}{***}
+  Outline what the webForm function should do. Discuss in particular
+  what happens if the user presses the ``back'' button in their
+  browser.
+\end{ex}
+
 
 \paragraph{Removing recursion using continuations}
 
@@ -741,8 +796,6 @@ X = Y = Z = W \\
 \end{tabular}
     
 }
-
-
 \end{ex}
 
 \subsubsection{Difference Lists}
@@ -790,7 +843,7 @@ toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
 Given that representation for lists, it is possible to perform concatenation by
 doing unification only!
 
-\begin{question}{**}
+\begin{ex}{**}
 Write a predicate dconcat/3 to concatenate two difference lists, without
 using the direct representation.
 
@@ -809,19 +862,14 @@ Final = [1,2,3,4,5].
 \begin{prolog}
 dconcat(d(Out2,In2),d(Out1,In1),d(Out,In)) :- Out = Out2, In2 = Out1, In = In1.
 \end{prolog}
-
 or
-
 \begin{prolog}
 dconcat(d(Out,Intermediate),d(Intermediate,In),d(Out,In)).
 \end{prolog}
-
 }
 
+\end{ex}
 
-\end{question}
-
-\end{document}
 \begin{question}{***}
 What happens when you concatenate a difference list with itself?
 \answer{The difference list will contain circular, infinite lists.}
@@ -878,7 +926,7 @@ in either of the inputs, it will fail.}
 \subsection{Explicit Search}
 
 
-Consider the following list comprehension:
+Consider the following list comprehension, in Haskell syntax:
 \begin{verbatim}
 c = [f x | z <- a, y <- g z, x <- h y, p v]
 \end{verbatim}
