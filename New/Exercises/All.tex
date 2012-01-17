@@ -2,15 +2,15 @@
 
 \usepackage[utf8x]{inputenc}
 \usepackage[pdftex]{graphicx}
-\usepackage{pdfpages}
 \usepackage{todonotes}
-\usepackage{t1enc}         
 \usepackage[english]{babel}
-\usepackage{times}
+%\usepackage{times}
 \usepackage{url}
 \usepackage{enumerate}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage{verbatim}
+\usepackage{hyperref}
 
 \newcommand{\percents}[1]{\protect \marginpar[l]{\bf [#1]}}
 \newcounter{question}
@@ -19,10 +19,17 @@
   % {\bf Exercise~\arabic{question}} \percents{#1}
   \paragraph{Exercise~\arabic{question}  \percents{#1}}
  }
-\newenvironment{ex}[1]{\question{#1}}{\paragraph{}}
+\newenvironment{ex}[1]{\question{#1}}{\vspace{1em}}
 \newcommand{\removed}[1]{}
 
+\newcommand{\answer}[1]{}
+
+% Uncomment to show answers
+% \renewcommand{\answer}[1]{#1}
+ 
+
 \usepackage{listings}
+
 \lstset{language=java,basicstyle=\small}
 \lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
 \lstnewenvironment{java}
@@ -56,16 +63,17 @@
     columns=fullflexible
 }
 
+\lstnewenvironment{prolog}
+    {\lstset{language=prolog,frame=tb}}
+    {}
 
 \begin{document}
 %\listoftodos
 
-\title{Programming Paradigms}
-\author{Ramona Enache, Jean-Philippe Bernardy\footnote{with thanks to previous teams in charge of the course.}}
+\title{Programming Paradigms: Exercises}
+% \author{Ramona Enache, Jean-Philippe Bernardy\footnote{with thanks to previous teams in charge of the course.}}
 \maketitle
 
-%\newcommand{\answer}[1]{} %{\begin{quote}{\bf Answer:} #1\end{quote}}
-\newcommand{\percent}[1]{} %{\marginpar{\bf #1 }}
 
 \section{Generalities}
 
@@ -102,7 +110,7 @@ which is supported by C++?
 \item derivative
 \end{enumerate}
 
-\question{*} Explain the meaning of the following types. (Hint: what
+\question{**} Explain the meaning of the following types. (Hint: what
 kind of values can inhabit those types?)
 
 \begin{enumerate}
@@ -113,6 +121,9 @@ kind of values can inhabit those types?)
 \item String → (String → String)
 \item (String → String) → (String → String)
 \end{enumerate}
+% FIXME: the above already has an implicit notion of currification, so
+% the exercise should be split/simplified.
+
 
 One can not only parameterize over values, but also over
 types. (Eg. in Java, generic classes).
@@ -132,7 +143,7 @@ Consider the type
 \question{***} What can possibly inhabit it?
 
 
-
+\newpage % so the algorithm below is not broken
 \section{Imperative Programming}
 
 \subsection{Gotos to loops}
@@ -179,14 +190,15 @@ Consider the algorithm:
 implement binary search without gotos in the context of the
 algorithm. There is a slight change compared to the classical
 algorithm, since the scope of the search is different. Keep in mind! 
-\todo[noline]{or} 
+\footnote{If that is too easy, do it for red-black trees.}
+
 
 \question{*} 
 
 \textbf{Step1} may require the calculation of the expression $\lfloor log
     \left ( m \slash n \right ) \rfloor $, for $n \geq m$. Explain how
     to compute this easily without division or calculation of a
-    logarithm.  \todo[inline]{with gotos or explicit stack}
+    logarithm.  % \todo[inline]{with gotos or explicit stack}
 
 \question{*} 
 
@@ -206,7 +218,7 @@ Implement the above-mentioned algorithm without using
 implementation with the {\it A} and {\it B} from the previous question. 
 
   
-\subsection{Loops to gotos}
+\subsection{Control flow statements to gotos}
 \question{*}
 
 Translate the following \textbf{for} loop with explicit gotos:
@@ -216,23 +228,27 @@ Translate the following \textbf{for} loop with explicit gotos:
 
 $\ \ \ \ $loop$\_$body}
 
+
 \question{*}
 Translate the do/while construct.
 
 \question{*}
 Translate the switch/case construct.
 
+(If you want to make sure your translation is correct you should check the 
+specification of the C language. \url{http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf})
+
 \question{*}
 Translate the bubble sort algorithm.
 
-\subsection{Pointers and call by reference}
-\question{*}
 
+
+\subsection{Pointers and call by reference}
+
+\question{*}
 Create a binary search tree where nodes contain integer number in
 C/C++. Implement a function that adds a value to the tree and one that
 deletes a certain value from the tree. 
-\todo[inline]{maybe smth more interesting, red-black/Fibonacci tree...}
-
 
 \question{*}
 Write a recursive traversal of the above tree.
@@ -249,17 +265,133 @@ your answer.
 \question{**} Write down pros and cons of using call by reference
 vs. call by value. (Ease of use, performance, ...)
 
+\subsection{More on control flow and pointers: Duff's device}
+Duff's device is an optimization idiom for serial copies 
+in the language C. The fragment below lists first the original code,
+then Duff's optimization.
+\pagebreak
+\begin{cplus}
+/* (Almost) original code */
+int main() {
+   short *to, *from;
+   int count;	
+   ... 
+   {
+     /* pre: count > 0 */		
+     do
+	  *to++ = *from++;		
+     while(--count>0);	
+   }
+   return 0; 
+}
+\end{cplus}
+
+Many things happen in the assignment ``\textsf{*to++ = *from++;}''. Can you figure out what exactly?
+\begin{ex}{*}
+  Translate the above to multiple statements, so that for each of them
+  only one variable (or memory location) is updated.  Explain in your
+  own words what happens (draw a picture if necessary).  \answer{ It
+    is equivalent to \texttt{*to = *from; to++; from++;}.  In other
+    words, the memory pointed by \texttt{from} is copied to the memory
+    pointed by \texttt{to}, then the pointers are incremented.  }
+\end{ex}
+
+
+Duff optimised the above code as follows:
+\begin{cplus}
+/* Duff's transformation */
+int main() {
+  short *to, *from;
+  int count;	
+  ...
+  {
+     /* pre: count > 0 */		
+     int n = (count + 7) / 8;
+     switch(count % 8){
+       case 0:	do{	*to++ = *from++;
+       case 7:	        *to++ = *from++;
+       case 6:	        *to++ = *from++;
+       case 5:	        *to++ = *from++;
+       case 4:	        *to++ = *from++;
+       case 3:	        *to++ = *from++;
+       case 2:	        *to++ = *from++;
+       case 1:	        *to++ = *from++;
+                } while (--n > 0);
+     }
+  }
+  return 0;
+}
+\end{cplus}
+
+\begin{ex}{**}
+  Translate the switch statements to gotos.
+\end{ex}
+
+Is the second program really equivalent to the first?
+
+\begin{ex}{-}
+Show that the instruction ``\texttt{*to++ = *from++}'' will be executed 
+\texttt{count} times in the second program.
+\answer{The while loop will be executed $\floor{(count + 7) / 8}$ times.
+Since each iteration executes the instruction 8 times, we expect the
+program to run it $8 \times \floor{(count + 7)/ 8}$ times in total, which
+is up to 7 times more than count. 
+
+However, the \texttt{switch} instruction is there to skip 
+$count \bmod 8$ instructions in \emph{the first iteration}, to
+make the count exact.
+ }
+\end{ex}
+
+\begin{ex}{****}
+  Explain the equivalence by a series of program transformations.
+\end{ex}
+
+\providecommand{\floor}[1]{\lfloor #1 \rfloor}
+\begin{ex}{-}
+  Can you guess why Duff expects the second program to be faster?
+  What instructions are executed in the first program but not in the
+  second?
+  
+  \answer{The test and jump instructions are executed only
+    $\floor{(count + 7) / 8}$ times instead of $count$, which is about
+    $1/8$ of the time.}
+\end{ex}
+
+
+\paragraph{Further reading}
+\begin{itemize}
+\item For the original email in which Tom Duff presented his ``device'',
+see 
+
+\url{http://www.lysator.liu.se/c/duffs-device.html}
+
+\item You can see the assembly code generated by \textsf{gcc} by
+  compiling with
+  \begin{center}
+    \textsf{gcc -S $<$filename$>$}.   
+  \end{center}
+\end{itemize}
+
+
 \subsection{From recursion to explicit stack}
-Consider the following recursive relation for computing Fibonacci
+\begin{ex}{**}
+Re-implement the tree traversal (from above), but using explicit stacks.
+\end{ex}
+
+
+Consider the following recursive equation for computing Fibonacci
 numbers:
-\\
-\\
-{\it $fib_{n+2} = fib_{n+1} + fib_{n}$}
+\providecommand{\fib}{\mathnormal{fib}}
+\[
+\fib_{n+2} = \fib_{n+1} + \fib_{n}
+\]
 
 \question{*}
-
 Implement the recursive function computing the n-th Fibonacci number based on
-the expression above. Why is it not efficient ?
+the expression above. 
+
+\question{*} Why is it not efficient?
 
 \question{*}
 
@@ -267,17 +399,15 @@ Implement a slightly-optimized recursive function for the same
 purpose. (Hint: use an accumulator parameter).
 
 \question{**}
-
-Implement a version of one of the two functions above by using an
+Implement a version of each of the two functions above by using an
 explicit stack.  
-
-\question{**}
-Re-implement the tree traversal as above, but using explicit stacks.
 
 \question{**}
 Implement the Ackermann function without recursion.
 (See \url{http://en.wikipedia.org/wiki/Ackermann_function}).
 
+\question{**} Implement the algorithm from the previous section
+without loops (only recursion allowed).
 
 \section{Object-Oriented Programming}
 
@@ -502,7 +632,7 @@ comes from the previous section.
 \question{*} Unfold the following expressions:
 \begin{enumerate}
 \item map f
-\item filter (>= 0)
+\item filter ($>=$ 0)
 \item foldr [] (++)
 \end{enumerate}
 
@@ -517,12 +647,36 @@ Data.List module?
 
 \subsection{Closures}
 
-The following definition returns the list of prime numbers smaller than 1000:
+Lazy lists can be (potentially) infinite, although of course no
+program can evaluate {\em all} the elements of an infinite
+list. Nevertheless, using lazy lists can help us avoid building
+unnecessary limitations into our code.
 
+Eratosthenes' sieve is a method for finding prime numbers, dating from
+ancient Greece. We start by writing down all the numbers from 2 up to
+some limit, such as 1000. Then we repeatedly do the following:
+\begin{itemize}
+\item
+The {\em first} number in the list is a prime. We generate it as an
+output.
+\item
+We {\em remove all multiples} of the first number from the
+list---including that number itself.
+\item
+Loop.
+\end{itemize}
+We terminate when no numbers remain in our list. At this point, all
+prime numbers up to the limit have been found.
+
+The algorithm can be implemented in Haskell as follows:
+
+\question{*} Write the algorithm in Haskell.
+
+Consider the following (totally unrelated) algorithm:
 \begin{verbatim}
-primes = cribble [2..1000]
-cribble (n:ns) = n:cribble (filter (not . (`isDivisibleBy` n)) ns)
-x `isDivisibleBy` y = x `div` y == 0
+primes = sieve [2..1000]
+sieve (n:ns) = n:sieve (filter (not . (`isDivisibleBy` n)) ns)
+x `isDivisibleBy` y = x `mod` y == 0
 \end{verbatim}
 
 \question{*} Inline the call of function composition in the above.
@@ -531,10 +685,11 @@ The only remaining higher-order function is filter.
 
 \question{*} Write a version of filter which takes an explicit closure as an argument.
 
-\question{*} Re-write cribble using the above.
+\question{*} Re-write sieve using the above.
 
-\question{**} Write a version of cribble in imperative (or OO)
-language. (You can not use arrays instead of lists).
+\question{**} Write a version of sieve in imperative (or OO) language,
+by translation of the answer to the previous exercise. (eg. you can
+not use arrays instead of lists).
 
 \subsection{Explicit state}
 
@@ -542,8 +697,12 @@ Consider the binary tree structure written above. Assume the payload are integer
 
 \question{*} In the Java version, write a function that replaces each
 element with its index in preorder traversal of the tree.
-\question{*} Translate to Haskell.
+
+\begin{ex}{**} Translate to Haskell.
+\end{ex}
+
 The above can be seen as an imperative algorithm. 
+
 \question{*} What is the ``state of the world'' in this case?
 
 \question{*} Rewrite the Haskell version, in such a way that passing
@@ -551,66 +710,380 @@ The above can be seen as an imperative algorithm.
 
 
 \subsection{Laziness}
+There are no lazy languages that permit mutation.  \question{***} Why not?
 
-Remember the cribble algorithm. Let us call it with an infinite list:
-\begin{verbatim}
-primes = cribble [2..]
-\end{verbatim}
+\subsubsection{Lazy Dynamic Programming}
 
-\question{*} Translate cribble to use explicit thunks (as in the lecture)
+\question{*} Write the Floyd-Warshall algorithm in your favourite
+imperative language. Assume that there is no weight on edges; and
+you're only interested in whether there is a path between two given
+nodes, not the number of steps in the path.
 
-Oh noes, this introduced a higher-order function. 
+Note that the best-case performance is Cubic.
 
-\question{**} Where is the new higher-order function?
+\question{*} Repeat the above, but make sure you never overwrite a
+cell in a matrix. (What do you need to do to make this at all
+possible?)
+
+\question{*} Using the same formula, fill the Roy-Warshall matrix
+using an array comprehension in a lazy language (optionally use
+explicit thunks for the contents of each cell.)
+
+\question{**} Discuss the best-case performance.
+
+\question{-} Does your favourite spreadsheet program have strict, or
+lazy logical disjunction operator? Test it.
+
+\question{-} Can you write the Roy-Warshall algorithm in it?
+
+\question{**} Repeat the above steps with the algorithm to compute the
+least edit distance. \url{http://en.wikipedia.org/wiki/Levenshtein_distance}
+
+\begin{cplus}
+int LevenshteinDistance(char s[1..m], char t[1..n])
+{
+  // for all i and j, d[i,j] will hold the Levenshtein distance between
+  // the first i characters of s and the first j characters of t;
+  // note that d has (m+1)x(n+1) values
+  declare int d[0..m, 0..n]
+
+  for i from 0 to m
+    d[i, 0] := i // the distance of any first string to an empty second string
+  for j from 0 to n
+    d[0, j] := j // the distance of any second string to an empty first string
+
+  for j from 1 to n
+  {
+    for i from 1 to m
+    {
+      if s[i] = t[j] then  
+        d[i, j] := d[i-1, j-1]       // no operation required
+      else
+        d[i, j] := minimum
+                   (
+                     d[i-1, j] + 1,  // a deletion
+                     d[i, j-1] + 1,  // an insertion
+                     d[i-1, j-1] + 1 // a substitution
+                   )
+    }
+  }
+
+  return d[m,n]
+}
+\end{cplus}
+
+\subsubsection{Lazy Lists (Streams)}
+
+Remember the sieve algorithm.  Check that the \verb!sieve! function
+also works given the {\em infinite} list \verb![2..]!---the output
+should be the {\em infinite} list of all prime numbers.
+
+\question{*} How would you find the first 100 prime numbers? 
+
+Remark: start by answering the following questions on a simpler
+algorithm, for example the function \textsf{enumFrom} which generates
+the infinite list of numbers starting at a given one.
+
+\begin{ex}{*} Translate sieve to use explicit thunks (as in the lecture)
+\end{ex}
+
+Oh noes, this introduced higher-order function(s). 
+
+\begin{ex}{**}
+  Where are the new higher-order functions?
+\end{ex}
 
 You know what's coming...
 
 \question{***} Remove higher-orderness using the best technique available.
 
-\question{***} Write a version of lazy cribble in imperative (or OO)
-language.
+\begin{ex}{**}
+  Write a version of lazy sieve in imperative (or OO)
+language. 
+\end{ex}
+
+Since there are no more functions in the data, you can now display your
+infinite lists. 
+
+\question{***} Do so for a few meaningful inputs, and interpret what
+you see.
+
 
 \section{Concurrent Programming}
+
 \subsection{Channels and Processes}
 
-TODO
+\begin{ex}{*}
+  Write a process that manages a bank account. It has a channel for
+  queries; which can be deposits and withdrawals. The answer is posted
+  to a channel that comes with the query.  (Note: you cannot use
+  references to store any state -- see variable-managing process for inspiration)
+\end{ex}
 
-\subsection{State-carrying processes}
+\begin{ex}{*}
+  Write a client for the above process that move ``money'' from an
+  account to another. 
+\end{ex}
 
-TODO
+\begin{ex}{*}
+  Assume that withdrawals/deposits can fail. (For example if there is
+  too much/litte on the account). Modify the server process
+  accordingly.
+\end{ex}
+
+\begin{ex}{**}
+  Is the total amount of money a constant of your system? How can you
+  ensure that it is? Write the corresponding code. 
+\end{ex}
 
 \subsection{Explicit continuations}
 
-\paragraph{Removing recursion using continuations}
+Consider the following outline for the ``business logic'' of a
+web-application:
+\begin{verbatim}
+session = do
+   items <- webForm "What do you want to buy?"
+   address <- webForm "Where do you want your stuff delivered?"
+   daMoney <- webForm "Enter your credit card details, now."
+   secureInDatabase daMoney (priceOf items)
+   placeOrder items address
+\end{verbatim}
+
+\begin{ex}{*}
+  What is the purpose, and type of the webForm primitive?
+\end{ex}
+
+\begin{ex}{**}
+  Transform the type of webForm to take a continuation.
+\end{ex}
+
+\begin{ex}{**}
+  Break the above code into continuations, linked by the webForm primitive.
+\end{ex}
+
+\begin{ex}{***}
+  Outline what the webForm function should do. Discuss in particular
+  what happens if the user presses the ``back'' button in their
+  browser.
+\end{ex}
+
+
+\paragraph{Recursion and continuations}
 
 Remember your interpreter for arithmetic expressions. It should have type:
 
+% eval (Add x y) = eval x + eval y
+
 Expr → Int
 
-Let's make continuations explicit. In this case, the result is not returned, but 
-applied to a continuation. Hence, the type becomes:
+Let's make continuations explicit. In this case, the result is not
+returned directly, but applied to a continuation. Hence, the type
+becomes:
 
 Expr → (Int → a) → a
 
-\question{*} Write a wapper for the interpreter which has the above type
+\question{*} Write a wrapper for the interpreter which has the above type
 
 % wrapper expr k = k (eval expr)
 
-\question{***} Replace every recursive call in the interpreter by a call to the wrapper.
-(Hint: you must choose an order of evaluation!)
+
+\question{***} Replace every recursive call in the interpreter by a
+call to the wrapper.  (Hint: you must decide what is the
+``continuation'' for every call, and for this you must choose an order
+of evaluation!)
 % eval (Add x y) = wrapper x (\a -> wrapper y (\b -> a + b))
 
 \question{***} Unfold the usage of the interpreter in the wrapper.
 
-% wrapper (Add x y) k = k (w x $ \a -> w y $ \ b -> a + b)
+% wrapper (Add x y) k = k (wrapper x $ \a -> wrapper y $ \ b -> a + b)
 
-% Also possible: (wrapper x (\a -> wrapper y (\b -> k (a + b))))
-% (but does not follow the exercise)
+
+% It would be nice to have the students find:
+
+
+% eval (Add x y) k = (eval x (\a -> eval y (\b -> k (a + b))))
+
+
 
 \section{Logic Programming}
 \subsection{Metavariables and unification}
+
+\begin{ex}{*}
+What is the result of the following unifications? 
+Try to come up with the result without using the prolog interpreter!
+
+\begin{tabular}{c}
+a(X,Y) = a(b,c) \\
+a(X,Y) = a(Z,Z) \\
+a(X,X) = a(b,c) \\
+a(X) = a(b,b) \\
+a(X,X,Y) = a(Z,W,W) \\
+\end{tabular}
+
+\answer{
+
+\begin{tabular}{c}
+X = b, Y = c \\
+X = Y = Z \\
+fail \\
+fail \\
+X = Y = Z = W \\
+\end{tabular}
+    
+}
+\end{ex}
+
+\subsubsection{Difference Lists}
+
+A difference list is a special structure that can support efficient
+concatenation (Recall the discussion on \texttt{append/3} predicate in
+the lectures). It uses unification in a clever way to that end.
+
+The difference-list representation for a list can be obtained as follows:
+
+\begin{prolog}
+fromList([],d(X,X)).
+fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
+\end{prolog}
+
+
+A structure of the form \textsf{d(Out,In)} will represent the list
+\textsf{L} if \textsf{Out} unifies with \textsf{L} concatenated with
+\textsf{In}. Or, less technically, a list L will be represented as the
+difference between Out and In: so for instance,
+
+$$[1,2] \longrightarrow d(1:2:3:4:[],3:4:[])$$
+
+You can check how fromList works by testing it: 
+\begin{prolog}
+fromList([1,2,3],X).
+\end{prolog}
+
+Note that the same metavariable (G271 in my implementation) is present twice in
+the result. Note that we can get the original result back by unifying this
+metavariable with the empty list.
+
+\begin{question}{**}
+Write a predicate toList/2 to get back to the normal list representation.
+
+\answer{
+\begin{prolog}
+toList(d(X,X),[]).
+toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
+\end{prolog}
+}
+
+\end{question}
+
+Given that representation for lists, it is possible to perform concatenation by
+doing unification only!
+
+\begin{ex}{**}
+Write a predicate dconcat/3 to concatenate two difference lists, without
+using the direct representation.
+
+\begin{prolog}
+dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
+\end{prolog}
+
+
+should produce:
+
+\begin{verbatim}
+Final = [1,2,3,4,5].
+\end{verbatim}
+
+\answer{
+\begin{prolog}
+dconcat(d(Out2,In2),d(Out1,In1),d(Out,In)) :- Out = Out2, In2 = Out1, In = In1.
+\end{prolog}
+or
+\begin{prolog}
+dconcat(d(Out,Intermediate),d(Intermediate,In),d(Out,In)).
+\end{prolog}
+}
+
+\end{ex}
+
+\begin{question}{***}
+What happens when you concatenate a difference list with itself?
+\answer{The difference list will contain circular, infinite lists.}
+\end{question}
+
+
+
+
+
 \subsection{Functions ↔ Relations}
+
+Consider the following haskell function, that splits a list of
+integers into two lists: one containing the positive ones (and zero),
+the other containing the negative ones.
+\begin{verbatim}
+split [] = ([],[])
+split (x:xs) | x >= 0 = (x:p,n)
+             | x <  0 = (p,x:n)
+  where (p,n) = split xs        
+\end{verbatim}
+
+If written as a predicate, it is natural if it takes 3 arguments. For example,
+
+\begin{verbatim}
+split([3,4,-5,-1,0,4,-9],p,n)
+\end{verbatim}
+
+should bind:
+
+\begin{verbatim}
+P = [3,4,0,4]
+N = [-5,-1,-9].
+\end{verbatim}
+
+
+\begin{question}{**}
+    Write the predicate \textsf{split}. Make sure that it is \emph{reversible}. That is,
+    you can recover the original list if you pass it the split lists.
+\answer{
+\begin{prolog}
+split([],[],[]).
+split([X|A],[X|P],N) :- X >= 0, split(A,P,N).
+split([X|A],P,[X|N]) :- X <  0, split(A,P,N).
+\end{prolog}
+}
+\end{question}    
+
+\begin{question}{**}
+    What are the lists that are returned by \textsf{split/3} when used in reverse? Can it fail?
+\answer{All the possible interleavings of the inputs. If a number of the wrong class is
+in either of the inputs, it will fail.}
+\end{question}
+
 \subsection{Explicit Search}
+
+
+Consider the following list comprehension, in Haskell syntax:
+\begin{verbatim}
+c = [f x | z <- a, y <- g z, x <- h y, p v]
+\end{verbatim}
+
+\begin{ex}{*}
+  Write down possible types for f, a, g, h and p.
+\end{ex}
+
+\begin{ex}{*}
+  Assume that the above functions are translated to relational
+  style. What would be natural types for them?
+\end{ex}
+
+\begin{ex}{*}
+  Translate the list comprehension to relational style.
+\end{ex}
+
+\begin{ex}{**}
+  Translate all the functions from Family.curry in the ``list of
+  successes'' style, for all directions.
+\end{ex}
+
 
 
 

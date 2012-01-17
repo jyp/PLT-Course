@@ -19,3 +19,10 @@ instance Show a => Show (LList a) where
 
 theList = Cons "a" $ delay $ Cons "b" $ delay $ crash
 
+enumFromm :: Int -> LList Int
+enumFromm n = Cons n (delay $ enumFromm (n+1))
+
+-- force a whole prefix of the list.
+takeSome :: Int -> LList a -> [a]
+takeSome 0 _ = []
+takeSome n (Cons x xs) = x:takeSome (n-1) (force xs)

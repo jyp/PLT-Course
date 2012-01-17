@@ -7,9 +7,9 @@ parent :: Person -> Person -> Success
 parent Adolf         Gustaf = success
 parent Sybilla       Gustaf = success
 
-parent CarlGustaf    Victoria   = success
-parent CarlGustaf    Philip     = success
-parent CarlGustaf    Madeleine  = success
+parent Gustaf    Victoria   = success
+parent Gustaf    Philip     = success
+parent Gustaf    Madeleine  = success
 
 parent Silvia        Victoria   = success
 parent Silvia        Philip     = success
@@ -26,7 +26,7 @@ parent Silvia        Madeleine  = success
 
 sibling x y :: Person -> Person -> Success
 sibling x y = parent z x & parent z y
-
+   where z free
 
 -- exercise: cousin
 

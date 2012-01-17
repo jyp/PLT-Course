@@ -23,30 +23,30 @@ How to read this document
 - Programming paradigms
  (pronounciation: ˈpærədaɪm (us?)) 
 - Chalmers Course code: DAT121
-- G.U. Course Code: DIT330
+- G.U. Course Code: DIT331
 
 ** The teaching team
 + Ramona Enache
   - Exercise tutor
     - Room: 6...
-    - E-mail: enache@chalmers.se
+    - E-mail: enache (chalmers.se)
 + Nick Frolov
   - Exercise tutor
   - Contact:
     - Room: 5...
-    - E-mail: frolov@chalmers.se
+    - E-mail: frolov (chalmers.se)
 + Arash Rouhani
   - Exercise tutor
-  - E-mail: rarash@chalmers.se
+  - E-mail: rarash (student.chalmers.se)
 + JP Bernardy
   - Course responsible & Lecturer
   - Contact:
     - Room: 6126
-    - E-mail: bernardy@chalmers.se
+    - E-mail: bernardy (chalmers.se)
 
   - CV:
     + 1996-2000: Master in CS (Free University of Brussels)
-    + 2000-2007: Software engineer at various places
+    + 2000-2007: Software engineer (Various places)
     + 2007-2011: PhD (Chalmers)
 
 ** Schedule & Organisation
@@ -68,7 +68,7 @@ See file:Schedule.org
   on top.
 - You can also use the source if you fancy emacs org-mode.
 - Please interrupt me during lectures!
-*** TODO Exercises
+*** Exercises
 Groups: 
 
   1. Tue. 13.15-15.00
@@ -91,15 +91,29 @@ See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 - Volunteer _today_, by seeing me at the break.
 
 *** Reading material
-- Many links scattered across this document
-- Single most relevant textbook: probably
++ Unfortunately, I do not know of a single textbook covering all the
+  material in a suitable way. Therefore, this document is the "master"
+  source for the course. Still...
++ Do follow the links scattered across this document
++ Single most relevant textbook: probably
 
-  "Programming Languages -- Application and Interpretation", Shriram Krishnamurthi.
+  + "Programming Languages -- Application and Interpretation", Shriram Krishnamurthi.
+
   http://www.plai.org/
-  http://www.cs.brown.edu/~sk/Publications/Books/ProgLangs/2007-04-26/
+#  http://www.cs.brown.edu/~sk/Publications/Books/ProgLangs/2007-04-26/
+ 
+  + but
+    * uses different structure
+    * uses scheme (LISP) syntax
+    * is written with MS and PhD students in mind
 
- ... but uses different structure, and scheme (LISP) syntax.
+  + Relevant parts
+    * Shreds of part II 
+    * Parts III, IV, VI, VII
+    * Part X (Ch. 24, 25) 
+    * Part XI
 
++ Note that the exercises (file:All.pdf) are also part of the course material.
 **** Other relevant books
 
 - "Essentials of Programming Languages", Friedman, Wand and Haynes (http://www.eopl3.com/)
@@ -146,7 +160,7 @@ How do you think of your computer?
 
 - Memory + instructions (von Neumann model)
 - Rewriting engine
-- Mathematical function
+- (evaluator of) Mathematical functions
 - ...
   
 *** Paradigms and Languages
@@ -249,7 +263,7 @@ http://tauday.com/
 ** Outline of the course
 *** Brief exposition of each paradigm
 
-Can I teach you so 5 differrent ways of thinking in 7 weeks? 
+Can I teach you 5 differrent ways of thinking in 7 weeks? 
 Each of these would require major rewiring of your brain. Difficult!
 But fear not... Other courses are available:
 
@@ -277,7 +291,8 @@ Note in particular that exercises are integral part of the course material.
 Types are essential to get a quick overview of what a program is
 "about". Very useful when facing abstract programs! Hence, they are
 important in this course since some paradigms have high "expression
-power".
+power" (ie. programs can be esoteric if one doesn't know their
+purpose).
 
 Here I use the colon ':' to denote the typing relation. 
 
@@ -331,6 +346,7 @@ string, written formally as follows:
 4. if not done, then repeat 2. and 3. 
 
 (cf. cookbook...
+
    ... for beginner cooks :)
 
 *** Computing model
@@ -344,7 +360,7 @@ string, written formally as follows:
 *** Gotos
 
 #+begin_example
-   -- Assume A : list of sortable items
+   -- Assume A : array of comparable items
 
    begin:
         swapped = false
@@ -362,7 +378,7 @@ string, written formally as follows:
 *** Loops & Ifs
 
 #+begin_example
-   -- Assume A : list of sortable items
+   -- Assume A : array of comparable items
 
       while swapped
         swapped = false
@@ -376,7 +392,7 @@ string, written formally as follows:
 
 *** Wrapping in a procedure for good measure
 #+begin_example
-    procedure bubbleSort( A : list of sortable items )
+    procedure bubbleSort( A : array of comparable items )
       do
         swapped = false
         for each i in 1 to length(A) - 1 inclusive do:
@@ -389,12 +405,11 @@ string, written formally as follows:
     end procedure
 #+end_example
 
-** Discussion: When are gotos appropriate?
+** Discussion: When are gotos appropriate? (vs. ifs and loops?)
 extra reading: "goto statement considered harmful", E. G. Dijkstra
 http://portal.acm.org/citation.cfm?id=362947
 
 ** Transformation: Loops ⟶ Gotos
-
 *** Source: 
 #+begin_example
 while cond do
@@ -1066,7 +1081,7 @@ Translation of interfaces via method tables.
 ** Forward reference: ``objects are poor man's [[closures]]''
  Note the similarity between objects and closures: they are both
  encoded as state/environment + fct. pointer.
-** TODO Traits & Objects as fixpoints (✪)
+** Traits & Objects as fixpoints (✪)
 * Functional programming
 ** Reading (as necessary to understand Haskell syntax): "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
@@ -1566,6 +1581,15 @@ mark.  For [[file:Strict.hs][example]]:
 It's possible to recover laziness by introduction of /explicit thunks/:
 #+INCLUDE "Lazy.hs" src haskell
 
+*** Note: laziness as implemented in Haskell is more efficient than explicit thunks as presented above. Why?
+Because Haskell garantees that a given thunk is never evaluated more
+than once: after computation the thunk is overwritten by the
+value. (As opposed to re-evaluate it every time its value is neeed).
+If you need to evaluate thunks many times, it's a good idea to have
+explicit memoization.
+
+Subnote: this crucially relies on the absence of side-effects.
+
 *** Question: What if we want to encode laziness in an imperative language?
 - First introduce explicit thunks,
 - Then transform them into closures!
@@ -1636,7 +1660,6 @@ processes. file:CSPVariable.hs
   when 'set' is called.
 - Can you change the program so that the get command does not need to
   create a channel? (⋆⋆)
-- Write a "bank account" handler function.
 
 ** Transformation: explicit continuations
 *** What is a continuation?
@@ -1881,7 +1904,7 @@ means
 :  (x,y₁) ∈ f and (x,y₂) ∈ f   ⇒ y₁ = y₂
 
 
-We can turn this around and replace functions by graphs.
+We can turn this around and encode functions as their graphs.
 
 | source              | target                                                        |
 |---------------------+---------------------------------------------------------------|
@@ -1918,11 +1941,44 @@ file:Family.curry
 
 ** TODO Search
 There are sometimes more than one way to satisfy a relation!
-*** List of successes
 *** Backtracking
-manual search       <-->  constraints
 
-http://stackoverflow.com/questions/2280021/logic-variables-support-for-net
+If at some point one encounters a failure (for example unification
+fails), *backtrack* to the last dijunction and try the other branch.
+
+This requires that you remember the "state of the world" at each
+disjuction point.
+
+*** TODO List of successes
+
+Explicit representation of disjunction. That is, suppose we want to
+encode the (inverse) of the Parent relation from file:Family.curry as
+a function children, such as:
+
+: parent x y ⇔ y ∈ children x
+
+#+begin_src haskell
+children :: Person -> [Person]
+children Gustaf = [Victoria,Philippe,Madeleine]
+children Adolf  = ...
+#+end_src
+
+exercise: write the function "parents", such as 
+
+: parent x y ⇔ x ∈ parents y
+
+We can now translate sibling function as follows:
+
+: siblings x  :: Person -> [Person]
+: siblings x = [ y | z <- parents x,  y <- children z]
+
+Each free variable must range over its possible values.
+
+**** TODO Translate unification
+
+*** Note: there are clever ways to implement logic programming.
+We won't discuss those here; there is lots of literature for the
+interested.
 
 * Outlook
 
@@ -1959,7 +2015,14 @@ digraph G {
 ** Invent your own paradigm!
 - ... that suits the way you think
 - ... that suits your favourite application domain
-- → AFP Course
+- ⟶ AFP Course
+** Translations "in the large"
+- Interpreters ⟶ Dr. Racket
+- Compilers ⟶ Compiler construction Course
+** Formal study of Syntax, Types, and Semantics
+   + Programming Languages Course
+   + "Types and Programming Languages", Pierce
+   + Types For Proofs And Programs Course
 ** A lot more to read
 - The essence of functional programming (Wadler) — Actually a tutorial on monads.
 - Poor man's concurrency monad (Claessen)
@@ -1968,11 +2031,3 @@ digraph G {
 - Introduction to programming with shift and reset http://okmij.org/ftp/continuations/index.html#tutorial1
 - Transforming failure into a list of successes (Wadler)
 - Typed logical variables in Haskell
-** Formal study of Syntax, Types, and Semantics
-   + Programming Languages Course
-   + "Types and Programming Languages", Pierce
-   + Types For Proofs And Programs Course
-
-
-
-

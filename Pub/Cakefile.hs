@@ -19,10 +19,12 @@ agenda = do
       --              "--kill"
               ]
         
-cp a b = system ["cp",a,b]        
+cp a b = system ["cp",a,b]
         
-exercises = do    
-  _pdflatex "../New/Exercises/All.tex"
+exercises = produce "All.pdf" $ do    
+  let input =  "../New/Exercises/All.tex"
+  need input
+  _pdflatex input
 
 html = do
   produce "Lectures.html" $ do
@@ -34,6 +36,18 @@ html = do
                 "--eval", "(setq org-export-headline-levels 2)",
                 "--visit=Lectures.org",
                 "--funcall", "org-export-as-html-batch"]
+
+tex = do
+  produce "Lectures.pdf" $ do
+    need "Lectures.org"
+    -- todo: chase includes
+    cut $ 
+        system ["emacs", 
+                "--batch", 
+                "--eval", "(setq org-export-headline-levels 2)",
+                "--visit=Lectures.org",
+                "--funcall", "org-export-as-pdf"]
+  
 
 pub = system ["rsync", "-r", ".",
           "bernardy@remote13.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
