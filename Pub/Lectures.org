@@ -112,8 +112,8 @@ See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
     * Parts III, IV, VI, VII
     * Part X (Ch. 24, 25) 
     * Part XI
-+ Note that the exercises (file:All.pdf) are also part of the course material.
 
++ Note that the exercises (file:All.pdf) are also part of the course material.
 **** Other relevant books
 
 - "Essentials of Programming Languages", Friedman, Wand and Haynes (http://www.eopl3.com/)

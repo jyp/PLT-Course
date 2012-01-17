@@ -288,12 +288,12 @@ int main() {
 
 Many things happen in the assignment ``\textsf{*to++ = *from++;}''. Can you figure out what exactly?
 \begin{ex}{*}
-Translate the above to multiple statements, so that for each
-of them only one variable (or memory location) is updated.  
-\answer{ It is equivalent to \texttt{*to = *from; to++;
-      from++;}.  In other words, the memory pointed by \texttt{from}
-    is copied to the memory pointed by \texttt{to}, then the pointers
-    are incremented.  }
+  Translate the above to multiple statements, so that for each of them
+  only one variable (or memory location) is updated.  Explain in your
+  own words what happens (draw a picture if necessary).  \answer{ It
+    is equivalent to \texttt{*to = *from; to++; from++;}.  In other
+    words, the memory pointed by \texttt{from} is copied to the memory
+    pointed by \texttt{to}, then the pointers are incremented.  }
 \end{ex}
 
 
@@ -399,8 +399,7 @@ Implement a slightly-optimized recursive function for the same
 purpose. (Hint: use an accumulator parameter).
 
 \question{**}
-
-Implement a version of one of the two functions above by using an
+Implement a version of each of the two functions above by using an
 explicit stack.  
 
 \question{**}
@@ -698,8 +697,12 @@ Consider the binary tree structure written above. Assume the payload are integer
 
 \question{*} In the Java version, write a function that replaces each
 element with its index in preorder traversal of the tree.
-\question{*} Translate to Haskell.
+
+\begin{ex}{**} Translate to Haskell.
+\end{ex}
+
 The above can be seen as an imperative algorithm. 
+
 \question{*} What is the ``state of the world'' in this case?
 
 \question{*} Rewrite the Haskell version, in such a way that passing
@@ -736,7 +739,7 @@ lazy logical disjunction operator? Test it.
 \question{**} Repeat the above steps with the algorithm to compute the
 least edit distance. \url{http://en.wikipedia.org/wiki/Levenshtein_distance}
 
-\begin{verbatim}
+\begin{cplus}
 int LevenshteinDistance(char s[1..m], char t[1..n])
 {
   // for all i and j, d[i,j] will hold the Levenshtein distance between
@@ -767,7 +770,7 @@ int LevenshteinDistance(char s[1..m], char t[1..n])
 
   return d[m,n]
 }
-\end{verbatim}
+\end{cplus}
 
 \subsubsection{Lazy Lists (Streams)}
 
@@ -865,14 +868,17 @@ session = do
 \end{ex}
 
 
-\paragraph{Removing recursion using continuations}
+\paragraph{Recursion and continuations}
 
 Remember your interpreter for arithmetic expressions. It should have type:
 
+% eval (Add x y) = eval x + eval y
+
 Expr → Int
 
-Let's make continuations explicit. In this case, the result is not returned, but 
-applied to a continuation. Hence, the type becomes:
+Let's make continuations explicit. In this case, the result is not
+returned directly, but applied to a continuation. Hence, the type
+becomes:
 
 Expr → (Int → a) → a
 
@@ -880,16 +886,24 @@ Expr → (Int → a) → a
 
 % wrapper expr k = k (eval expr)
 
-\question{***} Replace every recursive call in the interpreter by a call to the wrapper.
-(Hint: you must choose an order of evaluation!)
+
+\question{***} Replace every recursive call in the interpreter by a
+call to the wrapper.  (Hint: you must decide what is the
+``continuation'' for every call, and for this you must choose an order
+of evaluation!)
 % eval (Add x y) = wrapper x (\a -> wrapper y (\b -> a + b))
 
 \question{***} Unfold the usage of the interpreter in the wrapper.
 
-% wrapper (Add x y) k = k (w x $ \a -> w y $ \ b -> a + b)
+% wrapper (Add x y) k = k (wrapper x $ \a -> wrapper y $ \ b -> a + b)
 
-% Also possible: (wrapper x (\a -> wrapper y (\b -> k (a + b))))
-% (but does not follow the exercise)
+
+% It would be nice to have the students find:
+
+
+% eval (Add x y) k = (eval x (\a -> eval y (\b -> k (a + b))))
+
+
 
 \section{Logic Programming}
 \subsection{Metavariables and unification}

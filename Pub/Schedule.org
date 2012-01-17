@@ -31,7 +31,7 @@ See table below for detail of contents.
 
 | Abbr | Contents                                                           |
 |------+--------------------------------------------------------------------|
-| Intr | Generalities                                                       |
+| Intr | Introduction and Generalities                                      |
 | IP 1 | Goto ↔ Loops, Pointers and passing by reference, Inline procedures |
 | EX 1 |                                                                    |
 | IP 2 | Procedures → Gotos, Explicit stack                                 |
