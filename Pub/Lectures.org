@@ -360,7 +360,7 @@ string, written formally as follows:
 *** Gotos
 
 #+begin_example
-   -- Assume A : list of sortable items
+   -- Assume A : array of comparable items
 
    begin:
         swapped = false
@@ -378,7 +378,7 @@ string, written formally as follows:
 *** Loops & Ifs
 
 #+begin_example
-   -- Assume A : list of sortable items
+   -- Assume A : array of comparable items
 
       while swapped
         swapped = false
@@ -392,7 +392,7 @@ string, written formally as follows:
 
 *** Wrapping in a procedure for good measure
 #+begin_example
-    procedure bubbleSort( A : list of sortable items )
+    procedure bubbleSort( A : array of comparable items )
       do
         swapped = false
         for each i in 1 to length(A) - 1 inclusive do:
@@ -405,12 +405,11 @@ string, written formally as follows:
     end procedure
 #+end_example
 
-** Discussion: When are gotos appropriate?
+** Discussion: When are gotos appropriate? (vs. ifs and loops?)
 extra reading: "goto statement considered harmful", E. G. Dijkstra
 http://portal.acm.org/citation.cfm?id=362947
 
 ** Transformation: Loops ⟶ Gotos
-
 *** Source: 
 #+begin_example
 while cond do
@@ -2016,7 +2015,14 @@ digraph G {
 ** Invent your own paradigm!
 - ... that suits the way you think
 - ... that suits your favourite application domain
-- → AFP Course
+- ⟶ AFP Course
+** Translations "in the large"
+- Interpreters ⟶ Dr. Racket
+- Compilers ⟶ Compiler construction Course
+** Formal study of Syntax, Types, and Semantics
+   + Programming Languages Course
+   + "Types and Programming Languages", Pierce
+   + Types For Proofs And Programs Course
 ** A lot more to read
 - The essence of functional programming (Wadler) — Actually a tutorial on monads.
 - Poor man's concurrency monad (Claessen)
@@ -2025,11 +2031,3 @@ digraph G {
 - Introduction to programming with shift and reset http://okmij.org/ftp/continuations/index.html#tutorial1
 - Transforming failure into a list of successes (Wadler)
 - Typed logical variables in Haskell
-** Formal study of Syntax, Types, and Semantics
-   + Programming Languages Course
-   + "Types and Programming Languages", Pierce
-   + Types For Proofs And Programs Course
-
-
-
-

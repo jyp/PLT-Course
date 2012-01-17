@@ -4,7 +4,7 @@
 + Lecture 2 - Fri 10.00
 + Exercises, group A - Tue 13.15
 + Exercises, group B - Tue 15.15
-+ Extra slot (see timetable below) - Friday 15.15 (Will be relocated, maybe)
++ Extra slot (see timetable below) - Friday 15.15 (relocation pending)
 + Office hours:
   - JP: Tue: 10.00
   - Ramona: Thu. 13.15
@@ -17,15 +17,15 @@ https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=201
 
 * Timetable
 
-| Week | Exercises | Lecture 1 | Lecture 2 | Extra |
-|------+-----------+-----------+-----------+-------|
-|    1 | %         | Intr      | IP 1      | Q&A   |
-|    2 | EX 1      | IP 2      | OO 2      | Q&A   |
-|    3 | EX 2      | FP 1      | FP 2      | Q&A   |
-|    4 | EX 3      | CHARM     | FP 3      | Q&A   |
-|    5 | EX 4      | FP 4      | CP 1      | Q&A   |
-|    6 | EX 5      | CP 2      | LP 1      | Q&A   |
-|    7 | EX 6      | LP 2      | Q&A       | %     |
+| Week | Starts | Exercises | Lecture 1 | Lecture 2 | Extra |
+|------+--------+-----------+-----------+-----------+-------|
+|    1 | 0116   | %         | Intr      | IP 1      | Q&A   |
+|    2 | 0123   | EX 1      | IP 2      | OO 2      | Q&A   |
+|    3 | 0130   | EX 2      | FP 1      | FP 2      | Q&A   |
+|    4 | 0206   | EX 3      | CHARM     | FP 3      | Q&A   |
+|    5 | 0213   | EX 4      | FP 4      | CP 1      | Q&A   |
+|    6 | 0220   | EX 5      | CP 2      | LP 1      | Q&A   |
+|    7 | 0227   | EX 6      | LP 2      | Q&A       | %     |
 
 See table below for detail of contents.
 
@@ -57,10 +57,11 @@ covered in the two previous lectures.
 * Other events:
 ** CHARM
   SCHEDULED: <2012-02-07 Tue>--<2012-02-08 Wed>
+  Note that the exercises remain.
 ** Examination
   SCHEDULED:  <2012-03-09 Fri 14:00>
 *** Correction
-  SCHEDULED:  <2012-03-15 Thu 14:00>--<2012-03-16 Fri 14:00>
+  SCHEDULED:  <2012-03-13 Tue 14:00>--<2012-03-14 Wed 14:00>
 *** TODO Review
 
 ** Re-Examination
