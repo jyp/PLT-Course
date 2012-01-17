@@ -23,7 +23,7 @@ How to read this document
 - Programming paradigms
  (pronounciation: ˈpærədaɪm (us?)) 
 - Chalmers Course code: DAT121
-- G.U. Course Code: DIT330
+- G.U. Course Code: DIT331
 
 ** The teaching team
 + Ramona Enache
