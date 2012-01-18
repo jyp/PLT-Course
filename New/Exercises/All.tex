@@ -636,6 +636,18 @@ comes from the previous section.
 \item foldr [] (++)
 \end{enumerate}
 
+Consider the following imperative program:
+\begin{verbatim}
+for (i=0;i<sizeof(a);i++)
+  if (a[i].grade >= 24)
+     *b++ = a;
+\end{verbatim}
+\begin{ex}{*}
+  How would the same algorithm be naturally expressed in a functional
+  language? (Use functions from the Haskell prelude to shorten your code)
+\end{ex}
+
+
 \question{*} write a function that does the dot-product of two
 vectors; 
 
