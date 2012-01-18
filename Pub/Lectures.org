@@ -279,7 +279,7 @@ But fear not... Other courses are available:
 - Imperative ("machine-oriented programming" EDA480)
 - Concurrent ("concurrent programming" TDA381)
 - Object oriented ("Object oriented programming" DAT042)
-- Logic (?)
+- Logic (?) -- partly covered in Formal Methods
 *** (Some) Transformations between paradigms
 *This is the focus of the course.*
 *** Learning outcomes

@@ -32,7 +32,7 @@ See table below for detail of contents.
 | Abbr | Contents                                                           | TAs  |
 |------+--------------------------------------------------------------------+------|
 | Intr | Generalities                                                       |      |
-| IP 1 | Goto ↔ Loops, Pointers and passing by reference, Inline procedures |      |
+| IP 1 | Goto ↔ Loops, Pointers and passing by reference, Inlining procedures |      |
 | EX 1 |                                                                    | N, R |
 | IP 2 | Procedures → Gotos, Explicit stack                                 |      |
 | OO 1 | Inheritance, Interfaces, Notion of co/contra variance              |      |
