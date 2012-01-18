@@ -69,26 +69,29 @@ See file:Schedule.org
 - You can also use the source if you fancy emacs org-mode.
 - Please interrupt me during lectures!
 *** Exercises
-Groups: 
-
-  1. Tue. 13.15-15.00
-  2. Tue. 15.15-17.00
-
+2 groups (go to only 1 session).
 Your group: will be emailed to you later (remember to subscribe; see link above)
 
 - Prepare exercise
 - Go to session
 - Subscribe
 - No cheating
-
+  + Make sure you understand all your submissions. The best way to
+    make sure you understand is to do the exercise yourself. Don't
+    copy somebody else solution and hope for the best.
+  + Submit only serious attempts. Make sure your solution passes basic
+    sanity checks. Example: if you submit a program, test it on at
+    least of few inputs. (If you write pseudo-code, do the
+    compiler/interpreter job by hand.)
+  + A good idea if you decide to work with a friend: both attempt an
+    exercise; cross-check each other result afterwards.
 *** Course evaluation
 
 See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 
 2-6 Volunteers needed
 - Discuss the course with other students, represent their views to the teachers.
-- Cremona voucher for 200SEK
-- Volunteer _today_, by seeing me at the break.
+- Designated representatives: see me at the break.
 
 *** Reading material
 + Unfortunately, I do not know of a single textbook covering all the
@@ -108,6 +111,7 @@ See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
     * is written with MS and PhD students in mind
 
   + Relevant parts
+    * Part I (To understand the point of view of the author)
     * Shreds of part II 
     * Parts III, IV, VI, VII
     * Part X (Ch. 24, 25) 
@@ -126,12 +130,13 @@ https://www.student.chalmers.se/hp/index_html?hp_id=8977
 ** What is a "programming paradigm"?
 
 *** Definition
-http://www.merriam-webster.com/dictionary/paradigm
 
-"A philosophical and theoretical framework of a scientific school or
+Paradigm: "A philosophical and theoretical framework of a scientific school or
 discipline within which theories, laws, and generalizations and the
 experiments performed in support of them are formulated; broadly: a
 philosophical or theoretical framework of any kind"
+
+http://www.merriam-webster.com/dictionary/paradigm
 
 see also: http://en.wikipedia.org/wiki/Programming_paradigm
 
@@ -186,8 +191,9 @@ http://www.info.ucl.ac.be/~pvr/paradigmsDIAGRAMeng108.pdf
 
 *** Notion of paradigm shift
 After writing many programs, you may notice patterns emerging. These
-patterns may become codified, either informally (see the book of the
-Gang of Four) or formally within the language (cf. Haskell Monads).
+patterns may become codified, either informally (cf. "Design
+Patterns", the seminal book) or formally within the language
+(cf. Haskell Monads).
 
 Eventually, all programming may revolve around a number of patterns;
 the old ways are abandonned.  This is the paradigm shift: a new way of
@@ -251,6 +257,8 @@ digraph G {
   facts and rules, backtracking). As a programing language researcher, I
   really am convinced that language shapes thought.
 
+- When a paradigm is well supported, you can "think big" and have the
+  compiler check that you're on the right track.
 **** Altenative paradigms in the industry:
 - "Excell is the most used programming language"
 - SQL is mostly functional (relational)
@@ -279,10 +287,9 @@ But fear not... Other courses are available:
 First questions of the design phase: "How should I think about this
 problem? (Do I know a paradigm suitable to express the solution?)"
 **** Recognise "encoded" thoughts:
-***** what is the natural paradigm
-***** decode them
++ what is the natural paradigm
++ decode them
 **** Encode thoughts expressed in a paradigm in another one
-
 **** The exam questions will be similar to exercises
 Note in particular that exercises are integral part of the course material.
 
@@ -324,6 +331,10 @@ The above makes sense only when 'name' is a string, and in that case
 greet(name) is a string. 
 
 :    name : String    ⊢    "Hello, " ++ name ++ " How are you today?" : String
+
+or 
+
+:    name : String    ⊢    greet(name) : String
 
 We can then deduce that "greet" is a function taking a string into a
 string, written formally as follows:
