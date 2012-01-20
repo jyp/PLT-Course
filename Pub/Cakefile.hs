@@ -26,15 +26,17 @@ exercises = produce "All.pdf" $ do
   need input
   _pdflatex input
 
-html = do
-  produce "Lectures.html" $ do
-    need "Lectures.org"
+html x = do
+  let html = x ++ ".html"
+      org = x ++ ".org"
+  produce html $ do
+    need org
     -- todo: chase includes
     cut $ 
         system ["emacs", 
                 "--batch", 
                 "--eval", "(setq org-export-headline-levels 2)",
-                "--visit=Lectures.org",
+                "--visit=" ++ org,
                 "--funcall", "org-export-as-html-batch"]
 
 tex = do
@@ -54,7 +56,8 @@ pub = system ["rsync", "-r", ".",
 
 action = do
   exercises
-  html
+  html "Schedule"
+  html "Lectures"
   pub
   
 

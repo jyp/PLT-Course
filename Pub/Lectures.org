@@ -370,7 +370,6 @@ string, written formally as follows:
 - Program (assignments, arithmetic, logic, (conditional) jumps)
 
 ** Example
-
 *** Gotos
 
 #+begin_example
@@ -394,6 +393,7 @@ string, written formally as follows:
 #+begin_example
    -- Assume A : array of comparable items
 
+      swapped = true
       while swapped
         swapped = false
         for each i in 1 to length(A) - 1 inclusive do:
@@ -407,7 +407,8 @@ string, written formally as follows:
 *** Wrapping in a procedure for good measure
 #+begin_example
     procedure bubbleSort( A : array of comparable items )
-      do
+      swapped = true
+      while swapped
         swapped = false
         for each i in 1 to length(A) - 1 inclusive do:
           if A[i-1] > A[i] then
@@ -415,7 +416,7 @@ string, written formally as follows:
             swapped = true
           end if
         end for
-      while swapped
+      end 
     end procedure
 #+end_example
 
@@ -433,7 +434,7 @@ while cond do
 *** Target
 #+begin_example
 test:
-  p := cond
+  p := not cond
   if p goto done
   body
   goto test
@@ -441,15 +442,13 @@ done:
 #+end_example
 
 *** Exercise (⋆)
-Translate the following to explicit gotos:
-1. 
+1. Translate the following to explicit gotos:
 #+begin_example
 do
    body
 until cond
 #+end_example
-2. bubbleSort
-
+2. Translate insertion sort
 ** Transformation: If then else ⟶ Gotos
 *** Source
 #+begin_example
@@ -471,18 +470,24 @@ done:
 *** Exercise (⋆⋆)
 
 Do the same job with the switch/case construct.
+Hint: use indirect jump.
+
+ie.
+
+: goto A[i]
+
+where A is an array of labels.
 
 ** Reverse transformation? (Gotos ⟶ Loops)
-
-No general form! (You must be creative)
+No (simple) general formula! (You must be creative)
 
 ** Passing by reference 
 *** Reminder: References (aka. pointers)
 **** Addresses
-Assume:
+Assume a variable x:
 
 #+begin_example
- x : Integer
+ x : Integer {-Variable -}
 #+end_example
 
 Then
@@ -493,15 +498,10 @@ Then
    ≃ where in the memory is the variable x
 
 hence:
-: addressOf : Integer → PointerTo Integer
+: addressOf : Integer {-By Ref-} → PointerTo Integer
 
 **** "De-reference"
-
-Assuming
-: p : PointerTo Integer
-Then
-: variableAt(p) : Integer
-
+:     p : PointerTo Integer     ⊢      variableAt(p) : Integer
 Hence:
 : variableAt : PointerTo Integer → Integer 
 
@@ -514,8 +514,7 @@ re-write the above in C syntax
 
 (Supposing the language supports passing arguments by reference:)
 
-
-: increment(by ref. x : Int)
+: procedure increment(by ref. x : Int)
 :   x := x + 1
 
 with a call
@@ -533,28 +532,27 @@ and the call
 
 : increment(addressOf(y))
 *** Question: Why is passing by reference useful?
-- "expressive power" : you can factor out parts of the computation that update any (sub-part of) the state
+- "expressive power" : you can factor out parts of the computation
+  that update any (sub-part of) the state
 - save time : no need to copy around things
 
 *** Exercise: Does Java use call by reference? 
   Show example(s) that says yes/no
   
-** Transformation: inlining procedures
+** Transformation: inlining procedure calls
 *** Source
 #+begin_example
-procedure g(x,y)
+procedure g(by ref. x,y)
   x := x + y
 
-procedure f(x,y)
+procedure f(by ref. x,y)
   g(x,y)
   x := x + 1
   g(y,x)
 
 f(a,b)
 #+end_example
-
 *** Intermediate
-
 #+begin_example
 procedure f(x,y)
   x := x + y
@@ -566,13 +564,12 @@ f(a,b)
 #+end_example
 
 *** Final
-
 #+begin_example
 a := a + b
 a := a + 1
-b := b + x
+b := b + a
 #+end_example
-
+*** Exercise: redo the transformations above, assuming call-by-value.
 *** Question: What happens when the original program is recursive?
 ** Transformation: Procedures ⟶ Gotos & Variables
 Source:
