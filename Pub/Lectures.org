@@ -92,10 +92,13 @@ Your group: will be emailed to you later (remember to subscribe; see link above)
 *** Course evaluation
 
 See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
+And: https://document.chalmers.se/workspaces/chalmers/hogskolegemensamma5051/internt/kursutvarderingar/vad-ar-detta2740
 
 2-6 Volunteers needed
-- Discuss the course with other students, represent their views to the teachers.
-- Designated representatives: see me at the break.
+- Discuss the course with other students, represent their views to the
+  teachers.
+- Designated representatives: see me, present yourself to your fellow
+  students.
 
 *** Reading material
 + Unfortunately, I do not know of a single textbook covering all the
@@ -479,8 +482,8 @@ ie.
 where A is an array of labels.
 
 ** Reverse transformation? (Gotos ⟶ Loops)
-No (simple) general formula! (You must be creative)
-
+No general formula that gives you "beautiful" code! 
+⟶ You must be creative
 ** Passing by reference 
 *** Reminder: References (aka. pointers)
 **** Addresses
