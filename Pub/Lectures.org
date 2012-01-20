@@ -54,7 +54,7 @@ How to read this document
 See file:Schedule.org
 *** Formal requirements
 - Pass the exam
-- Participate in the exercises correction sessions (bonus points)
+- Participate in the exercises correction sessions 
 - Do the exercises: file:All.pdf
 - Attend the lectures
 - Prepare lectures by reading lecture notes (this document) and follow relevant links.
@@ -75,6 +75,9 @@ Your group: will be emailed to you later (remember to subscribe; see link above)
 - Prepare exercise
 - Go to session
 - Subscribe
+- Bonus points awarded according to the number of exercises above; to
+  redeem on the FIRST written exam (ie. not in re-exams; in particular
+  you lose them if you don't take the exam).
 - No cheating
   + Make sure you understand all your submissions. The best way to
     make sure you understand is to do the exercise yourself. Don't
@@ -83,8 +86,9 @@ Your group: will be emailed to you later (remember to subscribe; see link above)
     sanity checks. Example: if you submit a program, test it on at
     least of few inputs. (If you write pseudo-code, do the
     compiler/interpreter job by hand.)
-  + A good idea if you decide to work with a friend: both attempt an
-    exercise; cross-check each other result afterwards.
+  + A good idea if you decide to work with a friend: attempt both each
+    exercise; cross-check each other's result afterwards.
+  + Punishment: all your bonus points erased
 *** Course evaluation
 
 See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
@@ -294,7 +298,6 @@ problem? (Do I know a paradigm suitable to express the solution?)"
 Note in particular that exercises are integral part of the course material.
 
 * Prelude: A crash course on types
-
 Types are essential to get a quick overview of what a program is
 "about". Very useful when facing abstract programs! Hence, they are
 important in this course since some paradigms have high "expression
@@ -757,10 +760,6 @@ while n /= 0 do
 result := acc;
 #+end_example
 
-** Exercises
-1. Derecursify tree traversal (⋆⋆)
-   - Do you really need a stack? (⋆⋆⋆) (hint: you can update the tree as you go)
-2. Derecursify the [[http://en.wikipedia.org/wiki/Ackermann_function][Ackermann function]] (⋆)
 * Interlude: Garbage Collection
 aka. Automatic memory management
 The memory is freed automatically for you! (Magic!?)
