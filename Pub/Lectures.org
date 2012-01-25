@@ -28,20 +28,20 @@ How to read this document
 ** The teaching team
 + Ramona Enache
   - Exercise tutor
-    - Room: 6...
+    - Room: EDIT 6120A
     - E-mail: enache (chalmers.se)
 + Nick Frolov
   - Exercise tutor
   - Contact:
-    - Room: 5...
+    - Room: EDIT 5...
     - E-mail: frolov (chalmers.se)
 + Arash Rouhani
   - Exercise tutor
   - E-mail: rarash (student.chalmers.se)
 + JP Bernardy
-  - Course responsible & Lecturer
+  - Course responsible & lecturer
   - Contact:
-    - Room: 6126
+    - Room: EDIT 6126
     - E-mail: bernardy (chalmers.se)
 
   - CV:
@@ -54,7 +54,8 @@ How to read this document
 See file:Schedule.org
 *** Formal requirements
 - Pass the exam
-- Participate in the exercises correction sessions 
+- Participate in the exercises correction sessions (this means you
+  should have done, or attempted to do the exercises beforehand.)
 - Do the exercises: file:All.pdf
 - Attend the lectures
 - Prepare lectures by reading lecture notes (this document) and follow relevant links.
@@ -94,11 +95,9 @@ Your group: will be emailed to you later (remember to subscribe; see link above)
 See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
 And: https://document.chalmers.se/workspaces/chalmers/hogskolegemensamma5051/internt/kursutvarderingar/vad-ar-detta2740
 
-2-6 Volunteers needed
 - Discuss the course with other students, represent their views to the
   teachers.
-- Designated representatives: see me, present yourself to your fellow
-  students.
+- See Designated representatives in file:Schedule.org
 
 *** Reading material
 + Unfortunately, I do not know of a single textbook covering all the
@@ -619,14 +618,19 @@ out2:
 - Loop (dynamic)
 - variables: a mess...
 ** Transformation: Explicit stack
+
 *** 1st example: factorial.
 Translation of a recursive call:
- - push local variables on a stack
- - set caller
+ - save local variables (push on a stack)
+ - set caller (return address)
  - goto
- - pop local variables
+ - restore local variables (pop)
 
 #+begin_example
+-- Example call to 'fact'
+fact(13)
+...
+...
 function fact (n:Int)
   if n = 0 then
     return 1
@@ -636,9 +640,8 @@ function fact (n:Int)
 
 Straightforward application of rules:
 
-
 #+begin_example
--- Call to 'fact'
+-- Example call to 'fact'
 caller := out;
 n := 12;
 goto fact;
@@ -671,10 +674,20 @@ function fact (n:Int,acc:Int)
     return acc
   else
     return fact(n-1,n * acc)
+
+-- assuming that fact will be called with (acc = 1) from the outside:
+function wrapper(n:Int)
+  return fact(n,1);
 #+end_example
 **** Question: explain the algorithm.
 **** Target (by straightforward application of rules)
 #+begin_example
+wrapper:
+  acc := 1;
+  caller := out;
+  goto fact
+  out:
+
 fact: -- n,acc,caller are defined here.
 if n = 0 then
   result := acc;
@@ -734,10 +747,11 @@ Hence, the stack can be removed altogether! This is called /tail-call optimisati
 
 We get:
 #+begin_example
-acc := 1;
-caller := out;
-goto fact
-out:
+wrapper:
+  acc := 1;
+  caller := out;
+  goto fact
+  out:
 
 fact:
 if n = 0 then
@@ -750,8 +764,7 @@ else
 #+end_example
 
 **** Final version
-Finally we can reconstruct a loop:
-
+Finally we can merge in the wrapper and reconstruct a loop:
 #+begin_example
 acc := 1;
 while n /= 0 do
@@ -759,13 +772,25 @@ while n /= 0 do
   n := n-1;
 result := acc;
 #+end_example
-
+and even add some extra polish:
+#+begin_example
+function fact (n)
+  acc := 1;
+  foreach i in 1..n do
+    acc := i * acc;
+result := acc;
+#+end_example
 * Interlude: Garbage Collection
 aka. Automatic memory management
 The memory is freed automatically for you! (Magic!?)
+- Nah, chase pointers. (but what is a pointer)?
 
-- Allows for much easier OOP
-- Practically impossible to do FP/Logic without it
+Why GC discussed here?
+- Allows for much easier OOP (sharing)
+- Practically impossible to do FP/Logic without it (sharing!)
+
+** Q: Why does Firefox leak memory while it uses GC?
+** Q: why are imperative languages usually not using GC?
 * Object-oriented programming
 ** Coupling data and related code
 *** Toy example: Date
@@ -791,7 +816,7 @@ appointment.shiftByDays(7);
 #+end_example
 
 **** Note: Objects are, almost always, passed by reference.
-
+Why is that?
 **** Tranlated into plain records + procedures
 
 #+begin_example
@@ -811,8 +836,7 @@ shiftByDays(appointment,7);
 #+end_example
 
 ** Encapsulation 
-
-mechanisms to make the fields private
+Mechanisms to make the fields private
 
 *** Paradigm Shift: Abstract Data Type (ADT) 
  - Example: "stack", "priority queue", ... from your data structures course
