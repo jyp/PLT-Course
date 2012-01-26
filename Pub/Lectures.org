@@ -14,7 +14,7 @@ How to read this document
  + Sometimes the difficulty/relevance of a section is indicated by a number of stars:
    + (⋆) material required to pass the course
    + (⋆⋆) material for grade 4
-   + (⋆⋆⋆) only for grade 5 
+   + (⋆⋆⋆) only for grade 5
    + (✪) not formally part of the course material
 
 
@@ -53,9 +53,10 @@ How to read this document
 *** Schedule
 See file:Schedule.org
 *** Formal requirements
-- Pass the exam
-- Participate in the exercises correction sessions (this means you
-  should have done, or attempted to do the exercises beforehand.)
+- Pass the exam 
+- That's it!
+*** Informal requirements and learning aids
+- Participate in the exercises correction sessions: see [[<<Exercises>>][below]] for details. 
 - Do the exercises: file:All.pdf
 - Attend the lectures
 - Prepare lectures by reading lecture notes (this document) and follow relevant links.
@@ -69,16 +70,24 @@ See file:Schedule.org
   on top.
 - You can also use the source if you fancy emacs org-mode.
 - Please interrupt me during lectures!
-*** Exercises
+*** <<Exercises>>
 2 groups (go to only 1 session).
 Your group: will be emailed to you later (remember to subscribe; see link above)
 
-- Prepare exercise
+- Prepare exercises.
+  + This means that you must have a written copy of your solution with
+    you.
+  + To be able to follow the discussion, you should also bring a
+    printout of the questions.
+  + See [[file:Schedule.org::timetable][the schedule]] for which exercises you need to prepare for each
+    session.
 - Go to session
 - Subscribe
-- Bonus points awarded according to the number of exercises above; to
-  redeem on the FIRST written exam (ie. not in re-exams; in particular
-  you lose them if you don't take the exam).
+  + Write down which exercises you are confident enough to present to
+    the class.
+- Bonus points (about 10% of the exam) awarded according to the number
+  of exercises above; to redeem on the FIRST written exam (ie. not in
+  re-exams; in particular you lose them if you don't take the exam).
 - No cheating
   + Make sure you understand all your submissions. The best way to
     make sure you understand is to do the exercise yourself. Don't
@@ -89,7 +98,8 @@ Your group: will be emailed to you later (remember to subscribe; see link above)
     compiler/interpreter job by hand.)
   + A good idea if you decide to work with a friend: attempt both each
     exercise; cross-check each other's result afterwards.
-  + Punishment: all your bonus points erased
+  + Punishment: all your bonus points erased (including those earned
+    in previous sessions).
 *** Course evaluation
 
 See: https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
