@@ -816,7 +816,7 @@ class Date
   method ShiftByDays(days : Integer);
 
   constructor ymd(y,m,d : Integer)
-  constructor today -- -- query OS for current date
+  constructor today  -- query the OS for current date
 
 
 -- Example use:
@@ -851,7 +851,9 @@ Mechanisms to make the fields private
  - Example: "stack", "priority queue", ... from your data structures course
  - Every data type comes with a specification
  - ... maybe in the form of _unit tests_
- - Notion of data-invariant
+ - Notion of data-invariant:
+     + a condition which the representation must verify at all times
+     (seen form outside the object)
  - Advantage: it's easy to change representation of data
 
  - Note: not every piece of data fits the ADT model. 
@@ -876,7 +878,7 @@ class Cat inherits Animal
 
 
 procedure Test(c : Animal)
-  c.Feed
+  c.Pet
 
 Test(new Dog);
 Test(new Cat);
@@ -891,33 +893,28 @@ record Animal
   field
     Pet : function;
 
-
 record Dog 
   field
     Pet : function;
 
-procedure petDog(this : Dog);
+procedure petDog(this : Dog by reference);
   print "Shake tail"  -- (1)
 
-
 function createDog : Dog
-  return new Dog(pet = petDog);  
-    
+  return new Dog(Pet = petDog);  
 
 record Cat
   field 
      Pet : function;
 
-procedure petCat(this : Cat);
-  print "Shake tail"
-
+procedure petCat(this : Cat by reference);
+  print "Mew"
 
 function createCat : Cat
-  return new Cat(pet = petCat);  
-
+  return new Cat(Pet = petCat);  
 
 procedure Test(c : Animal by reference)
-  c.Pet; -- (1)
+  c.Pet(c); -- (1)
 
 
 Test(cast<Animal> createDog); -- (2)
@@ -932,8 +929,8 @@ Test(cast<Animal> createCat); -- (2)
 
 **** Question: why are the casts (2) valid?
 The layout of the parent class is exactly the same as that of the subclass.
-(In general, there can be more fields/methods in the subclass, found _after_ the fields of the top class)
- 
+**** Question: what if the Dog class had an extra method/field?
+(In general, there can be more fields/methods in the subclass, found _after_ the fields of th e top class)
 **** Liskov substitution principle and Polymorphism
 
 if class B inherits class A, then, for any x,
@@ -944,10 +941,10 @@ This means that
 
 1. 'x' has multiple types 
 
-2. Whenever a function 'f' for type 'A', one can pass a value of type
-   'B'. By deriving from 'A', a lot of code is automatically ready to
-   work with 'B'.  (Inheriting from 'A' make the function 'f' more
-   useful.)
+2. Whenever a function 'f' has an parameter of type 'A', one can pass
+   an argument of type 'B'. By deriving from 'A', a lot of code is
+   automatically ready to work with 'B'.  (Conversely, if you write
+   code working for A, it will be useful in many contexts)
 
 This is one instance of an important phenomenon: /polymorphism/. The
 kind of polymorphism linked with inheritance is /inclusion
@@ -956,13 +953,15 @@ polymorphism/. Recall the definition of set-inclusion:
 
 :         B ⊆ A     iff     x ∈ B  ⇒  x ∈ A
 
+One says that B is a subtype of A.
 
 Read (✪) more about polymorphism on Wikipedia.  (I prefer the
 article on [[http://en.wikipedia.org/wiki/Polymorphism_(computer_science)][polymorphism]],
 http://en.wikipedia.org/wiki/Liskov_substitution_principle is badly
-written)
-
-*** Exercises 
+written in my opinion)
+**** Question: could you copy objects instead of passing by reference?
+Hint: what happens in the "Test" function in the above example?
+*** Exercises
 Apply the transformation on each of the following examples:
 
 - call the function 'Vocalise' by default in the 'Pet' method
@@ -1019,7 +1018,7 @@ dogMethods = {Pet := petDog, ...}
   
   - Open question: multiple dispatch!
 
-** Reading/Exercise: Javascript prototypes
+*** (✧) Reading/Exercise: Javascript prototypes
 http://en.wikipedia.org/wiki/ECMAScript_syntax#Objects
 
 ** Multiple-inheritance & interfaces
@@ -1032,9 +1031,9 @@ class SmartPhone inherits Computer, Phone
 
 
 #+begin_example
-class Person
+class Teacher
 class Student
-class GradStud inherits Person, Student
+class GradStud inherits Teacher, Student
 #+end_example
 
 1. Better reuse of code (possibly the derived class can use code from
@@ -1042,7 +1041,7 @@ class GradStud inherits Person, Student
 2. More polymorphism!
 
 *** Diamond problem
-
+**** On a conceptual level:
 #+begin_src dot :file diamond.svg :cmdline -Kdot -Tsvg
 digraph G {
    node [shape="record"];
@@ -1058,11 +1057,11 @@ digraph G {
 Does a grad student have two names? ... no
 BUT some other fields might need to be duplicated, if they have a
 function specific to (Student, or Teacher class). (eg. A grad student
-has a Boss as a teacher and another boss as a Student)
+has a Boss as a Teacher and another boss as a Student)
 
 ⟶ Big headache
 
-On an implementation level:
+**** On an implementation level:
 
 #+begin_example
 class Person
@@ -1081,7 +1080,6 @@ class Teacher inherits Person
 class GradStud inherits Student, Teacher
 #+end_example
   
-
 What is the record corresponding to GradStud?
 If we copy all the fields, we get:
 
@@ -1099,15 +1097,28 @@ The record can be casted to Student (as normal, the 3 last fields will
 never be accessed by methods in the Student class) or Teacher (by
 adding 3 to the pointer).
 
-But what if a method in the class Student updates the BirthDate? Then
+Aside: what if a method in the class Student updates the Name? Then
 there is a problem: the gradstudent will end up with 2 different
-names!
+Names!
+
+Let's say we want to have a single copy of Name and BirthDate:
+#+begin_example
+Name
+BirthDate
+CourseGrade
+numberOfStudents
+#+end_example
+
+Problem: what happens if you see the GradStud as a Teacher?
+--> The translation to "pure" imperative programming becomes much more complicated. 
 
 *** Interfaces
 
-As it is often the case, the issue appears only if the shared class
+As it is often the case, the issue is due to side effects
+(modification of hidden state). It appears only if the shared class
 has mutable fields. An important case of immutable fields are methods
-(their code is fixed once an for all for a class). Hence the notion of
+(their code is fixed once an for the lifetime of the object, in fact
+it is the same for all objects in a class). Hence the notion of
 /Interface/: a class without fields. In Java, there is special support
 for interfaces, and one can inherit many of them.
 
@@ -1118,7 +1129,7 @@ Interfaces:
 **** Exercise (⋆⋆)
 Modify the translation above to support interfaces
 
-**** Exercise (✪)
+**** Exercise (⋆⋆)
 Translation of interfaces via method tables.
 
 ** Forward reference: ``objects are poor man's [[closures]]''
