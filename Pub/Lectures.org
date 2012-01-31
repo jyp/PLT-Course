@@ -56,8 +56,8 @@ See file:Schedule.org
 - Pass the exam 
 - That's it!
 *** Informal requirements and learning aids
-- Participate in the exercises correction sessions: see [[<<Exercises>>][below]] for details. 
-- Do the exercises: file:All.pdf
+- Do the exercises
+- Participate in the exercises correction sessions: see [[<<Exercises>>][below]] for details.
 - Attend the lectures
 - Prepare lectures by reading lecture notes (this document) and follow relevant links.
 - IMPORTANT. Subscribe to the course here
@@ -144,7 +144,6 @@ And: https://document.chalmers.se/workspaces/chalmers/hogskolegemensamma5051/int
  ⟶ check announcements, etc.
 https://www.student.chalmers.se/hp/index_html?hp_id=8977
 ** What is a "programming paradigm"?
-
 *** Definition
 
 Paradigm: "A philosophical and theoretical framework of a scientific school or
@@ -827,7 +826,7 @@ appointment.shiftByDays(7);
 
 **** Note: Objects are, almost always, passed by reference.
 Why is that?
-**** Tranlated into plain records + procedures
+**** Translated into plain records + procedures
 
 #+begin_example
 record Date
@@ -1129,16 +1128,13 @@ Translation of interfaces via method tables.
 * Functional programming
 ** Reading (as necessary to understand Haskell syntax): "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
-
 ** A bit of syntax
-
 *** Function definitions
 Similar to mathematical notation:
 
 : minimum (x,y) = if x < y 
 :                   then x
 :                   else y
-
 
 *** (λ) abstractions / local functions
 
@@ -1179,14 +1175,14 @@ Let's count the number of inhabitants of the type:
 
 To "bootstrap" we also need types 0 (empty type, unit of +) and 1 (singleton, unit of ×)
 
-*** Trivia (✪): what is A → B, algebraically ?
+*** Trivia (✪): what is A → B, algebraically?
 *** Examples
 
-: Bool = 1 + 1
+: Bool ≅ 1 + 1
 
 Giving a name to the cases:
 
-: Bool = (True : 1) + (False : 1)
+: Bool = (True ↦ 1) + (False ↦ 1)
 
 In Haskell syntax:
 
@@ -1194,17 +1190,13 @@ In Haskell syntax:
 
 Lists can be defined as follows, using _recursion_:
 
-: List a = (Nil : a) + (Cons : a × List a)
+: List a = (Nil ↦ a) + (Cons ↦ (a × List a))
 
 
 Haskell syntax:
 
 : data List a = Nil a | Cons a (List a)
 
-*** Exercises
- - define an algebraic type for binary trees (⋆)
- - define an algebraic type for arithmetic expressions (⋆)
-   - simple interpreter for the above type (⋆)
 *** Transformation: Algebraic data type ⟶ inheritance
 
 - ×: supported by records
@@ -1239,8 +1231,11 @@ class Nil<A> extends List<A> {
   }
 }
 
--- missing aspect: one should not allow to implement other instance of the List interface.
 #+end_example
+Missing aspect: one should not allow to implement other instance of
+the List interface.
+
+(Note: one could also just represent Nil by a null object)
 
 **** Remark: the expression problem
 
@@ -1313,18 +1308,30 @@ the type of map.
 Effectively, map has mutliple types. Because the type is parameterized
 over any types (a,b), this is called /parametric polymorphism/.
 
-*** Exercise (⋆)
-
-- write a function that does the dot-product of two vectors;
-- then /abstract/.
-- Can you find the function you created in the Haskell Data.List
-  module? (⋆⋆)
-
 *** Reading: 
 "Can Programming Be Liberated From the von Neumann Style?", John
 Backus, 1977 Turing Award Lecture
 http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
 (recommended to read up to p. 620).
+
+** Transformation: Currification
+
+#+begin_example
+f : (A × B) → C
+f = ...
+
+g : A → (B → C)
+g a = \b -> f (a,b)
+
+h : (A × B) → C
+h (a,b) = g a b
+#+end_example
+
+Remark: f ≡ h
+
+*** Note: try to read A → B as B^A
+... then, what is currification?
+**** Extra: can you implement other algebraic laws?
 
 ** Removing Higher-Order functions
 *** Transformation: Inlining higher-order functions
@@ -1367,7 +1374,7 @@ multiply n xs = case xs of
     (x:xs) -> x * n : recursiveCall f xs
 #+end_src
 
-Downside: 
+Downsides:
 - explosion of the code size
 - maybe impossible! (eg. the code of map is not available -- map itself is abstract)
 
@@ -1379,7 +1386,8 @@ map : (a -> b) -> List a -> List b
 map f [] = []
 map f (x:xs) = f x : map f xs
 
-multiplyBy n = map (\x -> x * n) 
+call0 = map (\x -> x + 4) 
+call1 n = map (\x -> x * n)
 #+end_src
 
 - Target
@@ -1388,28 +1396,30 @@ map : Closure -> List a -> List b
 map f [] = []
 map f (x:xs) = apply f x : map f xs
 
-multiplyBy n = map (Multiply n)
+call0 = map Add4
+call1 n = map (MultiplyBy n)
 
-apply (Multiply n) x = x * n
+apply (MultiplyBy n) x = x * n
+apply (Add4)           = x + 4
 
-data Closure = Multiply Int | ...      -- (ref:closure definition)
+data Closure = MultiplyBy Int | Add4 | ...      -- (ref:closure definition)
 #+end_src
 
 The trick is to replace each function argument by a data-type. The
 constructors of the data type are made to represent the possible
-arguments.
+arguments. The closure stores all the variables of the environment
+used in the argument.
 
 Note that there may be more kind of closures, so there may be more
 cases in [[(ref:closure definition)]].
 
 **** Read: 
-http://en.wikipedia.org/wiki/Closure_(computer_science)
-
+[[http://en.wikipedia.org/wiki/Closure_(computer_science)][Closures on wikipedia]]
 
 **** Exercise (⋆⋆): Implement the above example C. 
 Hint: Instead of a 'tag', use a function pointer.
 
-....
+...
 
 Note the similarity with [[objects]]!
 
@@ -1505,25 +1515,6 @@ safePrint line =
     else print line `andThen` \() ->
          return 0
 #+end_src
-
-** Transformation: Currification
-
-#+begin_example
-f : (A × B) → C
-f = ...
-
-g : A → (B → C)
-g a = \b -> f (a,b)
-
-h : (A × B) → C
-h (a,b) = g a b
-#+end_example
-
-Remark: f ≡ h
-
-*** Note: try to read A → B as B^A
-... then, what is currification?
-**** Extra: can you implement other algebraic laws?
 
 ** Paradigm shift: HOT!
 Higher-Order and Typed

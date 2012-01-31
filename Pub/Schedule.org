@@ -43,7 +43,7 @@ See table below for detail of contents.
 | EX 2 | Exercises: 14, 15, 17, 18, 28, 35, 39, 41                            | N, R |
 | FP 1 | Algebraic Types & Pattern matching                                   |      |
 | FP 2 | Higher-order functions & Currification                               |      |
-| EX 3 |                                                                      | R, A |
+| EX 3 | Exercises: 48, 49, 50, 52, 53, 54, 57, 58                            | R, A |
 | FP 3 | Explicit state & Closures                                            |      |
 | EX 4 |                                                                      | N, A |
 | FP 4 | Laziness & Explicit thunks                                           |      |
@@ -65,7 +65,7 @@ Adjustments done:
 | Abbr | Comment                                                          |
 |------+------------------------------------------------------------------|
 | IP 1 | Had time to discuss Procedures → Gotos in addition of the above. |
-|      |                                                                  |
+| OO 1 | Had time to do the quick review of Haskell syntax                |
 
 * Other events:
 ** CHARM

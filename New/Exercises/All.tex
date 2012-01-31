@@ -224,10 +224,16 @@ implementation with the {\it A} and {\it B} from the previous question.
 Translate the following \textbf{for} loop with explicit gotos:
 \\
 \\
-{\it for (statement; condition; statement)
+{\it for (statement1; condition; statement2)
 
 $\ \ \ \ $loop$\_$body}
+\question{*}
 
+Translate the following \textbf{foreach} loop with explicit gotos:
+\begin{verbatim}
+  foreach i in k..l do
+    body
+\end{verbatim}
 
 \question{*}
 Translate the do/while construct.
@@ -662,10 +668,29 @@ Data.List module?
 
 \subsection{Closures}
 
-Lazy lists can be (potentially) infinite, although of course no
-program can evaluate {\em all} the elements of an infinite
-list. Nevertheless, using lazy lists can help us avoid building
-unnecessary limitations into our code.
+Consider the program:
+\begin{verbatim}
+test1 xs = foldr 0 (+) xs
+test2 xs = foldr 1 (*) xs
+\end{verbatim}
+
+\begin{ex}{*}
+  Identify higher-order applications in the above program.
+\end{ex}
+
+\begin{ex}{*}
+  Assuming that $\mathsf{xs}$ are lists of integers, replace the above
+  uses of higher-order application by explicit closures. 
+  (Hint: you need to also change the definition of foldr/map).
+\end{ex}
+
+\begin{ex}{**}
+  Add the following line to the above program and repeat the above 2
+  exercises.
+\begin{verbatim}
+test3 xs = map (\x -> if x == 0 then 'z' else chr x) xs
+\end{verbatim}
+\end{ex}
 
 Eratosthenes' sieve is a method for finding prime numbers, dating from
 ancient Greece. We start by writing down all the numbers from 2 up to
@@ -789,9 +814,14 @@ int LevenshteinDistance(char s[1..m], char t[1..n])
 
 \subsubsection{Lazy Lists (Streams)}
 
-Remember the sieve algorithm.  Check that the \verb!sieve! function
-also works given the {\em infinite} list \verb![2..]!---the output
-should be the {\em infinite} list of all prime numbers.
+Remember the sieve algorithm. Lazy lists can be (potentially)
+infinite, although of course no program can evaluate {\em all} the
+elements of an infinite list. Nevertheless, using lazy lists can help
+us avoid building unnecessary limitations into our code.  Check that
+the \verb!sieve! function also works given the {\em infinite} list
+\verb![2..]!---the output should be the {\em infinite} list of all
+prime numbers.
+
 
 \question{*} How would you find the first 100 prime numbers? 
 
