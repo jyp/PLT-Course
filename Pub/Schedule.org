@@ -43,7 +43,7 @@ See table below for detail of contents.
 | EX 2 | Exercises: 14, 15, 17, 18, 28, 35, 39, 41                            | N, R |
 | FP 1 | Algebraic Types & Pattern matching                                   |      |
 | FP 2 | Higher-order functions & Currification                               |      |
-| EX 3 | Exercises: 48, 49, 50, 52, 53, 54, 57, 58                            | R, A |
+| EX 3 | Exercises marked with @3 in file:All.pdf                             | R, A |
 | FP 3 | Explicit state & Closures                                            |      |
 | EX 4 |                                                                      | N, A |
 | FP 4 | Laziness & Explicit thunks                                           |      |
@@ -56,9 +56,8 @@ See table below for detail of contents.
 | Q&A  | Questions and answers                                                |      |
 
 Note: the contents of each exercise session is about the topics
-covered in the two previous lectures. Numbers refer to those in
-file:All.pdf. Remember to re-fetch the file each week: exercises may
-have been updated.
+covered in the two previous lectures. Remember to re-fetch the
+file:All.pdf file each week: exercises may have been updated.
 
 Adjustments done:
 
