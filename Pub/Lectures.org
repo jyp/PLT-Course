@@ -1176,7 +1176,7 @@ If A and B are data types, then...
   + similar to union in C (what is the difference?)
 
 - what is A × B ?
-  + similar to records in C (difference?)
+  + similar to records in Pascal/Ada/...; struct in C (difference?)
 
 
 Let's count the number of inhabitants of the type:
@@ -1201,17 +1201,46 @@ In Haskell syntax:
 
 Lists can be defined as follows, using _recursion_:
 
-: List a = (Nil ↦ a) + (Cons ↦ (a × List a))
+: List a = (Nil ↦ 1) + (Cons ↦ (a × List a))
 
 
 Haskell syntax:
 
-: data List a = Nil a | Cons a (List a)
+: data List a = Nil | Cons a (List a)
 
+*** TODO Values and Pattern Matching
+inhabitants of A + B; A × B; and matching over them.
 *** Transformation: Algebraic data type ⟶ inheritance
-
 - ×: supported by records
-- +: one can use inheritance to implement sum types, as follows.
+- +: one can use inheritance to implement sum types, as in the
+  following example.
+
+#+begin_src haskell
+data ListOfInt = Cons Int ListOfInt | Nil
+
+sum : ListOfInt -> Int
+sum Nil = 0
+sum (Cons x xs) = x + sum xs
+#+end_src
+#+begin_src pseudo-java
+
+interface ListOfInt 
+   int sum(); 
+
+class Nil extends ListOfInt
+  -- no field
+  int sum() {
+    return 0;
+  }
+
+class Cons extends ListOfInt
+  int head;
+  ListOfInt tail;
+  int sum () {
+    return head + tail.sum;
+  }
+#+end_src
+**** (⋆⋆⋆) Polymorphic version
 
 #+begin_src haskell
 data List a = Cons a (List a) | Nil
@@ -1270,7 +1299,7 @@ Consider now the following function, which multiplies the elements in
 a list:
 #+begin_src haskell
 product Nil         = 1
-product (Cons x xs) = 1 * product xs
+product (Cons x xs) = x * product xs
 #+end_src
 
 *Same pattern ⟶ Abstract out the difference ! (Parameterize)*
@@ -1278,7 +1307,7 @@ product (Cons x xs) = 1 * product xs
 Exercise: fill in the question mark in the following snippet
 #+begin_src haskell
 foldr :: (a -> b -> b) -> b -> [a] -> b
-foldr = ?
+foldr f k xs = ?
 #+end_src
 such that
 
@@ -1299,8 +1328,8 @@ Consider these two examples:
 : multiplyBy n Nil = Nil
 : multiplyBy n (Cons x xs) = Cons (n*x) (multiplyBy n xs)
 
-: squareAll n Nil = Nil
-: squareAll n (Cons x xs) = Cons (x^2) (squareAll n xs)
+: squareAll Nil = Nil
+: squareAll (Cons x xs) = Cons (x^2) (squareAll xs)
 
 
 Capture the pattern in the following 
@@ -1332,10 +1361,10 @@ f : (A × B) → C
 f = ...
 
 g : A → (B → C)
-g a = \b -> f (a,b)
+g = \a -> \b -> f (a,b)
 
 h : (A × B) → C
-h (a,b) = g a b
+h (a,b) = (g a) b
 #+end_example
 
 Remark: f ≡ h
