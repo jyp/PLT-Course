@@ -649,7 +649,7 @@ Consider the following imperative program:
 \begin{verbatim}
 for (i=0;i<sizeof(a);i++)
   if (a[i].grade >= 24)
-     *b++ = a;
+     *b++ = a[i];
 \end{verbatim}
 \begin{ex}{*,@3}
   How would the same algorithm be naturally expressed in a functional
