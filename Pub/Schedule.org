@@ -61,10 +61,12 @@ file:All.pdf file each week: exercises may have been updated.
 
 Adjustments done:
 
-| Abbr | Comment                                                          |
-|------+------------------------------------------------------------------|
-| IP 1 | Had time to discuss Procedures → Gotos in addition of the above. |
-| OO 1 | Had time to do the quick review of Haskell syntax                |
+| Abbr | Comment                                                                           |
+|------+-----------------------------------------------------------------------------------|
+| IP 1 | Had time to discuss Procedures → Gotos in addition of the above.                  |
+| OO 1 | Had time to do the quick review of Haskell syntax                                 |
+| FP 1 | Discussed also HOF and currification                                              |
+| FP 2 | Did exercise on: co/contra variance. Showed how to arrive to the sieve algorithm. |
 
 * Other events:
 ** CHARM
@@ -113,3 +115,9 @@ Items:
 **** Course-specific questions in questionnaire; other material for final meeting?
 *** TODO Evaluation Meeting 3   
 
+** TODO Next year:
+- Change file structure:
+  + Top level (Intro, organisation info, team, exam, course eval, ...)
+    + Lecture notes
+    + Schedule
+    + Exercises
