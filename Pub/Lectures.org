@@ -1009,7 +1009,6 @@ record DogMethods
 dogMethods = {Pet := petDog, ...}
 #+end_example
 
-
 *** Paradigm Shift
 
   - Multiple "cases" can be implemented by inheriting a common class

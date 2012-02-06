@@ -107,12 +107,52 @@ Representatives:
   - The T.A. can use the paper copy to check if what the student says
     corresponds to what they have written.
 
-*** TODO Evaluation Meeting 2
+*** Evaluation Meeting 2
+(Oscar was absent from the meeting)
 Items:
 **** Changes in the course since last year.
-**** Study climate (communication, work load, supervision).
+- Moved from Master (served as a common ground in programming for
+  students with various backgrounds -- the course was given to many
+  international students)
+- To Bachelor (most students had basic course in FP, OO, ...); the
+  focus of the course is now to explain the links between the
+  paradigms, and explain new concepts by translation into known (old)
+  concepts.
+**** Study climate
++ Communication
+  - Students feel intimidated by T.A.; it requires courage to go to the
+    TA and get one's exercise corrected.
+  - Student appreciate the presence of a TA which talks at their own
+    level. (So Friday's QA sessions are good.)
++ Workload
+   - No complaint.
++ Supervision
+  - The 2nd session was already better compared to the 1st.
+  - To make the exercise session smoother, the TA will now check the
+    solution on paper before the student explains the exercise orally.
+  - Instead of "regular" lectures, students appreciate tutorials.
+  - Sometimes exercises can be vague. TAs are asked to improve them in
+    that respect.  Note however that clarifications can be requested
+    (email, office hours).
 **** Problematic course items; can resources be used better?
+No gap is felt. Various activites reply to existing needs.
 **** Course-specific questions in questionnaire; other material for final meeting?
+- Do you think the format of the (last few) exercise sessions is
+  appropriate?
+  1. Inappropriate
+  2. It's basically ok but there are points to improve
+  3. Appropriate
+ 
+
+- Did the knowledge/skills learnt thanks to the exercises proposed
+  helped you accomplish the course goals?
+  1. I learnt almost nothing via exercises
+  2. I learnt mostly via other sources
+  3. I learnt mostly via exercises
+  4. My learning was completely driven by the exercises
+
+
+
 *** TODO Evaluation Meeting 3   
 
 ** TODO Next year:
