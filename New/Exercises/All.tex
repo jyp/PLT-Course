@@ -675,17 +675,17 @@ test1 xs = foldr 0 (+) xs
 test2 xs = foldr 1 (*) xs
 \end{verbatim}
 
-\begin{ex}{*}
+\begin{ex}{*,@4}
   Identify higher-order applications in the above program.
 \end{ex}
 
-\begin{ex}{*}
+\begin{ex}{*,@4}
   Assuming that $\mathsf{xs}$ are lists of integers, replace the above
   uses of higher-order application by explicit closures. 
   (Hint: you need to also change the definition of foldr/map).
 \end{ex}
 
-\begin{ex}{**}
+\begin{ex}{**,@4}
   Add the following line to the above program and repeat the above 2
   exercises.
 \begin{verbatim}
@@ -693,6 +693,8 @@ test3 xs = map (\x -> if x == 0 then 'z' else chr x) xs
 \end{verbatim}
 \end{ex}
 
+
+\question{*}
 Eratosthenes' sieve is a method for finding prime numbers, dating from
 ancient Greece. We start by writing down all the numbers from 2 up to
 some limit, such as 1000. Then we repeatedly do the following:
@@ -711,7 +713,9 @@ prime numbers up to the limit have been found.
 
 The algorithm can be implemented in Haskell as follows:
 
-\question{*} Write the algorithm in Haskell.
+Write the algorithm in Haskell.
+
+\question{*,@4}
 
 Consider the following (totally unrelated) algorithm:
 \begin{verbatim}
@@ -720,11 +724,12 @@ sieve (n:ns) = n:sieve (filter (not . (`isDivisibleBy` n)) ns)
 x `isDivisibleBy` y = x `mod` y == 0
 \end{verbatim}
 
-\question{*} Inline the call of function composition in the above.
+Inline the call of function composition in the above as a
+lambda abstraction.
 
 The only remaining higher-order function is filter. 
 
-\question{*} Write a version of filter which takes an explicit closure as an argument.
+\question{*,@4} Write a version of filter which takes an explicit closure as an argument.
 
 \question{*} Re-write sieve using the above.
 
@@ -734,19 +739,18 @@ not use arrays instead of lists).
 
 \subsection{Explicit state}
 
-Consider the binary tree structure written above. Assume the payload are integers.
+Consider the binary tree structure with integer values in the nodes.
 
-\question{*} In the Java version, write a function that replaces each
+\question{*,@4} In the Java version, write a function that replaces each
 element with its index in preorder traversal of the tree.
 
-\begin{ex}{**} Translate to Haskell.
+\begin{ex}{**,@4} Translate to Haskell.
 \end{ex}
 
 The above can be seen as an imperative algorithm. 
+ What is the ``state of the world'' in this case?
 
-\question{*} What is the ``state of the world'' in this case?
-
-\question{*} Rewrite the Haskell version, in such a way that passing
+\question{*,@4} Rewrite the Haskell version, in such a way that passing
 ``state of the world'' is made visible as such.
 
 
