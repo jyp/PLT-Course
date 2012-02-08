@@ -739,19 +739,18 @@ not use arrays instead of lists).
 
 \subsection{Explicit state}
 
-Consider the binary tree structure with integer values in the nodes.
+Consider a binary tree structure with integer values in the nodes.
 
 \question{*,@4} In the Java version, write a function that replaces each
 element with its index in preorder traversal of the tree.
 
-\begin{ex}{**,@4} Translate to Haskell.
-\end{ex}
-
-The above can be seen as an imperative algorithm.
- What is the ``state of the world'' in this case?
+\question{**,@4} Translate the function above to Haskell thinking of it
+as an imperative algorithm. You should use \emph{IP} from the lecture notes.
+What is the ``state of the world'' in this case?
 
 \question{*,@4} Rewrite the Haskell version, in such a way that passing
-``state of the world'' is made visible as such.
+``state of the world'' is made visible as such, that is, eliminate your
+usage of \emph{IP}.
 
 
 \subsection{Laziness}
