@@ -194,6 +194,7 @@ Regexp / Excell formulas / sql queries / Haskell / C / Asm / ...
 - Languages implement features
 
 http://www.info.ucl.ac.be/~pvr/paradigmsDIAGRAMeng108.pdf
+file:LangPop.png
 
 **** PL Features
 - Structured data / Records
@@ -1435,7 +1436,7 @@ map : Closure -> List a -> List b
 map f [] = []
 map f (x:xs) = apply f x : map f xs
 
-call0 = map Add4
+call0 xs = map Add4 xs
 call1 n = map (MultiplyBy n)
 
 apply (MultiplyBy n) x = x * n
@@ -1458,16 +1459,72 @@ cases in [[(ref:closure definition)]].
 **** Exercise (⋆⋆): Implement the above example C. 
 Hint: Instead of a 'tag', use a function pointer.
 
-...
+Here's "pseudo-c" draft to get you started:
 
-Note the similarity with [[objects]]!
+#+begin_src pseudo-c
+list map(closure* c, list p) {
+   while (p /= null) {
+     apply(c,p.info); 
+     // Attn: to be faithful to the Haskell code we'd need to create a new list.
+   }
+}
+
+struct {
+  int *f();
+  byte[] env;
+} closure
+
+
+int apply(closure* c, args...) {
+  c.f(c.env,args);
+}
+
+
+int add4(byte* env, int x) {
+  return x+4;
+}
+
+// call0
+add4Closure = new (void*); // we only need space for a function pointer, because add4 has no environment.
+add4Closure.f = add4;
+map(add4Closure,xs);
+
+#+end_src
+
+Note the similarity with the implementation of [[objects]]!
 
 **** Exercise: Implement the above example Java
-Hint: Instead of a tag, make a derived class ('apply' is a method)
+Hints
+ - Instead of a tag, make a derived class ('apply' is a method)
+ - Or just apply the Alg. Data Type ==> Classes transformation seen above.
+
+#+begin_src pseudo-Java
+List map(Closure c, List xs) {
+  while (xs != null) {
+    ... construct new list
+    ys.info = c.apply(xs.info);
+  }
+}
+
+interface Closure
+  int apply(int);
+  
+class Add4 implements Closure
+  int apply(int x);
+    return x+4
+
+
+// call0
+map(new Add4(), xs)
+#+end_src
+  
+**** Exercise: polymorphic closures
+In the above we had closures of type Int -> Int. How would you support
+polymorphic closures?
 
 ** Transformation: Explicit State
 
-- Can we represent imperative program without using side effects?
+- How can we represent imperative programs without using side effects?
 - Idea: pass around the "state of the world" explicitly
 - Functions are transformed as follows:
 
@@ -1476,10 +1533,8 @@ Hint: Instead of a tag, make a derived class ('apply' is a method)
 :  print : State -> State × () -- after making the state explicit
 
 
-
 Assuming the "state of the world" is only the contents of the output
-file, then print does what?
-
+file, then 'print' does what?
 
 *** Exercise: implement "safePrint" functionally...
 
@@ -1606,9 +1661,45 @@ behaviour of getChar depends on an (implicit) environment.
 
 *** Possible to use laziness  (see in a moment)
 
-** TODO Copying and sharing
+** Copying and sharing
 
-Example: tree update
+Consider a binary tree:
+
+#+begin_src dot :file tree-orig.svg :cmdline -Kdot -Tsvg
+digraph G {
+  10 -> 5 -> 2; 
+        5 -> 7;
+  10 -> 20 -> 12;
+        20 -> 22;
+}
+#+end_src
+
+And say we insert 13 in it. The new tree /shares/ most of its contents
+with the old one.
+
+#+begin_src dot :file tree-orig.svg :cmdline -Kdot -Tsvg
+digraph G {
+  10 -> 5 -> 2; 
+        5 -> 7;
+  10 -> 20 -> 12;
+        20 -> 22;
+node [color=red];
+edge [color=red];
+
+new10 [label="10"];
+new20 [label="10"];
+new13 [label="10"];
+
+new10 -> 5;
+new10 -> new20;
+new20 -> new13;
+new20 -> 22;
+new13 -> 12;
+  
+}
+#+end_src
+
+*** Question: which nodes will be considered as garbage during the next collection? 
 
 ** Laziness
 

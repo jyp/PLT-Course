@@ -45,7 +45,7 @@ See table below for detail of contents.
 | FP 2 | Higher-order functions & Currification                               |      |
 | EX 3 | Exercises marked with @3 in file:All.pdf                             | R, A |
 | FP 3 | Explicit state & Closures                                            |      |
-| EX 4 |                                                                      | R, A |
+| EX 4 | Exercises marked with @4 in file:All.pdf                             | R, A |
 | FP 4 | Laziness & Explicit thunks                                           |      |
 | CP 1 | Variable-managing process                                            |      |
 | EX 5 |                                                                      | N, A |
