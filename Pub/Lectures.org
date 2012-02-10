@@ -1445,7 +1445,7 @@ apply (Add4)           = x + 4
 data Closure = MultiplyBy Int | Add4 | ...      -- (ref:closure definition)
 #+end_src
 
-The trick is to replace each function argument by a data-type. The
+The trick is to replace each function parameter by a data-type. The
 constructors of the data type are made to represent the possible
 arguments. The closure stores all the variables of the environment
 used in the argument.
@@ -1453,7 +1453,7 @@ used in the argument.
 Note that there may be more kind of closures, so there may be more
 cases in [[(ref:closure definition)]].
 
-**** Read: 
+**** Read:
 [[http://en.wikipedia.org/wiki/Closure_(computer_science)][Closures on wikipedia]]
 
 **** Exercise (⋆⋆): Implement the above example C. 
@@ -1513,11 +1513,24 @@ class Add4 implements Closure
   int apply(int x);
     return x+4
 
+class MultiplyBy implements Closure
+  field
+    int n; 
+  int apply(int x);
+    return x * n
+  constructor MultiplyBy(int n_arg) {
+     n = n_arg;
+  }
 
 // call0
 map(new Add4(), xs)
+
+// call1
+map(new MultipyBy(n), xs)
 #+end_src
-  
+
+Quote: Objects are Poor Man's closures.  
+
 **** Exercise: polymorphic closures
 In the above we had closures of type Int -> Int. How would you support
 polymorphic closures?
@@ -1528,9 +1541,9 @@ polymorphic closures?
 - Idea: pass around the "state of the world" explicitly
 - Functions are transformed as follows:
 
-:  print : () -- in an imperative language, the state is implicit
+:  print : String -> () -- in an imperative language, the state is implicit
 
-:  print : State -> State × () -- after making the state explicit
+:  print : String -> State -> State × () -- after making the state explicit
 
 
 Assuming the "state of the world" is only the contents of the output
@@ -1544,6 +1557,7 @@ procedure safePrint(line) : ErrorCode
     return -1
   else
     print(line)
+    return 0
 #+end_example
 
 ... given the imperative function
@@ -1553,6 +1567,16 @@ procedure safePrint(line) : ErrorCode
 **** Questions
  1. What is the type of outOfInk in the functional representation ?
  2. What is the translation ?
+
+**** Answers
+outOfInk :: State -> Bool × State
+
+safePrint :: String -> State -> ErrorCode × State
+safePrint    line      s1 =
+   let (noInk,s2) = outOfInk s1
+   in  if noInk then (-1,s2)
+                else let (s3,()) = print line s2
+                     in  (0,s3)
 
 *** Imperative syntax in Haskell
 
@@ -1585,15 +1609,15 @@ you special syntax for imperative programming. If you give:
 #+begin_src haskell
 instance Monad IP where
   (>>=) = andThen
-  return x = -- when x does not depend on the state:
+  return x = x -- when x does not depend on the state:
 #+end_src
 
 Then the following is valid:
 
 #+begin_src haskell
   safePrint line = do
-    condition <- outOfInk  
-    if outOfInk 
+    noInk <- outOfInk  
+    if noInk
       then return -1
       else do print line
               return 0
@@ -1603,8 +1627,8 @@ In fact, the meaning of "imperative" is given by that function -- andThen in our
 
 #+begin_src haskell 
 safePrint line = 
-  outOfInk `andThen` \condition ->
-  if outOfInk 
+  outOfInk `andThen` \noInk ->
+  if noInk 
     then return -1
     else print line `andThen` \() ->
          return 0
@@ -1612,7 +1636,8 @@ safePrint line =
 
 ** Paradigm shift: HOT!
 Higher-Order and Typed
-- Any part of a function can be abstracted over (before one could not abstract over functions)
+- Any part of a function can be abstracted over (before one could not
+  abstract over functions)
   + Possibility to make the code more clear
   + Good for reuse!
 - Types capture a coarse-grained meaning of each function
