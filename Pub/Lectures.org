@@ -1440,7 +1440,7 @@ call0 xs = map Add4 xs
 call1 n = map (MultiplyBy n)
 
 apply (MultiplyBy n) x = x * n
-apply (Add4)           = x + 4
+apply (Add4)         x = x + 4
 
 data Closure = MultiplyBy Int | Add4 | ...      -- (ref:closure definition)
 #+end_src
