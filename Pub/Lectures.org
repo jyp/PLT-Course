@@ -467,6 +467,7 @@ label2:
   part2
 done:
 #+end_example
+*** TODO Computed/Indirect gotos
 *** Exercise (⋆⋆)
 
 Do the same job with the switch/case construct.
