@@ -26,7 +26,7 @@
 
 % Uncomment to show answers
 % \renewcommand{\answer}[1]{#1}
- 
+
 
 \usepackage{listings}
 
@@ -51,7 +51,7 @@
 
 \lstdefinelanguage{FSharp}
       {morekeywords={let, new, match, with, rec, open, module,
-           namespace, type, of, member, and, for, in, do,  
+           namespace, type, of, member, and, for, in, do,
            begin, end, fun, function, try, mutable, if, then, else, class, end},
     keywordstyle=\color{blue},
     sensitive=false,
@@ -104,8 +104,8 @@ which is supported by C++?
 \item 'c'
 \item ``Hello, world!''
 \item -3
-\item (unary) -  
-\item (binary) + 
+\item (unary) -
+\item (binary) +
 \item sin
 \item derivative
 \end{enumerate}
@@ -152,9 +152,9 @@ Consider the algorithm:
 
 \begin{enumerate}
 \item \textbf {Preliminary:} {\it A} is an array of integers of length
-  {\it n} and {\it B} is an array of integers of length {\it m}. Also
+  {\it m} and {\it B} is an array of integers of length {\it n}. Also
   the elements from both arrays are distinct (from the elements in
-  both arrays) and in ascending order. 
+  both arrays) and in ascending order.
 
 \item \textbf{Step1:} if {\it n} or {\it m} is zero
   \textbf{STOP}. Otherwise if  $m\textgreater n$, set $t := \lfloor log
@@ -185,49 +185,55 @@ Consider the algorithm:
 \end{enumerate}
 
 
-\question{*} 
+\question{*}
 
 implement binary search without gotos in the context of the
 algorithm. There is a slight change compared to the classical
-algorithm, since the scope of the search is different. Keep in mind! 
+algorithm, since the scope of the search is different. Keep in mind!
 \footnote{If that is too easy, do it for red-black trees.}
 
 
-\question{-} 
+\question{-}
 
 \textbf{Step1} may require the calculation of the expression $\lfloor log
     \left ( m \slash n \right ) \rfloor $, for $n \geq m$. Explain how
     to compute this easily without division or calculation of a
     logarithm.  % \todo[inline]{with gotos or explicit stack}
 
-\question{*} 
+\question{*}
 
 Why does the binary search mentioned in the algorithm
 always take {\it t} steps ?
 
-\question{*} 
+\question{*}
 
-Explain the behaviour of the algorithm for the arrays 
+Explain the behaviour of the algorithm for the arrays
 {\it A} = \{87, 503, 512\} and {\it B} = \{61, 154, 170, 275, 426, 509,
   612, 653, 677, 703, 765, 897, 908\}.
 
-\question{**} 
+\question{**}
 
 Implement the above-mentioned algorithm without using
 {\it gotos} in a programming language of your choice. Check your
-implementation with the {\it A} and {\it B} from the previous question. 
+implementation with the {\it A} and {\it B} from the previous question.
 
-  
+
 \subsection{Control flow statements to gotos}
 \question{*}
 
 Translate the following \textbf{for} loop with explicit gotos:
 \\
 \\
-{\it for (statement; condition; statement)
+{\it for (statement1; condition; statement2)
 
 $\ \ \ \ $loop$\_$body}
+\question{*}
 
+Translate the following \textbf{foreach} loop with explicit gotos:
+\begin{verbatim}
+  foreach i in k..l do
+    body
+\end{verbatim}
 
 \question{*}
 Translate the do/while construct.
@@ -235,7 +241,7 @@ Translate the do/while construct.
 \question{*}
 Translate the switch/case construct.
 
-(If you want to make sure your translation is correct you should check the 
+(If you want to make sure your translation is correct you should check the
 specification of the C language. \url{http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf})
 
 \question{*}
@@ -247,8 +253,8 @@ Translate the insertion sort algorithm.
 
 \question{*}
 Create a binary search tree where nodes contain integer number in
-C/C++. Implement a function that adds a value to the tree and one that
-deletes a certain value from the tree. 
+C/C++/Java. Implement a function that adds a value to the tree and one that
+deletes a certain value from the tree.
 
 \question{*}
 Write a recursive traversal of the above tree.
@@ -257,7 +263,7 @@ Write a recursive traversal of the above tree.
 Write a swap function using call by reference.
 
 \question{*}
-Write a swap function using call by value. 
+Write a swap function using call by value.
 
 \question{**} Does Java use call by reference? Give examples to support
 your answer.
@@ -266,7 +272,7 @@ your answer.
 vs. call by value. (Ease of use, performance, ...)
 
 \subsection{More on control flow and pointers: Duff's device}
-Duff's device is an optimization idiom for serial copies 
+Duff's device is an optimization idiom for serial copies
 in the language C. The fragment below lists first the original code,
 then Duff's optimization.
 \pagebreak
@@ -274,15 +280,15 @@ then Duff's optimization.
 /* (Almost) original code */
 int main() {
    short *to, *from;
-   int count;	
-   ... 
+   int count;
+   ...
    {
-     /* pre: count > 0 */		
+     /* pre: count > 0 */
      do
-	  *to++ = *from++;		
-     while(--count>0);	
+	  *to++ = *from++;
+     while(--count>0);
    }
-   return 0; 
+   return 0;
 }
 \end{cplus}
 
@@ -302,10 +308,10 @@ Duff optimised the above code as follows:
 /* Duff's transformation */
 int main() {
   short *to, *from;
-  int count;	
+  int count;
   ...
   {
-     /* pre: count > 0 */		
+     /* pre: count > 0 */
      int n = (count + 7) / 8;
      switch(count % 8){
        case 0:	do{	*to++ = *from++;
@@ -330,14 +336,14 @@ int main() {
 Is the second program really equivalent to the first?
 
 \begin{ex}{-}
-Show that the instruction ``\texttt{*to++ = *from++}'' will be executed 
+Show that the instruction ``\texttt{*to++ = *from++}'' will be executed
 \texttt{count} times in the second program.
 \answer{The while loop will be executed $\floor{(count + 7) / 8}$ times.
 Since each iteration executes the instruction 8 times, we expect the
 program to run it $8 \times \floor{(count + 7)/ 8}$ times in total, which
-is up to 7 times more than count. 
+is up to 7 times more than count.
 
-However, the \texttt{switch} instruction is there to skip 
+However, the \texttt{switch} instruction is there to skip
 $count \bmod 8$ instructions in \emph{the first iteration}, to
 make the count exact.
  }
@@ -352,7 +358,7 @@ make the count exact.
   Can you guess why Duff expects the second program to be faster?
   What instructions are executed in the first program but not in the
   second?
-  
+
   \answer{The test and jump instructions are executed only
     $\floor{(count + 7) / 8}$ times instead of $count$, which is about
     $1/8$ of the time.}
@@ -362,14 +368,14 @@ make the count exact.
 \paragraph{Further reading}
 \begin{itemize}
 \item For the original email in which Tom Duff presented his ``device'',
-see 
+see
 
 \url{http://www.lysator.liu.se/c/duffs-device.html}
 
 \item You can see the assembly code generated by \textsf{gcc} by
   compiling with
   \begin{center}
-    \textsf{gcc -S $<$filename$>$}.   
+    \textsf{gcc -S $<$filename$>$}.
   \end{center}
 \end{itemize}
 
@@ -389,7 +395,7 @@ numbers:
 
 \question{*}
 Implement the recursive function computing the n-th Fibonacci number based on
-the expression above. 
+the expression above.
 
 \question{*} Why is it not efficient?
 
@@ -400,7 +406,7 @@ purpose. (Hint: use an accumulator parameter).
 
 \question{**}
 Implement a version of each of the two functions above by using an
-explicit stack.  
+explicit stack.
 
 \question{**}
 Implement the Ackermann function without recursion.
@@ -422,14 +428,14 @@ interface Monoid {
 };
 
 struct IntegerAdditiveMonoid : Monoid {
-    public IntegerAdditiveMonoid(int x) { 
+    public IntegerAdditiveMonoid(int x) {
          elt = x;
-    }    
-    public IntegerAdditiveMonoid op(IntegerAdditiveMonoid second) { 
-         return new IntegerAdditiveMonoid(
-             elt + second.elt); 
     }
-    public IntegerAdditiveMonoid id(){ 
+    public IntegerAdditiveMonoid op(IntegerAdditiveMonoid second) {
+         return new IntegerAdditiveMonoid(
+             elt + second.elt);
+    }
+    public IntegerAdditiveMonoid id(){
          return new IntegerAdditiveMonoid(0);
     }
     int elt;
@@ -464,11 +470,11 @@ happens at runtime when the expression is evaluated. (Which code is executed?)
 
 Surprise: the above code is refused by the C\# compiler:
 \begin{verbatim}
-> gmcs Monoids.cs 
-Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement 
+> gmcs Monoids.cs
+Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement
   interface member `Monoid.op(Monoid)'
 Monoids.cs(2,11): (Location of the symbol related to previous error)
-Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement 
+Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement
   interface member `Monoid.id()'
 Monoids.cs(3,11): (Location of the symbol related to previous error)
 Compilation failed: 2 error(s), 0 warnings
@@ -495,11 +501,11 @@ C\#-compiler accepts it? What is the problem then?
 \removed{
 \subsection{Dynamic dispatching \& the visitor}
 
-Suppose the three classes \textsf{Shape}, \textsf{Rectangle}, and 
+Suppose the three classes \textsf{Shape}, \textsf{Rectangle}, and
 \textsf{Circle}, and the appropriate inheritance relation between them.
 Further assume a method \textsf{intersect()} that can determine whether two
-shapes overlap. Obviously, the implementation of \textsf{intersect()} 
-depends on the actual shapes involved. 
+shapes overlap. Obviously, the implementation of \textsf{intersect()}
+depends on the actual shapes involved.
 
 \question{*} Implement and design the 3 classes so that all possible
 intersections of shapes can be properly handled using Smalltalk.  What
@@ -507,11 +513,11 @@ is the problem with single dispatching? Name at least 2 issues.
 
 
   The following Java snippet redesigns the
-  class hierarchy using \textit{double dispatch}. 
+  class hierarchy using \textit{double dispatch}.
   Explain how double dispatching works by
   giving the sequence of calls for the line marked (*) in \textsf{Main}.
   Name two problems with double dispatching.
-  
+
 \begin{java}
 class Shape {
     public  boolean intersect(Shape s) {
@@ -530,7 +536,7 @@ class Shape {
 }
 class Rectangle extends Shape {
     public  boolean intersect(Shape s) {
-        return s.intersectRectangle(this);  
+        return s.intersectRectangle(this);
     }
     protected  boolean intersectRectangle(Rectangle r) {
         // Rectangle x Rectangle
@@ -539,16 +545,16 @@ class Rectangle extends Shape {
 }
 class Circle extends Shape {
     public  boolean intersect(Shape s) {
-        return s.intersectCircle(this);  
+        return s.intersectCircle(this);
     }
     protected  boolean intersectCircle(Circle c) {
-        // Circle x Circle 
-   }   
+        // Circle x Circle
+   }
 }
 
 class Intersect {
    public static void Main() {
-      Shape s1 = new Rectangle(); 
+      Shape s1 = new Rectangle();
       Shape s2 = new Circle();
       boolean b = s2.intersect(s1);        // *
    }
@@ -557,7 +563,7 @@ class Intersect {
 
 The \textit{Visitor pattern} provides an alternative workaround,
 also based on double dispatching. In difference
-to the solution above, the pattern 
+to the solution above, the pattern
 introduces two hierarchies, the visited
 hierarchy and the visitor hierarchy. In the example,
  \textsf{Shape, Rectangle, Circle}
@@ -566,7 +572,7 @@ subclasses \textsf{RectangleIntersectVisitor} and \textsf{CircleIntersectVisitor
 form the visiting hierarchy. The visited classes are
 augmented with a method \textsf{accept}, which uses double dispatching
 to call the appropriate ShapeVisitor (and to invoke the
-right computation). 
+right computation).
 
 \question{*} Complete the code for the two class hierarchies and the client.
 \question{*} Name two problems of the visitor approach.
@@ -578,21 +584,21 @@ class Shape {
     }
 }
 class Rectangle extends Shape {
-public  void accept(IntersectVisitor v) { 
+public  void accept(IntersectVisitor v) {
         // your job
     }
 }
 class Circle extends Shape {
    // your job
 }
- 
+
 // visitor hierarchy
-abstract class IntersectVisitor { 
-    boolean intersects; 
+abstract class IntersectVisitor {
+    boolean intersects;
     public abstract void visitShape(Shape s);
-    public abstract void visitRectangle(Rectangle r); 
-    public abstract void visitCircle(Circle c); 
-} 
+    public abstract void visitRectangle(Rectangle r);
+    public abstract void visitCircle(Circle c);
+}
 
 // client code
   Shape s1 = new ..
@@ -605,25 +611,26 @@ abstract class IntersectVisitor {
 \section{Functional Programming}
 \subsection{Algebraic Data Types and Pattern Matching}
 
-\question{*} define an algebraic type for binary trees 
-\question{*} define an algebraic type for arithmetic expressions 
-\question{*} define a simple interpreter for the above type 
+\question{*} Define an algebraic type for binary trees
+\question{*,@3} define an algebraic type for arithmetic expressions
+\question{*,@3} define a simple interpreter for the above type
 
-\question{*} Translate the above 2 structures to an OO language. (Hint: One
+\question{*,@3} Translate the above 2 structures to an OO language. (Hint: One
 class corresponds to leaves, one to branching.)
 
-\question{*} Translate the interpreter. You are not allowed to use 'instanceof'
+\question{*,@3} Translate the interpreter. You are not allowed to use 'instanceof'
 
 \question{*} Translate the interpreter. You must use 'instanceof'.
 
 \subsection{Currification and partial application}
 
-\question{*} Define a function f following this spec.  Given a integer, return it
-unchanged if it is greater than zero, and zero otherwise. (The type must be Int → Int.)
+\question{*,@3} Define a function $\mathsf{f}$ following this spec: given a
+integer, return it unchanged if it is greater than zero, and zero
+otherwise. (The type must be Int → Int.)
 
-\question{*} Assuming a function max : (Int × Int) → Int, define the same function.
+\question{*,@3} Assuming a function max : (Int × Int) → Int, define the function $\mathsf{f}$.
 
-\question{*} Define max' by currifying the function max.
+\question{*} Define a function max', by currifying the function max.
 
 \question{*} Define f using max'.
 
@@ -632,7 +639,7 @@ unchanged if it is greater than zero, and zero otherwise. (The type must be Int 
 Assume the filter, map, foldr functions as in the Haskell prelude. f
 comes from the previous section.
 
-\question{*} Unfold the following expressions:
+\question{*,@3} Unfold the following expressions:
 \begin{enumerate}
 \item map f
 \item filter ($>=$ 0)
@@ -643,16 +650,16 @@ Consider the following imperative program:
 \begin{verbatim}
 for (i=0;i<sizeof(a);i++)
   if (a[i].grade >= 24)
-     *b++ = a;
+     *b++ = a[i];
 \end{verbatim}
-\begin{ex}{*}
+\begin{ex}{*,@3}
   How would the same algorithm be naturally expressed in a functional
   language? (Use functions from the Haskell prelude to shorten your code)
 \end{ex}
 
 
 \question{*} write a function that does the dot-product of two
-vectors; 
+vectors;
 
 \question{*} make an abstract version of the above.
 
@@ -662,11 +669,32 @@ Data.List module?
 
 \subsection{Closures}
 
-Lazy lists can be (potentially) infinite, although of course no
-program can evaluate {\em all} the elements of an infinite
-list. Nevertheless, using lazy lists can help us avoid building
-unnecessary limitations into our code.
+Consider the program:
+\begin{verbatim}
+test1 xs = foldr 0 (+) xs
+test2 xs = foldr 1 (*) xs
+\end{verbatim}
 
+\begin{ex}{*,@4}
+  Identify higher-order applications in the above program.
+\end{ex}
+
+\begin{ex}{*,@4}
+  Assuming that $\mathsf{xs}$ are lists of integers, replace the above
+  uses of higher-order application by explicit closures.
+  (Hint: you need to also change the definition of foldr/map).
+\end{ex}
+
+\begin{ex}{**,@4}
+  Add the following line to the above program and repeat the above 2
+  exercises.
+\begin{verbatim}
+test3 xs = map (\x -> if x == 0 then 'z' else chr x) xs
+\end{verbatim}
+\end{ex}
+
+
+\question{*}
 Eratosthenes' sieve is a method for finding prime numbers, dating from
 ancient Greece. We start by writing down all the numbers from 2 up to
 some limit, such as 1000. Then we repeatedly do the following:
@@ -685,7 +713,9 @@ prime numbers up to the limit have been found.
 
 The algorithm can be implemented in Haskell as follows:
 
-\question{*} Write the algorithm in Haskell.
+Write the algorithm in Haskell.
+
+\question{*,@4}
 
 Consider the following (totally unrelated) algorithm:
 \begin{verbatim}
@@ -694,11 +724,12 @@ sieve (n:ns) = n:sieve (filter (not . (`isDivisibleBy` n)) ns)
 x `isDivisibleBy` y = x `mod` y == 0
 \end{verbatim}
 
-\question{*} Inline the call of function composition in the above.
+Inline the call of function composition in the above as a
+lambda abstraction.
 
-The only remaining higher-order function is filter. 
+The only remaining higher-order function is filter.
 
-\question{*} Write a version of filter which takes an explicit closure as an argument.
+\question{*,@4} Write a version of filter which takes an explicit closure as an argument.
 
 \question{*} Re-write sieve using the above.
 
@@ -708,20 +739,18 @@ not use arrays instead of lists).
 
 \subsection{Explicit state}
 
-Consider the binary tree structure written above. Assume the payload are integers.
+Consider a binary tree structure with integer values in the nodes.
 
-\question{*} In the Java version, write a function that replaces each
+\question{*,@4} In the Java version, write a function that replaces each
 element with its index in preorder traversal of the tree.
 
-\begin{ex}{**} Translate to Haskell.
-\end{ex}
+\question{**,@4} Translate the function above to Haskell thinking of it
+as an imperative algorithm. You should use \emph{IP} from the lecture notes.
+What is the ``state of the world'' in this case?
 
-The above can be seen as an imperative algorithm. 
-
-\question{*} What is the ``state of the world'' in this case?
-
-\question{*} Rewrite the Haskell version, in such a way that passing
-``state of the world'' is made visible as such.
+\question{*,@4} Rewrite the Haskell version, in such a way that passing
+``state of the world'' is made visible as such, that is, eliminate your
+usage of \emph{IP}.
 
 
 \subsection{Laziness}
@@ -771,7 +800,7 @@ int LevenshteinDistance(char s[1..m], char t[1..n])
   {
     for i from 1 to m
     {
-      if s[i] = t[j] then  
+      if s[i] = t[j] then
         d[i, j] := d[i-1, j-1]       // no operation required
       else
         d[i, j] := minimum
@@ -789,11 +818,16 @@ int LevenshteinDistance(char s[1..m], char t[1..n])
 
 \subsubsection{Lazy Lists (Streams)}
 
-Remember the sieve algorithm.  Check that the \verb!sieve! function
-also works given the {\em infinite} list \verb![2..]!---the output
-should be the {\em infinite} list of all prime numbers.
+Remember the sieve algorithm. Lazy lists can be (potentially)
+infinite, although of course no program can evaluate {\em all} the
+elements of an infinite list. Nevertheless, using lazy lists can help
+us avoid building unnecessary limitations into our code.  Check that
+the \verb!sieve! function also works given the {\em infinite} list
+\verb![2..]!---the output should be the {\em infinite} list of all
+prime numbers.
 
-\question{*} How would you find the first 100 prime numbers? 
+
+\question{*} How would you find the first 100 prime numbers?
 
 Remark: start by answering the following questions on a simpler
 algorithm, for example the function \textsf{enumFrom} which generates
@@ -802,7 +836,7 @@ the infinite list of numbers starting at a given one.
 \begin{ex}{*} Translate sieve to use explicit thunks (as in the lecture)
 \end{ex}
 
-Oh noes, this introduced higher-order function(s). 
+Oh noes, this introduced higher-order function(s).
 
 \begin{ex}{**}
   Where are the new higher-order functions?
@@ -814,11 +848,11 @@ You know what's coming...
 
 \begin{ex}{**}
   Write a version of lazy sieve in imperative (or OO)
-language. 
+language.
 \end{ex}
 
 Since there are no more functions in the data, you can now display your
-infinite lists. 
+infinite lists.
 
 \question{***} Do so for a few meaningful inputs, and interpret what
 you see.
@@ -837,7 +871,7 @@ you see.
 
 \begin{ex}{*}
   Write a client for the above process that move ``money'' from an
-  account to another. 
+  account to another.
 \end{ex}
 
 \begin{ex}{*}
@@ -848,7 +882,7 @@ you see.
 
 \begin{ex}{**}
   Is the total amount of money a constant of your system? How can you
-  ensure that it is? Write the corresponding code. 
+  ensure that it is? Write the corresponding code.
 \end{ex}
 
 \subsection{Explicit continuations}
@@ -924,7 +958,7 @@ of evaluation!)
 \subsection{Metavariables and unification}
 
 \begin{ex}{*}
-What is the result of the following unifications? 
+What is the result of the following unifications?
 Try to come up with the result without using the prolog interpreter!
 
 \begin{tabular}{c}
@@ -944,7 +978,7 @@ fail \\
 fail \\
 X = Y = Z = W \\
 \end{tabular}
-    
+
 }
 \end{ex}
 
@@ -969,7 +1003,7 @@ difference between Out and In: so for instance,
 
 $$[1,2] \longrightarrow d(1:2:3:4:[],3:4:[])$$
 
-You can check how fromList works by testing it: 
+You can check how fromList works by testing it:
 \begin{prolog}
 fromList([1,2,3],X).
 \end{prolog}
@@ -1038,7 +1072,7 @@ the other containing the negative ones.
 split [] = ([],[])
 split (x:xs) | x >= 0 = (x:p,n)
              | x <  0 = (p,x:n)
-  where (p,n) = split xs        
+  where (p,n) = split xs
 \end{verbatim}
 
 If written as a predicate, it is natural if it takes 3 arguments. For example,
@@ -1065,7 +1099,7 @@ split([X|A],[X|P],N) :- X >= 0, split(A,P,N).
 split([X|A],P,[X|N]) :- X <  0, split(A,P,N).
 \end{prolog}
 }
-\end{question}    
+\end{question}
 
 \begin{question}{**}
     What are the lists that are returned by \textsf{split/3} when used in reverse? Can it fail?

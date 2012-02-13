@@ -1,0 +1,98 @@
+* Entry requirements
+
+The requirements for the course is to have successfully completed a
+first year studies within the subject Computer Science or
+equivalent. In particuar, 
+
+  - Knowlegde of elementary data structures (Lists, Stacks, Queues)
+
+  - Fluency in least one imperative or object-oriented programming
+    language is required (eg. Java or C).
+
+  - Basic experience with one functional programming language (eg.
+    LISP, ML, or Haskell)
+    
+
+are required.
+
+
+* Course content
+
+This course provides an overview of common programming paradigms,
+including imperative, object-oriented, logic, concurrent, and
+functional programming, and discusses the fundamental concepts
+underlying the design, definition, and implementation of modern
+computer languages. Students get practical experience with languages
+that exemplify a particular paradigm.
+
+The course contains:
+- an introduction by example to each paradigm;
+- theoretical and practical studies of transformations between
+  paradigms. Examples of such transformations include:
+  - introduction/removal of jumps/loops,
+  - introduction/removal of recursion/stack,
+  - introduction/removal of higher order functions/closures
+  - introduction/removal of processes/continuations,
+  - introduction/removal of explicit search.
+
+* Outcomes
+
+** Knowledge and understanding
+After completion of the course the student is expected to be able to
+- Explain and contrast the principles of different paradigms both
+  conceptually and in terms of particular language features.
+- Know the relationship between mainstream programming languages, the
+  features they implement, and the paradigms they support.
+
+** Skills and abilities
+After completion of the course the student is expected to be able to
+- Write small idiomatic programs in languages that represent different
+  paradigms.
+- Read programs written idiomatically in a given paradigm, and
+  translate (encode) them into a language that does not support the
+  paradigm directly.
+- Read non-idiomatic programs (that use an encoding), and re-write
+  them in their idiomatic paradigm.
+
+** Judgement and approach
+After completion of the course the student is expected to be able to 
+- Evaluate and apply the styles and strategies that characterize
+  different paradigm and assess their suitability for solving a given
+  problem.
+- Recognize the paradigms at the core of programs, regardless of
+  shallow or accidental implementation choices.
+
+
+* Assessment
+
+The course is examined by an individual written examination, carried
+out in examination hall.
+
+A student who has failed a test twice has the right to change
+examiners, if it is possible. A written application should be sent to
+the Department.
+
+In cases where a course has been discontinued or major changes have
+been made a student should be guaranteed at least three examination
+occasions (including the ordinary examination occasion) during a time
+of at least one year from the last time the course was given.
+
+
+* Grading scale
+
+The grading scale comprises Fail, (U), Pass (G) and Pass with
+Distinction (VG).
+
+Pass requires a mark of 40% on the exam, and Pass with Distinction
+requires a mark of 70%.
+
+* Course evaluation
+
+The course is evaluated through meetings both during and after the
+course between teachers and student representatives. Further, an
+anonymous questionnaire can be used to ensure written information. The
+outcome of the evaluations serves to improve the course by indicating
+which parts could be added, improved, changed or removed
+10. Additional information
+
+The instruction language is English. 
