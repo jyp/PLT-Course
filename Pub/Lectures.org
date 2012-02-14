@@ -1529,7 +1529,22 @@ map(new Add4(), xs)
 map(new MultipyBy(n), xs)
 #+end_src
 
-Quote: Objects are Poor Man's closures.  
+See the similiarity with Observer/EventListener pattern in Java:
+
+#+begin_src 
+interface Listener -- "Closure"
+  void respond(); -- "apply"
+
+class MyPrintAction implements Listener -- "Function representation"
+   String text -- "environment"
+   respond() {
+     print text;
+   }
+  
+button.onPress(new MyPrintAction("Hello there"));
+#+end_src
+
+Hence: "Objects are Poor Man's closures."
 
 **** Exercise: polymorphic closures
 In the above we had closures of type Int -> Int. How would you support

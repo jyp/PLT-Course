@@ -60,7 +60,7 @@ After completion of the course the student is expected to be able to
   different paradigm and assess their suitability for solving a given
   problem.
 - Recognize the paradigms at the core of programs, regardless of
-  shallow or accidental implementation choices.
+  shallow/accidental implementation choices.
 
 
 * Assessment
