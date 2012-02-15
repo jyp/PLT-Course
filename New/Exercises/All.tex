@@ -754,11 +754,11 @@ usage of \emph{IP}.
 
 
 \subsection{Laziness}
-There are no lazy languages that permit mutation.  \question{***} Why not?
+There are no lazy languages that permit mutation.  \question{***, @5} Why not?
 
 \subsubsection{Lazy Dynamic Programming}
 
-\question{*} Write the Floyd-Warshall algorithm in your favourite
+\question{*, @5} Write the Floyd-Warshall algorithm in your favourite
 imperative language. Assume that there is no weight on edges; and
 you're only interested in whether there is a path between two given
 nodes, not the number of steps in the path.
@@ -769,11 +769,10 @@ Note that the best-case performance is Cubic.
 cell in a matrix. (What do you need to do to make this at all
 possible?)
 
-\question{*} Using the same formula, fill the Roy-Warshall matrix
+\question{*, @5} Using the same formula, fill the Roy-Warshall matrix
 using an array comprehension in a lazy language (optionally use
-explicit thunks for the contents of each cell.)
-
-\question{**} Discuss the best-case performance.
+explicit thunks for the contents of each cell). Discuss the best-case
+performance.
 
 \question{-} Does your favourite spreadsheet program have strict, or
 lazy logical disjunction operator? Test it.
@@ -827,13 +826,13 @@ the \verb!sieve! function also works given the {\em infinite} list
 prime numbers.
 
 
-\question{*} How would you find the first 100 prime numbers?
+\question{*, @5} How would you find the first 100 prime numbers?
 
 Remark: start by answering the following questions on a simpler
 algorithm, for example the function \textsf{enumFrom} which generates
 the infinite list of numbers starting at a given one.
 
-\begin{ex}{*} Translate sieve to use explicit thunks (as in the lecture)
+\begin{ex}{*, @5} Translate sieve to use explicit thunks (as in the lecture)
 \end{ex}
 
 Oh noes, this introduced higher-order function(s).
@@ -846,7 +845,7 @@ You know what's coming...
 
 \question{***} Remove higher-orderness using the best technique available.
 
-\begin{ex}{**}
+\begin{ex}{**, @5}
   Write a version of lazy sieve in imperative (or OO)
 language.
 \end{ex}
@@ -862,7 +861,7 @@ you see.
 
 \subsection{Channels and Processes}
 
-\begin{ex}{*}
+\begin{ex}{*, @5}
   Write a process that manages a bank account. It has a channel for
   queries; which can be deposits and withdrawals. The answer is posted
   to a channel that comes with the query.  (Note: you cannot use
@@ -880,7 +879,7 @@ you see.
   accordingly.
 \end{ex}
 
-\begin{ex}{**}
+\begin{ex}{**, @5}
   Is the total amount of money a constant of your system? How can you
   ensure that it is? Write the corresponding code.
 \end{ex}
