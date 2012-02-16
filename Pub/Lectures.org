@@ -16,7 +16,7 @@ How to read this document
    + (⋆⋆) material for grade 4
    + (⋆⋆⋆) only for grade 5
    + (✪) not formally part of the course material
-
+Variable
 
 * Introduction + Programming Paradigms in General
 
@@ -1163,11 +1163,13 @@ In Haskell:
 :                       then x
 :                       else y
 
-*** Application BINDS TO THE LEFT.
+*** Application is LEFT associative.
 - No need for parentheses:
   : f x   ==  f(x)
 - Left leaning:
   : f x y == (f x) y  ==  (f(x))(y)
+
+*** TODO Forward reference: function arrow is RIGHT associative
 
 ** Algebraic Types
    
@@ -1382,7 +1384,7 @@ Example/Exercise: from "filter/map" to for loop...
 This transformation is essentially the inverse of abstraction.
 
 #+begin_src haskell
-map : (a -> b) -> List a -> List b
+map :: (a -> b) -> List a -> List b
 map f xs = case xs of 
    [] ->  []
    (x:xs) -> f x : map f xs
@@ -1423,7 +1425,7 @@ Downsides:
 **** Example
 - Source
 #+begin_src haskell
-map : (a -> b) -> List a -> List b
+map :: (a -> b) -> List a -> List b
 map f [] = []
 map f (x:xs) = f x : map f xs
 
@@ -1433,7 +1435,7 @@ call1 n = map (\x -> x * n)
 
 - Target
 #+begin_src haskell
-map : Closure -> List a -> List b
+map :: Closure -> List a -> List b
 map f [] = []
 map f (x:xs) = apply f x : map f xs
 
@@ -1838,7 +1840,7 @@ For [[file:Process.hs][example]]:
 ** Channel
 A channel is a medium for communication between processes. In Haskell,
 channels can be created with the newChan function. (Note that the
-channel is polymorphic, you may need to force the type to what you
+channel is polymorphic, you may need to force the type to that you
 need.)  For [[file:Channel.hs][example]], in the following snippet, two processes
 communicate via a channel (c).
 #+INCLUDE "Channel.hs" src haskell
@@ -1846,9 +1848,13 @@ communicate via a channel (c).
 Execute each line of the main function in ghci, and try to guess what
 will happen.
 ** Transformation: variable-managing process
+
+Erlang approach: NO shared state; communication only happens via
+messages over channels.
+
 Reading/Writing to a channel is a harmless kind of side effect... Or is it?
 + Yes!
-  - Nothing is "overwritten"
+  - Nothing is "overwritten" (see x=x+1 // x=x+1 example above)
   - in particular the integrity of data structures in never
     compromised.
 + No!

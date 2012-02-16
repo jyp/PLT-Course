@@ -47,7 +47,7 @@ See table below for detail of contents.
 | FP 3 | Explicit state & Closures                                            |      |
 | EX 4 | Exercises marked with @4 in file:All.pdf                             | R, A |
 | FP 4 | Laziness & Explicit thunks                                           |      |
-| CP 1 | Variable-managing process                                            |      |
+| CP 1 | State-managing process                                       |      |
 | EX 5 |                                                                      | N, A |
 | CP 2 | Explicit continuations                                               |      |
 | LP 1 | Unification                                                          |      |
