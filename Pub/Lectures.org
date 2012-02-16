@@ -1837,20 +1837,44 @@ For [[file:Process.hs][example]]:
 *** Exercise (⋆)
 - Run the above example
 - What is the output?
+** Shared state
+
+http://hackage.haskell.org/packages/archive/base/4.4.1.0/doc/html/Data-IORef.html
+
+- Data.IORef newIORef 
+
+Big danger of "screwing up":
+
+x = x + 1 // x = x + 1
+
+- How not to screw up?
+  - Semaphores
+  - Locks
+  - Critical section
+  - Synchronized classes
+  - ...
+
 ** Channel
+
 A channel is a medium for communication between processes. In Haskell,
 channels can be created with the newChan function. (Note that the
 channel is polymorphic, you may need to force the type to that you
 need.)  For [[file:Channel.hs][example]], in the following snippet, two processes
 communicate via a channel (c).
 #+INCLUDE "Channel.hs" src haskell
+
 *** Exercise:
 Execute each line of the main function in ghci, and try to guess what
 will happen.
-** Transformation: variable-managing process
 
-Erlang approach: NO shared state; communication only happens via
-messages over channels.
+** Idea:
+One approach not to screw up:
+- NO shared state!
+- communication only happens via messages over channels.
+- Approach of CSP, π-calculus, Erlang
+- The approach we'll describe here... using "Concurrent Haskell"
+
+** Transformation: variable-managing process
 
 Reading/Writing to a channel is a harmless kind of side effect... Or is it?
 + Yes!
@@ -1872,6 +1896,29 @@ processes. file:CSPVariable.hs
   when 'set' is called.
 - Can you change the program so that the get command does not need to
   create a channel? (⋆⋆)
+
+** Some erlang peculiarities
+- Syntax (inspired by prolog!?)
+- Dynamic typing
+- Hot-code swapping
+- Things can fail!
+  - processes crash (sometimes)
+  - messages may or may not arrive (usually they do).
+- Functional (like Haskell)
+  - but strict.
+- Processes have a single "mailbox" instead of multiple channels
+** Exercise: remote procedure call.
+
+server: accepts arguments to the function + channel where to post the reply.
+gotcha: laziness!
+
+** Exercise: implement semaphore using channels & processes
+See the [[http://en.wikipedia.org/wiki/Semaphore_(programming)][wikipedia article]].
+
+server: manage the semaphore.
+queries: - get(channel to wake)
+         - put
+state of the server?
 
 ** Transformation: explicit continuations
 *** What is a continuation?
