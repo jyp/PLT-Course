@@ -1849,7 +1849,6 @@ Subnote: this crucially relies on the absence of side-effects.
 ** What if we have side effects+laziness?
 * Concurrent programming
 ** Disclaimer: Concurrent programming ≠ Parallel programming
-
 Parallel programming = expose (lack of) dependencies between parts of
 the computation, so that the computer can run subtasks in parallel.
 
@@ -1857,9 +1856,8 @@ Concurrent programming = spawn independent processes, which live
 independent lives (dependencies might come, but "after the fact").
 
 In summary:
-- parallelism: SPEED!
-- concurrency: distribution, redundancy, ...
-
+- parallelism: about /speed/.
+- concurrency: distribution, redundancy, etc.
 ** Motivation: the world is concurrent
 #+begin_quote
 The world is concurrent
@@ -1882,25 +1880,34 @@ For [[file:Process.hs][example]]:
 *** Exercise (⋆)
 - Run the above example
 - What is the output?
-** Shared state
-
+** Shared state (aka Concurrent + Imperative)
 http://hackage.haskell.org/packages/archive/base/4.4.1.0/doc/html/Data-IORef.html
 
 - Data.IORef newIORef 
 
 Big danger of "screwing up":
 
-x = x + 1 // x = x + 1
+: x = 0
+: x = x + 1   //   x = x + 1
+: x ???
+
+- more realistic example: two insertions in a balanced tree
+- In general: access to a shared ressource must be controlled.
 
 - How not to screw up?
   - Semaphores
   - Locks
-  - Critical section
+  - Critical sections
   - Synchronized classes
   - ...
 
-** Channel
+- ... but these solutions come with problems of their own:
+  - deadlocks
+  - livelocks
+  - priority inversion
+  - ...
 
+** Channels
 A channel is a medium for communication between processes. In Haskell,
 channels can be created with the newChan function. (Note that the
 channel is polymorphic, you may need to force the type to that you
@@ -1912,10 +1919,11 @@ communicate via a channel (c).
 Execute each line of the main function in ghci, and try to guess what
 will happen.
 
-** Idea:
+** Idea (Concurrent + Functional)
 One approach not to screw up:
 - NO shared state!
 - communication only happens via messages over channels.
+- In general: a shared ressource is managed by a single process
 - Approach of CSP, π-calculus, Erlang
 - The approach we'll describe here... using "Concurrent Haskell"
 
