@@ -671,8 +671,8 @@ Data.List module?
 
 Consider the program:
 \begin{verbatim}
-test1 xs = foldr 0 (+) xs
-test2 xs = foldr 1 (*) xs
+test1 xs = foldr (+) 0 xs
+test2 xs = foldr (*) 1 xs
 \end{verbatim}
 
 \begin{ex}{*,@4}
@@ -689,7 +689,7 @@ test2 xs = foldr 1 (*) xs
   Add the following line to the above program and repeat the above 2
   exercises.
 \begin{verbatim}
-test3 xs = map (\x -> if x == 0 then 'z' else chr x) xs
+replace a b xs = map (\x -> if x == a then b else x) xs
 \end{verbatim}
 \end{ex}
 
@@ -730,14 +730,15 @@ lambda abstraction.
 The only remaining higher-order function is filter.
 
 \question{*,@4} Write a version of filter which takes an explicit
-closure as an argument.  Hint: in order to test your program you need
-to define an example parameter, such as $(>= 0)$, etc.
+closure as an argument.  Remember to write (and use) an apply
+function. Hint: in order to test your program you need to define an
+example parameter, such as $(>= 0)$, etc.
 
 \question{*} Re-write sieve using the above.
 
 \question{**} Write a version of sieve in imperative (or OO) language,
 by translation of the answer to the previous exercise. (eg. you can
-not use arrays instead of lists).
+not use arrays instead of lists). (Hint: write this one as a recursive program).
 
 \subsection{Explicit state}
 
@@ -756,11 +757,38 @@ usage of \emph{IP}.
 
 
 \subsection{Laziness}
-There are no lazy languages that permit mutation.  \question{***} Why not?
+There are no lazy languages that permit mutation.  \question{***, @5} Why not?
 
 \subsubsection{Lazy Dynamic Programming}
 
-\question{*} Write the Floyd-Warshall algorithm in your favourite
+Consider a the function computing the fibonacci sequence:
+\begin{verbatim}
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n-1) + fib (n-2)
+\end{verbatim}
+
+\question{-} Estimate the time-complexity of computing $\mathsf{fib}\,n$.
+
+One can make the above computation take linear time by saving the
+intermediate results in an array:
+\begin{verbatim}
+fibs[0] = 0
+fibs[1] = 1
+for i = 2 to n do
+  fibs[n] = fibs[n-1] + fibs[n-2]
+\end{verbatim}
+
+\question{*} Instead of specifying the order of filling the array via
+an imperative algorithm, let Haskell's lazy evaluation take care of it.
+Write the definition of the array $\mathsf{fibs}$ in Haskell.
+
+\question{*} What portion of the array is forced when
+$\mathsf{fibs}!k$ is accessed? Draw the graph of computation
+dependencies for $k=5$.
+
+
+\question{*, @5} Write the Floyd-Warshall algorithm in your favourite
 imperative language. Assume that there is no weight on edges; and
 you're only interested in whether there is a path between two given
 nodes, not the number of steps in the path.
@@ -771,11 +799,10 @@ Note that the best-case performance is Cubic.
 cell in a matrix. (What do you need to do to make this at all
 possible?)
 
-\question{*} Using the same formula, fill the Roy-Warshall matrix
+\question{*, @5} Using the same formula, fill the Roy-Warshall matrix
 using an array comprehension in a lazy language (optionally use
-explicit thunks for the contents of each cell.)
-
-\question{**} Discuss the best-case performance.
+explicit thunks for the contents of each cell). Discuss the best-case
+performance.
 
 \question{-} Does your favourite spreadsheet program have strict, or
 lazy logical disjunction operator? Test it.
@@ -829,13 +856,13 @@ the \verb!sieve! function also works given the {\em infinite} list
 prime numbers.
 
 
-\question{*} How would you find the first 100 prime numbers?
+\question{*, @5} How would you find the first 100 prime numbers?
 
 Remark: start by answering the following questions on a simpler
 algorithm, for example the function \textsf{enumFrom} which generates
 the infinite list of numbers starting at a given one.
 
-\begin{ex}{*} Translate sieve to use explicit thunks (as in the lecture)
+\begin{ex}{*, @5} Translate sieve to use explicit thunks (as in the lecture)
 \end{ex}
 
 Oh noes, this introduced higher-order function(s).
@@ -848,7 +875,7 @@ You know what's coming...
 
 \question{***} Remove higher-orderness using the best technique available.
 
-\begin{ex}{**}
+\begin{ex}{**, @5}
   Write a version of lazy sieve in imperative (or OO)
 language.
 \end{ex}
@@ -864,7 +891,7 @@ you see.
 
 \subsection{Channels and Processes}
 
-\begin{ex}{*}
+\begin{ex}{*, @5}
   Write a process that manages a bank account. It has a channel for
   queries; which can be deposits and withdrawals. The answer is posted
   to a channel that comes with the query.  (Note: you cannot use
@@ -882,7 +909,7 @@ you see.
   accordingly.
 \end{ex}
 
-\begin{ex}{**}
+\begin{ex}{**, @5}
   Is the total amount of money a constant of your system? How can you
   ensure that it is? Write the corresponding code.
 \end{ex}
