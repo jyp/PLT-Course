@@ -2,6 +2,16 @@ Programming paradigms DAT121
 
 https://www.student.chalmers.se/sp/programplan?program_id=771
 
+Hard bits in the course:
+
+
+- Explicit state
+- Thunks 
+
+
+- Channels: can be hard for "new" people. 
+
+
 * Courses elsewhere
 ** Stanford cs107 
  http://see.stanford.edu/see/courseinfo.aspx?coll=2d712634-2bf1-4b55-9a3a-ca9d470755ee
@@ -66,3 +76,5 @@ Rough budget:
 
 * Tasks:
 ** DONE Create course homepage
+
+

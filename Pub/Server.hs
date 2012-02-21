@@ -8,20 +8,19 @@ data Connect = Connect (Chan Request) (Chan Reply)
 type Reply = String
 
 -- The client can only "tell" these two things to the server:
-data Request = Login String 
-             | Password String 
+type Request = String 
 
 ------------------------------------------
 -- Server code:
 
 handleClient input output = do
   writeChan output "What is your name?"
-  Login name <- readChan input
+  name <- readChan input
   writeChan output "What is your quest?"
-  Password pass <- readChan input
-  case name /= "King Arthur" || pass /= "Holy Grail"  of
-    False -> writeChan output "Incorrect login or password"
+  pass <- readChan input
+  case name == "King Arthur" && pass == "Holy Grail"  of
     True  -> writeChan output "You shall pass!"
+    False -> writeChan output "Incorrect login or password"
   
 server c = do  
   Connect input output <- readChan c
