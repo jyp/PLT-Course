@@ -1605,7 +1605,7 @@ safePrint    line      s1 =
 Generic way to sequence two 'IP a':
 
 #+begin_src haskell
-andThen : IP a -> IP b -> IP b
+andThen :: IP a -> IP b -> IP b
 f `andThen` g = \s0 -> let (s1,a) = f s0
                            (s2,b) = g s1
                        in  (s2,b)
@@ -1615,7 +1615,7 @@ But what if the 2nd program uses the returned value of the 1st?
 Then (in general) the 2nd program must depend on 'a':
 
 #+begin_src haskell
-andThen : IP a -> (a -> IP b) -> IP b
+andThen :: IP a -> (a -> IP b) -> IP b
 f `andThen` g = \s0 -> let (s1,a) = f s0
                            (s2,b) = g a s1
                        in  (s2,b)
@@ -1627,7 +1627,8 @@ you special syntax for imperative programming. If you give:
 #+begin_src haskell
 instance Monad IP where
   (>>=) = andThen
-  return x = x -- when x does not depend on the state:
+  return x = \s -> (s,x)
+  -- when x does not depend on the state
 #+end_src
 
 Then the following is valid:
@@ -1687,13 +1688,41 @@ Did you know that side effects...
 The behaviour of sin depends only on its arguments; whereas the
 behaviour of getChar depends on an (implicit) environment.
 
-*** Testing is MUCH easier
+In other words, all the dependencies of a function are /explicit/.
 
+**** Attention: constrast with the Haskell function getChar
+
+: getChar :: IO Char
+
+and remember... 
+
+: IO x  ≃   StateOfTheWorld -> (StateOfTheWorld, x)
+
+
+**** TODO: sin + cos
+
+*** Testing is /much/ easier
+
+Example: 
+
+
+- emulate the user pressing key 'x'
+: a = getChar()
+- verify a == 'x'
+
+Contrast with:
+
+: sin π == 0 
+
+In general:
 - no guesswork to know what a function depends on
 - can (relatively) easily explore the input space of the function
 
 *** More optimisations possible (which ones?)
-*** Easier concurrency (cf. Erlang)
+- CSE (gotchas)
+- Fusion
+- ...
+*** Easier parallelism/concurrency (cf. Erlang)
 
 :    x = 0
 :    x = x+1 |in parallel with| x = x + 1
@@ -1701,12 +1730,15 @@ behaviour of getChar depends on an (implicit) environment.
     Value of x ?     
 
 *** Sharing is ALWAYS safe! (see in a moment)
-
 *** Possible to use laziness  (see in a moment)
-
 ** Copying and sharing
 
 Consider a binary tree:
+
+#+begin_src 
+data Tree = Leaf
+          | Bin Tree Int Tree
+#+end_src
 
 #+begin_src dot :file tree-orig.svg :cmdline -Kdot -Tsvg
 digraph G {
@@ -1717,9 +1749,19 @@ digraph G {
 }
 #+end_src
 
-And say we insert 13 in it. The new tree /shares/ most of its contents
-with the old one.
+And say we insert 13 in it using the function: 
 
+#+begin_src haskell
+insert x Leaf = Bin Leaf x Leaf
+insert x (Bin l y r) | x < y = Bin (insert x l) y r
+                     | ...
+#+end_src
+
+
+The new tree /shares/ most of its contents
+with the old one:
+
+FIXME: verify this diagram
 #+begin_src dot :file tree-orig.svg :cmdline -Kdot -Tsvg
 digraph G {
   10 -> 5 -> 2; 
@@ -1730,14 +1772,15 @@ node [color=red];
 edge [color=red];
 
 new10 [label="10"];
-new20 [label="10"];
-new13 [label="10"];
+new20 [label="20"];
+new12 [label="12"];
+new13 [label="13"];
 
 new10 -> 5;
 new10 -> new20;
-new20 -> new13;
+new20 -> new12;
 new20 -> 22;
-new13 -> 12;
+new12 -> new13;
   
 }
 #+end_src
@@ -1745,14 +1788,13 @@ new13 -> 12;
 *** Question: which nodes will be considered as garbage during the next collection? 
 
 ** Laziness
-
 *** Question: How much memory is used by map?
 Assuming
 
 - l : List Int
 - length l = n
 
-How much is consumed by:
+How much memory is consumed by:
 
     : map (+1) l
 
@@ -1765,12 +1807,14 @@ How much is consumed by:
 ** Paradigm shift: composition of transformations
 
 - When writing a search function, the programmer can ALWAYS (and ONLY)
-  return a list of ALL possible results.
-
-- Programs can be understood as 
-
+  return a list of ALL possible results (instead of "the first one").
+- Programs can be understood as "stream processors"
 - Dogma: no side effect (eg. no global state)
 
+** Paradigm shift: generate and prune
+- Generate infinite/large data structure
+- Only visit relevant parts 
+- Examples: game tree, processes
 *** Trivia: what is the most used lazy language?
 - Probably SQL!
 - But remember also unix-shell pipes:
@@ -1802,9 +1846,9 @@ Subnote: this crucially relies on the absence of side-effects.
 - First introduce explicit thunks,
 - Then transform them into closures!
 
+** What if we have side effects+laziness?
 * Concurrent programming
 ** Disclaimer: Concurrent programming ≠ Parallel programming
-
 Parallel programming = expose (lack of) dependencies between parts of
 the computation, so that the computer can run subtasks in parallel.
 
@@ -1812,9 +1856,8 @@ Concurrent programming = spawn independent processes, which live
 independent lives (dependencies might come, but "after the fact").
 
 In summary:
-- parallelism: SPEED!
-- concurrency: distribution, redundancy, ...
-
+- parallelism: about /speed/.
+- concurrency: distribution, redundancy, etc.
 ** Motivation: the world is concurrent
 #+begin_quote
 The world is concurrent
@@ -1837,25 +1880,34 @@ For [[file:Process.hs][example]]:
 *** Exercise (⋆)
 - Run the above example
 - What is the output?
-** Shared state
-
+** Shared state (aka Concurrent + Imperative)
 http://hackage.haskell.org/packages/archive/base/4.4.1.0/doc/html/Data-IORef.html
 
 - Data.IORef newIORef 
 
 Big danger of "screwing up":
 
-x = x + 1 // x = x + 1
+: x = 0
+: x = x + 1   //   x = x + 1
+: x ???
+
+- more realistic example: two insertions in a balanced tree
+- In general: access to a shared ressource must be controlled.
 
 - How not to screw up?
   - Semaphores
   - Locks
-  - Critical section
+  - Critical sections
   - Synchronized classes
   - ...
 
-** Channel
+- ... but these solutions come with problems of their own:
+  - deadlocks
+  - livelocks
+  - priority inversion
+  - ...
 
+** Channels
 A channel is a medium for communication between processes. In Haskell,
 channels can be created with the newChan function. (Note that the
 channel is polymorphic, you may need to force the type to that you
@@ -1867,10 +1919,11 @@ communicate via a channel (c).
 Execute each line of the main function in ghci, and try to guess what
 will happen.
 
-** Idea:
+** Idea (Concurrent + Functional)
 One approach not to screw up:
 - NO shared state!
 - communication only happens via messages over channels.
+- In general: a shared ressource is managed by a single process
 - Approach of CSP, π-calculus, Erlang
 - The approach we'll describe here... using "Concurrent Haskell"
 

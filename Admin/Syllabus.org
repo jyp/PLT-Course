@@ -68,6 +68,14 @@ After completion of the course the student is expected to be able to
 The course is examined by an individual written examination, carried
 out in examination hall.
 
+Students are asked
+- to demonstrate the expected "knowledge and understanding" by answering questions testing those.
+- to transcode small programs from a paradigm to another, directly
+  testing the "skills and abilities" listed above.
+
+The goals under "judgement and approach" will be reached by the
+diligent student via thorough practice of the above two tasks.
+
 A student who has failed a test twice has the right to change
 examiners, if it is possible. A written application should be sent to
 the Department.

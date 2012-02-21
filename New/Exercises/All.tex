@@ -742,8 +742,10 @@ lambda abstraction.
 
 The only remaining higher-order function is filter.
 
-\question{*,@4} Write a version of filter which takes an explicit closure as an argument. 
-Remember to write (and use) an apply function.
+\question{*,@4} Write a version of filter which takes an explicit
+closure as an argument.  Remember to write (and use) an apply
+function. Hint: in order to test your program you need to define an
+example parameter, such as $(>= 0)$, etc.
 
 \question{*} Re-write sieve using the above.
 
@@ -771,6 +773,33 @@ usage of \emph{IP}.
 There are no lazy languages that permit mutation.  \question{***, @5} Why not?
 
 \subsubsection{Lazy Dynamic Programming}
+
+Consider a the function computing the fibonacci sequence:
+\begin{verbatim}
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n-1) + fib (n-2)
+\end{verbatim}
+
+\question{-} Estimate the time-complexity of computing $\mathsf{fib}\,n$.
+
+One can make the above computation take linear time by saving the
+intermediate results in an array:
+\begin{verbatim}
+fibs[0] = 0
+fibs[1] = 1
+for i = 2 to n do
+  fibs[n] = fibs[n-1] + fibs[n-2]
+\end{verbatim}
+
+\question{*} Instead of specifying the order of filling the array via
+an imperative algorithm, let Haskell's lazy evaluation take care of it.
+Write the definition of the array $\mathsf{fibs}$ in Haskell.
+
+\question{*} What portion of the array is forced when
+$\mathsf{fibs}!k$ is accessed? Draw the graph of computation
+dependencies for $k=5$.
+
 
 \question{*, @5} Write the Floyd-Warshall algorithm in your favourite
 imperative language. Assume that there is no weight on edges; and
