@@ -1965,14 +1965,6 @@ processes. file:CSPVariable.hs
 server: accepts arguments to the function + channel where to post the reply.
 gotcha: laziness!
 
-** Exercise: implement semaphore using channels & processes
-See the [[http://en.wikipedia.org/wiki/Semaphore_(programming)][wikipedia article]].
-
-server: manage the semaphore.
-queries: - get(channel to wake)
-         - put
-state of the server?
-
 ** Transformation: explicit continuations
 *** What is a continuation?
 A continuation is simply the part of the program /execution/ that will
@@ -1994,13 +1986,6 @@ Same with explicit continuations:
 There are more models for concurrency than chanels + processes
 (eg. revisions)
 
-** Paradigm shift:
-- use ONLY relations (no more functions)
-- everything is invertible!
-- everything is slow 
-  + As far as I know, there does not exist a "sufficiently smart
-    compiler" for logic programming yet.
-  + restricted to very specific domains
 * Logic programming
 ** Logic: a crash course (✪)
 *** Question: what is *a logic*?
@@ -2036,7 +2021,6 @@ There are more models for concurrency than chanels + processes
 ----------------
        A
 
-
      A ∧ B
 ----------------
        B
@@ -2049,18 +2033,14 @@ There are more models for concurrency than chanels + processes
            B(a)
 #+end_example
 
-
 Famously:
-
 #+begin_example
    ∀x. Man(x) ⇒ Mortal(x)          Man(socrates)
  ------------------------------------------------
                    Mortal(socrates)
 #+end_example
 
-**** Example(⋆⋆⋆): application (specialisation)
-
-
+**** Example(⋆⋆⋆⋆): application
 #+begin_example
    ∀x:A ⇒ B(x)          a:A
 ----------------------------
@@ -2069,12 +2049,13 @@ Famously:
 
 
 Famously:
-
 #+begin_example
    ∀x:Man ⇒ Mortal(x)          socrates : Man
  ------------------------------------------------
                    Mortal(socrates)
 #+end_example
+
+Note the similarity with function application!
 
 *** Proof
 
@@ -2246,6 +2227,9 @@ and reverse to relations.
 - Sadly, often inefficient
   + Performance of functions inverted using the above receipe can be
     terrible.
+  + As far as I know, there does not exist a "sufficiently smart
+    compiler" for logic programming yet.
+  + restricted to very specific domains
 
 ** Other example: family tree
 #+INCLUDE "Family.curry" src curry
