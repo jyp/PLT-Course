@@ -51,7 +51,7 @@ See table below for detail of contents.
 | EX 5 | Exercises marked with @5 in file:All.pdf                             | N, A |
 | CP 2 | Explicit continuations                                               |      |
 | LP 1 | Unification                                                          |      |
-| EX 6 |                                                                      | N, A |
+| EX 6 | Exercises marked with @6 in file:All.pdf                             | N, A |
 | LP 2 | Relations, Search as list of successes                               |      |
 | Q&A  | Questions and answers                                                |      |
 
