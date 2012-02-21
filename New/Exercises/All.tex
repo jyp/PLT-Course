@@ -418,6 +418,19 @@ without loops (only recursion allowed).
 \question{**}
 Translate the quicksort algorithm.
 
+\question{**} 
+Implement the following algorithm as a recursive
+function. (And remove the loop!)
+\begin{verbatim}
+a = 0
+b = 1
+for i in [1..n] do
+  c = a + b
+  a = b
+  b = c
+return a  
+\end{verbatim}
+
 \section{Object-Oriented Programming}
 
 Consider the following code, in C\# syntax:
@@ -871,7 +884,7 @@ you see.
 
 \begin{ex}{*}
   Write a client for the above process that move ``money'' from an
-  account to another.
+  account to another. (``transaction'')
 \end{ex}
 
 \begin{ex}{*}
@@ -881,8 +894,21 @@ you see.
 \end{ex}
 
 \begin{ex}{**, @5}
-  Is the total amount of money a constant of your system? How can you
-  ensure that it is? Write the corresponding code.
+  Is the total amount of money a constant of your system? (Consider
+  that transactions may fail in the ``middle''.) How can you ensure
+  that it is?  Write the corresponding code.
+\end{ex}
+
+\begin{ex}{*}
+  Implement a process that manages a semaphore.  The process should
+  implement the requests P and V. (See the wikipedia article for
+  explanation of semaphore, P and
+  V). \url{http://en.wikipedia.org/wiki/Semaphore_(programming)}
+\end{ex}
+
+\begin{ex}{*}
+  Implement two library functions that help communicate with the above
+  server. (Hint: you may have to create channels.)
 \end{ex}
 
 \subsection{Explicit continuations}
@@ -1120,8 +1146,9 @@ c = [f x | z <- a, y <- g z, x <- h y, p v]
 \end{ex}
 
 \begin{ex}{*}
-  Assume that the above functions are translated to relational
-  style. What would be natural types for them?
+  Assume that the above functions/values (f, a, g, h and p) are
+  translated to relational style. What would be natural types for
+  them?
 \end{ex}
 
 \begin{ex}{*}
