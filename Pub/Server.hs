@@ -1,13 +1,9 @@
 import Control.Concurrent
 import Control.Concurrent.Chan
 
-
-
 data Connect = Connect (Chan Request) (Chan Reply)
 
 type Reply = String
-
--- The client can only "tell" these two things to the server:
 type Request = String 
 
 ------------------------------------------
@@ -31,6 +27,7 @@ server c = do
 -------------------------------------------
 -- Startup code 
 
+startServer :: IO (Chan Connect)
 startServer = do  
   c <- newChan
   forkIO (server c)

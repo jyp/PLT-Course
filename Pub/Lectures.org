@@ -1973,6 +1973,15 @@ server: accepts arguments to the function + channel where to post the reply.
 gotcha: laziness!
 
 ** Transformation: explicit continuations
+
+Possible meaning for Concurrent Programming: processes are executed in
+an interleaved fashion. A process can be "put on hold" at some point,
+and control is given to some other process. To understand this, we
+must first capture the notion of a "running process"
+precisely. Namely, when a process is stopped, we need to have an
+object that represents /how to continue/ when control is returned to
+it.
+
 *** What is a continuation?
 A continuation is simply the part of the program /execution/ that will
 take place after some given point.
