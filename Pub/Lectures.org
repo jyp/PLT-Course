@@ -1939,7 +1939,14 @@ Reading/Writing to a channel is a harmless kind of side effect... Or is it?
   - reading from a channel is not a proper function
 
 In fact, one can simulate an updatable variable using channels and
-processes. file:CSPVariable.hs
+processes. 
+
+See
+file:SimpleVariableManager.hs
+for a simple example.
+
+Or this one for an "serious" version.
+file:CSPVariable.hs
 #+INCLUDE "CSPVariable.hs" src haskell
 
 *** Exercises
