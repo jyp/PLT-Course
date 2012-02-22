@@ -2094,13 +2094,17 @@ In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_lang
 - Install PAKCS (recommended)
   + MacOS (tested on Lion) install instructions:
     - Install Haskell platform
-    - sudo ln -s /usr/bin/gcc /Developer/usr/bin/
-    - Install swi-prolog
+    - For some reason the Haskell platform seems confused with the
+      location of gcc. Fix it:
+       : sudo ln -s /usr/bin/gcc /Developer/usr/bin/
+    - Install swi-prolog *5.10*
+      http://www.swi-prolog.org/download/stable
+      ATTENTION: It does not work with 6.0!
     - download pakcs and unzip
     - ./configure-pakcs
     - make
     - interpreter is bin/pakcs
-  + Load file:   
+  + Run the interpreter and load file:   
      :  :l Family.curry
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
 ** Unification
