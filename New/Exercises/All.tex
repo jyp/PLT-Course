@@ -955,19 +955,19 @@ session = do
    placeOrder items address
 \end{verbatim}
 
-\begin{ex}{*}
+\begin{ex}{*, @6}
   What is the purpose, and type of the webForm primitive?
 \end{ex}
 
-\begin{ex}{**}
+\begin{ex}{**, @6}
   Transform the type of webForm to take a continuation.
 \end{ex}
 
-\begin{ex}{**}
+\begin{ex}{**, @6}
   Break the above code into continuations, linked by the webForm primitive.
 \end{ex}
 
-\begin{ex}{***}
+\begin{ex}{***, @6}
   Outline what the webForm function should do. Discuss in particular
   what happens if the user presses the ``back'' button in their
   browser.
@@ -988,18 +988,18 @@ becomes:
 
 Expr → (Int → a) → a
 
-\question{*} Write a wrapper for the interpreter which has the above type
+\question{*, @6} Write a wrapper for the interpreter which has the above type
 
 % wrapper expr k = k (eval expr)
 
 
-\question{***} Replace every recursive call in the interpreter by a
+\question{***, @6} Replace every recursive call in the interpreter by a
 call to the wrapper.  (Hint: you must decide what is the
 ``continuation'' for every call, and for this you must choose an order
 of evaluation!)
 % eval (Add x y) = wrapper x (\a -> wrapper y (\b -> a + b))
 
-\question{***} Unfold the usage of the interpreter in the wrapper.
+\question{***, @6} Unfold the usage of the interpreter in the wrapper.
 
 % wrapper (Add x y) k = k (wrapper x $ \a -> wrapper y $ \ b -> a + b)
 
@@ -1014,7 +1014,7 @@ of evaluation!)
 \section{Logic Programming}
 \subsection{Metavariables and unification}
 
-\begin{ex}{*}
+\begin{ex}{*, @6}
 What is the result of the following unifications?
 Try to come up with the result without using the prolog interpreter!
 
@@ -1069,7 +1069,7 @@ Note that the same metavariable (G271 in my implementation) is present twice in
 the result. Note that we can get the original result back by unifying this
 metavariable with the empty list.
 
-\begin{question}{**}
+\begin{question}{**, @6}
 Write a predicate toList/2 to get back to the normal list representation.
 
 \answer{
@@ -1084,7 +1084,7 @@ toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
 Given that representation for lists, it is possible to perform concatenation by
 doing unification only!
 
-\begin{ex}{**}
+\begin{ex}{**, @6}
 Write a predicate dconcat/3 to concatenate two difference lists, without
 using the direct representation.
 

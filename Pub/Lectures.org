@@ -1939,7 +1939,14 @@ Reading/Writing to a channel is a harmless kind of side effect... Or is it?
   - reading from a channel is not a proper function
 
 In fact, one can simulate an updatable variable using channels and
-processes. file:CSPVariable.hs
+processes. 
+
+See
+file:SimpleVariableManager.hs
+for a simple example.
+
+Or this one for an "serious" version.
+file:CSPVariable.hs
 #+INCLUDE "CSPVariable.hs" src haskell
 
 *** Exercises
@@ -1966,6 +1973,15 @@ server: accepts arguments to the function + channel where to post the reply.
 gotcha: laziness!
 
 ** Transformation: explicit continuations
+
+Possible meaning for Concurrent Programming: processes are executed in
+an interleaved fashion. A process can be "put on hold" at some point,
+and control is given to some other process. To understand this, we
+must first capture the notion of a "running process"
+precisely. Namely, when a process is stopped, we need to have an
+object that represents /how to continue/ when control is returned to
+it.
+
 *** What is a continuation?
 A continuation is simply the part of the program /execution/ that will
 take place after some given point.
@@ -2076,6 +2092,16 @@ In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_lang
    [[http://www-ps.informatik.uni-kiel.de/currywiki/documentation/tutorial][the Curry tutorial]]
 *** Interpreter
 - Install PAKCS (recommended)
+  + MacOS (tested on Lion) install instructions:
+    - Install Haskell platform
+    - sudo ln -s /usr/bin/gcc /Developer/usr/bin/
+    - Install swi-prolog
+    - download pakcs and unzip
+    - ./configure-pakcs
+    - make
+    - interpreter is bin/pakcs
+  + Load file:   
+     :  :l Family.curry
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
 ** Unification
 

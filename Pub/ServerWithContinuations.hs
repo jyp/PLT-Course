@@ -9,9 +9,10 @@ instance Show (a -> b) where
     show f = "<function>"
 
 data ChanelState = ChanelState {
-      chanelMessages :: [Message],
-      chanelListeners :: [Message -> Process]
+      chanelMessages :: [Message], -- messages pending
+      chanelListeners :: [Message -> Process] -- processes blocked on the chanel
     } deriving Show
+-- INVARIANT: if the system is blocked, either list is empty
 
 data System = System {
       readyProcesses :: [Process],
@@ -55,12 +56,15 @@ unblockChannels chs = (chs',concat ps)
 ----------------------
 -- System calls
 
-fork :: Process -> Process -> Process
+fork :: Process -> Process -> (System -> System)
+     -- Process -> Process -> Process
 fork p k s = scheduler $ addProcess p $ addProcess k $ s
 
 -- | Write a message to a channel, and continue with 'k'
 writeChan :: Chan -> String -> Process -> Process
-writeChan c msg k s = scheduler $ updateChan c (addMessage msg) $ addProcess k $ s
+writeChan c msg k s = scheduler $ 
+                      updateChan c (addMessage msg) $
+                      addProcess k $ s
 
 
 -- | Read a message from a channel, and continue with 'k'
@@ -79,13 +83,14 @@ newChan k (System ps chs) = scheduler $ addProcess (k ch) $ (System ps (chs ++ [
 
 
 die :: Process
+    -- System -> System
 die = scheduler -- just go back to the scheduler to see if there is more work to do.
 
 
 -- helpers
 
 -- | Add a messeage to a channel
-addMessage m (ChanelState ms ws) = ChanelState (m:ms) ws
+addMessage m (ChanelState ms ws) = ChanelState (ms++[m]) ws
 
 -- | Add a listener to a channel
 addListener w (ChanelState ms ws) = ChanelState ms (w:ws)
@@ -105,16 +110,16 @@ data Connect = Connect Chan Chan
 ------------------------------------------
 -- Server code:
 
-handleClient :: Chan -> Chan -> Process -> Process
-handleClient input output k = 
-  writeChan output "What is your name?" $
-  readChan input $ \name ->
-  writeChan output "What is your quest?" $
-  readChan input $ \pass -> 
+handleClient :: Chan -> Chan -> Process
+handleClient input output = 
+  writeChan output "What is your name?" (
+  readChan input ( \name ->
+  writeChan output "What is your quest?" (
+  readChan input ( \pass -> 
   (case name == "King Arthur" && pass == "Holy Grail"  of
-     False -> writeChan output "Incorrect login or password" 
-     True  -> writeChan output "You shall pass!") $
-  k
+     False -> writeChan output "Incorrect login or password" die
+     True  -> writeChan output "You shall pass!" die)
+  ))))
   
 
 server c k = 
@@ -122,10 +127,10 @@ server c k =
   let [d1,d2] = chs
       input  = read [d1]
       output = read [d2]
-  in fork (handleClient input output die) $
+  in fork (handleClient input output) $
      server c k
     
-
+startServer :: (Chan -> Process) -> Process
 startServer k = 
   newChan $ \c ->
   fork (server c die) $
