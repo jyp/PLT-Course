@@ -52,7 +52,7 @@ tex = do
   
 
 pub = system ["rsync", "-r", ".",
-          "bernardy@remote13.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
+          "bernardy@remote12.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
 
 action = do
   exercises

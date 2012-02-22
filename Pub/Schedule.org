@@ -29,7 +29,7 @@ https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=201
 |    4 |   0206 | EX 3      | CHARM     | FP 3      | Q&A   |
 |    5 |   0213 | EX 4      | FP 4      | CP 1      | Q&A   |
 |    6 |   0220 | EX 5      | CP 2      | LP 1      | Q&A   |
-|    7 |   0227 | EX 6      | LP 2      | Q&A       | %     |
+|    7 |   0227 | EX 6      | LP 2      | Test exam | %     |
 
 See table below for detail of contents.
 
