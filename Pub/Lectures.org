@@ -2076,6 +2076,16 @@ In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_lang
    [[http://www-ps.informatik.uni-kiel.de/currywiki/documentation/tutorial][the Curry tutorial]]
 *** Interpreter
 - Install PAKCS (recommended)
+  + MacOS (tested on Lion) install instructions:
+    - Install Haskell platform
+    - sudo ln -s /usr/bin/gcc /Developer/usr/bin/
+    - Install swi-prolog
+    - download pakcs and unzip
+    - ./configure-pakcs
+    - make
+    - interpreter is bin/pakcs
+  + Load file:   
+     :  :l Family.curry
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
 ** Unification
 
