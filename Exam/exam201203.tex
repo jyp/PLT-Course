@@ -1,0 +1,332 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{listings}
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\usepackage{pgf, tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{arrows}
+
+\lstdefinelanguage{FSharp}
+      {morekeywords={let, new, match, inherit, abstract, with, rec,
+          open, module, namespace, type, of, member, and, for, in, do,
+          begin, end, fun, function, try, mutable, if, then, else,
+          class, interface, end},
+    keywordstyle=\color{blue},
+    basicstyle = \small,
+    sensitive=false,
+    morecomment=[l][\color{green!50!black!80}]{///},
+    morecomment=[l][\color{green!50!black!80}]{//},
+    morecomment=[s][\color{green!50!black!80}]{{(*}{*)}},
+    morestring=[b]",
+    stringstyle=\color{red},
+    columns=fullflexible
+    }
+
+
+\lstdefinelanguage{Smalltalk}{
+  basicstyle=\ttfamily,
+  keywordstyle=\bfseries,
+  morekeywords={self,super,true,false,nil,thisContext}, % This is overkill
+  morestring=[d]',
+  morecomment=[s]{"}{"},
+  alsoletter={\#:},
+  escapechar={!},
+}[keywords,comments,strings]
+
+
+\newcommand{\Blue}[1]{\color{blue}#1\color{black}\xspace}
+
+
+\usepackage{array}
+% This is needed because raggedright in table elements redefines \\:
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\let\PBS=\PreserveBackslash
+
+%%%%%%%%%%%%%% 
+\newcommand{\solution}[1] {}
+%\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
+
+%\newcommand{\comment}[1]{}
+\newcommand{\comment}[1]{\marginpar{#1}}
+
+
+\begin{document}
+\newcommand{\examtime}{14:00, March 9th, 2012}
+\newcommand{\points}[1]{\marginpar{\bf #1 points}}
+\noindent
+\begin{tabular}{lr}
+CHALMERS TEKNISKA H\"OGSKOLA &\examtime{}.\\
+Dept. of Computer Science and Engineering & Programming Paradigms\\
+Jean-Philippe Bernardy                 & DAT121 / DIT331(GU) \\
+\end{tabular}
+
+\vspace{2.5cm} \noindent
+\begin{center} {\LARGE
+Exam in Programming Paradigms}
+\end{center}
+
+\vspace{1.5cm}
+
+\noindent
+\examtime{}.\\
+\begin{tabular}{ll}
+\textbf{Examiner:} &  John Hughes  \\
+\textbf{Lecturer:} & Jean-Philippe Bernardy
+\end{tabular}
+\vspace{1cm}
+
+\noindent
+Permitted aids:\\
+English-Swedish or English-other language dictionary.
+
+There are 6 questions: each worth 10 points. The total sum is 60
+points.  Some questions come with \emph{remarks}: you must take those
+into account.  Some questions come with \emph{hints}: you may ignore
+those.
+
+
+\textbf{Chalmers:}
+24 points is required to pass (grade 3), 36 points is required for
+grade 4, and 48 points is required for grade 5. 
+
+\textbf{GU:} 
+24 points is required to pass (grade G) and 42 points is
+required for grade VG.
+
+
+\newpage
+\hfill\\
+\newpage
+
+
+\section{Explicit gotos}
+
+Consider the following optimised code for array copy:
+\begin{verbatim}
+  short *to, *from;
+  int count;
+  ...
+  {
+     /* pre: count > 0 */
+     int n = (count + 7) / 8;
+     switch(count % 8){
+       case 0:	do{     *to++ = *from++;
+       case 7:	        *to++ = *from++;
+       case 6:	        *to++ = *from++;
+       case 5:	        *to++ = *from++;
+       case 4:	        *to++ = *from++;
+       case 3:	        *to++ = *from++;
+       case 2:	        *to++ = *from++;
+       case 1:	        *to++ = *from++;
+                } while (--n > 0);
+     }
+  }
+\end{verbatim}
+
+Translate the above snippet to equivalent code that does not use
+\texttt{switch} nor \texttt{while}: use explicit gotos instead.
+
+Remark: you must retain the optimisation. Do not test the loop
+condition after each copy of a byte.
+
+\newpage
+\section{Objects from records}
+
+Consider the following code, which is an encoding of a class
+hierarchy, written in C.
+\begin{verbatim}
+
+struct C {
+   float x;
+   float y;
+};
+
+struct C {
+   void *n(B *p, C* q);
+   void *m(B *p, B *q);
+   int f;
+   int g;
+};
+
+struct A {
+   void *m(A *p, B *q);
+   int f;
+}
+
+void B_n(B* p, C* q) {
+  q->x += p->f;
+  q->y += p->g;
+}
+
+void B_m (B* p, B* q) {
+  q->f += p->f;
+  q->g += p->g;
+}
+
+void A_m(A* p, B* q) {
+  q->f += p->f;
+}
+\end{verbatim}
+
+Write the original class hierarchy in a C++-like or Java-like language.
+
+
+\newpage
+\section{Higher-order abstractions}
+
+Consider the following code:
+\begin{verbatim}
+concat [] = []
+concat (x:xs) = x ++ concat xs
+\end{verbatim}
+
+Express the same function in terms of the higher-order function
+\texttt{fold} provided below.  Remark: you may \emph{not} use
+recursion directly in your solution.
+
+\begin{verbatim}
+fold k f [] = k
+fold k f (x:xs) = f x (fold k f xs)
+\end{verbatim}
+
+\section{Closures}
+
+Consider the program:
+\begin{verbatim}
+f grades bonuses = zipWith (+) bonuses (filter (<48) grades)
+
+zipWith f [] [] = []
+zipWith f (x:xs) (y:xs) = f x y : zipWith f xs ys
+
+filter p [] = []
+filter p (x:xs) = if p x
+                  then x : filter p xs
+                  else filter p xs
+\end{verbatim}
+
+Translate the code to use explicit closures. 
+
+Remarks:
+\begin{itemize}
+\item All higher-order functions must be removed.
+\item You may not \emph{specialize} any higher-order function to the
+  cases where they are used here. Use closures!
+\end{itemize}
+
+\newpage
+\section{Laziness}
+
+In Haskell you can write a matrix comprehension like so:
+\begin{verbatim}
+matrix = array bounds [((x,y),valueAtIndex x y) | (x,y) <- range bounds]
+  where bounds =  ((lowx,highx),(lowy,highy))
+\end{verbatim}
+
+You can then access a cell $x,y$ in the array using $matrix!(x,y)$.
+
+For example, in this array the value at index $(x,y)$ contains $x ×
+y$: \texttt{example!(x,y) == x * y}.
+\begin{verbatim}
+example = array bounds [((x,y),x * y) | (x,y) <- range bounds]
+  where bounds =  ((0,0),(10,10))
+\end{verbatim}
+
+
+Consider the following algorithm to compute the Levenshtein distance between two strings:
+(see next page)
+\newpage
+\begin{verbatim}
+int LevenshteinDistance(char s[1..m], char t[1..n])
+{
+  // for all i and j, d[i,j] will hold the Levenshtein distance between
+  // the first i characters of s and the first j characters of t;
+  // note that d has (m+1)x(n+1) values
+  declare int d[0..m, 0..n]
+
+  for i from 0 to m
+    d[i, 0] := i // the distance of any first string to an empty second string
+  for j from 0 to n
+    d[0, j] := j // the distance of any second string to an empty first string
+
+  for j from 1 to n
+  {
+    for i from 1 to m
+    {
+      if s[i] = t[j] then
+        d[i, j] := d[i-1, j-1]       // no operation required
+      else
+        d[i, j] := minimum
+                   (
+                     d[i-1, j] + 1,  // a deletion
+                     d[i, j-1] + 1,  // an insertion
+                     d[i-1, j-1] + 1 // a substitution
+                   )
+    }
+  }
+
+  return d[m,n]
+}
+\end{verbatim}
+
+
+Using \emph{a single comprehension}, construct a matrix \texttt{d},
+such that \texttt{d!(i,j)} is the Levenshtein distance between the
+first \texttt{i} characters of \texttt{s} and the first \texttt{j}
+characters of \texttt{t}, assuming
+\begin{verbatim}
+s :: String
+t :: String
+\end{verbatim}
+
+Hints:
+\begin{itemize}
+\item You may also assume a predefined function \texttt{minimum}:
+\begin{verbatim}
+   minimum :: [Int] -> Int
+\end{verbatim}
+\item You can access the $\mbox{\texttt{i}}^{\mbox{th}}$ character of
+  string \texttt{s} with the expression \texttt{s!!(i-1)}.
+\end{itemize}
+
+\newpage
+\section{Functions to relations}
+
+Consider the function
+\begin{verbatim}
+fib :: Int -> Int
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n-1) + fib (n-2)
+\end{verbatim}
+
+Translate the function \texttt{fib} to a relation \texttt{fibo}, such that
+\begin{verbatim}
+       fibo x y z     is equivalent to      fib x y == z
+\end{verbatim}
+
+Remarks:
+\begin{itemize}
+\item You may not use the \emph{function} \texttt{fib} in the
+  translated version.
+\item Use a relation \texttt{plus} which coincides with addition:
+  \begin{verbatim}
+       plus x y z     is equivalent to      x + y == z
+\end{verbatim}
+
+\begin{verbatim}
+
+\end{verbatim}
+\end{itemize}
+
+Hint: you may want to start by writing the types of the
+\emph{relations} \texttt{fib} and \texttt{plus}.
+
+\end{document}
