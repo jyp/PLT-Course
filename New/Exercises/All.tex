@@ -1018,13 +1018,20 @@ of evaluation!)
 What is the result of the following unifications?
 Try to come up with the result without using the prolog interpreter!
 
-\begin{tabular}{c}
-a(X,Y) = a(b,c) \\
-a(X,Y) = a(Z,Z) \\
-a(X,X) = a(b,c) \\
-a(X) = a(b,b) \\
-a(X,X,Y) = a(Z,W,W) \\
-\end{tabular}
+% \begin{tabular}{rel}
+% a(X,Y) = a(b,c) \\
+% a(X,Y) = a(Z,Z) \\
+% a(X,X) = a(b,c) \\
+% a(X) = a(b,b) \\
+% a(X,X,Y) = a(Z,W,W) \\
+% \end{tabular}
+\begin{verbatim}
+a x y   =:= a b c where x, y free
+a y y   =:= a z z where x, y, z free
+a x x   =:= a b c where x free
+a x     =:= a b b where x free
+a x x y =:= a z w w where x, y, w, z free
+\end{verbatim}
 
 \answer{
 
@@ -1047,10 +1054,15 @@ the lectures). It uses unification in a clever way to that end.
 
 The difference-list representation for a list can be obtained as follows:
 
-\begin{prolog}
-fromList([],d(X,X)).
-fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
-\end{prolog}
+% \begin{prolog}
+% fromList([],d(X,X)).
+% fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
+% \end{prolog}
+
+\begin{verbatim}
+fromList [] = d x x where x free
+fromList (a:as) = ???
+\end{verbatim}
 
 
 A structure of the form \textsf{d(Out,In)} will represent the list
@@ -1061,9 +1073,12 @@ difference between Out and In: so for instance,
 $$[1,2] \longrightarrow d(1:2:3:4:[],3:4:[])$$
 
 You can check how fromList works by testing it:
-\begin{prolog}
-fromList([1,2,3],X).
-\end{prolog}
+% \begin{prolog}
+% fromList([1,2,3],X).
+% \end{prolog}
+\begin{verbatim}
+fromList [1,2,3] x where x free
+\end{verbatim}
 
 Note that the same metavariable (G271 in my implementation) is present twice in
 the result. Note that we can get the original result back by unifying this
@@ -1088,15 +1103,21 @@ doing unification only!
 Write a predicate dconcat/3 to concatenate two difference lists, without
 using the direct representation.
 
-\begin{prolog}
-dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
-\end{prolog}
+% \begin{prolog}
+% dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
+% \end{prolog}
 
+\begin{verbatim}
+dconcat x y z where x, y, z free
+fromList [1,2,3] x where x free
+fromList [4,5] y where y free
+toList z final where z, final free
+\end{verbatim}
 
 should produce:
 
 \begin{verbatim}
-Final = [1,2,3,4,5].
+final = [1,2,3,4,5].
 \end{verbatim}
 
 \answer{
