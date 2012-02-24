@@ -1,5 +1,4 @@
 -- Database programming in Curry: family relationships
--- (functional logic style with explicit functional dependencies)
 
 data Person = Adolf | Sybilla | Gustaf | Silvia | Victoria | Philip | Madeleine
 

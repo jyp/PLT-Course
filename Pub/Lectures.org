@@ -2099,12 +2099,14 @@ In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_lang
        : sudo ln -s /usr/bin/gcc /Developer/usr/bin/
     - Install swi-prolog *5.10*
       http://www.swi-prolog.org/download/stable
-      ATTENTION: It does not work with 6.0!
+      ATTENTION: Pakcs does not work with swi-prolog 6.0!
     - download pakcs and unzip
-    - ./configure-pakcs
-    - make
+    - build
+       : ./configure-pakcs
+       : make
     - interpreter is bin/pakcs
   + Run the interpreter and load file:   
+     :  .../pakcs/bin/pakcs
      :  :l Family.curry
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
 ** Unification
@@ -2118,12 +2120,6 @@ construct.
 #+begin_example
 f = ... x ... x ....
     where x free
-#+end_example
-
-Additionnally, variables declared in patterns are metavariables. /x/
-is a metavariable in the following.
-#+begin_example
-f x = ...
 #+end_example
 
 Two (arbitrary) values can be unified using the =:= operator.  On
@@ -2179,7 +2175,6 @@ fails
     : [x,y,z] =:= [w,x,y] 
 
 *** Unification failures
-
 **** Different structures
 
 The query 
@@ -2232,8 +2227,8 @@ We can turn this around and encode functions as their graphs.
 | source              | target                                                        |
 |---------------------+---------------------------------------------------------------|
 | f : A → B           | f : A → B → Success                                           |
-| definition: f x = y | assert: f x y = y                                             |
-| expression: f(x)    | expression: y (new free variable),  with the condition f(x,y) |
+| definition: f x = y | assert: f x y = success                                       |
+| expression: f(x)    | expression: y (new free variable),  with the condition f x y  |
 
 In the following [[file:Lists.curry][example]], we see transform the List functions append
 and reverse to relations.
