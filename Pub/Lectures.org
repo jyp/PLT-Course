@@ -1939,7 +1939,14 @@ Reading/Writing to a channel is a harmless kind of side effect... Or is it?
   - reading from a channel is not a proper function
 
 In fact, one can simulate an updatable variable using channels and
-processes. file:CSPVariable.hs
+processes. 
+
+See
+file:SimpleVariableManager.hs
+for a simple example.
+
+Or this one for an "serious" version.
+file:CSPVariable.hs
 #+INCLUDE "CSPVariable.hs" src haskell
 
 *** Exercises
@@ -1966,6 +1973,15 @@ server: accepts arguments to the function + channel where to post the reply.
 gotcha: laziness!
 
 ** Transformation: explicit continuations
+
+Possible meaning for Concurrent Programming: processes are executed in
+an interleaved fashion. A process can be "put on hold" at some point,
+and control is given to some other process. To understand this, we
+must first capture the notion of a "running process"
+precisely. Namely, when a process is stopped, we need to have an
+object that represents /how to continue/ when control is returned to
+it.
+
 *** What is a continuation?
 A continuation is simply the part of the program /execution/ that will
 take place after some given point.
@@ -2076,6 +2092,22 @@ In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_lang
    [[http://www-ps.informatik.uni-kiel.de/currywiki/documentation/tutorial][the Curry tutorial]]
 *** Interpreter
 - Install PAKCS (recommended)
+  + MacOS (tested on Lion) install instructions:
+    - Install Haskell platform
+    - For some reason the Haskell platform seems confused with the
+      location of gcc. Fix it:
+       : sudo ln -s /usr/bin/gcc /Developer/usr/bin/
+    - Install swi-prolog *5.10*
+      http://www.swi-prolog.org/download/stable
+      ATTENTION: Pakcs does not work with swi-prolog 6.0!
+    - download pakcs and unzip
+    - build
+       : ./configure-pakcs
+       : make
+    - interpreter is bin/pakcs
+  + Run the interpreter and load file:   
+     :  .../pakcs/bin/pakcs
+     :  :l Family.curry
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
 ** Unification
 
@@ -2088,12 +2120,6 @@ construct.
 #+begin_example
 f = ... x ... x ....
     where x free
-#+end_example
-
-Additionnally, variables declared in patterns are metavariables. /x/
-is a metavariable in the following.
-#+begin_example
-f x = ...
 #+end_example
 
 Two (arbitrary) values can be unified using the =:= operator.  On
@@ -2149,7 +2175,6 @@ fails
     : [x,y,z] =:= [w,x,y] 
 
 *** Unification failures
-
 **** Different structures
 
 The query 
@@ -2202,8 +2227,8 @@ We can turn this around and encode functions as their graphs.
 | source              | target                                                        |
 |---------------------+---------------------------------------------------------------|
 | f : A → B           | f : A → B → Success                                           |
-| definition: f x = y | assert: f x y = y                                             |
-| expression: f(x)    | expression: y (new free variable),  with the condition f(x,y) |
+| definition: f x = y | assert: f x y = success                                       |
+| expression: f(x)    | expression: y (new free variable),  with the condition f x y  |
 
 In the following [[file:Lists.curry][example]], we see transform the List functions append
 and reverse to relations.
@@ -2306,6 +2331,10 @@ digraph G {
 ** Exam :)
 - re-do the exercises
 - exam will be in the same style
+** More features we did not discuss:
+- Exceptions
+- Constraints
+- ...
 ** Explore the paradigms you like!
 ⟶ Take the dedicated courses 
 ** Invent your own paradigm!

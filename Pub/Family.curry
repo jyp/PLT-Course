@@ -1,5 +1,4 @@
 -- Database programming in Curry: family relationships
--- (functional logic style with explicit functional dependencies)
 
 data Person = Adolf | Sybilla | Gustaf | Silvia | Victoria | Philip | Madeleine
 
@@ -24,7 +23,7 @@ parent Silvia        Madeleine  = success
 
 -- exercises: define grandparent, grandgrandparent, ancestor, descendents
 
-sibling x y :: Person -> Person -> Success
+sibling :: Person -> Person -> Success
 sibling x y = parent z x & parent z y
    where z free
 
@@ -36,7 +35,6 @@ data Gender = Male | Female
 gender :: Person -> Gender
 gender Adolf = Male
 gender Gustaf = Male
-gender Catherine = Female
 gender Sybilla = Female
 gender Silvia = Female
 gender Madeleine = Female
