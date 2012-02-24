@@ -149,17 +149,17 @@ struct C {
    float y;
 };
 
-struct C {
+struct B {
    void *n(B *p, C* q);
-   void *m(B *p, B *q);
    int f;
+   void *m(B *p, B *q);
    int g;
 };
 
 struct A {
    void *m(A *p, B *q);
    int f;
-}
+};
 
 void B_n(B* p, C* q) {
   q->x += p->f;
@@ -227,16 +227,16 @@ Remarks:
 In Haskell you can write a matrix comprehension like so:
 \begin{verbatim}
 matrix = array bounds [((x,y),valueAtIndex x y) | (x,y) <- range bounds]
-  where bounds =  ((lowx,highx),(lowy,highy))
+  where bounds =  ((low_x,low_y),(high_x,high_y))
 \end{verbatim}
 
-You can then access a cell $x,y$ in the array using $matrix!(x,y)$.
+You can then access a cell $x,y$ in the array using \texttt{matrix!(x,y)}.
 
-For example, in this array the value at index $(x,y)$ contains $x ×
+For example, in this matrix of $100$ elements the value at index $(x,y)$ contains $x ×
 y$: \texttt{example!(x,y) == x * y}.
 \begin{verbatim}
 example = array bounds [((x,y),x * y) | (x,y) <- range bounds]
-  where bounds =  ((0,0),(10,10))
+  where bounds =  ((1,1),(10,10))
 \end{verbatim}
 
 
@@ -309,12 +309,12 @@ fib n = fib (n-1) + fib (n-2)
 
 Translate the function \texttt{fib} to a relation \texttt{fibo}, such that
 \begin{verbatim}
-       fibo x y z     is equivalent to      fib x y == z
+       fibo x y     is equivalent to      fib x == y
 \end{verbatim}
 
 Remarks:
 \begin{itemize}
-\item You may not use the \emph{function} \texttt{fib} in the
+\item You may not use the \emph{functions} \texttt{fib} nor \texttt{(+)} in the
   translated version.
 \item Use a relation \texttt{plus} which coincides with addition:
   \begin{verbatim}
@@ -327,6 +327,6 @@ Remarks:
 \end{itemize}
 
 Hint: you may want to start by writing the types of the
-\emph{relations} \texttt{fib} and \texttt{plus}.
+\emph{relations} \texttt{fibo} and \texttt{plus}.
 
 \end{document}

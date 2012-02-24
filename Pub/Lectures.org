@@ -2336,6 +2336,10 @@ digraph G {
 ** Exam :)
 - re-do the exercises
 - exam will be in the same style
+** More features we did not discuss:
+- Exceptions
+- Constraints
+- ...
 ** Explore the paradigms you like!
 ⟶ Take the dedicated courses 
 ** Invent your own paradigm!
