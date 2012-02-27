@@ -2253,8 +2253,7 @@ and reverse to relations.
   + if X known, Y is computed (f(X))
   + if Y known, X is computed (f-1(Y))  
   + Compute both directions with one piece of code
-  + Very cool!!!! (parser/pretty-printer,
-  compiler/decompiler...)
+  + Very cool!!!! (parser/pretty-printer, compiler/decompiler...)
 - Sadly, often inefficient
   + Performance of functions inverted using the above receipe can be
     terrible.
