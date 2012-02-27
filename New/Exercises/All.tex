@@ -1014,29 +1014,40 @@ of evaluation!)
 
 
 \section{Logic Programming}
+
+In this section, exercises are sometimes formulated both in Prolog and Curry syntax; as indicated in the margin.
+\providecommand{\Prolog}{{\tiny Prolog}}
+\providecommand{\Curry}{{\tiny Curry}}
 \subsection{Metavariables and unification}
 
 \begin{ex}{*, @6}
 What is the result of the following unifications?
-Try to come up with the result without using the prolog interpreter!
+Try to come up with the result without using the prolog/curry interpreter!
 
-% \begin{tabular}{rel}
-% a(X,Y) = a(b,c) \\
-% a(X,Y) = a(Z,Z) \\
-% a(X,X) = a(b,c) \\
-% a(X) = a(b,b) \\
-% a(X,X,Y) = a(Z,W,W) \\
-% \end{tabular}
+\Prolog{}
+\begin{prolog}
+a(X,Y) = a(b,c) 
+a(X,Y) = a(Z,Z) 
+a(X,X) = a(b,c) 
+e(X) = a(b,b) 
+d(X,X,Y) = d(Z,W,W) 
+a(X,X) = d(Z,W,W) 
+\end{prolog}
+
+
+\Curry{}
 \begin{verbatim}
-a x y   =:= a b c where x, y free
-a y y   =:= a z z where x, y, z free
-a x x   =:= a b c where x free
-a x     =:= a b b where x free
-a x x y =:= a z w w where x, y, w, z free
+data X = A X X | B | C | D X X X | E X
+
+A x y =:= A B C  where x, y free
+A x y =:= A z z  where x, y, z free
+A x x =:= A B C where x free
+E x =:= A B B where x free
+D x x y =:= D z w w where x, y, w, z free
+A x x =:= D z w w where x, y, w, z free
 \end{verbatim}
 
 \answer{
-
 \begin{tabular}{c}
 X = b, Y = c \\
 X = Y = Z \\
@@ -1051,19 +1062,24 @@ X = Y = Z = W \\
 \subsubsection{Difference Lists}
 
 A difference list is a special structure that can support efficient
-concatenation (Recall the discussion on \texttt{append/3} predicate in
-the lectures). It uses unification in a clever way to that end.
+concatenation. It uses unification in a clever way to that end.
 
 The difference-list representation for a list can be obtained as follows:
 
-% \begin{prolog}
-% fromList([],d(X,X)).
-% fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
-% \end{prolog}
+\Prolog{}
+\begin{prolog}
+fromList([],d(X,X)).
+fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
+\end{prolog}
 
+
+\Curry{}
 \begin{verbatim}
-fromList [] = d x x where x free
-fromList (a:as) = ???
+data DList a = D [a] [a]
+
+fromList :: [a] -> D a -> Success
+fromList [] (D x x') = x =:= x'
+fromList (a:as) (D (a':o) i) = a =:= a' & fromList as (D o i)
 \end{verbatim}
 
 
@@ -1072,28 +1088,40 @@ A structure of the form \textsf{d(Out,In)} will represent the list
 \textsf{In}. Or, less technically, a list L will be represented as the
 difference between Out and In: so for instance,
 
-$$[1,2] \longrightarrow d(1:2:3:4:[],3:4:[])$$
+\Prolog{
+$$[1,2] \longrightarrow d([1,2,3,4],[3,4])$$
+}
+\Curry{
+$$[1,2] \longrightarrow D [1,2,3,4] [3,4] $$
+}
+
 
 You can check how fromList works by testing it:
-% \begin{prolog}
-% fromList([1,2,3],X).
-% \end{prolog}
+\Prolog{
+\begin{prolog}
+fromList([1,2,3],X).
+\end{prolog}
+}
+\Curry{
 \begin{verbatim}
 fromList [1,2,3] x where x free
 \end{verbatim}
-
+}
 Note that the same metavariable (G271 in my implementation) is present twice in
 the result. Note that we can get the original result back by unifying this
 metavariable with the empty list.
 
 \begin{question}{**, @6}
-Write a predicate toList/2 to get back to the normal list representation.
+Write a predicate \textsf{toList :: DList a $\rightarrow$ [a] $\rightarrow$ Success} to get back to the normal list representation.
 
 \answer{
 \begin{prolog}
 toList(d(X,X),[]).
 toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
 \end{prolog}
+
+toList (D x y) [] = x =:= y
+toList (D (head:rest) tail) (head':otherTail) = head =:= head' & toList (D rest tail) otherTail
 }
 
 \end{question}
@@ -1102,24 +1130,26 @@ Given that representation for lists, it is possible to perform concatenation by
 doing unification only!
 
 \begin{ex}{**, @6}
-Write a predicate dconcat/3 to concatenate two difference lists, without
+Write a predicate dconcat to concatenate two difference lists, without
 using the direct representation.
 
-% \begin{prolog}
-% dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
-% \end{prolog}
+\Prolog{
+\begin{prolog}
+dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
+\end{prolog}
+}
 
+\Curry{
 \begin{verbatim}
-dconcat x y z where x, y, z free
-fromList [1,2,3] x where x free
-fromList [4,5] y where y free
-toList z final where z, final free
+dconcat x y z & fromList [1,2,3] x & fromList [4,5] y & toList z final where x, y, z, final free
 \end{verbatim}
+}
 
 should produce:
 
 \begin{verbatim}
-final = [1,2,3,4,5].
+...
+final = [1,2,3,4,5]
 \end{verbatim}
 
 \answer{

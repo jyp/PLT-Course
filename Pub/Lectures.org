@@ -2106,14 +2106,20 @@ In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_lang
     - Install swi-prolog *5.10*
       http://www.swi-prolog.org/download/stable
       ATTENTION: Pakcs does not work with swi-prolog 6.0!
-    - download pakcs and unzip
+    - download pakcs sources and unzip
     - build
        : ./configure-pakcs
        : make
     - interpreter is bin/pakcs
+  + Linux (tested on Ubuntu Oneiric):
+    - Install swi-prolog *5.x*
+      : sudo aptitude install swi-prolog
+    - download packs Linux binary http://www.informatik.uni-kiel.de/~pakcs/download/pakcs_Linux.tar.gz
+    - untar
+    - make     
   + Run the interpreter and load file:   
      :  .../pakcs/bin/pakcs
-     :  :l Family.curry
+     :  :l Family.curry  
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
 ** Unification
 
