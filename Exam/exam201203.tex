@@ -140,40 +140,49 @@ condition after each copy of a byte.
 \section{Objects from records}
 
 Consider the following code, which is an encoding of a class
-hierarchy, written in C.
+hierarchy, (written in C++).
 \begin{verbatim}
-
 struct C {
    float x;
    float y;
 };
 
 struct B {
-   void *n(B *p, C* q);
+   void *n(B*, C*);
    int f;
-   void *m(B *p, B *q);
+   void *m(B*, B*);
    int g;
 };
 
 struct A {
-   void *m(A *p, B *q);
+   void *m(A*, B*);
    int f;
 };
 
-void B_n(B* p, C* q) {
+void B_n(B*, C*) {
   q->x += p->f;
   q->y += p->g;
 }
 
-void B_m (B* p, B* q) {
+void B_m (B*, B*) {
   q->f += p->f;
   q->g += p->g;
 }
 
-void A_m(A* p, B* q) {
+void A_m(A*, B*) {
   q->f += p->f;
 }
 \end{verbatim}
+
+Quick refresher:
+\begin{itemize}
+\item If \texttt{A} is a type, then \texttt{A*} is the type of
+  pointers to \texttt{A}.
+\item \texttt{void *f(A,B,...)} stands for a pointer to a function
+  \texttt{f} taking arguments \texttt{A},\texttt{B},...
+\item \texttt{p->f} is used to access a field \texttt{f} in a
+  structure pointed by \texttt{p}.
+\end{itemize}
 
 Write the original class hierarchy in a C++-like or Java-like language.
 
@@ -185,22 +194,30 @@ Consider the following code:
 \begin{verbatim}
 concat [] = []
 concat (x:xs) = x ++ concat xs
+
+data Tree = B Tree Tree | Leaf Int
+
+reverse (Leaf x) = (Leaf (0-x))
+reverse (B x y) = B (reverse y) (reverse x)
 \end{verbatim}
 
-Express the same function in terms of the higher-order function
-\texttt{fold} provided below.  Remark: you may \emph{not} use
-recursion directly in your solution.
+Express the same functions in terms of the higher-order functions
+provided below.  Remark: you may \emph{not} use recursion directly in
+your solution.
 
 \begin{verbatim}
 fold k f [] = k
 fold k f (x:xs) = f x (fold k f xs)
+
+foldT k f (Leaf x) = k x
+foldT k f (Bin x y) = f (foldT k f x) (foldT k f y)
 \end{verbatim}
 
 \section{Closures}
 
 Consider the program:
 \begin{verbatim}
-f grades bonuses = zipWith (+) bonuses (filter (<48) grades)
+f m grades bonuses = zipWith (\x y -> x + y) bonuses (filter (\ x -> x < m) grades)
 
 zipWith f [] [] = []
 zipWith f (x:xs) (y:xs) = f x y : zipWith f xs ys
@@ -226,7 +243,7 @@ Remarks:
 In Haskell you can write a matrix comprehension like so:
 \begin{verbatim}
 matrix = array bounds [((x,y),valueAtIndex x y) | (x,y) <- range bounds]
-  where bounds =  ((low_x,low_y),(high_x,high_y))
+  where bounds = ((low_x,low_y),(high_x,high_y))
 \end{verbatim}
 
 You can then access a cell $x,y$ in the array using \texttt{matrix!(x,y)}.
@@ -235,7 +252,7 @@ For example, in this matrix of $100$ elements the value at index $(x,y)$ contain
 y$: \texttt{example!(x,y) == x * y}.
 \begin{verbatim}
 example = array bounds [((x,y),x * y) | (x,y) <- range bounds]
-  where bounds =  ((1,1),(10,10))
+  where bounds = ((1,1),(10,10))
 \end{verbatim}
 
 
