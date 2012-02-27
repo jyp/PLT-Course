@@ -2259,8 +2259,7 @@ and reverse to relations.
   + if X known, Y is computed (f(X))
   + if Y known, X is computed (f-1(Y))  
   + Compute both directions with one piece of code
-  + Very cool!!!! (parser/pretty-printer,
-  compiler/decompiler...)
+  + Very cool!!!! (parser/pretty-printer, compiler/decompiler...)
 - Sadly, often inefficient
   + Performance of functions inverted using the above receipe can be
     terrible.
@@ -2281,7 +2280,7 @@ There are sometimes more than one way to satisfy a relation!
 *** Backtracking
 
 If at some point one encounters a failure (for example unification
-fails), *backtrack* to the last dijunction and try the other branch.
+fails), *backtrack* to the last disjunction and try the other branch.
 
 This requires that you remember the "state of the world" at each
 disjuction point.

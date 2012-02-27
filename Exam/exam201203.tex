@@ -103,8 +103,6 @@ required for grade VG.
 
 
 \newpage
-\hfill\\
-\newpage
 
 
 \section{Explicit gotos}
@@ -133,6 +131,7 @@ Consider the following optimised code for array copy:
 
 Translate the above snippet to equivalent code that does not use
 \texttt{switch} nor \texttt{while}: use explicit gotos instead.
+Write your answer in a C-like language.
 
 Remark: you must retain the optimisation. Do not test the loop
 condition after each copy of a byte.
@@ -241,8 +240,7 @@ example = array bounds [((x,y),x * y) | (x,y) <- range bounds]
 
 
 Consider the following algorithm to compute the Levenshtein distance between two strings:
-(see next page)
-\newpage
+{\small
 \begin{verbatim}
 int LevenshteinDistance(char s[1..m], char t[1..n])
 {
@@ -256,10 +254,8 @@ int LevenshteinDistance(char s[1..m], char t[1..n])
   for j from 0 to n
     d[0, j] := j // the distance of any second string to an empty first string
 
-  for j from 1 to n
-  {
-    for i from 1 to m
-    {
+  for j from 1 to n {
+    for i from 1 to m {
       if s[i] = t[j] then
         d[i, j] := d[i-1, j-1]       // no operation required
       else
@@ -271,11 +267,10 @@ int LevenshteinDistance(char s[1..m], char t[1..n])
                    )
     }
   }
-
   return d[m,n]
 }
 \end{verbatim}
-
+}
 
 Using \emph{a single comprehension}, construct a matrix \texttt{d},
 such that \texttt{d!(i,j)} is the Levenshtein distance between the
@@ -285,6 +280,9 @@ characters of \texttt{t}, assuming
 s :: String
 t :: String
 \end{verbatim}
+
+Remark: The distance between any two substrings must not be computed
+twice. Use laziness!
 
 Hints:
 \begin{itemize}
@@ -296,7 +294,6 @@ Hints:
   string \texttt{s} with the expression \texttt{s!!(i-1)}.
 \end{itemize}
 
-\newpage
 \section{Functions to relations}
 
 Consider the function
@@ -328,5 +325,7 @@ Remarks:
 
 Hint: you may want to start by writing the types of the
 \emph{relations} \texttt{fibo} and \texttt{plus}.
+
+You may write your answer in Curry syntax or Prolog syntax. 
 
 \end{document}
