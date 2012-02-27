@@ -966,10 +966,10 @@ you see.
 Consider the following outline for the ``business logic'' of a
 web-application:
 \begin{verbatim}
-session = do
-   items <- webForm "What do you want to buy?"
-   address <- webForm "Where do you want your stuff delivered?"
-   daMoney <- webForm "Enter your credit card details, now."
+session connection = do
+   items <- webForm connection "What do you want to buy?"
+   address <- webForm connection "Where do you want your stuff delivered?"
+   daMoney <- webForm connection "Enter your credit card details, now."
    secureInDatabase daMoney (priceOf items)
    placeOrder items address
 \end{verbatim}
