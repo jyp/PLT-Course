@@ -2016,11 +2016,17 @@ There are more models for concurrency than chanels + processes
 **** Closed propositions:
 - "Socrates is a man"
 - "John Hughes has a tatto on the sole of his left foot"
+- 123 + 345 == 567
+- reverse [] == []
+- p(1235) terminates
 **** Open propositions:
 - "/X/ is a man"
 - "John Hughes has a tatto on /X/"
+- (sin /X/)² + (cos /X/)² == 1
+- reverse (/X/ ++ /Y/) == reverse /Y/ ++ reverse /X/
+- p(/X/) terminates
 
-(The above statements _may_ be made true for some value of the (meta-)variable /X/)
+(The above statements _may_ be made true for some value of the (meta-)variables /X/, /Y/)
 
 *** Notion: Rules
 (An axiom is just a rule without premiss)
@@ -2259,6 +2265,10 @@ and reverse to relations.
 ** Other example: family tree
 #+INCLUDE "Family.curry" src curry
 file:Family.curry
+
+** Example: test your code
+
+: reverse xs ++ reverse ys /= ys ++ xs where xs,ys free
 
 ** TODO Search
 There are sometimes more than one way to satisfy a relation!
