@@ -159,17 +159,17 @@ struct A {
    int f;
 };
 
-void B_n(B*, C*) {
+void B_n(B* p, C* q) {
   q->x += p->f;
   q->y += p->g;
 }
 
-void B_m (B*, B*) {
+void B_m (B* p, B* q) {
   q->f += p->f;
   q->g += p->g;
 }
 
-void A_m(A*, B*) {
+void A_m(A* p, B* q) {
   q->f += p->f;
 }
 \end{verbatim}
@@ -233,8 +233,9 @@ Translate the code to use explicit closures.
 Remarks:
 \begin{itemize}
 \item All higher-order functions must be removed.
-\item You may not \emph{specialize} any higher-order function to the
-  cases where they are used here. Use closures!
+\item You cannnot \emph{specialize} any higher-order function
+  (eg. don't make a special version of \texttt{zipWith} which does
+  only addition).  Use closures.
 \end{itemize}
 
 \newpage
