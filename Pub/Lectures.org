@@ -2106,14 +2106,20 @@ In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_lang
     - Install swi-prolog *5.10*
       http://www.swi-prolog.org/download/stable
       ATTENTION: Pakcs does not work with swi-prolog 6.0!
-    - download pakcs and unzip
+    - download pakcs sources and unzip
     - build
        : ./configure-pakcs
        : make
     - interpreter is bin/pakcs
+  + Linux (tested on Ubuntu Oneiric):
+    - Install swi-prolog *5.x*
+      : sudo aptitude install swi-prolog
+    - download packs Linux binary http://www.informatik.uni-kiel.de/~pakcs/download/pakcs_Linux.tar.gz
+    - untar
+    - make     
   + Run the interpreter and load file:   
      :  .../pakcs/bin/pakcs
-     :  :l Family.curry
+     :  :l Family.curry  
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
 ** Unification
 
@@ -2253,8 +2259,7 @@ and reverse to relations.
   + if X known, Y is computed (f(X))
   + if Y known, X is computed (f-1(Y))  
   + Compute both directions with one piece of code
-  + Very cool!!!! (parser/pretty-printer,
-  compiler/decompiler...)
+  + Very cool!!!! (parser/pretty-printer, compiler/decompiler...)
 - Sadly, often inefficient
   + Performance of functions inverted using the above receipe can be
     terrible.
@@ -2275,7 +2280,7 @@ There are sometimes more than one way to satisfy a relation!
 *** Backtracking
 
 If at some point one encounters a failure (for example unification
-fails), *backtrack* to the last dijunction and try the other branch.
+fails), *backtrack* to the last disjunction and try the other branch.
 
 This requires that you remember the "state of the world" at each
 disjuction point.
