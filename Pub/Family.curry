@@ -14,6 +14,21 @@ parent Silvia        Victoria   = success
 parent Silvia        Philip     = success
 parent Silvia        Madeleine  = success
 
+-- parent x y  ⇔  x ∈ parents y 
+parents :: Person -> [Person]
+parents Gustaf = [Adolf,Sybilla]
+parents Silvia = []
+parents Victoria = [Silvia,Gustaf]
+-- ...
+
+grandparent y x = parent y z & parent z x
+   where z free
+
+-- grandparent y x ⇔ y ∈ grandparents x
+grandparents :: Person -> [Person]
+grandparents x = --- concat (map parents (parents x))
+                 [y | z <- parents x, 
+                      y <- parents z]
 
 
 ---- We can ask who is a parent; who is a child...

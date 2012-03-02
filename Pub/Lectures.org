@@ -2203,11 +2203,15 @@ fails, because x cannot be unified with something where occurs.
   recursive behavior.
 *** Exercise (⋆⋆⋆)
 Write an algorithm implementing the above specification.
-*** TODO Implementing unification in an imperative language (a sketch)
+*** Implementing unification in an imperative language (a sketch)
 
 Have indirection for meta-variables occurences; indirection for meta
 (meta = unbound / ground / meta).  After unifying, overwrite the
 meta-variable with its value
+
+**** Question
+how do we reconciliate referencial transparency with the need to
+"update" the bindings of meta-variables?
 
 *** (✪) Reading
 Wikipedia has a [[http://en.wikipedia.org/wiki/Unification_(computer_science)][good article]] on unification.
@@ -2260,17 +2264,82 @@ and reverse to relations.
 #+INCLUDE "Family.curry" src curry
 file:Family.curry
 
-** TODO Search
 There are sometimes more than one way to satisfy a relation!
 *** Backtracking
 
 If at some point one encounters a failure (for example unification
-fails), *backtrack* to the last dijunction and try the other branch.
+fails), *backtrack* to the last disjunction and try the other branch.
 
 This requires that you remember the "state of the world" at each
 disjuction point.
 
-*** TODO List of successes
+Example: solve the query:
+
+:   append xs ys "hello"  
+:        where xs,ys free
+
+(Branching point A)
+1st case. Maybe the equation
+
+:  append [] ys zs = ys =:= zs 
+
+applies? Using it to rewrite the goal gives:
+
+:   ys =:= "hello"
+:        where ys free
+:              xs = []
+
+Solving the unification constraint yields:
+
+:   success
+:        where ys = "hello"
+:              xs = []
+
+And this is our 1st solution. Now, we can /backtrack/ to the branching
+point A, and try the 2nd equation (I have renamed variables to avoid clashes):
+
+:   append (x:xs') ys zs = append xs' ys zs' &
+:                      zs =:= x:zs'
+:      where zs' free
+
+
+Which rewrites our goal to 
+
+:                      append xs' ys zs' &
+:                      "hello" =:= x:zs'
+:      where zs' free
+:            xs = x:xs'
+:            ys free    
+:            x  free
+:            xs' free 
+
+Solving the 2nd unification constraint yields:
+
+:                      append xs' ys "ello"
+:      where xs = 'h':xs'
+:            ys free     
+:            x = 'h'
+:            xs' free 
+
+
+Again there are 2 ways to solve the remaining goal. (So we have
+another branching point B here.)
+
+Proceeding with the 1st equation for append yields (similary as
+before)
+
+:  xs' = []
+:  ys = "ello"
+
+and thus the final solution:
+
+: xs = "h"
+: ys = "ello"
+
+At this point one can backtrack to the point B, and continue with the
+2nd equation for append, etc.
+
+*** List of successes
 
 Explicit representation of disjunction. That is, suppose we want to
 encode the (inverse) of the Parent relation from file:Family.curry as
@@ -2291,11 +2360,17 @@ exercise: write the function "parents", such as
 We can now translate sibling function as follows:
 
 : siblings x  :: Person -> [Person]
+: siblings x = map children
+
+this pattern is so common that there is special syntax for it: list
+comprehension.
+
 : siblings x = [ y | z <- parents x,  y <- children z]
 
 Each free variable must range over its possible values.
 
-**** TODO Translate unification
+**** Translate unification
+We do not cover this.
 
 *** Note: there are clever ways to implement logic programming.
 We won't discuss those here; there is lots of literature for the
