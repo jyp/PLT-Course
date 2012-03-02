@@ -1,0 +1,188 @@
+\documentclass[7pt]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{listings}
+\usepackage{geometry}
+
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\usepackage{pgf, tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{arrows}
+
+\lstdefinelanguage{FSharp}
+      {morekeywords={let, new, match, inherit, abstract, with, rec,
+          open, module, namespace, type, of, member, and, for, in, do,
+          begin, end, fun, function, try, mutable, if, then, else,
+          class, interface, end},
+    keywordstyle=\color{blue},
+    basicstyle = \small,
+    sensitive=false,
+    morecomment=[l][\color{green!50!black!80}]{///},
+    morecomment=[l][\color{green!50!black!80}]{//},
+    morecomment=[s][\color{green!50!black!80}]{{(*}{*)}},
+    morestring=[b]",
+    stringstyle=\color{red},
+    columns=fullflexible
+    }
+
+
+\lstdefinelanguage{Smalltalk}{
+  basicstyle=\ttfamily,
+  keywordstyle=\bfseries,
+  morekeywords={self,super,true,false,nil,thisContext}, % This is overkill
+  morestring=[d]',
+  morecomment=[s]{"}{"},
+  alsoletter={\#:},
+  escapechar={!},
+}[keywords,comments,strings]
+
+
+\newcommand{\Blue}[1]{\color{blue}#1\color{black}\xspace}
+
+
+\usepackage{array}
+% This is needed because raggedright in table elements redefines \\:
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\let\PBS=\PreserveBackslash
+
+%%%%%%%%%%%%%% 
+\newcommand{\solution}[1] {}
+%\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
+
+%\newcommand{\comment}[1]{}
+\newcommand{\comment}[1]{\marginpar{#1}}
+
+
+\begin{document}
+\newcommand{\examtime}{14:00, March 9th, 2012}
+\newcommand{\points}[1]{\marginpar{\bf #1 points}}
+
+
+\section{Explicit stacks}
+
+Consider the function
+\begin{verbatim}
+procedure fib(n)
+  if n == 0
+    return 0
+  else if n == 1
+    return 1
+  else 
+    return fib (n-1) + fib (n-2)
+\end{verbatim}
+
+Remove explicit recursion, using an explicit stack. 
+
+Remarks:
+
+\begin{itemize}
+\item  You should assume a ``global'' stack accessed via \texttt{push}
+  and \texttt{pop} primitives.
+
+\item You must implement \emph{the same algorithm}. Do not change
+  the algorithm in the process of doing the translation.
+
+\item If tail-call optimisation applies to this example, your
+  translation must use it.
+\end{itemize}
+
+Hints: you should first define the type of values that you can push on
+the stack, and you can assume that labels can be used as values.
+
+\section{Continuations}
+
+Consider the following function, which computes the factorial of its argument.
+\begin{verbatim}
+fac 0 = return 1
+fac n = do r <- fac (n-1)
+           yield
+           return (r*n)
+\end{verbatim}
+
+The above algorithm will be used on very big numbers, hence
+potentially running for a long time, concurrently with other
+processes. Therefore, the implementer of \texttt{fac} has decided
+to insert a call to \texttt{yield}, which performs no useful task, but
+gives the opportunity for the runtime environment to schedule another
+processes. (The computation of the factorial will be continued
+later.)
+
+Transform \texttt{fac} to use explicit continuations.
+
+Remarks: 
+\begin{itemize}
+\item In the translation, you will use a different version of
+  \texttt{yield}, which takes an explicit continuation as argument.
+\item The translation of \texttt{fac} should also take an explicit
+  continuation as argument.
+\end{itemize}
+
+\section{Laziness}
+In Haskell you can write a matrix comprehension like so:
+\begin{verbatim}
+matrix = array bounds [((x,y),valueAtIndex x y) | (x,y) <- range bounds]
+  where bounds =  ((low_x,low_y),(high_x,high_y))
+\end{verbatim}
+
+You can then access a cell $x,y$ in the array using \texttt{matrix!(x,y)}.
+%
+For example, in this matrix of $100$ elements the value at index $(x,y)$ contains $x ×
+y$: \texttt{example!(x,y) == x * y}.
+\begin{verbatim}
+example = array bounds [((x,y),x * y) | (x,y) <- range bounds]
+  where bounds = ((1,1),(10,10))
+\end{verbatim}
+
+Consider the following algorithm to compute the Levenshtein distance between two strings:
+{\small
+\begin{verbatim}
+int LevenshteinDistance(char s[1..m], char t[1..n])
+{
+  // for all i and j, d[i,j] will hold the Levenshtein distance between
+  // the first i characters of s and the first j characters of t;
+  // note that d has (m+1)x(n+1) values
+  declare int d[0..m, 0..n]
+
+  for i from 0 to m
+    d[i, 0] := i // the distance of any first string to an empty second string
+  for j from 0 to n
+    d[0, j] := j // the distance of any second string to an empty first string
+  for j from 1 to n {
+    for i from 1 to m {
+      if s[i] = t[j] then
+        d[i, j] := d[i-1, j-1]       // no operation required
+      else
+        d[i, j] := minimum (
+                     d[i-1, j] + 1,  // a deletion
+                     d[i, j-1] + 1,  // an insertion
+                     d[i-1, j-1] + 1 // a substitution
+                   )
+    }
+  }
+  return d[m,n]
+}
+\end{verbatim}
+}
+
+Using \emph{a single comprehension}, construct a matrix \texttt{d},
+such that \texttt{d!(i,j)} is the Levenshtein distance between the
+first \texttt{i} characters of \texttt{s} and the first \texttt{j}
+characters of \texttt{t}, assuming
+\texttt{s :: String} and \texttt{t :: String}.
+
+\begin{itemize}
+\item The distance between any two substrings must not be computed
+  twice.
+\item You may also assume a predefined function \texttt{minimum :: [Int] -> Int}
+\item You can access the $\mbox{\texttt{i}}^{\mbox{th}}$ character of
+  string \texttt{s} with the expression \texttt{s!!(i-1)}.
+\end{itemize}
+
+\end{document}
