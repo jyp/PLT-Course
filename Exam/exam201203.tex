@@ -84,15 +84,37 @@ Exam in Programming Paradigms}
 \vspace{1cm}
 
 \noindent
-Permitted aids:\\
-English-Swedish or English-other language dictionary.
+Permitted aids: Pen and paper. 
+% English-Swedish or English-other language dictionary.
 
 There are 6 questions: each worth 10 points. The total sum is 60
-points.  Some questions come with \emph{remarks}: you must take those
+points.  
+
+Some questions come with \emph{remarks}: you must take those
 into account.  Some questions come with \emph{hints}: you may ignore
 those.
 
+You will be asked to write programs in various paradigms in the
+following. Choose the language appropriately in each case, and
+indicate which you choose at the beginning of your answer.
 
+\begin{tabular}[p]{cc}
+  Paradigm & Acceptable language \\ \hline
+  Imperative   & C or (an OO language where you refrain to use Objects) \\
+  Object oriented & C++ or Java \\
+  Functional & Haskell, ML \\
+  Concurrent & Erlang, Concurrent-Haskell \\
+  Logic & Prolog, Curry 
+\end{tabular}
+
+You may also use pseudo-code ressembling an actual language in the
+relevant list. In that case, make sure your code can only be
+interpreted in the way you intent (the responsibility lies with
+you). In particular, in the case of functional/logic languages,
+omitting parentheses is NOT acceptable: \texttt{a b c} is not
+acceptable pseudo-code for \texttt{a (b c)}.
+
+  
 \textbf{Chalmers:}
 24 points is required to pass (grade 3), 36 points is required for
 grade 4, and 48 points is required for grade 5. 
@@ -136,11 +158,14 @@ Write your answer in a C-like language.
 Remark: you must retain the optimisation. Do not test the loop
 condition after each copy of a byte.
 
+Note: You can get partial credit for removing either the switch or the
+while.
+
 \newpage
 \section{Objects from records}
 
-Consider the following code, which is an encoding of a class
-hierarchy, (written in C++).
+Consider the following C++ code, which is an encoding of a class
+hierarchy.
 \begin{verbatim}
 struct C {
    float x;
@@ -190,7 +215,7 @@ Write the original class hierarchy in a C++-like or Java-like language.
 \newpage
 \section{Higher-order abstractions}
 
-Consider the following code:
+Consider the following Haskell code:
 \begin{verbatim}
 concat [] = []
 concat (x:xs) = x ++ concat xs
@@ -215,7 +240,7 @@ foldT k f (Bin x y) = f (foldT k f x) (foldT k f y)
 
 \section{Closures}
 
-Consider the program:
+Consider the Haskell program:
 \begin{verbatim}
 f m grades bonuses = zipWith (\x y -> x + y) bonuses (filter (\ x -> x < m) grades)
 
@@ -324,7 +349,7 @@ fib n = fib (n-1) + fib (n-2)
 
 Translate the function \texttt{fib} to a relation \texttt{fibo}, such that
 \begin{verbatim}
-       fibo x y     is equivalent to      fib x == y
+       fibo x y      is equivalent to      fib x == y
 \end{verbatim}
 
 Remarks:

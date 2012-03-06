@@ -69,18 +69,16 @@
 
 Consider the function
 \begin{verbatim}
-procedure fib(n)
+procedure fib(n : Int)
   if n == 0
     return 0
   else if n == 1
     return 1
   else 
-    return fib (n-1) + fib (n-2)
+    return (fib (n-1) + fib (n-2))
 \end{verbatim}
 
-Remove explicit recursion, using an explicit stack. 
-
-Remarks:
+Remove recursion, using an explicit stack. Remarks:
 
 \begin{itemize}
 \item  You should assume a ``global'' stack accessed via \texttt{push}
@@ -90,7 +88,7 @@ Remarks:
   the algorithm in the process of doing the translation.
 
 \item If tail-call optimisation applies to this example, your
-  translation must use it.
+  translation must use it --- but don't change the algorithm.
 \end{itemize}
 
 Hints: you should first define the type of values that you can push on
@@ -109,14 +107,12 @@ fac n = do r <- fac (n-1)
 The above algorithm will be used on very big numbers, hence
 potentially running for a long time, concurrently with other
 processes. Therefore, the implementer of \texttt{fac} has decided
-to insert a call to \texttt{yield}, which performs no useful task, but
+to insert a call to \texttt{yield}, which performs no useful computational task, but
 gives the opportunity for the runtime environment to schedule another
 processes. (The computation of the factorial will be continued
 later.)
 
-Transform \texttt{fac} to use explicit continuations.
-
-Remarks: 
+Transform \texttt{fac} to use explicit continuations. Remarks: 
 \begin{itemize}
 \item In the translation, you will use a different version of
   \texttt{yield}, which takes an explicit continuation as argument.

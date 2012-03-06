@@ -22,7 +22,7 @@ agenda = do
 cp a b = system ["cp",a,b]
         
 exercises = produce "All.pdf" $ do    
-  let input =  "../New/Exercises/All.tex"
+  let input =  "../Exercises/All.tex"
   need input
   _pdflatex input
 
