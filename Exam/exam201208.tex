@@ -1,0 +1,273 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{listings}
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\usepackage{pgf, tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{arrows}
+
+\lstdefinelanguage{FSharp}
+      {morekeywords={let, new, match, inherit, abstract, with, rec,
+          open, module, namespace, type, of, member, and, for, in, do,
+          begin, end, fun, function, try, mutable, if, then, else,
+          class, interface, end},
+    keywordstyle=\color{blue},
+    basicstyle = \small,
+    sensitive=false,
+    morecomment=[l][\color{green!50!black!80}]{///},
+    morecomment=[l][\color{green!50!black!80}]{//},
+    morecomment=[s][\color{green!50!black!80}]{{(*}{*)}},
+    morestring=[b]",
+    stringstyle=\color{red},
+    columns=fullflexible
+    }
+
+
+\lstdefinelanguage{Smalltalk}{
+  basicstyle=\ttfamily,
+  keywordstyle=\bfseries,
+  morekeywords={self,super,true,false,nil,thisContext}, % This is overkill
+  morestring=[d]',
+  morecomment=[s]{"}{"},
+  alsoletter={\#:},
+  escapechar={!},
+}[keywords,comments,strings]
+
+
+\newcommand{\Blue}[1]{\color{blue}#1\color{black}\xspace}
+
+
+\usepackage{array}
+% This is needed because raggedright in table elements redefines \\:
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\let\PBS=\PreserveBackslash
+
+%%%%%%%%%%%%%% 
+\newcommand{\solution}[1] {}
+%\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
+
+%\newcommand{\comment}[1]{}
+\newcommand{\comment}[1]{\marginpar{#1}}
+
+
+\begin{document}
+\newcommand{\examtime}{14:00, March 9th, 2012}
+\newcommand{\points}[1]{\marginpar{\bf #1 points}}
+\noindent
+\begin{tabular}{lr}
+CHALMERS TEKNISKA H\"OGSKOLA &\examtime{}.\\
+Dept. of Computer Science and Engineering & Programming Paradigms\\
+Jean-Philippe Bernardy                 & DAT121 / DIT331(GU) \\
+\end{tabular}
+
+\vspace{2.5cm} \noindent
+\begin{center} {\LARGE
+Exam in Programming Paradigms}
+\end{center}
+
+\vspace{1.5cm}
+
+\noindent
+\examtime{}.\\
+\begin{tabular}{ll}
+\textbf{Examiner:} &  John Hughes  \\
+\textbf{Lecturer:} & Jean-Philippe Bernardy
+\end{tabular}
+\vspace{1cm}
+
+\noindent
+Permitted aids: Pen and paper. 
+% English-Swedish or English-other language dictionary.
+
+There are 6 questions: each worth 10 points. The total sum is 60
+points.  
+
+Some questions come with \emph{remarks}: you must take those
+into account.  Some questions come with \emph{hints}: you may ignore
+those.
+
+You will be asked to write programs in various paradigms in the
+following. Choose the language appropriately in each case, and
+indicate which you choose at the beginning of your answer.
+
+\begin{tabular}[p]{cc}
+  Paradigm & Acceptable language \\ \hline
+  Imperative   & C or (an OO language where you refrain to use Objects) \\
+  Object oriented & C++ or Java \\
+  Functional & Haskell, ML \\
+  Concurrent & Erlang, Concurrent-Haskell \\
+  Logic & Prolog, Curry 
+\end{tabular}
+
+You may also use pseudo-code ressembling an actual language in the
+relevant list. In that case, make sure your code can only be
+interpreted in the way you intent (the responsibility lies with
+you). In particular, in the case of functional/logic languages,
+omitting parentheses is NOT acceptable: \texttt{a b c} is not
+acceptable pseudo-code for \texttt{a (b c)}.
+
+  
+\textbf{Chalmers:}
+24 points is required to pass (grade 3), 36 points is required for
+grade 4, and 48 points is required for grade 5. 
+
+\textbf{GU:} 
+24 points is required to pass (grade G) and 42 points is
+required for grade VG.
+
+\section{Generalities}
+
+You are facing the task to translate an application written in Erlang
+into an imperative language like C. List a sequence of transformations
+seen in the course that, if applied in the order given, will transform
+the Erlang program to an imperative program easy to write in C syntax.
+
+Reminder: Erlang is a functional language equipped with concurrency
+features such as channels and processes.
+
+\section{Explicit Stack}
+
+Consider the Ackermann function, defined as follows:
+
+\begin{verbatim}
+function a(m,n) 
+  if m = 0 
+    return n+1
+  else if n = 0
+    return a(m-1,1)
+  else
+    return a(m-1,a(m,n-1))
+\end{verbatim}
+
+\begin{itemize}
+\item Write a version of the Ackermann function that does not use
+  recursion, but may use an explicit stack.
+\item Did you perform tail-call optimisation in your translation?
+\item Is it at all possible to do so? Qualify your answer if necessary.
+\end{itemize}
+
+Hints: you should first define the type of values that you can push on
+the stack, and you can assume that labels can be used as values.
+
+\section{Objects from records}
+
+Consider the following C++ code, which is an encoding of a class
+hierarchy.
+\begin{verbatim}
+struct C {
+   float x;
+   float y;
+};
+
+struct B {
+   void *m(B*, B*);
+   int f;
+   void *n(B*, C*);
+   int g;
+};
+
+struct A {
+   void *m(A*, B*);
+   int f;
+};
+
+void B_n(B* p, C* q) {
+  q->x += p->f;
+  q->y += p->g;
+}
+
+void B_m (B* p, B* q) {
+  q->f += p->f;
+  q->g += p->g;
+}
+
+void A_m(A* p, B* q) {
+  q->f += p->f;
+}
+\end{verbatim}
+
+Write the original class hierarchy in a C++-like or Java-like language.
+
+Quick refresher:
+\begin{itemize}
+\item If \texttt{A} is a type, then \texttt{A*} is the type of
+  pointers to \texttt{A}.
+\item \texttt{void *f(A,B,...)} stands for a pointer to a function
+  \texttt{f} taking arguments \texttt{A},\texttt{B},...
+\item \texttt{p->f} is used to access a field \texttt{f} in a
+  structure pointed by \texttt{p}.
+\end{itemize}
+
+\section{Closures}
+Consider the Haskell program:
+
+\begin{verbatim}
+g [] = []
+g (p:ps) = p : g (filter (\x -> x `mod` p == 0)) ps
+\end{verbatim}
+
+Translate the code to use explicit closures. 
+
+Remarks:
+\begin{itemize}
+\item All higher-order functions must be removed.
+\item You cannnot \emph{specialize} any higher-order function
+  (eg. don't make a special version of \texttt{zipWith} which does
+  only addition).  Use closures.
+\end{itemize}
+\section{Continuations}
+
+Consider the following function, which computes the factorial of its argument.
+\begin{verbatim}
+fac 0 = return 1
+fac n = do r <- fac (n-1)
+           yield
+           return (r*n)
+\end{verbatim}
+
+The above algorithm will be used on very big numbers, hence
+potentially running for a long time, concurrently with other
+processes. Therefore, the implementer of \texttt{fac} has decided
+to insert a call to \texttt{yield}, which performs no useful computational task, but
+gives the opportunity for the runtime environment to schedule another
+processes. (The computation of the factorial will be continued
+later.)
+
+Transform \texttt{fac} to use explicit continuations. Remarks: 
+\begin{itemize}
+\item In the translation, you will use a different version of
+  \texttt{yield}, which takes an explicit continuation as argument.
+\item The translation of \texttt{fac} should also take an explicit
+  continuation as argument.
+\end{itemize}
+
+
+\section{Relations to lists of successes}
+
+Consider the Curry program
+\begin{verbatim}
+ancestor a c = (parent a x & ancestor x c) | a =:= c
+\end{verbatim}
+
+Write a function \texttt{ancestors} that returns all the ancestors of
+a given person.  That is, given a person \texttt{c}, construct the
+list of \texttt{x}s such that \texttt{ancestor x c} is true.
+
+To do so, you may assume that you have at your disposal a function
+\texttt{parents} which returns the list of \texttt{x}s such that
+\texttt{parent x c} is true.
+
+Hint: begin by writing the types of the functions \texttt{ancestors}
+and \texttt{parents}.
+
+Write your answer in a functional language.
+
+\end{document}
