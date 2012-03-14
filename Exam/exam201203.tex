@@ -219,24 +219,27 @@ Consider the following Haskell code:
 \begin{verbatim}
 concat [] = []
 concat (x:xs) = x ++ concat xs
-
-data Tree = B Tree Tree | Leaf Int
-
-reverse (Leaf x) = (Leaf (0-x))
-reverse (B x y) = B (reverse y) (reverse x)
 \end{verbatim}
 
-Express the same functions in terms of the higher-order functions
+
+% data Tree = B Tree Tree | Leaf Int
+% 
+% reverse (Leaf x) = (Leaf (0-x))
+% reverse (B x y) = B (reverse y) (reverse x)
+
+
+Express the same function in terms of the higher-order functions
 provided below.  Remark: you may \emph{not} use recursion directly in
 your solution.
 
 \begin{verbatim}
 fold k f [] = k
 fold k f (x:xs) = f x (fold k f xs)
-
-foldT k f (Leaf x) = k x
-foldT k f (Bin x y) = f (foldT k f x) (foldT k f y)
 \end{verbatim}
+
+% foldT k f (Leaf x) = k x
+% foldT k f (Bin x y) = f (foldT k f x) (foldT k f y)
+
 
 \section{Closures}
 
