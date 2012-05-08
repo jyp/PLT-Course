@@ -94,9 +94,9 @@ Some questions come with \emph{remarks}: you must take those
 into account.  Some questions come with \emph{hints}: you may ignore
 those.
 
-You will be asked to write programs in various paradigms in the
-following. Choose the language appropriately in each case, and
-indicate which you choose at the beginning of your answer.
+You will be asked to write programs in various paradigms. Choose the
+language appropriately in each case, and indicate which you choose at
+the beginning of your answer.
 
 \begin{tabular}[p]{cc}
   Paradigm & Acceptable language \\ \hline
@@ -225,28 +225,31 @@ Remarks:
 \end{itemize}
 \section{Continuations}
 
-Consider the following function, which computes the factorial of its argument.
+Consider the following function, which computes the fibbonaci number
+of its argument.
 \begin{verbatim}
-fac 0 = return 1
-fac n = do r <- fac (n-1)
+fib 0 = return 1
+fib n = do x1 <- fib (n-1)
            yield
-           return (r*n)
+           x2 <- fib (n-2)
+           return (x1 + x2)
 \end{verbatim}
 
 The above algorithm will be used on very big numbers, hence
 potentially running for a long time, concurrently with other
-processes. Therefore, the implementer of \texttt{fac} has decided
-to insert a call to \texttt{yield}, which performs no useful computational task, but
-gives the opportunity for the runtime environment to schedule another
-processes. (The computation of the factorial will be continued
-later.)
+processes. Therefore, the implementer of \texttt{fib} has decided to
+insert a call to \texttt{yield}, which performs no useful
+computational task, but gives the opportunity for the runtime
+environment to schedule another processes. (The computation of the
+fibbonaci number will be continued later.)
 
-Transform \texttt{fac} to use explicit continuations. Remarks: 
+Transform \texttt{fib} to use explicit continuations. Remarks: 
 \begin{itemize}
 \item In the translation, you will use a different version of
   \texttt{yield}, which takes an explicit continuation as argument.
-\item The translation of \texttt{fac} should also take an explicit
+\item The translation of \texttt{fib} should also take an explicit
   continuation as argument.
+\item Do not change (optimise) the algorithm.
 \end{itemize}
 
 

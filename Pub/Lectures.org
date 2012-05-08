@@ -281,9 +281,6 @@ digraph G {
 - F# officially supported by MicroSoft
 - Exponential growth of Erlang / Haskell
 
-**** (✪) Fun reading on the importance of using the right language:
-http://tauday.com/
-
 ** Outline of the course
 *** Brief exposition of each paradigm
 
@@ -305,6 +302,9 @@ problem? (Do I know a paradigm suitable to express the solution?)"
 **** Recognise "encoded" thoughts:
 + what is the natural paradigm
 + decode them
+
+From this point of view, this course teaches "design patterns", /in reverse/.
+
 **** Encode thoughts expressed in a paradigm in another one
 **** The exam questions will be similar to exercises
 Note in particular that exercises are integral part of the course material.
@@ -1731,6 +1731,130 @@ In general:
 
 *** Sharing is ALWAYS safe! (see in a moment)
 *** Possible to use laziness  (see in a moment)
+*** John Carmack on Purity:
+
+http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/
+
+- Functional Programming in C++
+
+Probably everyone reading this has heard “functional programming” put
+forth as something that is supposed to bring benefits to software
+development, or even heard it touted as a silver bullet.  However, a
+trip to Wikipedia for some more information can be initially
+off-putting, with early references to lambda calculus and formal
+systems.  It isn’t immediately clear what that has to do with writing
+better software.
+
+My pragmatic summary: A large fraction of the flaws in software
+development are due to programmers not fully understanding all the
+possible states their code may execute in.  In a multithreaded
+environment, the lack of understanding and the resulting problems are
+greatly amplified, almost to the point of panic if you are paying
+attention.  Programming in a functional style makes the state
+presented to your code explicit, which makes it much easier to reason
+about, and, in a completely pure system, makes thread race conditions
+impossible.
+
+I do believe that there is real value in pursuing functional
+programming, but it would be irresponsible to exhort everyone to
+abandon their C++ compilers and start coding in Lisp, Haskell, or, to
+be blunt, any other fringe language.  To the eternal chagrin of
+language designers, there are plenty of externalities that can
+overwhelm the benefits of a language, and game development has more
+than most fields.  We have cross platform issues, proprietary tool
+chains, certification gates, licensed technologies, and stringent
+performance requirements on top of the issues with legacy codebases
+and workforce availability that everyone faces.
+
+If you are in circumstances where you can undertake significant
+development work in a non-mainstream language, I’ll cheer you on, but
+be prepared to take some hits in the name of progress.  For everyone
+else: No matter what language you work in, programming in a functional
+style provides benefits.  You should do it whenever it is convenient,
+and you should think hard about the decision when it isn’t convenient.
+You can learn about lambdas, monads, currying, composing lazily
+evaluated functions on infinite sets, and all the other aspects of
+explicitly functionally oriented languages later if you choose.
+
+C++ doesn’t encourage functional programming, but it doesn’t prevent
+you from doing it, and you retain the power to drop down and apply
+SIMD intrinsics to hand laid out data backed by memory mapped files,
+or whatever other nitty-gritty goodness you find the need for.
+
+- Pure Functions
+A pure function only looks at the parameters passed in to it, and all
+it does is return one or more computed values based on the parameters.
+It has no logical side effects.  This is an abstraction of course;
+every function has side effects at the CPU level, and most at the heap
+level, but the abstraction is still valuable.
+
+It doesn’t look at or update global state.  it doesn’t maintain
+internal state.  It doesn’t perform any IO.  it doesn’t mutate any of
+the input parameters.  Ideally, it isn’t passed any extraneous data –
+getting an allMyGlobals pointer passed in defeats much of the purpose.
+
+Pure functions have a lot of nice properties.
+
+Thread safety.  A pure function with value parameters is completely
+thread safe.  With reference or pointer parameters, even if they are
+const, you do need to be aware of the danger that another thread doing
+non-pure operations might mutate or free the data, but it is still one
+of the most powerful tools for writing safe multithreaded code.
+
+You can trivially switch them out for parallel implementations, or run
+multiple implementations to compare the results.  This makes it much
+safer to experiment and evolve.
+
+Reusability.  It is much easier to transplant a pure function to a new
+environment.  You still need to deal with type definitions and any
+called pure functions, but there is no snowball effect.  How many
+times have you known there was some code that does what you need in
+another system, but extricating it from all of its environmental
+assumptions was more work than just writing it over?
+
+Testability.  A pure function has referential transparency, which
+means that it will always give the same result for a set of parameters
+no matter when it is called, which makes it much easier to exercise
+than something interwoven with other systems.  I have never been very
+responsible about writing test code; a lot of code interacts with
+enough systems that it can require elaborate harnesses to exercise,
+and I could often convince myself (probably incorrectly) that it
+wasn’t worth the effort.  Pure functions are trivial to test; the
+tests look like something right out of a textbook, where you build
+some inputs and look at the output.  Whenever I come across a finicky
+looking bit of code now, I split it out into a separate pure function
+and write tests for it.  Frighteningly, I often find something wrong
+in these cases, which means I’m probably not casting a wide enough
+net.
+
+Understandability and maintainability.  The bounding of both input and
+output makes pure functions easier to re-learn when needed, and there
+are less places for undocumented requirements regarding external state
+to hide.
+
+Formal systems and automated reasoning about software will be
+increasingly important in the future.  Static code analysis is
+important today, and transforming your code into a more functional
+style aids analysis tools, or at least lets the faster local tools
+cover the same ground as the slower and more expensive global tools.
+We are a “Get ‘er done” sort of industry, and I do not see formal
+proofs of whole program “correctness” becoming a relevant goal, but
+being able to prove that certain classes of flaws are not present in
+certain parts of a codebase will still be very valuable.  We could use
+some more science and math in our process.
+
+Someone taking an introductory programming class might be scratching
+their head and thinking “aren’t all programs supposed to be written
+like this?”  The reality is that far more programs are Big Balls of
+Mud than not.  Traditional imperative programming languages give you
+escape hatches, and they get used all the time.  If you are just
+writing throwaway code, do whatever is most convenient, which often
+involves global state.  If you are writing code that may still be in
+use a year later, balance the convenience factor against the
+difficulties you will inevitably suffer later.  Most developers are
+not very good at predicting the future time integrated suffering their
+changes will result in.
+
 ** Copying and sharing
 
 Consider a binary tree:
