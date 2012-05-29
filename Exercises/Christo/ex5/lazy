@@ -1,0 +1,12 @@
+== There are no lazy languages that permit mutation.
+== Exercise 74
+== Why not?
+
+lazy evaluation postpones the actual evaluation until it's needed.
+If mutation would be allowed the variables the evaluation depends on could
+change, and the result differ depending on when the evaluation occurs.
+
+
+
+==Exercise 81 How would you find the first 100 prime numbers?
+take 100 primes

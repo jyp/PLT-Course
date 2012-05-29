@@ -1,0 +1,1 @@
+dconcat(X,Y,Z), fromList([1,2,3], X), fromList([4,5], Y), toList(Z, Final ).

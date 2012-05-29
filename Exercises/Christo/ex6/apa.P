@@ -1,0 +1,8 @@
+fromList([], d(X,X)).
+fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
+
+dconcat(d(A,B), d(B,C), d(A,C)).
+
+toList(d(X, _), Res) :- dropLast(X, Res).
+dropLast([_], []).
+dropLast(A:As, A:Bs) :- dropLast(As, Bs).
