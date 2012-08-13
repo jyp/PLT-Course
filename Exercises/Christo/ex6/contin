@@ -1,0 +1,46 @@
+==== Exercise 97 What is the purpose, and type of the webForm primitive?
+
+webForm :: (Monad m) => String -> m WebForm
+
+purpose: to abstract an entry field in haskell
+
+
+
+
+==== Exercise 98 Transform the type of webForm to take a continuation.
+
+webForm :: String -> (WebForm -> k) -> k
+
+
+
+===== Exercise 99 Break the above code into continuations, linked by the webForm primitive. 
+session =
+	webForm "What do you want to buy?" $ \items ->
+	webForm "Where do you want your stuff delivered?" $ \address ->
+	webForm "Enter your credit card details, now." $ \daMoney ->
+	secureInDatabase daMoney (priceOf items)
+	placeOrder items address
+
+??
+
+===== Exercise 100
+Outline what the webForm function should do. Discuss in
+particular what happens if the user presses the “back” button in their browser.
+
+
+as html is stateless there's not much you can do. Hopefully the browser remembers the state
+
+
+
+
+===== Exercise 101 Write a wrapper for the interpreter which has the above type
+evalC :: Expr -> (Int -> a) -> a
+evalC ex f = f (eval ex)
+
+
+
+
+===== Exercise 102 Replace every recursive call in the interpreter by a call to the 
+wrapper. (Hint: you must decide what is the “continuation” for every call, and 
+    for this you must choose an order of evaluation!)
+

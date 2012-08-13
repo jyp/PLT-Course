@@ -1,0 +1,27 @@
+Exercise 104 What is the result of the following unifications? Try to come
+up with the result without using the prolog/curry interpreter!
+Prolog
+
+
+a(X,Y) = a(b,c)
+X = b
+Y = c
+
+a(X,Y) = a(Z,Z)
+Z = X = Y
+
+a(X,X) = a(b,c)
+
+X = b = c
+no
+
+
+e(X) = a(b,b)
+no
+
+d(X,X,Y) = d(Z,W,W)
+X = W = Y
+
+
+a(X,X) = d(Z,W,W)
+no

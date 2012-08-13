@@ -1,0 +1,110 @@
+====== Exercise 14 Translate the do/while construct.
+
+body: loop_body;
+if(condition)
+	goto body;
+
+
+
+====== Exercise 15 Translate the switch/case construct.
+
+Compiler and range specific.
+int var;
+..
+switch (var) {
+	case 1: .. break;
+	case 2: ..
+	case 3: .. break;
+	default: ..
+}
+
+May be implemented by a jump table, however since you cant write it directly in C
+(doesn't allow label arrays) This can be seen as pseudo C:
+
+void* tbl[] = [case_1,case_2,case_3];
+
+if(var > 3 || var < 1)
+	goto case_deault;
+
+goto tbl+var;
+
+case_1: ..; goto case_end;
+case_2: ..;
+case_3: ..; goto case_end;
+case_default: ...;
+case_end: ..
+
+Or more generally for a wide range of numbers (or unknown numbers) in valid C:
+
+if (var == 1)
+	goto case_1;
+if (var == 2)
+	goto case_2;
+if (var == 3)
+	goto case_3
+goto case_default;
+
+
+case_1: ..; goto case_end;
+case_2: ..;
+case_3: ..; goto case_end;
+case_default_code..
+
+case_end: ..
+
+
+
+====== 28
+The first program will branch once for each value to copy
+while the second will only branch at most values/8+1
+Branches can be quite expensive so emiminating them may cause a
+performance boost.
+the division and modulo is done by shifting and masking
+respectively so they are very cheap.
+
+
+
+======= 35
+/* pre: count > 0 */
+copyField(short *to, short *from, short count) {
+	*to++ = *from++;
+	if (--count > 0)
+		copyField(to, from, count);
+}
+
+
+====== Exercise 39
+Give two examples of data types that can be considered monoids.
+(Hint: Strings would form a monoid under the appropriate structure; what is
+the structure?
+
+integers in addition context.
++ : Int -> Int -> Int
+assoc, identity and closure is too obvious to mention.
+
+
+
+strings in the concat context
+++ : String -> String -> String
+"" is the empty string (identity)
+"bepa" ++ "" = "bepa"
+
+associativity:
+("apa" ++ "bepa") ++ "cepa" = "apa" ++ ("bepa" ++ "cepa")
+
+====== Exercise 41
+ Assume variables a,b of type Monoid. Translate the expression
+a.op(b).
+
+translated to c where each object is a struct and each struct contains two function pointers.
+a->op(b);
+
+
+the struct could look something like this:
+struct Monoid {
+	(Monoid *) (op)(Monoid *a, Monoid *b);
+	(Monoid *) (id)();
+	void *data;
+};
+
+
