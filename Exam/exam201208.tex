@@ -220,7 +220,7 @@ Consider the Haskell program:
 
 \begin{verbatim}
 g [] = []
-g (p:ps) = p : g (filter (\x -> x `mod` p == 0)) ps
+g (p:ps) = p : g (filter (\x -> x `mod` p == 0) ps)
 
 filter f [] = []
 filter f (x:xs) = if p x 
