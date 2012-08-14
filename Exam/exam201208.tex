@@ -221,16 +221,22 @@ Consider the Haskell program:
 \begin{verbatim}
 g [] = []
 g (p:ps) = p : g (filter (\x -> x `mod` p == 0)) ps
+
+filter f [] = []
+filter f (x:xs) = if p x 
+                     then x : filter f xs  
+                     else filter f xs
 \end{verbatim}
 
-Translate the code to use explicit closures. 
+Transform the code to use explicit closures. That is, use a Haskell
+\emph{data structure} to represent $\lambda$-expressions.
 
 Remarks:
 \begin{itemize}
 \item All higher-order functions must be removed.
 \item You cannnot \emph{specialize} any higher-order function
-  (eg. don't make a special version of \texttt{zipWith} which does
-  only addition).  Use closures.
+  (eg. don't make a special version of \texttt{filter} which can test
+  only divisibility).  Use closures.
 \end{itemize}
 \section{Continuations}
 
