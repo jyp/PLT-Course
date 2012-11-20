@@ -4,13 +4,9 @@ https://www.student.chalmers.se/sp/programplan?program_id=771
 
 Hard bits in the course:
 
-
 - Explicit state
-- Thunks 
-
-
-- Channels: can be hard for "new" people. 
-
+- Thunks
+- Channels: can be hard for "new" people.
 
 * Courses elsewhere
 ** Stanford cs107 
@@ -18,7 +14,6 @@ Hard bits in the course:
  http://www.youtube.com/watch?v=Ps8jOj7diA0
 
 ** http://www.cs.aau.dk/~normark/prog3-03/html/notes/theme-index.html
-
 ** University of western australia CITS3242 
 http://undergraduate.csse.uwa.edu.au/units/CITS3242/
 
@@ -27,11 +22,8 @@ http://undergraduate.csse.uwa.edu.au/units/CITS3242/
 ** Van Roy's
 http://www.info.ucl.ac.be/~pvr/VanRoyChapter.pdf
 
-* TODO Exam questions
-map/fold          <-->  loops
 * TODO Course Evaluation
 https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx
-
 ** Representatives:
 - Johannes Weschke
 - Davor Pejic
@@ -72,9 +64,15 @@ Rough budget:
 - assignment of tasks
   + who takes what week
   + arash: email?
-  + exam correction
+  + exam 
 
-* Tasks:
-** DONE Create course homepage
+** TODO Next year:
+- Change file structure:
+  + Top level (Intro, organisation info, team, exam, course eval, ...)
+    + Lecture notes
+    + Schedule
+    + Exercises
+
+-> Part of the course plan for GU (August) / Chalmers (...)
 
 
