@@ -66,12 +66,6 @@ Rough budget:
   + arash: email?
   + exam 
 
-** TODO Next year:
-- Change file structure:
-  + Top level (Intro, organisation info, team, exam, course eval, ...)
-    + Lecture notes
-    + Schedule
-    + Exercises
 
 -> Part of the course plan for GU (August) / Chalmers (...)
 
