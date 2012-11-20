@@ -56,6 +56,7 @@ pub = system ["rsync", "-r", ".",
 
 action = do
   exercises
+  html "index"
   html "Schedule"
   html "Lectures"
   pub
