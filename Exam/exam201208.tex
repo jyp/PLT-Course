@@ -1,8 +1,7 @@
 \documentclass{article}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage[mathletters]{ucs}
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{listings}
 \lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
 
@@ -125,10 +124,12 @@ required for grade VG.
 
 \section{Generalities}
 
-You are facing the task to translate an application written in Erlang
-into an imperative language like C. List a sequence of transformations
-seen in the course that, if applied in the order given, will transform
-the Erlang program to an imperative program easy to write in C syntax.
+Suppose that you are facing the task to translate an application
+written in Erlang into an imperative language like C. This can be done
+by a sequence of transformations seen in the course.  List a sequence
+of transformations seen in the course that, if applied \emph{in the
+  order given}, will transform the Erlang program to an imperative
+program easy to write in C syntax.
 
 Reminder: Erlang is a functional language equipped with concurrency
 features such as channels and processes.
@@ -150,13 +151,21 @@ function a(m,n)
 \begin{itemize}
 \item Write a version of the Ackermann function that does not use
   recursion, but may use an explicit stack.
-\item Did you perform tail-call optimisation in your translation?
-\item Is it at all possible to do so? Qualify your answer if necessary.
+\item Is it possible to tail-call optimise some recursive
+  calls? List which calls which can be optimised:
+  \begin{enumerate}
+  \item \texttt{a(m-1,1)}
+  \item \texttt{a(m-1,a(m,n-1))}
+  \item \texttt{a(m,n-1)}
+  \end{enumerate}
 \end{itemize}
 
 Hints: you should first define the type of values that you can push on
 the stack, and you can assume that labels can be used as values.
 
+Note: Optimising all possible tail-calls is worth only 2 points.
+
+\newpage
 \section{Objects from records}
 
 Consider the following C++ code, which is an encoding of a class
@@ -205,23 +214,29 @@ Quick refresher:
 \item \texttt{p->f} is used to access a field \texttt{f} in a
   structure pointed by \texttt{p}.
 \end{itemize}
-
+\newpage
 \section{Closures}
 Consider the Haskell program:
 
 \begin{verbatim}
 g [] = []
-g (p:ps) = p : g (filter (\x -> x `mod` p == 0)) ps
+g (p:ps) = p : g (filter (\x -> x `mod` p == 0) ps)
+
+filter f [] = []
+filter f (x:xs) = if p x 
+                     then x : filter f xs  
+                     else filter f xs
 \end{verbatim}
 
-Translate the code to use explicit closures. 
+Transform the code to use explicit closures. That is, use a Haskell
+\emph{data structure} to represent $\lambda$-expressions.
 
 Remarks:
 \begin{itemize}
 \item All higher-order functions must be removed.
 \item You cannnot \emph{specialize} any higher-order function
-  (eg. don't make a special version of \texttt{zipWith} which does
-  only addition).  Use closures.
+  (eg. don't make a special version of \texttt{filter} which can test
+  only divisibility).  Use closures.
 \end{itemize}
 \section{Continuations}
 
@@ -249,10 +264,10 @@ Transform \texttt{fib} to use explicit continuations. Remarks:
   \texttt{yield}, which takes an explicit continuation as argument.
 \item The translation of \texttt{fib} should also take an explicit
   continuation as argument.
-\item Do not change (optimise) the algorithm.
+\item Do not change the algorithm. Do not ``optimize'' it.
 \end{itemize}
 
-
+\newpage
 \section{Relations to lists of successes}
 
 Consider the Curry program
@@ -260,17 +275,23 @@ Consider the Curry program
 ancestor a c = (parent a x & ancestor x c) | a =:= c
 \end{verbatim}
 
-Write a function \texttt{ancestors} that returns all the ancestors of
-a given person.  That is, given a person \texttt{c}, construct the
+
+
+Convert the program from relational to functional style. That is,
+write a function \texttt{ancestors} that returns all the ancestors of
+a given person.  More precisely, given a person \texttt{c}, construct the
 list of \texttt{x}s such that \texttt{ancestor x c} is true.
 
 To do so, you may assume that you have at your disposal a function
 \texttt{parents} which returns the list of \texttt{x}s such that
 \texttt{parent x c} is true.
 
-Hint: begin by writing the types of the functions \texttt{ancestors}
-and \texttt{parents}.
-
-Write your answer in a functional language.
+Hints: 
+\begin{itemize}
+\item Remember that \texttt{|} stands for logical disjunction and
+  \texttt{\&} stands for logical conjunction.
+\item Begin by writing the types of the functions \texttt{ancestors}
+  and \texttt{parents}.
+\end{itemize}
 
 \end{document}
