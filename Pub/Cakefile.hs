@@ -51,8 +51,7 @@ tex = do
                 "--funcall", "org-export-as-pdf"]
   
 
-pub = system ["rsync", "-r", ".",
-          "bernardy@remote12.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/"]
+pub = system ["rsync", "-r", ".", "bernardy@remote12.chalmers.se:/chalmers/groups/edu2009/www/www.cse.chalmers.se/course/DAT121"]
 
 action = do
   exercises

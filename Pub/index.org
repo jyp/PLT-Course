@@ -19,19 +19,11 @@
   - Contact:
     - Room: EDIT 5...
     - E-mail: frolov (chalmers.se)
-+ Arash Rouhani
-  - Exercise tutor
-  - E-mail: rarash (student.chalmers.se)
 + JP Bernardy
   - Course responsible & lecturer
   - Contact:
     - Room: EDIT 6126
     - E-mail: bernardy (chalmers.se)
-
-  - CV:
-    + 1996-2000: Master in CS (Free University of Brussels)
-    + 2000-2007: Software engineer (Various places)
-    + 2007-2011: PhD (Chalmers)
 
 ** Schedule & Organisation
 *** Schedule
