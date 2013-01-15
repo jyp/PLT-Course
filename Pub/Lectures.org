@@ -1952,6 +1952,7 @@ In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_lang
      :  .../pakcs/bin/pakcs
      :  :l Family.curry  
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
+*** TODO Also look into KiCS2 http://www-ps.informatik.uni-kiel.de/kics2/
 ** Unification
 
 We introduce two new concepts at once:
