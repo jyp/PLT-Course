@@ -16,6 +16,144 @@ How to read this document
    + (⋆⋆⋆) only for grade 5
    + (✪) not formally part of the course material
 
+* What is a "programming paradigm"?
+** Definition
+
+Paradigm: "A philosophical and theoretical framework of a scientific school or
+discipline within which theories, laws, and generalizations and the
+experiments performed in support of them are formulated; broadly: a
+philosophical or theoretical framework of any kind"
+
+http://www.merriam-webster.com/dictionary/paradigm
+
+see also: http://en.wikipedia.org/wiki/Programming_paradigm
+
+** Paradigms as "ways of organising thought"
+
+:             Programming paradigm 
+:                        = 
+: The basic structuration of thought underlying the programming activity
+
+eg. when you think of a programming problem, what are you thinking of?
+
+- the sequence of actions to perform (first download the file, then
+  display it)
+- how to divide the problem-space into sub-tasks (to compute the
+  spanning tree, i can divide the graph arbitrarily in two, and then
+  ...)
+- what are the agents involved (sensors, a simulator, a renderer, ...)
+- what data do we need to handle? do we need intermediate
+  representations? what are the relations between the different forms?
+
+Note that the same way of thinking is not adapted to all problems.
+
+** To each paradigm corresponds a "mental model of the computer"
+
+How do you think of your computer?
+
+- Memory + instructions (von Neumann model)
+- Rewriting engine
+- (evaluator of) Mathematical functions
+- ...
+  
+** Paradigms and Languages
+*** (Do not reveal:) Discussion: What languages do you know? 
+
+Regexp / Excell formulas / sql queries / Haskell / C / Asm / ...
+
+ ⟶ clouds / recognise paradigms / discussions
+
+- Paradigms build on top of features
+- Languages implement features
+
+http://www.info.ucl.ac.be/~pvr/paradigmsDIAGRAMeng108.pdf
+file:LangPop.png
+
+*** PL Features
+- Structured data / Records
+- Naming and abstraction (2nd order, etc).
+- Memory (cell) / State
+- Processes
+- Communication channels
+- Recursion
+- Search
+
+** Notion of paradigm shift
+After writing many programs, you may notice patterns emerging. These
+patterns may become codified, either informally (cf. "Design
+Patterns", the seminal book) or formally within the language
+(cf. Haskell Monads).
+
+Eventually, all programming may revolve around a number of patterns;
+the old ways are abandonned.  This is the paradigm shift: a new way of
+thinking appears. Eventually, a new programming language may be
+developed to support the "patterns" directly.
+
+#+begin_src dot :file shift.svg :cmdline -Kdot -Tsvg
+digraph G {
+   "Programming habits" -> "(Design) patterns" -> "New Paradigm"
+}
+#+end_src
+
+#+results:
+[[file:shift.svg]]
+
+** The importance of knowing multiple paradigms
+*** Ability to think "big thoughts"
+- Anecdote: MULTICS
+- "Language as thought shaper", from http://soft.vub.ac.be/~tvcutsem/whypls.html
+
+  To quote Alan Perlis: "a language that doesn't affect the way you
+  think about programming, is not worth knowing."
+  
+  The goal of a thought shaper language is to change the way a
+  programmer thinks about structuring his or her program. The basic
+  building blocks provided by a programming language, as well as the
+  ways in which they can (or cannot) be combined, will tend to lead
+  programmers down a "path of least resistance", for some unit of
+  resistance. For example, an imperative programming style is definitely
+  the path of least resistance in C. It's possible to write functional C
+  programs, but as C does not make it the path of least resistance, most
+  C programs will not be functional.
+
+  Functional programming languages, by the way, are a good example of
+  thought shaper languages. By taking away assignment from the
+  programmer's basic toolbox, the language really forces programmers
+  coming from an imperative language to change their coding habits. I'm
+  not just thinking of purely functional languages like
+  Haskell. Languages like ML and Clojure make functional programming the
+  path of least resistance, yet they don't entirely abolish
+  side-effects. Instead, by merely de-emphasizing them, a program
+  written in these languages can be characterized as a sea of
+  immutability with islands of mutability, as opposed to a sea of
+  mutability with islands of immutability. This subtle shift often makes
+  it vastly easier to reason about the program.
+
+  Erlang's concurrency model based on isolated processes communicating
+  by messages is another example of a language design that leads to
+  radically different program structure, when compared to mainstream
+  multithreading models. Dijkstra's "GOTO considered harmful" and
+  Hoare's Communicating Sequential Processes are pioneering examples of
+  the use of language design to reshape our thoughts on programming. In
+  a more recent effort, Fortress wants to steer us towards writing
+  parallel(izable) programs by default.
+
+  Expanding the analogy with natural languages, languages as thought
+  shapers are not about changing the vocabulary or the grammar, but
+  primarily about changing the concepts that we talk about. Erlang
+  inherits most of its syntax from Prolog, but Erlang's concepts
+  (processes, messages) are vastly different from Prolog's (unification,
+  facts and rules, backtracking). As a programing language researcher, I
+  really am convinced that language shapes thought.
+
+- When a paradigm is well supported, you can "think big" and have the
+  compiler check that you're on the right track.
+*** Altenative paradigms in the industry:
+- "Excell is the most used programming language"
+- SQL is mostly functional (relational)
+- F# officially supported by MicroSoft
+- Exponential growth of Erlang / Haskell
+
 * Prelude: A crash course on types
 Types are essential to get a quick overview of what a program is
 "about". Very useful when facing abstract programs! Hence, they are

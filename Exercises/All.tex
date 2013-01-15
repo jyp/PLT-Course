@@ -23,6 +23,8 @@
 \newcommand{\removed}[1]{}
 
 \newcommand{\answer}[1]{}
+\newcommand{\correctedLastYear}[1]{}
+\newcommand{\correctedThisYear}[1]{,@#1}
 
 % Uncomment to show answers
 % \renewcommand{\answer}[1]{#1}
@@ -625,23 +627,23 @@ abstract class IntersectVisitor {
 \subsection{Algebraic Data Types and Pattern Matching}
 
 \question{*} Define an algebraic type for binary trees
-\question{*,@3} define an algebraic type for arithmetic expressions
-\question{*,@3} define a simple interpreter for the above type
+\question{*\correctedLastYear 3} define an algebraic type for arithmetic expressions
+\question{*\correctedLastYear 3} define a simple interpreter for the above type
 
-\question{*,@3} Translate the above 2 structures to an OO language. (Hint: One
+\question{*\correctedLastYear 3} Translate the above 2 structures to an OO language. (Hint: One
 class corresponds to leaves, one to branching.)
 
-\question{*,@3} Translate the interpreter. You are not allowed to use 'instanceof'
+\question{*\correctedLastYear 3} Translate the interpreter. You are not allowed to use 'instanceof'
 
 \question{*} Translate the interpreter. You must use 'instanceof'.
 
 \subsection{Currification and partial application}
 
-\question{*,@3} Define a function $\mathsf{f}$ following this spec: given a
+\question{*\correctedLastYear 3} Define a function $\mathsf{f}$ following this spec: given a
 integer, return it unchanged if it is greater than zero, and zero
 otherwise. (The type must be Int → Int.)
 
-\question{*,@3} Assuming a function max : (Int × Int) → Int, define the function $\mathsf{f}$.
+\question{*\correctedLastYear 3} Assuming a function max : (Int × Int) → Int, define the function $\mathsf{f}$.
 
 \question{*} Define a function max', by currifying the function max.
 
@@ -652,7 +654,7 @@ otherwise. (The type must be Int → Int.)
 Assume the filter, map, foldr functions as in the Haskell prelude. f
 comes from the previous section.
 
-\question{*,@3} Unfold the following expressions:
+\question{*\correctedLastYear 3} Unfold the following expressions:
 \begin{enumerate}
 \item map f
 \item filter ($>=$ 0)
@@ -665,7 +667,7 @@ for (i=0;i<sizeof(a);i++)
   if (a[i].grade >= 24)
      *b++ = a[i];
 \end{verbatim}
-\begin{ex}{*,@3}
+\begin{ex}{*\correctedLastYear 3}
   How would the same algorithm be naturally expressed in a functional
   language? (Use functions from the Haskell prelude to shorten your code)
 \end{ex}
@@ -700,17 +702,17 @@ test1 xs = foldr (+) 0 xs
 test2 xs = foldr (*) 1 xs
 \end{verbatim}
 
-\begin{ex}{*,@4}
+\begin{ex}{*\correctedLastYear 4}
   Identify higher-order applications in the above program.
 \end{ex}
 
-\begin{ex}{*,@4}
+\begin{ex}{*\correctedLastYear 4}
   Assuming that $\mathsf{xs}$ are lists of integers, replace the above
   uses of higher-order application by explicit closures.
   (Hint: you need to also change the definition of foldr/map).
 \end{ex}
 
-\begin{ex}{**,@4}
+\begin{ex}{**\correctedLastYear 4}
   Add the following line to the above program and repeat the above 2
   exercises.
 \begin{verbatim}
@@ -740,7 +742,7 @@ The algorithm can be implemented in Haskell as follows:
 
 Write the algorithm in Haskell.
 
-\question{*,@4}
+\question{*\correctedLastYear 4}
 
 Consider the following (totally unrelated) algorithm:
 \begin{verbatim}
@@ -754,7 +756,7 @@ lambda abstraction.
 
 The only remaining higher-order function is filter.
 
-\question{*,@4} Write a version of filter which takes an explicit
+\question{*\correctedLastYear 4} Write a version of filter which takes an explicit
 closure as an argument.  Remember to write (and use) an apply
 function. Hint: in order to test your program you need to define an
 example parameter, such as $(>= 0)$, etc.
@@ -769,20 +771,20 @@ not use arrays instead of lists). (Hint: write this one as a recursive program).
 
 Consider a binary tree structure with integer values in the nodes.
 
-\question{*,@4} In the Java version, write a function that replaces each
+\question{*\correctedLastYear 4} In the Java version, write a function that replaces each
 element with its index in preorder traversal of the tree.
 
-\question{**,@4} Translate the function above to Haskell thinking of it
+\question{**\correctedLastYear 4} Translate the function above to Haskell thinking of it
 as an imperative algorithm. You should use \emph{IP} from the lecture notes.
 What is the ``state of the world'' in this case?
 
-\question{*,@4} Rewrite the Haskell version, in such a way that passing
+\question{*\correctedLastYear 4} Rewrite the Haskell version, in such a way that passing
 ``state of the world'' is made visible as such, that is, eliminate your
 usage of \emph{IP}.
 
 
 \subsection{Laziness}
-There are no lazy languages that permit mutation.  \question{***, @5} Why not?
+There are no lazy languages that permit mutation.  \question{*** \correctedLastYear 5} Why not?
 
 \subsubsection{Lazy Dynamic Programming}
 
@@ -813,7 +815,7 @@ $\mathsf{fibs}!k$ is accessed? Draw the graph of computation
 dependencies for $k=5$.
 
 
-\question{*, @5} Write the Floyd-Warshall algorithm in your favourite
+\question{*\correctedLastYear5} Write the Floyd-Warshall algorithm in your favourite
 imperative language. Assume that there is no weight on edges; and
 you're only interested in whether there is a path between two given
 nodes, not the number of steps in the path.
@@ -824,7 +826,7 @@ Note that the best-case performance is Cubic.
 cell in a matrix. (What do you need to do to make this at all
 possible?)
 
-\question{*, @5} Using the same formula, fill the Roy-Warshall matrix
+\question{*\correctedLastYear5} Using the same formula, fill the Roy-Warshall matrix
 using an array comprehension in a lazy language (optionally use
 explicit thunks for the contents of each cell). Discuss the best-case
 performance.
@@ -885,7 +887,7 @@ the \verb!sieve! function also works given the {\em infinite} list
 prime numbers.
 
 
-\begin{ex}{*, @5}
+\begin{ex}{*\correctedLastYear5}
 How would you find the first 100 prime numbers?
 \end{ex}
 
@@ -893,7 +895,7 @@ Remark: start by answering the following questions on a simpler
 algorithm, for example the function \textsf{enumFrom} which generates
 the infinite list of numbers starting at a given one.
 
-\begin{ex}{*, @5} Translate sieve to use explicit thunks (as in the lecture)
+\begin{ex}{*\correctedLastYear5} Translate sieve to use explicit thunks (as in the lecture)
 \end{ex}
 
 Oh noes, this introduced higher-order function(s).
@@ -907,7 +909,7 @@ You know what's coming...
 \question{***} Remove higher-orderness using the best technique available.
 \answer{In Sieve2.hs}
 
-\begin{ex}{**, @5}
+\begin{ex}{**\correctedLastYear5}
   Write a version of lazy sieve in imperative (or OO)
 language. 
 \answer{Found in SieveJava directory}
@@ -924,7 +926,7 @@ you see.
 
 \subsection{Channels and Processes}
 
-\begin{ex}{*, @5}
+\begin{ex}{*\correctedLastYear5}
   Write a process that manages a bank account. It has a channel for
   queries; which can be deposits and withdrawals. The answer is posted
   to a channel that comes with the query.  (Note: you cannot use
@@ -942,7 +944,7 @@ you see.
   accordingly.
 \end{ex}
 
-\begin{ex}{**, @5}
+\begin{ex}{**\correctedLastYear5}
   Is the total amount of money a constant of your system? (Consider
   that transactions may fail in the ``middle''.) How can you ensure
   that it is?  Write the corresponding code.
@@ -973,19 +975,19 @@ session connection = do
    placeOrder items address
 \end{verbatim}
 
-\begin{ex}{*, @6}
+\begin{ex}{*\correctedLastYear6}
   What is the purpose, and type of the webForm primitive?
 \end{ex}
 
-\begin{ex}{**, @6}
+\begin{ex}{**\correctedLastYear6}
   Transform the type of webForm to take a continuation.
 \end{ex}
 
-\begin{ex}{**, @6}
+\begin{ex}{**\correctedLastYear6}
   Break the above code into continuations, linked by the webForm primitive.
 \end{ex}
 
-\begin{ex}{***, @6}
+\begin{ex}{***\correctedLastYear6}
   Outline what the webForm function should do. Discuss in particular
   what happens if the user presses the ``back'' button in their
   browser.
@@ -1006,18 +1008,18 @@ becomes:
 
 Expr → (Int → a) → a
 
-\question{*, @6} Write a wrapper for the interpreter which has the above type
+\question{*\correctedLastYear6} Write a wrapper for the interpreter which has the above type
 
 % wrapper expr k = k (eval expr)
 
 
-\question{***, @6} Replace every recursive call in the interpreter by a
+\question{***\correctedLastYear6} Replace every recursive call in the interpreter by a
 call to the wrapper.  (Hint: you must decide what is the
 ``continuation'' for every call, and for this you must choose an order
 of evaluation!)
 % eval (Add x y) = wrapper x (\a -> wrapper y (\b -> a + b))
 
-\question{***, @6} Unfold the usage of the interpreter in the wrapper.
+\question{***\correctedLastYear6} Unfold the usage of the interpreter in the wrapper.
 
 % wrapper (Add x y) k = k (wrapper x $ \a -> wrapper y $ \ b -> a + b)
 
@@ -1036,7 +1038,7 @@ In this section, exercises are sometimes formulated both in Prolog and Curry syn
 \providecommand{\Curry}{{\tiny Curry}}
 \subsection{Metavariables and unification}
 
-\begin{ex}{*, @6}
+\begin{ex}{*\correctedLastYear6}
 What is the result of each of the following unifications?
 Try to come up with the result without using the prolog/curry interpreter!
 
@@ -1135,7 +1137,7 @@ Note that the same metavariable (G271 in my implementation) is present twice in
 the result. Note that we can get the original result back by unifying this
 metavariable with the empty list.
 
-\begin{question}{**, @6}
+\begin{question}{**\correctedLastYear6}
 Write a predicate \textsf{toList :: DList a $\rightarrow$ [a] $\rightarrow$ Success} to get back to the normal list representation.
 
 \answer{
@@ -1153,7 +1155,7 @@ toList (D (head:rest) tail) (head':otherTail) = head =:= head' & toList (D rest 
 Given that representation for lists, it is possible to perform concatenation by
 doing unification only!
 
-\begin{ex}{**, @6}
+\begin{ex}{**\correctedLastYear6}
 Write a predicate dconcat to concatenate two difference lists, without
 using the direct representation.
 

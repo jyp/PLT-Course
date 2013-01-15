@@ -52,7 +52,7 @@ tex = do
   
 
 pub = system ["rsync", "-r", ".",
-          "bernardy@remote12.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/" -- Correct url.
+          "bernardy@remote11.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/" -- Correct url.
           -- I don't use the "official" thing; see e-mail correspondence (Edu2009)
           -- bernardy@remote12.chalmers.se:/chalmers/groups/edu2009/www/www.cse.chalmers.se/course/DAT121
   ]
