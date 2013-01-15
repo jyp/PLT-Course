@@ -11,107 +11,72 @@
 + Extra slot (see [[timetable]] below) 
 + Office hours:
   - JP: Tue: 10.00
-  - Ramona: Thu. 13.15
   - Nik: Mon. 13.15
-  - Arash: During extra slot, assigned to Q&A below.
-+ Teachers weekly meeting: Thu. 11.30
+  - Dan: TODO
++ Teachers weekly meeting: TODO
 
 See also timeedit:
-https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=20120116.x,20120331.x&objects=201044.182&ox=0&types=0&fe=0
+https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=0.days%2C20130607.x&objects=201044.182&ox=0&types=0&fe=0
 
 * <<Timetable>>
 
-| Week | Starts | Exercises | Lecture 1 | Lecture 2 | Extra |
-|------+--------+-----------+-----------+-----------+-------|
-|    1 |   0116 | %         | Intr      | IP 1      | Q&A   |
-|    2 |   0123 | EX 1      | IP 2      | OO 2      | Q&A   |
-|    3 |   0130 | EX 2      | FP 1      | FP 2      | Q&A   |
-|    4 |   0206 | EX 3      | CHARM     | FP 3      | Q&A   |
-|    5 |   0213 | EX 4      | FP 4      | CP 1      | Q&A   |
-|    6 |   0220 | EX 5      | CP 2      | LP 1      | Q&A   |
-|    7 |   0227 | EX 6      | LP 2      | Test exam | %     |
+| Week | Starts | Lecture 1 | Lecture 2 | Exercises |
+|------+--------+-----------+-----------+-----------|
+|    1 |   0121 | Intr      | IP 1      | EX 1      |
+|    2 |   0128 | IP 2      | OO 2      | EX 2      |
+|    3 |   0204 | FP 1      | FP 2      | EX 3      |
+|    4 |   0211 | FP 3      | CHARM     | EX 4      |
+|    5 |   0218 | FP 4      | CP 1      | EX 5      |
+|    6 |   0225 | CP 2      | LP 1      | EX 6      |
+|    7 |   0304 | LP 2      | Q&A       | EX 7      |
 
 See table below for detail of contents.
 
-| Abbr | Contents                                                             | TAs  |
-|------+----------------------------------------------------------------------+------|
-| Intr | Generalities                                                         |      |
-| IP 1 | Goto ↔ Loops, Pointers and passing by reference, Inlining procedures |      |
-| EX 1 | Exercises: 1, 2, 4, 5, 8, 11, 12, 13                                 | N, R |
-| IP 2 | Procedures → Gotos, Explicit stack                                   |      |
-| OO 1 | Inheritance, Interfaces, Notion of co/contra variance                |      |
-| EX 2 | Exercises: 14, 15, 17, 18, 28, 35, 39, 41                            | N, R |
-| FP 1 | Algebraic Types & Pattern matching                                   |      |
-| FP 2 | Higher-order functions & Currification                               |      |
-| EX 3 | Exercises marked with @3 in file:All.pdf                             | R, A |
-| FP 3 | Explicit state & Closures                                            |      |
-| EX 4 | Exercises marked with @4 in file:All.pdf                             | R, A |
-| FP 4 | Laziness & Explicit thunks                                           |      |
-| CP 1 | State-managing process                                               |      |
-| EX 5 | Exercises marked with @5 in file:All.pdf                             | N, A |
-| CP 2 | Explicit continuations                                               |      |
-| LP 1 | Unification                                                          |      |
-| EX 6 | Exercises marked with @6 in file:All.pdf                             | N, A |
-| LP 2 | Relations, Search as list of successes                               |      |
-| Q&A  | Questions and answers                                                |      |
+| Abbr | Contents                                                             |
+|------+----------------------------------------------------------------------|
+| Intr | Generalities                                                         |
+| IP 1 | Goto ↔ Loops, Pointers and passing by reference, Inlining procedures |
+| EX 1 | Exercises: marked with @1 in file:All.pdf                            |
+| IP 2 | Procedures → Gotos, Explicit stack                                   |
+| OO 1 | Inheritance, Interfaces, Notion of co/contra variance                |
+| EX 2 | Exercises:  marked with @2 in file:All.pdf                           |
+| FP 1 | Algebraic Types & Pattern matching                                   |
+| FP 2 | Higher-order functions & Currification                               |
+| EX 3 | Exercises marked with @3 in file:All.pdf                             |
+| FP 3 | Explicit state & Closures                                            |
+| EX 4 | Exercises marked with @4 in file:All.pdf                             |
+| FP 4 | Laziness & Explicit thunks                                           |
+| CP 1 | State-managing process                                               |
+| EX 5 | Exercises marked with @5 in file:All.pdf                             |
+| CP 2 | Explicit continuations                                               |
+| LP 1 | Unification                                                          |
+| EX 6 | Exercises marked with @6 in file:All.pdf                             |
+| LP 2 | Relations, Search as list of successes                               |
+| EX 7 | Exercises marked with @7 in file:All.pdf                             |
+| Q&A  | Questions and answers                                                |
 
 Note: the contents of each exercise session is about the topics
 covered in the two previous lectures. Remember to re-fetch the
 file:All.pdf file each week: exercises may have been updated.
 
-Adjustments done:
-
-| Abbr | Comment                                                                           |
-|------+-----------------------------------------------------------------------------------|
-| IP 1 | Had time to discuss Procedures → Gotos in addition of the above.                  |
-| OO 1 | Had time to do the quick review of Haskell syntax                                 |
-| FP 1 | Discussed also HOF and currification                                              |
-| FP 2 | Did exercise on: co/contra variance. Showed how to arrive to the [[FP2-Extras2.hs][sieve algorithm]]. |
 
 * Other events:
-** CHARM
-  SCHEDULED: <2012-02-07 Tue>--<2012-02-08 Wed>
-  Note that the exercises remain.
 ** Examination
-  SCHEDULED:  <2012-03-09 Fri 14:00>
+  SCHEDULED:  <2013-03-14 Thu 14:00>
+  SCHEDULED:  <2013-08-30 Fri 8:00>
 *** Correction
-  SCHEDULED:  <2012-03-13 Tue 14:00>--<2012-03-14 Wed 14:00>
+  SCHEDULED:  <2013-03-15 Fri 14:00>
 *** Review
-    SCHEDULED:  <2012-03-28 Wed 13:15>
+    SCHEDULED:  <2013-04-01 Mon 13:15>
     In room 5128
-** Re-Examination
-  SCHEDULED:  <2012-08-30 Thu 14:00>
-
 ** Course evaluation
 Representatives:
-
-  + oscar.dragen (at gmail)
-  + Davor Pejic (pejic at student...)
-  + Johannes Weschke (johwesc at student...)
-
-*** Evaluation Meeting 1
-    Could not be implemented due to the absence of the representatives
-     at the teaching events.  Representatives should then take care
-     themselves to advertise themselves to their fellow students.
-*** Spontaneous remarks by students on exercise sessions.
-- Extra points should be awarded only for planned exercises.
-- Students have proposed that instead of them explaining their
-  solution directly on the board, they'd prefer the following process.
-  (14 people support the proposal out of 35 present at the lecture.)
-
-  - Before the session students turn-in a solution on paper
-  - The T.A. explain "the" solution
-  - A random student is then picked to explain the differences with
-    their solution
-  - Students are (still) awarded points in proportion to what they
-    submit.
-  - The T.A. can use the paper copy to check if what the student says
-    corresponds to what they have written.
 
 *** Evaluation Meeting 2
 (Oscar was absent from the meeting)
 Items:
 **** Changes in the course since last year.
+***** 2012
 - Moved from Master (served as a common ground in programming for
   students with various backgrounds -- the course was given to many
   international students)
@@ -119,48 +84,12 @@ Items:
   focus of the course is now to explain the links between the
   paradigms, and explain new concepts by translation into known (old)
   concepts.
+***** 2013
+- Different style of exercise sessions
+- More course material will be produced
 **** Study climate
-+ Communication
-  - Students feel intimidated by T.A.; it requires courage to go to the
-    TA and get one's exercise corrected.
-  - Student appreciate the presence of a TA which talks at their own
-    level. (So Friday's QA sessions are good.)
-+ Workload
-   - No complaint.
-+ Supervision
-  - The 2nd session was already better compared to the 1st.
-  - To make the exercise session smoother, the TA will now check the
-    solution on paper before the student explains the exercise orally.
-  - Instead of "regular" lectures, students appreciate tutorials.
-  - Sometimes exercises can be vague. TAs are asked to improve them in
-    that respect.  Note however that clarifications can be requested
-    (email, office hours).
 **** Problematic course items; can resources be used better?
-No gap is felt. Various activites reply to existing needs.
 **** Course-specific questions in questionnaire; other material for final meeting?
-- Do you think the format of the (last few) exercise sessions is
-  appropriate?
 
-  1. Inappropriate
-  2. It's basically ok but there are aspects to improve (please give details below)
-  3. Appropriate
- 
+*** Evaluation Meeting 3   
 
-- Did the knowledge/skills learnt thanks to the exercises proposed
-  helped you accomplish the course goals?
-
-  1. I learnt almost nothing via exercises
-  2. I learnt mostly via other sources
-  3. I learnt mostly via exercises
-  4. My learning was completely driven by the exercises
-
-
-
-*** TODO Evaluation Meeting 3   
-
-** TODO Next year:
-- Change file structure:
-  + Top level (Intro, organisation info, team, exam, course eval, ...)
-    + Lecture notes
-    + Schedule
-    + Exercises
