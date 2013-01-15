@@ -3,6 +3,7 @@
 #+STYLE: <link rel="stylesheet" type="text/css" href="pp.css" />
 
 * Announcements
+- [[file:Lectures.org][Jump to the lecture notes]]
 - <2013-01-21 Mon> Course begins
 * Organisation info
 
@@ -45,7 +46,7 @@ See [[file:Schedule.org][here]].
   interrupt me.
 *** <<Exercises>>
 - 2 groups (go to only 1 session).
-- Find out your group using [[file:GroupAssignment.hs][this program]]. See [[file:Schedule.org::timetable][the schedule]] for times.
+- Find out your group using [[file:GroupAssignment.hs][this Haskell program]]. See [[file:Schedule.org::timetable][the schedule]] for times.
 - Prepare exercises.
   + You should have a written copy of your solution with you if you
     have one.
