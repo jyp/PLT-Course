@@ -420,9 +420,21 @@ without loops (only recursion allowed).
 \question{**}
 Translate the quicksort algorithm.
 
-\question{**} 
-Implement the following algorithm as a recursive
-function. (And remove the loop!)
+\question{**} For each of the following: implement the algorithm as a
+recursive function. (And remove the loop!)
+\begin{enumerate}
+\item
+\begin{verbatim}
+-- n given
+x = 1
+while n > 0 do
+  b = least_significant_bit(n);
+  n = n / 2;
+  x = x * x + b;
+return x
+\end{verbatim}
+
+
 \begin{verbatim}
 a = 0
 b = 1
@@ -432,6 +444,8 @@ for i in [1..n] do
   b = c
 return a  
 \end{verbatim}
+\item 
+\end{enumerate}
 
 \section{Object-Oriented Programming}
 

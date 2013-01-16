@@ -2,20 +2,14 @@
 #+EMAIL: bernardy@chalmers.se
 #+STYLE: <link rel="stylesheet" type="text/css" href="pp.css" />
 
-How to read this document
- + Use the source, Luke: 
-   - replace .html by .org in the above link
-   - Plain text: header level is indicated by number of *
-   - Or better: Use emacs [[http://orgmode.org/][org mode]]. 
+* How to read this document
+This document is generated form an org-mode file. 
+   - To access it replace .html by .org in the above link
+   - It can be read in plain text: header level is indicated by number of *
+   - Or more conveniently by using emacs [[http://orgmode.org/][org mode]]. 
      + Use <TAB> to expand/collapse nodes. 
      + C-c C-e b to do HTML rendering and open in your browser
      + Check out the [[http://orgmode.org/orgcard.txt][reference card]].
- + Sometimes the difficulty/relevance of a section is indicated by a number of stars:
-   + (⋆) material required to pass the course
-   + (⋆⋆) material for grade 4
-   + (⋆⋆⋆) only for grade 5
-   + (✪) not formally part of the course material
-
 * What is a "programming paradigm"?
 ** Definition
 
@@ -24,9 +18,8 @@ discipline within which theories, laws, and generalizations and the
 experiments performed in support of them are formulated; broadly: a
 philosophical or theoretical framework of any kind"
 
-http://www.merriam-webster.com/dictionary/paradigm
-
-see also: http://en.wikipedia.org/wiki/Programming_paradigm
+- http://www.merriam-webster.com/dictionary/paradigm
+- http://en.wikipedia.org/wiki/Programming_paradigm
 
 ** Paradigms as "ways of organising thought"
 
@@ -45,9 +38,10 @@ eg. when you think of a programming problem, what are you thinking of?
 - what data do we need to handle? do we need intermediate
   representations? what are the relations between the different forms?
 
-Note that the same way of thinking is not adapted to all problems.
+Note that the same way of thinking is not adapted to all
+problems. Hence, it is important to know many paradigms!
 
-** To each paradigm corresponds a "mental model of the computer"
+*** To each paradigm corresponds a "mental model of the computer"
 
 How do you think of your computer?
 
@@ -56,50 +50,7 @@ How do you think of your computer?
 - (evaluator of) Mathematical functions
 - ...
   
-** Paradigms and Languages
-*** (Do not reveal:) Discussion: What languages do you know? 
-
-Regexp / Excell formulas / sql queries / Haskell / C / Asm / ...
-
- ⟶ clouds / recognise paradigms / discussions
-
-- Paradigms build on top of features
-- Languages implement features
-
-http://www.info.ucl.ac.be/~pvr/paradigmsDIAGRAMeng108.pdf
-file:LangPop.png
-
-*** PL Features
-- Structured data / Records
-- Naming and abstraction (2nd order, etc).
-- Memory (cell) / State
-- Processes
-- Communication channels
-- Recursion
-- Search
-
-** Notion of paradigm shift
-After writing many programs, you may notice patterns emerging. These
-patterns may become codified, either informally (cf. "Design
-Patterns", the seminal book) or formally within the language
-(cf. Haskell Monads).
-
-Eventually, all programming may revolve around a number of patterns;
-the old ways are abandonned.  This is the paradigm shift: a new way of
-thinking appears. Eventually, a new programming language may be
-developed to support the "patterns" directly.
-
-#+begin_src dot :file shift.svg :cmdline -Kdot -Tsvg
-digraph G {
-   "Programming habits" -> "(Design) patterns" -> "New Paradigm"
-}
-#+end_src
-
-#+results:
-[[file:shift.svg]]
-
-** The importance of knowing multiple paradigms
-*** Ability to think "big thoughts"
+*** Quotes on the ability to think "big thoughts"
 - Anecdote: MULTICS
 - "Language as thought shaper", from http://soft.vub.ac.be/~tvcutsem/whypls.html
 
@@ -146,32 +97,76 @@ digraph G {
   facts and rules, backtracking). As a programing language researcher, I
   really am convinced that language shapes thought.
 
-- When a paradigm is well supported, you can "think big" and have the
-  compiler check that you're on the right track.
-*** Altenative paradigms in the industry:
-- "Excell is the most used programming language"
-- SQL is mostly functional (relational)
-- F# officially supported by MicroSoft
-- Exponential growth of Erlang / Haskell
+** Paradigms and Languages
+*** The big-bang of languages
+file:LangPop.png
 
-* Prelude: A crash course on types
+- In the old days: languages were built around a central idea,
+  crystallised in a paradigm.
+- Explosion in the number of languages
+- Now, there is a lot of cross-fertilisation between
+  languages: real-world languages implement apparently random collections
+  of features.
+- A given paradigm needs a specific set of features to be supported.
+
+The situation is summed up in [[paradigmsDIAGRAMeng108.pdf][this diagram]].
+
+*** PL Features we will see
+- Structured data / Records
+- Recursion
+- Naming and abstraction (higher order)
+- Memory (cell) / State
+- Processes
+- Communication channels
+- Search
+
+** Fluidity between paradigms
+
+As a working programmer, you will often look at a program and think:
+"this is a big mess". Your problem is to make sense of this
+mess. Perhaps the code was written using the "wrong" paradigm; perhaps
+the features to support the paradigms are not available to the
+programmers, and they used a wrong method for the implementation.
+
+- We will learn to properly encode features using others
+- By doing so we will also learn to recognize "a mess" as an encoding
+  of some feature(s) into others.
+
+** ✪ A remark on paradigm shift
+After writing many programs, you may notice patterns emerging. These
+patterns may become codified, either informally (cf. "Design
+Patterns", the seminal book) or formally within the language
+(cf. Haskell Monads). 
+
+Eventually, all programming may revolve around a number of patterns;
+the old ways are abandonned.  This is the paradigm shift: a new way of
+thinking appears. Eventually, a new programming language may be
+developed to support the "patterns" directly.
+
+* Prelude: Abstraction and Types
 Types are essential to get a quick overview of what a program is
-"about". Very useful when facing abstract programs! Hence, they are
-important in this course since some paradigms have high "expression
-power" (ie. programs can be esoteric if one doesn't know their
-purpose).
+"about". Very useful when facing unknown programs! We use them a lot in
+this course to structure the thinking about programs.
 
-Here I use the colon ':' to denote the typing relation. 
+The colon is used ':' to denote the typing relation:
 
-*** Some examples:
+: someValue : ItsType
 
-1. 0 : Int
-2. 1 : Int
-3. 'c' : Char
-4. "hello" : String
-5. (1/2) : Rational
+*** Examples
+- 0 : Int
+- 1 : Int
+- 'c' : Char
+- "hello" : String
+- (1/2) : Rational
 
-*** Paramerisation of programs / Abstraction / Function types
+*** Feature: Paramerisation and function types
+
+This is a good time to see our first programming language feature. It
+is so ubiquitious (nearly every language has it -- can you think of a
+counter-example?) that you may not have thought of it as a "feature"
+at all so far. We are talking about the ability to /abstract/ over
+parameters.
+
 
 Take a simple value like this:
 
@@ -187,20 +182,28 @@ person greeted:
 :    greet(name) = "Hello, " ++ name ++ " How are you today?" 
 
 
-The above makes sense only when 'name' is a string, and in that case
-greet(name) is a string. 
+A problem of abstraction is that it may not be so clear what the code
+is doing. What could this do if ~name~ is a floating point number? In
+this simple example it is pretty obvious, but in reality things get
+hairy pretty fast without types.
 
-:    name : String    ⊢    "Hello, " ++ name ++ " How are you today?" : String
-
-or 
-
-:    name : String    ⊢    greet(name) : String
-
-We can then deduce that "greet" is a function taking a string into a
-string, written formally as follows:
-
+In our example, we may declare that the above code makes sense only
+when ~name~ is a string (in fact /any/ string); and in that case
+~greet(name)~ is a string.
+Equivalently, we will say that ~greet~ is a function converting a
+string into another string, and we will write:
 :   greet : String → String
 
+
+The flip side of abstraction is application (or use). Given an
+abstract piece of code, one can use it as many times as desired on
+concrete cases.
+
+:  greet "dog"
+:  greet "there children!"
+
+Philosophical remark: if there is no application possible; abstraction
+is useless --- so they really are two sides of the same coin.
 *** Trivia: types of the following
 1. factorial : ?  
 2. π : ?  
@@ -208,6 +211,50 @@ string, written formally as follows:
 4. × : ?   (multiplicaton)
 5. derivative : ? (or ∫ : ?) (review this question after FP paradigm...)
    - hint: remember that derivative maps sin to cos.
+*** TODO Feature: naming things
+
+Naming things is a *special case* of abstraction. (Abstraction is a
+generalisation of naming things).
+
+Example:
+
+: circle_area(r) = 3.14 * r * r
+: circle_perimeter(r) = 2 * 3.14 * r
+
+We can abstact over pi
+
+: module Some_Code(pi : Float)
+:   circle_area(r) = pi * r * r
+:   circle_perimeter(r) = 2 * pi * r
+
+And immediately fix it:
+
+: Some_Code(3.14);
+
+This pattern of abstraction/application is so common that most
+(every?) programming language has special support for it.
+
+*** Feature: Higher-order parametrisation
+"What can be named/abstracted on" is an important characteristic of
+programming languages. Consider you favorite programming
+language. Does it support abstraction over:
+- integers?
+- charaters?
+- strings?
+- arrays?
+- matrices?
+- blocks of code?
+- functions?
+- types?
+- modules?
+- ...
+
+Higher-order functions refer to functions which are parameterised by
+other functions.  Typically in mathematics abstraction is
+unrestricted. Consider for example the types of derivative and
+integrals!
+
+*** TODO Every problem can be solved by adding a level of indirection
 * Imperative programming
 ** Paradigm
 
@@ -216,9 +263,7 @@ string, written formally as follows:
 3. then do some otherthing 
 4. if not done, then repeat 2. and 3. 
 
-(cf. cookbook...
-
-   ... for beginner cooks :)
+(cf. cookbook... for beginner cooks :)
 
 *** Computing model
 "von neumann" model of the computer:
@@ -227,8 +272,10 @@ string, written formally as follows:
 - Program (assignments, arithmetic, logic, (conditional) jumps)
 
 ** Example
-*** Gotos
-
+*** Feature: goto
+A pretty basic feature of imperative language is the jump ("goto");
+which may be conditional. Try to figure out what the following code
+does.
 #+begin_example
    -- Assume A : array of comparable items
 
@@ -245,8 +292,16 @@ string, written formally as follows:
         if swapped goto begin
 #+end_example
 
-*** Loops & Ifs
+*** Feature: Loops & Ifs
+It has been noted that programs written using only gotos are pretty
+hard to understand.  If one programs using gotos, it is advisable to
+restrict oneself to a few easy patterns (loops; or conditional
+execution). Nowadays gotos have almost disappeard from usage and all
+code is written using special-purpose instructions for the above
+patterns. This is an instance of paradigm shift.
 
+Here is a piece of code so-written. Is it easier to understand than
+the above?
 #+begin_example
    -- Assume A : array of comparable items
 
@@ -261,7 +316,10 @@ string, written formally as follows:
         end for
 #+end_example
 
-*** Wrapping in a procedure for good measure
+*** Feature: procedures
+The above code is parametric over ~A~. If the language supports this
+abstraction we should take advantage of it and present the above as a
+procedure.
 #+begin_example
     procedure bubbleSort( A : array of comparable items )
       swapped = true
@@ -277,26 +335,40 @@ string, written formally as follows:
     end procedure
 #+end_example
 
-** Discussion: When are gotos appropriate? (vs. ifs and loops?)
-extra reading: "goto statement considered harmful", E. G. Dijkstra
-http://portal.acm.org/citation.cfm?id=362947
+*** Extra reading
+It has not always been clear that GOTO is a bad idea. See for example:
+
+[[http://portal.acm.org/citation.cfm%3Fid%3D362947][GOTO statement considered harmful]], E. G. Dijkstra
 
 ** Transformation: Loops ⟶ Gotos
-*** Source: 
+The pattern in this course will be to understand a feature by
+/translation/ into other, known features. To get warmed up, we will do
+so with a feature we already understand well; namely loops.
+
+*** Source
+Consider the following loop:
 #+begin_example
-while cond do
-  body
+while i > 0 do
+  a[i] := b[i]
+  i = i-1
 #+end_example
 
 *** Target
+It can be encoded into the following code, which uses only
+(conditinal) jumps:
 #+begin_example
 test:
-  p := not cond
-  if p goto done
-  body
+  p := not (i>0)
+  if p then goto done
+  a[i] := b[i]
+  i = i-1  
   goto test
 done:
 #+end_example
+
+Note in passing that such a job is typically performed by a C (or
+Java...) compiler. Indeed, the computer code has no notion of loop, it
+only knows about jumps
 
 *** Exercise (⋆)
 1. Translate the following to explicit gotos:
@@ -307,7 +379,12 @@ until cond
 #+end_example
 2. Translate insertion sort
 ** Transformation: If then else ⟶ Gotos
+In fact the above transformation is parametric on the
+condition and body of the loop. Hence we may just abstract over these
+parts. We will present the next transformation in this format.
 *** Source
+Assuming a boolean-valued expression ~cond~ and two blocks of code
+~part1~ and ~part2~, and the following pattern:
 #+begin_example
 if cond then
   part1
@@ -315,6 +392,7 @@ else
   part2
 #+end_example
 *** Target
+It can be translated into:
 #+begin_example
   p := not(cond)
   if p then goto label2
@@ -324,22 +402,75 @@ label2:
   part2
 done:
 #+end_example
-*** TODO Computed/Indirect gotos
-*** Exercise (⋆⋆)
+*** Computed jumps
+Most computers also feature computed (indirect) jumps. That is, one
+does not jump to a fixed label, but to a variable one. This is once
+more an example of abstraction: the computed goto is a goto which is
+"abstract" over its target.
 
-Do the same job with the switch/case construct.
-Hint: use indirect jump.
+For example using a computed jump one may translate ~if~ as follows:
+#+begin_example
+if cond then
+  target = label1;
+else
+  target = label2;
+goto done
+label1:
+  part1
+  goto doe
+label2:
+  part2
+end
+#+end_example
+Can you figure out the type of the ~target~ variable?
+*** Exercise (⋆⋆) 
+Translate switch/case construct to code which uses an indirect
+jump. Hint: use an array of labels
+*** Exercise (⋆⋆⋆) 
+Translate the indirect jump in the above to code to direct jumps
+only. (You may use if statements)
 
-ie.
+** Transformation (Gotos ⟶ Loops)
+The reverse transformation (from jumps to structured constructions) is
+not so easy. That is, there is no general formula that gives you
+"beautiful" code from "spaghetti" code. To do so you must be creative!
+A good idea is to try to recognise the patterns generated above and
+reconstruct the source from them.
+** Feature: parameter passing by reference 
+*** Example
+Passing by reference means that the programmer can name /blocks of
+code/.
 
-: goto A[i]
+That is, if we have a piece of code that often swaps two variables:
 
-where A is an array of labels.
+#+begin_example
+  tmp := x;
+  y := x;
+  x := tmp;
+  ...
+  ...
+  tmp := x;
+  y := x;
+  x := tmp;
+  ...
+  ...
+#+end_example
+one can capture the pattern in a procedure
+#+begin_example
+procedure swap(by ref x, by ref y) 
+  local var tmp;
+  tmp := x;
+  y := x;
+  x := tmp;
+#+end_example
+and simply call where needed.
 
-** Reverse transformation? (Gotos ⟶ Loops)
-No general formula that gives you "beautiful" code! 
-⟶ You must be creative
-** Passing by reference 
+Can you see why this would not work with parameter passing by value?
+*** Why is passing by reference useful?
+- "expressive power" : you can factor out parts of the computation
+  that update any (sub-part of) the state
+- save time : no need to copy around things
+
 *** Reminder: References (aka. pointers)
 **** Addresses
 Assume a variable x:
@@ -355,21 +486,18 @@ Then
 #+end_example
    ≃ where in the memory is the variable x
 
-hence:
+We can express this with the following typing for ~addressOf~:
 : addressOf : Integer {-By Ref-} → PointerTo Integer
 
 **** "De-reference"
-:     p : PointerTo Integer     ⊢      variableAt(p) : Integer
-Hence:
 : variableAt : PointerTo Integer → Integer 
 
 **** Trivia: whats the meaning of addressOf(addressOf(x))?
- ⟶ none! because addressOf(x) is just a value, there is no location for it in the memory.
+ none! because addressOf(x) is just a value, there is no location for it in the memory.
 **** Exercise (⋆)
 re-write the above in C syntax
-*** Example
+*** Translation: from reference-parameters to pointers 
 **** Source:
-
 (Supposing the language supports passing arguments by reference:)
 
 : procedure increment(by ref. x : Int)
@@ -389,15 +517,10 @@ with a call
 and the call
 
 : increment(addressOf(y))
-*** Question: Why is passing by reference useful?
-- "expressive power" : you can factor out parts of the computation
-  that update any (sub-part of) the state
-- save time : no need to copy around things
-
 *** Exercise: Does Java use call by reference? 
   Show example(s) that says yes/no
-  
 ** Transformation: inlining procedure calls
+This is the reverse of naming code blocks.
 *** Source
 #+begin_example
 procedure g(by ref. x,y)
@@ -427,8 +550,13 @@ a := a + b
 a := a + 1
 b := b + a
 #+end_example
+
 *** Exercise: redo the transformations above, assuming call-by-value.
 *** Question: What happens when the original program is recursive?
+The process never finishes!  
+
+Hence inlining is an ok model as a dynamic model, but not as a static
+model in the presence of recursion.
 ** Transformation: Procedures ⟶ Gotos & Variables
 Source:
 #+begin_example
@@ -981,7 +1109,7 @@ Translation of interfaces via method tables.
 ** Forward reference: ``objects are poor man's [[closures]]''
  Note the similarity between objects and closures: they are both
  encoded as state/environment + fct. pointer.
-** Traits & Objects as fixpoints (✪)
+** TODO Traits & Objects as fixpoints (✪)
 * Functional programming
 ** Reading (as necessary to understand Haskell syntax): "Learn you a Haskell, for great good!"
 http://learnyouahaskell.com/
@@ -2391,14 +2519,20 @@ digraph G {
 - Constraints
 - ...
 ** Explore the paradigms you like!
-⟶ Take the dedicated courses 
+You can take courses dedicated to specific paradigms
+- Functional ((advanced) functional programming)
+- Concurrent (concurrent programming TDA381)
+- Object oriented
+- Logic (partly covered in Formal Methods)
+
 ** Invent your own paradigm!
 - ... that suits the way you think
 - ... that suits your favourite application domain
-- ⟶ AFP Course
+- Partly covered in the AFP Course
 ** Translations "in the large"
-- Interpreters ⟶ Dr. Racket
-- Compilers ⟶ Compiler construction Course
+Courses:
+- Programming Languages
+- Compiler construction Course
 ** Formal study of Syntax, Types, and Semantics
    + Programming Languages Course
    + "Types and Programming Languages", Pierce

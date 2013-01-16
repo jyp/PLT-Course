@@ -29,7 +29,6 @@ pre {
 }
 code {
     font-family: monospace;
-    font-size: 120%;
     padding: 0.1em;
      
 /*    font-style: italic; */
@@ -128,4 +127,10 @@ address {
   margin-top: 1em;
   padding-top: 1em;
   border-top: thin dotted 
+}
+
+img {
+margin-left: auto;
+margin-right: auto;
+max-width: 44em; 
 }

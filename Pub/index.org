@@ -2,13 +2,13 @@
 #+EMAIL: bernardy@chalmers.se
 #+STYLE: <link rel="stylesheet" type="text/css" href="pp.css" />
 
+Looking for [[file:Lectures.org][the lecture notes]]?
+
 * Announcements
-- [[file:Lectures.org][Jump to the lecture notes]]
 - <2013-01-21 Mon> Course begins
 * Organisation info
 
 - Programming paradigms
- (pronounciation: ˈpærədaɪm (us?)) 
 - Chalmers Course code: DAT121
 - G.U. Course Code: DIT331
 
@@ -46,7 +46,7 @@ See [[file:Schedule.org][here]].
   interrupt me.
 *** <<Exercises>>
 - 2 groups (go to only 1 session).
-- Find out your group using [[file:GroupAssignment.hs][this Haskell program]]. See [[file:Schedule.org::timetable][the schedule]] for times.
+- Find out which is your group by using [[file:GroupAssignment.hs][this Haskell program]]. See [[file:Schedule.org::timetable][the schedule]] for times.
 - Prepare exercises.
   + You should have a written copy of your solution with you if you
     have one.
@@ -58,12 +58,11 @@ See [[file:Schedule.org][here]].
 - [[https://student.portal.chalmers.se/en/studies/pages/courseevaluation.aspx][Overview of the process]]
 - [[https://document.chalmers.se/workspaces/chalmers/hogskolegemensamma5051/internt/kursutvarderingar/vad-ar-detta2740][Details]]
 - See Designated representatives in [[file:Schedule.org][the schedule]].
-
 *** Reading material
 + Unfortunately, I do not know of a single textbook covering all the
-  material in a suitable way. Therefore, this document is the "master"
-  source for the course. Still...
-+ Do follow the links scattered across this document
+  material in a suitable way. Therefore, [[file:Lectures.org][the lecture notes]] are the "master"
+  source for the course. 
++ The exercises [[file:All.pdf][(pdf)]] are also part of the course material.
 + Single most relevant textbook: probably
 
   + "Programming Languages -- Application and Interpretation", Shriram Krishnamurthi.
@@ -83,25 +82,13 @@ See [[file:Schedule.org][here]].
     * Part X (Ch. 24, 25) 
     * Part XI
 
-+ Note that the exercises (file:All.pdf) are also part of the course material.
-**** Other relevant books
-
-- "Essentials of Programming Languages", Friedman, Wand and Haynes (http://www.eopl3.com/)
-- "Concepts, Techniques, and Models of Computer Programming", Van Roy (http://www.info.ucl.ac.be/~pvr/book.html)
-- ...
++ Other relevant books
+  - "Essentials of Programming Languages", Friedman, Wand and Haynes (http://www.eopl3.com/)
+  - "Concepts, Techniques, and Models of Computer Programming", Van Roy (http://www.info.ucl.ac.be/~pvr/book.html)
+  - ...
 
 ** Outline of the course
 *** Brief exposition of each paradigm
-
-Can I teach you 5 differrent ways of thinking in 7 weeks? 
-Each of these would require major rewiring of your brain. Difficult!
-But fear not... Other courses are available:
-
-- Functional ("introduction to functional programming" TDA555)
-- Imperative ("machine-oriented programming" EDA480)
-- Concurrent ("concurrent programming" TDA381)
-- Object oriented ("Object oriented programming" DAT042)
-- Logic (?) -- partly covered in Formal Methods
 *** (Some) Transformations between paradigms
 *This is the focus of the course.*
 *** Learning outcomes
