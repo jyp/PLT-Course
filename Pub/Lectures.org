@@ -13,10 +13,10 @@ This document is generated form an org-mode file.
 * What is a "programming paradigm"?
 ** Definition
 
-Paradigm: "A philosophical and theoretical framework of a scientific school or
-discipline within which theories, laws, and generalizations and the
-experiments performed in support of them are formulated; broadly: a
-philosophical or theoretical framework of any kind"
+Paradigm: "A philosophical and theoretical framework of a scientific
+school or discipline within which theories, laws, and generalizations
+and the experiments performed in support of them are formulated;
+broadly: a philosophical or theoretical framework of any kind"
 
 - http://www.merriam-webster.com/dictionary/paradigm
 - http://en.wikipedia.org/wiki/Programming_paradigm
@@ -48,6 +48,7 @@ How do you think of your computer?
 - Memory + instructions (von Neumann model)
 - Rewriting engine
 - (evaluator of) Mathematical functions
+- A network: a number of units of execution communicating with messages 
 - ...
   
 *** Quotes on the ability to think "big thoughts"
@@ -109,10 +110,11 @@ file:LangPop.png
   of features.
 - A given paradigm needs a specific set of features to be supported.
 
-The situation is summed up in [[paradigmsDIAGRAMeng108.pdf][this diagram]].
+The situation is summed up in [[file:paradigmsDIAGRAMeng108.pdf][this diagram]]
 
 *** PL Features we will see
 - Structured data / Records
+- Procedure
 - Recursion
 - Naming and abstraction (higher order)
 - Memory (cell) / State
@@ -150,13 +152,15 @@ this course to structure the thinking about programs.
 
 The colon is used ':' to denote the typing relation:
 
-: someValue : ItsType
+:           someValue : ItsType
 
 *** Examples
 - 0 : Int
 - 1 : Int
+- 1 : Natural
 - 'c' : Char
 - "hello" : String
+- 0.5 : Float
 - (1/2) : Rational
 
 *** Feature: Paramerisation and function types
@@ -192,6 +196,7 @@ when ~name~ is a string (in fact /any/ string); and in that case
 ~greet(name)~ is a string.
 Equivalently, we will say that ~greet~ is a function converting a
 string into another string, and we will write:
+
 :   greet : String → String
 
 
