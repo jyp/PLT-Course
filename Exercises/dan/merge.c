@@ -17,10 +17,10 @@ int pow_2(int x) {
     if (x == 0) {
         return 1;
     } else if (x % 2) {
+        return x * pow_2(x - 1);
+    } else /* even */ {
         int r = pow_2(x / 2);
         return r * r;
-    } else /* odd */ {
-        return x * pow_2(x - 1);
     }
 }
 
