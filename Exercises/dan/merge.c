@@ -29,7 +29,7 @@ int pow_2(int x) {
 // (which somehow magically has room for more elements?)
 void insert(int e, int i, int n, int a[]) {
     int j;
-    for (j = n-1; j > i; j--) {
+    for (j = n; j > i; j--) {
         a[j] = a[j-1];
     }
     a[i] = e;
