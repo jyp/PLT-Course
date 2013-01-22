@@ -1,3 +1,4 @@
+module Main where
 
 xor False x = x
 xor True  x = not x
@@ -13,3 +14,4 @@ group = foldr xor False . bits
 myPersonNumber = 197812150666
 myGroup = sho $ group myPersonNumber
 
+main = putStrLn $ myGroup
