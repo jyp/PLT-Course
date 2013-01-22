@@ -121,7 +121,7 @@ void fact7() {
 
 //note now there is max 1 frame in the stack
 
-// recreate a loop and a function
+// recreate a loop and return the result as for a normal function.
 int fact8(int x) {
   int y=1;
   while (x /= 1) {

@@ -1,29 +1,5 @@
 #include <stdio.h>
 
-struct stack{ 
-  int x;
-  int ret;
-  struct stack* next;
-};
-
-typedef struct stack* stk;
-
-stk s = NULL;
-
-
-
-void push(int x,int ret) {
-  stk t = malloc(sizeof (struct stack));
-  t->x = x;
-  t->ret = ret;
-  t->next = s;
-  s = t;
-}
-
-void pop() {
-  s = s->next;
-}
-
 int fact1 (int x) {
   if (x == 1) 
     return x;
@@ -32,7 +8,7 @@ int fact1 (int x) {
 }
 
 
-// make order of evaluation explicit
+// pre-work: make order of evaluation explicit
 int fact2 (int x) {  
   int y;
   if (x == 1) 
@@ -57,6 +33,32 @@ void fact3 (int x) {
 }
 
 // put arguments on a stack
+
+struct stack{ 
+  int x;
+  int ret;
+  struct stack* next;
+};
+
+typedef struct stack* stk;
+
+stk s = NULL;
+
+
+
+void push(int x,int ret) {
+  stk t = malloc(sizeof (struct stack));
+  t->x = x;
+  t->ret = ret;
+  t->next = s;
+  s = t;
+}
+
+void pop() {
+  s = s->next;
+}
+
+
 void fact4() {  
   if (s->x == 1) 
     result = s->x;
