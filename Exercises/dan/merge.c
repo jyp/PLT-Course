@@ -5,6 +5,7 @@
 int log_2(int x) {
     if (x == 0) {
         // invalid input, log(0) is undefined (or -inf)
+        fprintf(stderr, "error: log on %d\n", x);
         return -1;
     } else if (x == 1) {
         return 0;
@@ -16,8 +17,6 @@ int log_2(int x) {
 int pow_2(int x) {
     if (x == 0) {
         return 1;
-    } else if (x == 1) {
-        return 2;
     } else if (x % 2) {
         return 2 * pow_2(x - 1);
     } else /* even */ {
@@ -66,6 +65,5 @@ void merge(int a[], int b[], int m, int n) {
             }
         }
     }
-    printf("%d %d\n",m,n);
 }
 

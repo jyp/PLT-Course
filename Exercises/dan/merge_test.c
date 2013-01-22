@@ -44,6 +44,10 @@ int main() {
     int b[N*2 + 1];
     int i;
 
+    for (i = 0; i < 20; ++i) {
+        printf("2^%2d: %6d      log(%2d): %d\n", i, pow_2(i), i+1, log_2(i+1));
+    }
+
     srand(time(0));
 
     memset(a,0,sizeof(a));
