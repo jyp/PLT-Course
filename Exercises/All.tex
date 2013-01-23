@@ -25,7 +25,7 @@
 \newcommand{\answer}[1]{}
 \newcommand{\correctedLastYear}[1]{}
 \newcommand{\correctedThisYear}[1]{,@#1}
-
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
 % Uncomment to show answers
 % \renewcommand{\answer}[1]{#1}
 
@@ -68,12 +68,14 @@
 \lstnewenvironment{prolog}
     {\lstset{language=prolog,frame=tb}}
     {}
+\lstnewenvironment{haskell}
+    {\lstset{language=haskell,frame=tb}}
+    {}
 
 \begin{document}
 %\listoftodos
 
 \title{Programming Paradigms: Exercises}
-% \author{Ramona Enache, Jean-Philippe Bernardy\footnote{with thanks to previous teams in charge of the course.}}
 \maketitle
 
 
@@ -152,7 +154,7 @@ Consider the type
 
 Consider the algorithm:
 
-\begin{enumerate}
+\begin{itemize}
 \item \textbf {Preliminary:} {\it A} is an array of integers of length
   {\it m} and {\it B} is an array of integers of length {\it n}. Also
   the elements from both arrays are distinct (from the elements in
@@ -184,7 +186,7 @@ Consider the algorithm:
     B[n]}, set {\it m := k} and {\it n := n - 1}. Return to \textbf{Step1}.
 
 
-\end{enumerate}
+\end{itemize}
 
 
 \question{*}
@@ -267,8 +269,8 @@ Write a swap function using call by reference.
 \question{*,@1}
 Write a swap function using call by value.
 
-\question{**} Does Java use call by reference? Give examples to support
-your answer.
+\question{**} Does Java use call by reference or call by value? Give
+examples to support your answer.
 
 \question{**,@1} Write down pros and cons of using call by reference
 vs. call by value. (Ease of use, performance, ...)
