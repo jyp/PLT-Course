@@ -1,8 +1,9 @@
 {-# LANGUAGE RecordWildCards #-}
   
-  module Main where
+module Main where
 
 import Data.Maybe
+import System.Environment
 
 data Status = Status {transmit :: Maybe String, inAnswer :: Bool, answersDeactivated :: Bool}
 
@@ -14,7 +15,9 @@ updStatus Status {..} s
   | otherwise = Status {transmit = Just s, ..}
 
 main = do
-  x <- lines `fmap` readFile "All.tex"
-  putStrLn . unlines . catMaybes . map transmit $ scanl updStatus (Status Nothing False False) $ x
+  [f,g] <- getArgs
+  x <- readFile f
+  let y = unlines . catMaybes . map transmit $ scanl updStatus (Status Nothing False False) . lines $ x
+  writeFile g y
   
   

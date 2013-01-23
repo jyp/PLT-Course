@@ -21,10 +21,17 @@ agenda = do
         
 cp a b = system ["cp",a,b]
         
-exercises = produce "All.pdf" $ do    
+prep = produce "../Exercises/Preprocessor" $ do
+  system ["ghc","--make","../Exercises/Preprocessor.hs"]
+  
+exercises = produce "All.pdf" $ do
+  prep
   let input =  "../Exercises/All.tex"
+  let intermediate =  "../Exercises/P.tex"
   need input
-  _pdflatex input
+  system ["../Exercises/Preprocessor", input, intermediate]
+  _pdflatex intermediate
+  cp "P.pdf" "All.pdf"
 
 html x = do
   let html = x ++ ".html"
