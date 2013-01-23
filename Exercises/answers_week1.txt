@@ -1,0 +1,50 @@
+Ex.5
+    1. a string constant
+    2. a function that reverses/doubles/etc a string
+    3. a concatenation function
+    4. a function that evals a function in some environment
+    5. same as 3
+    6. a function that reverses a function
+    
+Ex.8-12: see Dan's code
+
+Ex.13
+    statement1;
+    L: if (condition)
+        loop_body;
+        statement2;
+        goto L;
+        
+Ex.16
+    switch(a) {
+        case pattern1: statement1;
+        case pattern2: statement2;
+        default: def_statement;
+    }
+
+    if (pattern1)
+        statement1;
+        if (pattern2)
+            statement2;
+        else def_statement;
+    if
+    
+Ex.20
+    void swap(int& a, int& b) {
+        int t = a;
+        a = b;
+        b = a;
+    }
+    
+Ex.21
+    /* won't work because only copies of values will be changed, */
+    /* and local variables are destroyed on return */
+    void swap(int a, int b) {
+        int t = a;
+        a = b;
+        b = a;
+    }
+
+
+Ex.23
+    Use call-by-value to protect the data from occasional corruption by a buggy procedure. Use call-by-reference if arguments are too big to be passed on stack.
