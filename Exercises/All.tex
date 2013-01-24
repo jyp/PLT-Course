@@ -26,6 +26,8 @@
 \usepackage{hyperref}
 \usepackage{minted}
 
+\newcommand\DeactivateAnswers{}
+
 
 \usepackage{listings}
 
@@ -71,7 +73,6 @@
     {}
 
 
-\DeactivateAnswers
 \begin{document}
 
 \title{Programming Paradigms: Exercises}
@@ -386,6 +387,8 @@ see
     \textsf{gcc -S $<$filename$>$}.
   \end{center}
 \end{itemize}
+
+\DeactivateAnswers
 
 
 \subsection{From recursion to explicit stack}
@@ -1181,8 +1184,11 @@ toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
 \end{prolog}
 
 \begin{minted}{haskell}
-toList (D x y) [] = x =:= y
-toList (D (head:rest) tail) (head':otherTail) = head =:= head' & toList (D rest tail) otherTail  
+toList (D x y) [] 
+   = x =:= y
+toList (D (head:rest) tail) (head':otherTail) 
+   = head =:= head' & 
+     toList (D rest tail) otherTail  
 \end{minted}
   
 \end{ans}
@@ -1196,6 +1202,7 @@ doing unification only!
 Write a predicate dconcat to concatenate two difference lists, without
 using the direct representation.
 
+If \texttt{dconcat} is properly defined, then the queries
 \Prolog{
 \begin{prolog}
 dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
@@ -1203,9 +1210,10 @@ dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
 }
 
 \Curry{
-\begin{verbatim}
-dconcat x y z & fromList [1,2,3] x & fromList [4,5] y & toList z final where x, y, z, final free
-\end{verbatim}
+\begin{minted}{haskell}
+dconcat x y z & fromList [1,2,3] x & fromList [4,5] y & toList z final 
+   where x, y, z, final free
+\end{minted}
 }
 
 should produce:
@@ -1216,6 +1224,7 @@ final = [1,2,3,4,5]
 \end{verbatim}
 
 \begin{ans}
+~
 \begin{prolog}
 dconcat(d(Out2,In2),d(Out1,In1),d(Out,In)) :- Out = Out2, In2 = Out1, In = In1.
 \end{prolog}
