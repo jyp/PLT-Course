@@ -134,10 +134,20 @@ types. (Eg. in Java, generic classes).
 
 For example, the following type is a suitable type for a sorting
 function: it expresses that the function works for any element type,
-as long as you can compare its inhabitants.
+OBas long as you can compare its inhabitants.
 
 ∀ a. (a → a → Bool) → Array a → Array a
 
+\begin{ans}
+  \begin{enumerate} 
+   \item a string constant
+   \item a function that reverses/doubles/etc a string
+   \item a concatenation function
+   \item a function that evals a function in some environment
+   \item same as 3
+   \item a function that reverses a function
+  \end{enumerate}
+\end{ans}
 
 \question{**} Does \texttt{sort} in your favourite language have a similar
 type? How close/far is it?
@@ -221,6 +231,9 @@ Implement the above-mentioned algorithm without using
 {\it gotos} in a programming language of your choice. Check your
 implementation with the {\it A} and {\it B} from the previous question.
 
+\begin{ans}
+  See Dan Ros\'{e}n's implementation.
+\end{ans}
 
 \subsection{Control flow statements to gotos}
 \question{*,@1}
@@ -231,6 +244,19 @@ Translate the following \textbf{for} loop with explicit gotos:
 {\it for (statement1; condition; statement2)
 
 $\ \ \ \ $loop$\_$body}
+
+\begin{ans}
+  \begin{verbatim}
+    statement1;
+    loop:
+    if (condition) {
+        loop_body;
+        statement2;
+        goto loop;
+    }
+  \end{verbatim}
+\end{ans}
+
 \question{*}
 
 Translate the following \textbf{foreach} loop with explicit gotos:
@@ -247,6 +273,28 @@ Translate the switch/case construct.
 
 (If you want to make sure your translation is correct you should check the
 specification of the C language. \url{http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf})
+
+\begin{ans}
+The following \texttt{switch}-snippet
+\begin{verbatim}
+    switch(a) {
+        case pattern1: statement1;
+        case pattern2: statement2;
+        default: def_statement;
+    }
+\end{verbatim}
+
+can be translated like this:
+
+\begin{verbatim}
+    if (pattern1)
+        statement1;
+        if (pattern2)
+            statement2;
+        else def_statement;
+    if
+\end{verbatim}
+\end{ans}
 
 \question{*}
 Translate the insertion sort algorithm.
@@ -266,14 +314,57 @@ Write a recursive traversal of the above tree.
 \question{*,@1}
 Write a swap function using call by reference.
 
+\begin{ans}
+\begin{verbatim}
+    void swap(int& a, int& b) {
+        int t = a;
+        a = b;
+        b = a;
+    }
+\end{verbatim}
+\end{ans}
+
 \question{*,@1}
 Write a swap function using call by value.
+
+\begin{ans}
+\begin{verbatim}
+    /* won't work because only copies of values will be changed, */
+    /* local variables are destroyed when function returns  */
+    /* note the absence of &'s in the signature */
+    void swap(int a, int b) {
+        int t = a;
+        a = b;
+        b = a;
+    }
+
+    /* will work because a new value is created and returned */
+
+    typedef struct {
+        int fst;
+        int snd;
+    } pair;
+
+    pair swap(pair p) {
+        int t = p.fst;
+        p.fst = p.snd;
+        p.snd = p.fst;
+        return p;
+    }
+\end{verbatim}
+\end{ans}
 
 \question{**} Does Java use call by reference or call by value? Give
 examples to support your answer.
 
 \question{**,@1} Write down pros and cons of using call by reference
 vs. call by value. (Ease of use, performance, ...)
+
+\begin{ans}
+  Use call-by-value to protect the data from occasional corruption by a buggy
+  procedure. Use call-by-reference if arguments are too big to be passed on
+  stack.
+\end{ans}
 
 \subsection{More on control flow and pointers: Duff's device}
 Duff's device is an optimization idiom for serial copies
