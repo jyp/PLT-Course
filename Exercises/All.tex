@@ -114,9 +114,10 @@ which is supported by C++?
 \item derivative
 \end{enumerate}
 
-\question{**,@1} Explain the meaning of the following types. (Hint: what
+\begin{ex}{**,@1}
+Explain the meaning of the following types. (Hint: what
 kind of values can inhabit those types?)
-
+  
 \begin{enumerate}
 \item String
 \item String → String
@@ -128,6 +129,19 @@ kind of values can inhabit those types?)
 % FIXME: the above already has an implicit notion of currification, so
 % the exercise should be split/simplified.
 
+\begin{ans}
+Example of values which have these types:
+  \begin{enumerate} 
+   \item a string constant
+   \item a function that reverses/doubles/etc a string
+   \item a concatenation function
+   \item a function that evaluates a function on some constant string
+   \item same as 3
+   \item a function that reverses a function
+  \end{enumerate}
+\end{ans}
+
+\end{ex}
 
 One can not only parameterize over values, but also over
 types. (Eg. in Java, generic classes).
@@ -138,16 +152,6 @@ OBas long as you can compare its inhabitants.
 
 ∀ a. (a → a → Bool) → Array a → Array a
 
-\begin{ans}
-  \begin{enumerate} 
-   \item a string constant
-   \item a function that reverses/doubles/etc a string
-   \item a concatenation function
-   \item a function that evals a function in some environment
-   \item same as 3
-   \item a function that reverses a function
-  \end{enumerate}
-\end{ans}
 
 \question{**} Does \texttt{sort} in your favourite language have a similar
 type? How close/far is it?
@@ -232,21 +236,20 @@ Implement the above-mentioned algorithm without using
 implementation with the {\it A} and {\it B} from the previous question.
 
 \begin{ans}
-  See Dan Ros\'{e}n's implementation.
+  \inputminted[firstline=37]{c}{dan/merge.c}
 \end{ans}
 
 \subsection{Control flow statements to gotos}
 \question{*,@1}
 
 Translate the following \textbf{for} loop with explicit gotos:
-\\
-\\
-{\it for (statement1; condition; statement2)
-
-$\ \ \ \ $loop$\_$body}
+\begin{minted}{c}
+for (statement1; condition; statement2)
+  loop_body
+\end{minted}
 
 \begin{ans}
-  \begin{verbatim}
+  \begin{minted}{c}
     statement1;
     loop:
     if (condition) {
@@ -254,7 +257,7 @@ $\ \ \ \ $loop$\_$body}
         statement2;
         goto loop;
     }
-  \end{verbatim}
+  \end{minted}
 \end{ans}
 
 \question{*}
@@ -276,24 +279,38 @@ specification of the C language. \url{http://www.open-std.org/jtc1/sc22/wg14/www
 
 \begin{ans}
 The following \texttt{switch}-snippet
-\begin{verbatim}
-    switch(a) {
-        case pattern1: statement1;
-        case pattern2: statement2;
-        default: def_statement;
-    }
-\end{verbatim}
-
+\begin{minted}{c}
+switch(a) {
+    case pattern1: statement1; break;
+    case pattern2: statement2;
+    default: def_statement;
+}
+\end{minted}
 can be translated like this:
+\begin{minted}{c}
+if (var == pattern1) goto case_1;
+if (var == pattern2) goto case_2;
+goto case_default;
 
-\begin{verbatim}
-    if (pattern1)
-        statement1;
-        if (pattern2)
-            statement2;
-        else def_statement;
-    if
-\end{verbatim}
+case_1:       statement1; goto case_end;
+case_2:       statement2;
+case_default: def_statement;
+case_end:
+\end{minted}
+
+
+\paragraph{Note}
+The following translation is incorrect due to the fall-through
+behaviour of switch in C.
+\begin{minted}{c}
+if (var == pattern1) {
+    statement1;
+} else if (var == pattern2) {
+    statement2;
+} else 
+    def_statement;
+\end{minted}
+
 \end{ans}
 
 \question{*}
@@ -315,6 +332,7 @@ Write a recursive traversal of the above tree.
 Write a swap function using call by reference.
 
 \begin{ans}
+In C++ syntax:
 \begin{verbatim}
     void swap(int& a, int& b) {
         int t = a;

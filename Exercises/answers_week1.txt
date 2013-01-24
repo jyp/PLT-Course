@@ -15,20 +15,6 @@ Ex.13
         statement2;
         goto L;
         
-Ex.16
-    switch(a) {
-        case pattern1: statement1;
-        case pattern2: statement2;
-        default: def_statement;
-    }
-
-    if (pattern1)
-        statement1;
-        if (pattern2)
-            statement2;
-        else def_statement;
-    if
-    
 Ex.20
     void swap(int& a, int& b) {
         int t = a;
