@@ -1,6 +1,8 @@
 
 import Data.Monoid
 import Cake
+import System.Directory
+import Control.Monad.IO.Class
 
 rules :: Rule
 rules = empty
@@ -30,8 +32,10 @@ exercises = produce "All.pdf" $ do
   let intermediate =  "../Exercises/P.tex"
   need input
   system ["../Exercises/Preprocessor", input, intermediate]
-  _pdflatex intermediate
-  cp "P.pdf" "All.pdf"
+  liftIO $ setCurrentDirectory "../Exercises"   -- So that pdflatex sees includes, etc.
+  system ["pdflatex", "-shell-escape", intermediate]
+  liftIO $ setCurrentDirectory "../Pub"
+  cp "../Exercises/P.pdf" "All.pdf"
 
 html x = do
   let html = x ++ ".html"

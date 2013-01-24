@@ -1,7 +1,6 @@
 import Prelude hiding (enumFrom, take, drop)
 
-
-data List = -- Nil | (all lists are infinite here, so I spare this constructor)
+data List = -- Nil | (all lists are infinite here, so spare this constructor)
             Cons Int !Thunk
     deriving Show
 
@@ -11,9 +10,7 @@ data Thunk = DelayEnumFrom Int
            | DelayFilter Int !Thunk
     deriving Show
 
-
 n `divides` x = x `mod` n == 0
-
 
 enumFrom :: Int -> List
 enumFrom n = Cons n (DelayEnumFrom (n+1))
@@ -26,10 +23,8 @@ force (DelayEnumFrom n) = enumFrom n
 force (DelaySieveFilter x xs) = sieve (filterDiv x (force xs))
 force (DelayFilter x xs) = filterDiv x (force xs)
 
-
 sieve :: List -> List
 sieve (Cons x xs) = Cons x (DelaySieveFilter x xs)
-
 
 primes = sieve (enumFrom 2)
 

@@ -4,12 +4,13 @@ module Main where
 
 import Data.Maybe
 import System.Environment
+import Data.List
 
 data Status = Status {transmit :: Maybe String, inAnswer :: Bool, answersDeactivated :: Bool}
 
 updStatus Status {..} s
-  | s == "\\begin{ans}" && answersDeactivated = Status {transmit = Nothing, inAnswer = True, ..}
-  | s == "\\end{ans}"   && answersDeactivated = Status {transmit = Nothing, inAnswer = False, ..}
+  | ("\\begin{ans}" `isInfixOf` s) && answersDeactivated = Status {transmit = Nothing, inAnswer = True, ..}
+  | ("\\end{ans}" `isInfixOf` s) && answersDeactivated = Status {transmit = Nothing, inAnswer = False, ..}
   | s == "\\DeactivateAnswers" = Status {transmit = Nothing, answersDeactivated = True, ..}
   | inAnswer = Status {transmit = Nothing, ..}
   | otherwise = Status {transmit = Just s, ..}

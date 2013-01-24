@@ -1,6 +1,6 @@
 import Prelude hiding (enumFrom, take)
 
--- Sum the elements in a file, lazilyi
+-- Sum the elements in a file, lazily
 
 data List = -- Nil | (all lists are infinite here, so I spare this constructor)
             Cons Int Thunk
