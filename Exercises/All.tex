@@ -375,6 +375,27 @@ Write a swap function using call by value.
 \question{**} Does Java use call by reference or call by value? Give
 examples to support your answer.
 
+\begin{ans}
+  Java calling convention is a mishmash:
+ \begin{itemize}
+ \item Scalars are passed by value
+ \item Objects are passed by reference, but with a catch, see below.
+ \end{itemize}
+\begin{minted}{java}
+void f(Object x) {
+  x = null; -- this will only change the local copy of x
+}
+...
+y = new Object();
+f(y);
+
+-- pitfall: y != null
+\end{minted}
+
+ In sum, the calling convention of Java is "what you would do normally
+ in C"... Not a very clean semantics.
+\end{ans}
+
 \question{**,@1} Write down pros and cons of using call by reference
 vs. call by value. (Ease of use, performance, ...)
 
