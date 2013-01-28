@@ -563,11 +563,11 @@ for i in [1..n] do
 return a  
 \end{verbatim}
 \end{enumerate}
-
+\newpage % avoid breaking up the code which follows.
 \section{Object-Oriented Programming}
 
 Consider the following code, in C\# syntax:
-\begin{java}
+\begin{minted}{java}
 interface Monoid {
    Monoid op(Monoid second);
    Monoid id();
@@ -587,7 +587,7 @@ struct IntegerAdditiveMonoid : Monoid {
     int elt;
 };
 
-\end{java}
+\end{minted}
 %
 
 \subsection{Explicit method pointers}
