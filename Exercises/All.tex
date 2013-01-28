@@ -18,13 +18,14 @@
   \paragraph{Exercise~\arabic{question}  \percents{#1}}
  }
 \newenvironment{ex}[1]{\question{#1}}{\vspace{1em}}
-\newenvironment{ans}{\paragraph{Answer~to~exercise~\arabic{question}}}{}
+\newenvironment{ans}{\begin{framed}\paragraph{Answer~to~exercise~\arabic{question}}}{\end{framed}}
 \newcommand{\removed}[1]{}
 \newcommand{\correctedLastYear}[1]{}
 \newcommand{\correctedThisYear}[1]{,@#1}
 \newcommand{\floor}[1]{\lfloor #1 \rfloor}
 \usepackage{hyperref}
 \usepackage{minted}
+\usepackage{framed}
 
 \newcommand\DeactivateAnswers{}
 
@@ -588,7 +589,7 @@ return a
 \section{Object-Oriented Programming}
 
 Consider the following code, in C\# syntax:
-\begin{minted}{java}
+\begin{minted}{csharp}
 interface Monoid {
    Monoid op(Monoid second);
    Monoid id();
