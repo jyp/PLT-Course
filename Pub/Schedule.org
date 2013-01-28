@@ -73,6 +73,11 @@ file:All.pdf file each week: exercises may have been updated.
 ** Course evaluation
 Representatives:
 
+- RAN XUXIN xuxin student.chalmers.se
+- KIOKSOGLOU ANTONIOS antkio student.chalmers.se
+- BERG JOAKIM bergjoa student.chalmers.se
+- OLSSON JONATHAN jonolss student.chalmers.se
+
 *** Evaluation Meeting 2
 Items:
 **** Changes in the course since last year.
