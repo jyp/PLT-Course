@@ -347,30 +347,40 @@ In C++ syntax:
 Write a swap function using call by value.
 
 \begin{ans}
-\begin{verbatim}
-    /* won't work because only copies of values will be changed, */
-    /* local variables are destroyed when function returns  */
-    /* note the absence of &'s in the signature */
+  Merely using call by value won't work because only copies of values
+  will be changed, local variables are destroyed when function
+  returns.  Note the absence of \&'s in the signature.
+\begin{minted}{c}
     void swap(int a, int b) {
         int t = a;
         a = b;
-        b = a;
+        b = t;
     }
-
-    /* will work because a new value is created and returned */
-
+\end{minted}
+The standard way is then to pass pointers (make the references
+explicit):
+\begin{minted}{c}
+      void swap(int* a, int* b) {
+        int t = *a;
+        *a = *b;
+        *b = t;
+      }
+\end{minted}
+  But it is also possible to use a copy parameters back and forth, for
+  example using a structure.
+\begin{minted}{c}
     typedef struct {
         int fst;
         int snd;
     } pair;
 
-    pair swap(pair p) {
+   struct pair swap(struct pair p) {
         int t = p.fst;
         p.fst = p.snd;
         p.snd = p.fst;
         return p;
     }
-\end{verbatim}
+\end{minted}
 \end{ans}
 
 \question{**} Does Java use call by reference or call by value? Give
@@ -539,15 +549,14 @@ numbers:
 Implement the recursive function computing the n-th Fibonacci number based on
 the expression above.
 
-\question{*} Why is it not efficient?
+\question{*} What is the complexity of the computation? (How many
+calls will there be to compute $fib_{n}$?)
 
-\question{*}
-Implement a slightly-optimized recursive function for the same
-purpose. (Hint: use an accumulator parameter).
+\question{*} Implement a slightly-optimized recursive function for the
+same purpose, using an accumulator parameter.
 
-\question{**}
-Implement a version of each of the two functions above by using an
-explicit stack.
+\question{**} Implement a version of each of the two functions above
+by using an explicit stack.
 
 \question{**}
 Implement the Ackermann function without recursion.
@@ -779,6 +788,9 @@ abstract class IntersectVisitor {
 \section{Functional Programming}
 \subsection{Algebraic Data Types and Pattern Matching}
 
+\question{*} Write functions between the types $(Either A B, Either C
+D)$ and $Either (A,C) (B,D)$.
+
 \question{*} Define an algebraic type for binary trees
 \question{*\correctedLastYear 3} define an algebraic type for arithmetic expressions
 \question{*\correctedLastYear 3} define a simple interpreter for the above type
@@ -786,9 +798,11 @@ abstract class IntersectVisitor {
 \question{*\correctedLastYear 3} Translate the above 2 structures to an OO language. (Hint: One
 class corresponds to leaves, one to branching.)
 
-\question{*\correctedLastYear 3} Translate the interpreter. You are not allowed to use 'instanceof'
+\question{*\correctedLastYear 3} Translate the interpreter to an OO
+language. You are not allowed to use 'instanceof'
 
-\question{*} Translate the interpreter. You must use 'instanceof'.
+\question{*} Translate the interpreter to an OO language. You must use
+'instanceof'.
 
 \subsection{Currification and partial application}
 
