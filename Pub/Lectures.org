@@ -621,7 +621,7 @@ function sqrt(x : Float) : Float
   return result;
 
 -- the calls:
-sqrt(12345)
+sqrt(12345);
 ...
 ...
 sqrt(6789);
