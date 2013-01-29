@@ -533,7 +533,7 @@ see
 
 
 \subsection{From recursion to explicit stack}
-\begin{ex}{**}
+\begin{ex}{**,@2}
 Re-implement the tree traversal (from above), but using explicit stacks.
 \end{ex}
 
@@ -623,7 +623,7 @@ struct IntegerAdditiveMonoid : Monoid {
 
 \subsection{Explicit method pointers}
 
-\question{*} Translate the above code to a C-like language, using
+\question{*,@2} Translate the above code to a C-like language, using
 explicit method pointers. (Hint: you can simply consider the interface
 as a class without fields.)
 
@@ -658,15 +658,15 @@ Compilation failed: 2 error(s), 0 warnings
 \end{verbatim}
 
 
-\question{*} What if the method \textsf{op} \textit{would} compile?
+\question{*,@2} What if the method \textsf{op} \textit{would} compile?
 Define objects \textsf{a,b}, of appropriate types, so that
 \textsf{a.op(b)}, if is run, would result in a run-time error.
 
-\question{*} What if the method \textsf{id} would compile? Could you
+\question{*,@2} What if the method \textsf{id} would compile? Could you
 construct a similar run-time error? (Hint: do the translation job if
 the answer is not obvious to you.)
 
-\question{**} Explain the error messages in terms of co-/contra-/nonvariance.
+\question{**,@2} Explain the error messages in terms of co-/contra-/nonvariance.
 
 \question{***} The corresponding program in Java behaves differently. Briefly
 explain how, consult the Java Language Specification (JLS), and back your answer
