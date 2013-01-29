@@ -29,7 +29,7 @@ int pow_2(int x) {
 // (which somehow magically has room for more elements?)
 void insert(int e, int i, int n, int a[]) {
     int j;
-    for (j = n; j > i; j--) {
+    for (j = n+1; j > i; j--) {
         a[j] = a[j-1];
     }
     a[i] = e;
@@ -39,13 +39,16 @@ void merge(int a[], int b[], int m, int n) {
     int a_size=m;
     int b_size=n;
     while (n != 0 && m != 0) {
+        printf("%d %d\n",m,n);
         if (!(m > n)) {
             int t = log_2(n / m);
             int i = n + 1 - pow_2(t);
             if (a[m-1] < b[i-1]) {
+                printf("Decreasing n\n");
                 n = n - pow_2(t);
             } else {
                 int k = binsearch(i-1,n,a[m-1],b)+1;
+                printf("Inserting %d into b at %d\n", a[m-1], k-1);
                 insert(a[m-1],k-1,b_size,b);
                 b_size++;
                 m = m - 1;
@@ -55,9 +58,11 @@ void merge(int a[], int b[], int m, int n) {
             int t = log_2(m / n);
             int i = m + 1 - pow_2(t);
             if (b[n-1] < a[i-1]) {
+                printf("Decreasing m\n");
                 m = m - pow_2(t);
             } else {
                 int k = binsearch(i-1,m,b[n-1],a)+1;
+                printf("Inserting %d into a at %d\n", b[n-1], k-1);
                 insert(b[n-1],k-1,a_size,a);
                 a_size++;
                 n = n - 1;
@@ -65,5 +70,6 @@ void merge(int a[], int b[], int m, int n) {
             }
         }
     }
+    printf("%d %d\n",m,n);
 }
 
