@@ -627,6 +627,72 @@ struct IntegerAdditiveMonoid : Monoid {
 explicit method pointers. (Hint: you can simply consider the interface
 as a class without fields.)
 
+\begin{ans}
+  \begin{minted}{c}
+    #include "stdio.h"
+    #include "stdlib.h"
+
+struct monoid {
+  struct monoid_vtable *vtable;
+};
+
+typedef struct monoid Monoid;
+
+struct monoid_vtable {
+  Monoid *(*op)(Monoid *this, Monoid *second);
+  Monoid *(*id)(Monoid *this);
+};
+
+typedef struct monoid_vtable Monoid_Vtable;
+
+struct integerAdditiveMonoid {
+     Monoid* super;
+     int elt;
+};
+
+typedef struct integerAdditiveMonoid IntegerAdditiveMonoid;
+
+IntegerAdditiveMonoid *integerAdditiveMonoid_new(int x);
+
+Monoid *integerAdditiveMonoid_op(Monoid *this, Monoid *second) {
+     return (Monoid *)
+         (integerAdditiveMonoid_new(((IntegerAdditiveMonoid*) this)->elt
+         + ((IntegerAdditiveMonoid *) second)->elt));
+};
+
+Monoid *integerAdditiveMonoid_id(Monoid *this) {
+     return (Monoid *) (integerAdditiveMonoid_new(0));
+}
+
+Monoid_Vtable integerAdditiveMonoid_vtable =
+{  &integerAdditiveMonoid_op
+  , &integerAdditiveMonoid_id };
+
+IntegerAdditiveMonoid *integerAdditiveMonoid_new(int x) {
+     IntegerAdditiveMonoid *this =
+         malloc(sizeof(IntegerAdditiveMonoid));
+     this->super = malloc(sizeof(Monoid));
+     this->super->vtable = &integerAdditiveMonoid_vtable;
+     this->elt = x;
+     return this;
+}
+
+int main() {
+     IntegerAdditiveMonoid *a = integerAdditiveMonoid_new(3);
+     IntegerAdditiveMonoid *b = integerAdditiveMonoid_new(4);
+     printf("%d\n",((IntegerAdditiveMonoid*)
+         (a->super->vtable->op((Monoid *) a, (Monoid *) b)))->elt);
+     printf("%d\n",((IntegerAdditiveMonoid*)
+         (b->super->vtable->id((Monoid *) b)))->elt);
+     free(a);
+     free(b);
+     return 0;
+}
+
+  \end{minted}
+\end{ans}
+
+
 \question{-} Briefly recap: what is a \textit{monoid}, mathematically?
 
 \question{-} Give two examples of data types that can be considered monoids.
@@ -662,11 +728,41 @@ Compilation failed: 2 error(s), 0 warnings
 Define objects \textsf{a,b}, of appropriate types, so that
 \textsf{a.op(b)}, if is run, would result in a run-time error.
 
+\begin{ans}
+  \begin{minted}{csharp}
+    a = new IntegerAdditiveMonoid(3);
+    b = new IntegerAdditiveMonoid(4);
+    a.op(b);
+  \end{minted}
+  
+\begin{verbatim}
+error: method op() not found
+\end{verbatim}
+
+\end{ans}
+
 \question{*,@2} What if the method \textsf{id} would compile? Could you
 construct a similar run-time error? (Hint: do the translation job if
 the answer is not obvious to you.)
 
+\begin{ans}
+  \begin{minted}{csharp}
+    a = new IntegerAdditiveMonoid(3);
+    a.id();
+  \end{minted}
+  
+\begin{verbatim}
+error: method id() not found
+\end{verbatim}
+\end{ans}
+
 \question{**,@2} Explain the error messages in terms of co-/contra-/nonvariance.
+
+\begin{ans}
+  In an interface implementation, types should be covariant, because the users
+  of the interface expect to supply arguments of generic types and to get a
+  return value of a generic type, not of the narrow ones.
+\end{ans}
 
 \question{***} The corresponding program in Java behaves differently. Briefly
 explain how, consult the Java Language Specification (JLS), and back your answer
