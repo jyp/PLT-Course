@@ -26,7 +26,7 @@ https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=0.d
 |    1 |   0121 | Intr      | IP 1      | EX 1      |
 |    2 |   0128 | IP 2      | OO 2      | EX 2      |
 |    3 |   0204 | FP 1      | FP 2      | EX 3      |
-|    4 |   0211 | FP 3      | CHARM     | EX 4      |
+|    4 |   0211 | FP 3      | ???       | EX 4      |
 |    5 |   0218 | FP 4      | CP 1      | EX 5      |
 |    6 |   0225 | CP 2      | LP 1      | EX 6      |
 |    7 |   0304 | LP 2      | Q&A       | EX 7      |
