@@ -237,7 +237,7 @@ Implement the above-mentioned algorithm without using
 implementation with the {\it A} and {\it B} from the previous question.
 
 \begin{ans}
-  \inputminted[firstline=37]{c}{dan/merge.c}
+  \inputminted[firstline=37]{c}{dan/merge/merge.c}
 \end{ans}
 
 \subsection{Control flow statements to gotos}
@@ -529,12 +529,13 @@ see
   \end{center}
 \end{itemize}
 
-\DeactivateAnswers
-
 
 \subsection{From recursion to explicit stack}
 \begin{ex}{**,@2}
 Re-implement the tree traversal (from above), but using explicit stacks.
+\begin{ans}
+\inputminted[firstline=52,lastline=62]{c}{dan/trav/trav.c}
+\end{ans}
 \end{ex}
 
 
@@ -880,12 +881,13 @@ abstract class IntersectVisitor {
   if (v.intersects) ...
 \end{java2}
 }
+\DeactivateAnswers
 
 \section{Functional Programming}
 \subsection{Algebraic Data Types and Pattern Matching}
 
-\question{*} Write functions between the types $(Either A B, Either C
-D)$ and $Either (A,C) (B,D)$.
+\question{*} Write functions between the types \[(Either\,A\,B,
+Either\,C\,D)\] and \[Either (Either (A,C)\, (B,D))\,(Either (A,D)\,(B,C))\].
 
 \question{*} Define an algebraic type for binary trees
 \question{*\correctedLastYear 3} define an algebraic type for arithmetic expressions
@@ -917,32 +919,38 @@ otherwise. (The type must be Int → Int.)
 Assume the filter, map, foldr functions as in the Haskell prelude. f
 comes from the previous section.
 
-\question{*\correctedLastYear 3} Unfold the following expressions:
-\begin{enumerate}
-\item map f
-\item filter ($>=$ 0)
-\item foldr [] (++)
-\end{enumerate}
-
+\question{*\correctedLastYear 3} For each of the following
+expressions, remove occurences of the higher-order functions by
+inlining them.
+\begin{minted}{haskell}
+exp1 = map f
+exp2 = filter (>= 0)
+exp3 = foldr (:) []
+exp4 = foldr (++) []
+exp5 = foldr (\ x xs -> xs ++ [x]) []
+\end{minted}
+%
 Consider the following imperative program:
-\begin{verbatim}
+\begin{minted}{c}
 for (i=0;i<sizeof(a);i++)
   if (a[i].grade >= 24)
      *b++ = a[i];
-\end{verbatim}
+\end{minted}
 \begin{ex}{*\correctedLastYear 3}
   How would the same algorithm be naturally expressed in a functional
   language? (Use functions from the Haskell prelude to shorten your code)
 \end{ex}
 
 
+Assume we reprent a vector as a list of integers.
+
 \question{*} write a function that does the dot-product of two
-vectors;
+vectors using explicit recursion and pattern matching.
 
-\question{*} make an abstract version of the above.
+\question{*} In the above code, abstract over sum and prodcuts on integers.
 
-\question{**} Can you find the function you created in the Haskell
-Data.List module?
+\question{**} Can you find the functions you created in the Haskell
+\texttt{Data.List} module?
 
 \question{}
 The standard function \verb!insert! inserts an element into an ordered
@@ -959,6 +967,8 @@ use explicit recursion).
 
 \subsection{Closures}
 
+% Assume zipWith as defined in the Data.List module.
+
 Consider the program:
 \begin{verbatim}
 test1 xs = foldr (+) 0 xs
@@ -970,17 +980,18 @@ test2 xs = foldr (*) 1 xs
 \end{ex}
 
 \begin{ex}{*\correctedLastYear 4}
-  Assuming that $\mathsf{xs}$ are lists of integers, replace the above
-  uses of higher-order application by explicit closures.
-  (Hint: you need to also change the definition of foldr/map).
+  Assuming that \texttt{xs} are lists of integers, replace the above
+  uses of higher-order application by explicit closures.  (Hint: you
+  need to also change the definition of \texttt{foldr}/\texttt{map}).
 \end{ex}
 
 \begin{ex}{**\correctedLastYear 4}
-  Add the following line to the above program and repeat the above 2
+  Add the following lines to the above program and repeat the above 2
   exercises.
-\begin{verbatim}
+\begin{minted}{haskell}
 replace a b xs = map (\x -> if x == a then b else x) xs
-\end{verbatim}
+moment n xs = sum (map (\x -> x ^ n) xs)
+\end{minted}
 \end{ex}
 
 
