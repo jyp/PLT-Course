@@ -881,6 +881,7 @@ abstract class IntersectVisitor {
   if (v.intersects) ...
 \end{java2}
 }
+
 \DeactivateAnswers
 
 \section{Functional Programming}
@@ -1012,13 +1013,13 @@ Loop.
 We terminate when no numbers remain in our list. At this point, all
 prime numbers up to the limit have been found.
 
-The algorithm can be implemented in Haskell as follows:
-
 Write the algorithm in Haskell.
-
+\begin{ans}
+  See next question.
+\end{ans}
 \question{*\correctedLastYear 4}
 
-Consider the following (totally unrelated) algorithm:
+Consider the following algorithm:
 \begin{verbatim}
 primes = sieve [2..1000]
 sieve (n:ns) = n:sieve (filter (not . (`isDivisibleBy` n)) ns)
