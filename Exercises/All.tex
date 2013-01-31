@@ -29,51 +29,6 @@
 
 \newcommand\DeactivateAnswers{}
 
-
-\usepackage{listings}
-
-\lstset{language=java,basicstyle=\small}
-\lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
-\lstnewenvironment{java}
-    {\lstset{language=java,frame=tb}}
-    {}
-\lstnewenvironment{java2}
-    {\lstset{language=java}}
-    {}
-\lstnewenvironment{cplus}
-    {\lstset{language=c++,frame=tb}}
-    {}
-\lstnewenvironment{cplus2}
-    {\lstset{language=c++}}
-    {}
-\lstnewenvironment{perl}
-    {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip}}
-    {}
-
-
-\lstdefinelanguage{FSharp}
-      {morekeywords={let, new, match, with, rec, open, module,
-           namespace, type, of, member, and, for, in, do,
-           begin, end, fun, function, try, mutable, if, then, else, class, end},
-    keywordstyle=\color{blue},
-    sensitive=false,
-    morecomment=[l][\color{green!50!black!80}]{///},
-    morecomment=[l][\color{green!50!black!80}]{//},
-    morecomment=[s][\color{green!50!black!80}]{{(*}{*)}},
-    morestring=[b]",
-    stringstyle=\color{red},
-    columns=fullflexible
-}
-
-
-\lstnewenvironment{prolog}
-    {\lstset{language=prolog,frame=tb}}
-    {}
-\lstnewenvironment{haskell}
-    {\lstset{language=haskell,frame=tb}}
-    {}
-
-
 \begin{document}
 
 \title{Programming Paradigms: Exercises}
@@ -421,7 +376,7 @@ Duff's device is an optimization idiom for serial copies
 in the language C. The fragment below lists first the original code,
 then Duff's optimization.
 \pagebreak
-\begin{cplus}
+\begin{minted}{cpp}
 /* (Almost) original code */
 int main() {
    short *to, *from;
@@ -435,7 +390,7 @@ int main() {
    }
    return 0;
 }
-\end{cplus}
+\end{minted}
 
 Many things happen in the assignment ``\textsf{*to++ = *from++;}''. Can you figure out what exactly?
 \begin{ex}{*}
@@ -451,7 +406,7 @@ Many things happen in the assignment ``\textsf{*to++ = *from++;}''. Can you figu
 
 
 Duff optimised the above code as follows:
-\begin{cplus}
+\begin{minted}{cpp}
 /* Duff's transformation */
 int main() {
   short *to, *from;
@@ -474,7 +429,7 @@ int main() {
   }
   return 0;
 }
-\end{cplus}
+\end{minted}
 
 \begin{ex}{**}
   Translate the switch statements to gotos.
@@ -1114,7 +1069,7 @@ lazy logical disjunction operator? Test it.
 \question{**} Repeat the above steps with the algorithm to compute the
 least edit distance. \url{http://en.wikipedia.org/wiki/Levenshtein_distance}
 
-\begin{cplus}
+\begin{verbatim}
 int LevenshteinDistance(char s[1..m], char t[1..n])
 {
   // for all i and j, d[i,j] will hold the Levenshtein distance between
@@ -1145,7 +1100,7 @@ int LevenshteinDistance(char s[1..m], char t[1..n])
 
   return d[m,n]
 }
-\end{cplus}
+\end{verbatim}
 
 \begin{ans}
 \inputminted{haskell}{Diff.hs}
@@ -1333,14 +1288,14 @@ What is the result of each of the following unifications?
 Try to come up with the result without using the prolog/curry interpreter!
 
 \Prolog{}
-\begin{prolog}
+\begin{minted}{prolog}
 a(X,Y) = a(b,c) 
 a(X,Y) = a(Z,Z) 
 a(X,X) = a(b,c) 
 e(X) = a(b,b) 
 d(X,X,Y) = d(Z,W,W) 
 a(X,X) = d(Z,W,W) 
-\end{prolog}
+\end{minted}
 
 
 \Curry{}
@@ -1382,10 +1337,10 @@ concatenation. It uses unification in a clever way to that end.
 The difference-list representation for a list can be obtained as follows:
 
 \Prolog{}
-\begin{prolog}
+\begin{minted}{prolog}
 fromList([],d(X,X)).
 fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
-\end{prolog}
+\end{minted}
 
 
 \Curry{}
@@ -1413,9 +1368,9 @@ $$[1,2] \longrightarrow D [1,2,3,4] [3,4] $$
 
 You can check how fromList works by testing it:
 \Prolog{
-\begin{prolog}
+\begin{minted}{prolog}
 fromList([1,2,3],X).
-\end{prolog}
+\end{minted}
 }
 \Curry{
 \begin{verbatim}
@@ -1431,10 +1386,10 @@ Write a predicate \textsf{toList :: DList a $\rightarrow$ [a] $\rightarrow$ Succ
 
 \begin{ans}
 ~
-\begin{prolog}
+\begin{minted}{prolog}
 toList(d(X,X),[]).
 toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
-\end{prolog}
+\end{minted}
 
 \begin{minted}{haskell}
 toList (D x y) [] 
@@ -1457,9 +1412,9 @@ using the direct representation.
 
 If \texttt{dconcat} is properly defined, then the queries
 \Prolog{
-\begin{prolog}
+\begin{minted}{prolog}
 dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
-\end{prolog}
+\end{minted}
 }
 
 \Curry{
@@ -1478,13 +1433,13 @@ final = [1,2,3,4,5]
 
 \begin{ans}
 ~
-\begin{prolog}
+\begin{minted}{prolog}
 dconcat(d(Out2,In2),d(Out1,In1),d(Out,In)) :- Out = Out2, In2 = Out1, In = In1.
-\end{prolog}
+\end{minted}
 or
-\begin{prolog}
+\begin{minted}{prolog}
 dconcat(d(Out,Intermediate),d(Intermediate,In),d(Out,In)).
-\end{prolog}
+\end{minted}
 \end{ans}
 
 \end{ex}
@@ -1531,11 +1486,11 @@ N = [-5,-1,-9].
   you can recover the original list if you pass it the split lists.
   \begin{ans}
     
-    \begin{prolog}
+    \begin{minted}{prolog}
       split([],[],[]).
       split([X|A],[X|P],N) :- X >= 0, split(A,P,N).
       split([X|A],P,[X|N]) :- X <  0, split(A,P,N).
-    \end{prolog}
+    \end{minted}
   \end{ans}
 \end{question}
 
