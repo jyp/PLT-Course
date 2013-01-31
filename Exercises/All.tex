@@ -890,36 +890,36 @@ abstract class IntersectVisitor {
 Either\,C\,D)\] and \[Either (Either (A,C)\, (B,D))\,(Either (A,D)\,(B,C))\].
 
 \question{*} Define an algebraic type for binary trees
-\question{*\correctedLastYear 3} define an algebraic type for arithmetic expressions
-\question{*\correctedLastYear 3} define a simple interpreter for the above type
+\question{*,@3} define an algebraic type for arithmetic expressions
+\question{*,@3} define a simple interpreter for the above type
 
-\question{*\correctedLastYear 3} Translate the above 2 structures to an OO language. (Hint: One
+\question{*,@3} Translate the above 2 structures to an OO language. (Hint: One
 class corresponds to leaves, one to branching.)
 
-\question{*\correctedLastYear 3} Translate the interpreter to an OO
+\question{*,@3} Translate the interpreter to an OO
 language. You are not allowed to use 'instanceof'
 
-\question{*} Translate the interpreter to an OO language. You must use
+\question{*,@3} Translate the interpreter to an OO language. You must use
 'instanceof'.
 
 \subsection{Currification and partial application}
 
-\question{*\correctedLastYear 3} Define a function $\mathsf{f}$ following this spec: given a
+\question{*,@3} Define a function \texttt{f} following this spec: given a
 integer, return it unchanged if it is greater than zero, and zero
-otherwise. (The type must be Int → Int.)
+otherwise. (The type must be \texttt{Int → Int}.)
 
-\question{*\correctedLastYear 3} Assuming a function max : (Int × Int) → Int, define the function $\mathsf{f}$.
+\question{*,@3} Assuming a function max : \texttt{(Int × Int) → Int}, define the function \texttt{f}.
 
-\question{*} Define a function max', by currifying the function max.
+\question{*,@3} Define a function \texttt{max'}, by currifying the function \texttt{max}.
 
-\question{*} Define f using max'.
+\question{*} Define \texttt{f} using \texttt{max'}.
 
 \subsection{Higher-order functions}
 
-Assume the filter, map, foldr functions as in the Haskell prelude. f
-comes from the previous section.
+Assume the \texttt{filter}, \texttt{map}, \texttt{foldr} functions as in the Haskell prelude. \texttt{f
+} comes from the previous section.
 
-\question{*\correctedLastYear 3} For each of the following
+\question{*,@3} For each of the following
 expressions, remove occurences of the higher-order functions by
 inlining them.
 \begin{minted}{haskell}
@@ -936,7 +936,7 @@ for (i=0;i<sizeof(a);i++)
   if (a[i].grade >= 24)
      *b++ = a[i];
 \end{minted}
-\begin{ex}{*\correctedLastYear 3}
+\begin{ex}{*,@3}
   How would the same algorithm be naturally expressed in a functional
   language? (Use functions from the Haskell prelude to shorten your code)
 \end{ex}
