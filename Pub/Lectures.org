@@ -1050,7 +1050,7 @@ In Haskell:
 - Left leaning:
   : f x y == (f x) y  ==  (f(x))(y)
 
-*** TODO Forward reference: function arrow is RIGHT associative
+*** Function arrow is RIGHT associative
 
 :   a -> b -> c     ===       a -> (b -> c)
 
@@ -1109,13 +1109,13 @@ when pattern matching on the ~Tag~ one gets both an ~A~ and a ~B~.
 : test :: ACrossB -> String
 : test (Tag x y) = "I got an A: " ++ show x ++ " and a B:" ++ show y
 
-There is also special syntax for product types.
+There is also special syntax for product types. (Note: the syntax is
+the same for types and values)
 
 :  test : (A,B) -> String
 :  test (x,y) = "I got an A: " ++ show x ++ " and a B:" ++ show y
 
 Product types are also called tuples.
-
 
 *** A bit of algebra
 
@@ -1130,7 +1130,7 @@ identity).
 
 This is why the types are called algebraic!
 
-Some more laws that you can translate to isomorphisms:
+Some more laws, which all translate to isomorphisms:
 
 :   A×B ≅ B×A
 :   (A + 0) ≅ A
@@ -1153,7 +1153,7 @@ In Haskell syntax one must choose tags:
 : data Bool = True | False
 
 *** Parametric types
-
+    
 In functional languages it is common to use abstraction in types
 themselves.
 
@@ -1187,6 +1187,9 @@ Trees with any number of children:
 In fact there is a special syntax for lists in Haskell:
 
 : data [a] = [] | a : [a]
+
+(Note that the brackets have a different meaning if used in a type
+expression or in a value expression)
 
 Examples:
 
@@ -1321,7 +1324,7 @@ Capture the pattern in the following
 
 *** Polymorphism comes back (⋆⋆⋆)
 
-Note that, both in foldr and map, by abstracting over the functions to
+Note that, both in ~foldr~ and ~map~, by abstracting over the functions to
 apply on the elements on the list, the resulting code is also
 abstracted from the /type/ of the elements in the list. That is, (eg.)
 map works on lists of /anything/, as long as the type of function that
@@ -1329,7 +1332,7 @@ we pass to map (1st argument) matches. This is captured formally in
 the type of map.
 
 Effectively, map has mutliple types. Because the type is parametrized
-over any types (a,b), this is called /parametric polymorphism/.
+over any types ~a~ and ~b~, this is called /parametric polymorphism/.
 
 *** Reading: 
 "Can Programming Be Liberated From the von Neumann Style?", John
