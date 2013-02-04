@@ -11,7 +11,8 @@ data Status = Status {transmit :: Maybe String, inAnswer :: Bool, answersDeactiv
 updStatus Status {..} s
   | ("\\begin{ans}" `isInfixOf` s) && answersDeactivated = Status {transmit = Nothing, inAnswer = True, ..}
   | ("\\end{ans}" `isInfixOf` s) && answersDeactivated = Status {transmit = Nothing, inAnswer = False, ..}
-  | s == "\\DeactivateAnswers" = Status {transmit = Nothing, answersDeactivated = True, ..}
+  | ("\\DeactivateAnswers" `isInfixOf` s) && not ("newcommand\\DeactivateAnswers" `isInfixOf` s) 
+     = Status {transmit = Nothing, answersDeactivated = True, ..}
   | inAnswer = Status {transmit = Nothing, ..}
   | otherwise = Status {transmit = Just s, ..}
 
@@ -20,5 +21,4 @@ main = do
   x <- readFile f
   let y = unlines . catMaybes . map transmit $ scanl updStatus (Status Nothing False False) . lines $ x
   writeFile g y
-  
   

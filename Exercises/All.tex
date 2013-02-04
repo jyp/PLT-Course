@@ -29,51 +29,6 @@
 
 \newcommand\DeactivateAnswers{}
 
-
-\usepackage{listings}
-
-\lstset{language=java,basicstyle=\small}
-\lstset{commentstyle=\textit,flexiblecolumns=true,mathescape=true}
-\lstnewenvironment{java}
-    {\lstset{language=java,frame=tb}}
-    {}
-\lstnewenvironment{java2}
-    {\lstset{language=java}}
-    {}
-\lstnewenvironment{cplus}
-    {\lstset{language=c++,frame=tb}}
-    {}
-\lstnewenvironment{cplus2}
-    {\lstset{language=c++}}
-    {}
-\lstnewenvironment{perl}
-    {\lstset{language=perl,mathescape=false,lineskip=0\baselineskip}}
-    {}
-
-
-\lstdefinelanguage{FSharp}
-      {morekeywords={let, new, match, with, rec, open, module,
-           namespace, type, of, member, and, for, in, do,
-           begin, end, fun, function, try, mutable, if, then, else, class, end},
-    keywordstyle=\color{blue},
-    sensitive=false,
-    morecomment=[l][\color{green!50!black!80}]{///},
-    morecomment=[l][\color{green!50!black!80}]{//},
-    morecomment=[s][\color{green!50!black!80}]{{(*}{*)}},
-    morestring=[b]",
-    stringstyle=\color{red},
-    columns=fullflexible
-}
-
-
-\lstnewenvironment{prolog}
-    {\lstset{language=prolog,frame=tb}}
-    {}
-\lstnewenvironment{haskell}
-    {\lstset{language=haskell,frame=tb}}
-    {}
-
-
 \begin{document}
 
 \title{Programming Paradigms: Exercises}
@@ -237,7 +192,7 @@ Implement the above-mentioned algorithm without using
 implementation with the {\it A} and {\it B} from the previous question.
 
 \begin{ans}
-  \inputminted[firstline=37]{c}{dan/merge.c}
+  \inputminted[firstline=37]{c}{dan/merge/merge.c}
 \end{ans}
 
 \subsection{Control flow statements to gotos}
@@ -421,7 +376,7 @@ Duff's device is an optimization idiom for serial copies
 in the language C. The fragment below lists first the original code,
 then Duff's optimization.
 \pagebreak
-\begin{cplus}
+\begin{minted}{cpp}
 /* (Almost) original code */
 int main() {
    short *to, *from;
@@ -435,7 +390,7 @@ int main() {
    }
    return 0;
 }
-\end{cplus}
+\end{minted}
 
 Many things happen in the assignment ``\textsf{*to++ = *from++;}''. Can you figure out what exactly?
 \begin{ex}{*}
@@ -451,7 +406,7 @@ Many things happen in the assignment ``\textsf{*to++ = *from++;}''. Can you figu
 
 
 Duff optimised the above code as follows:
-\begin{cplus}
+\begin{minted}{cpp}
 /* Duff's transformation */
 int main() {
   short *to, *from;
@@ -474,7 +429,7 @@ int main() {
   }
   return 0;
 }
-\end{cplus}
+\end{minted}
 
 \begin{ex}{**}
   Translate the switch statements to gotos.
@@ -529,12 +484,13 @@ see
   \end{center}
 \end{itemize}
 
-\DeactivateAnswers
-
 
 \subsection{From recursion to explicit stack}
-\begin{ex}{**}
+\begin{ex}{**,@2}
 Re-implement the tree traversal (from above), but using explicit stacks.
+\begin{ans}
+\inputminted[firstline=52,lastline=62]{c}{dan/trav/trav.c}
+\end{ans}
 \end{ex}
 
 
@@ -643,9 +599,75 @@ struct IntegerAdditiveMonoid : Monoid {
 
 \subsection{Explicit method pointers}
 
-\question{*} Translate the above code to a C-like language, using
+\question{*,@2} Translate the above code to a C-like language, using
 explicit method pointers. (Hint: you can simply consider the interface
 as a class without fields.)
+
+\begin{ans}
+  \begin{minted}{c}
+    #include "stdio.h"
+    #include "stdlib.h"
+
+struct monoid {
+  struct monoid_vtable *vtable;
+};
+
+typedef struct monoid Monoid;
+
+struct monoid_vtable {
+  Monoid *(*op)(Monoid *this, Monoid *second);
+  Monoid *(*id)(Monoid *this);
+};
+
+typedef struct monoid_vtable Monoid_Vtable;
+
+struct integerAdditiveMonoid {
+     Monoid* super;
+     int elt;
+};
+
+typedef struct integerAdditiveMonoid IntegerAdditiveMonoid;
+
+IntegerAdditiveMonoid *integerAdditiveMonoid_new(int x);
+
+Monoid *integerAdditiveMonoid_op(Monoid *this, Monoid *second) {
+     return (Monoid *)
+         (integerAdditiveMonoid_new(((IntegerAdditiveMonoid*) this)->elt
+         + ((IntegerAdditiveMonoid *) second)->elt));
+};
+
+Monoid *integerAdditiveMonoid_id(Monoid *this) {
+     return (Monoid *) (integerAdditiveMonoid_new(0));
+}
+
+Monoid_Vtable integerAdditiveMonoid_vtable =
+{  &integerAdditiveMonoid_op
+  , &integerAdditiveMonoid_id };
+
+IntegerAdditiveMonoid *integerAdditiveMonoid_new(int x) {
+     IntegerAdditiveMonoid *this =
+         malloc(sizeof(IntegerAdditiveMonoid));
+     this->super = malloc(sizeof(Monoid));
+     this->super->vtable = &integerAdditiveMonoid_vtable;
+     this->elt = x;
+     return this;
+}
+
+int main() {
+     IntegerAdditiveMonoid *a = integerAdditiveMonoid_new(3);
+     IntegerAdditiveMonoid *b = integerAdditiveMonoid_new(4);
+     printf("%d\n",((IntegerAdditiveMonoid*)
+         (a->super->vtable->op((Monoid *) a, (Monoid *) b)))->elt);
+     printf("%d\n",((IntegerAdditiveMonoid*)
+         (b->super->vtable->id((Monoid *) b)))->elt);
+     free(a);
+     free(b);
+     return 0;
+}
+
+  \end{minted}
+\end{ans}
+
 
 \question{-} Briefly recap: what is a \textit{monoid}, mathematically?
 
@@ -678,15 +700,45 @@ Compilation failed: 2 error(s), 0 warnings
 \end{verbatim}
 
 
-\question{*} What if the method \textsf{op} \textit{would} compile?
+\question{*,@2} What if the method \textsf{op} \textit{would} compile?
 Define objects \textsf{a,b}, of appropriate types, so that
 \textsf{a.op(b)}, if is run, would result in a run-time error.
 
-\question{*} What if the method \textsf{id} would compile? Could you
+\begin{ans}
+  \begin{minted}{csharp}
+    a = new IntegerAdditiveMonoid(3);
+    b = new IntegerAdditiveMonoid(4);
+    a.op(b);
+  \end{minted}
+  
+\begin{verbatim}
+error: method op() not found
+\end{verbatim}
+
+\end{ans}
+
+\question{*,@2} What if the method \textsf{id} would compile? Could you
 construct a similar run-time error? (Hint: do the translation job if
 the answer is not obvious to you.)
 
-\question{**} Explain the error messages in terms of co-/contra-/nonvariance.
+\begin{ans}
+  \begin{minted}{csharp}
+    a = new IntegerAdditiveMonoid(3);
+    a.id();
+  \end{minted}
+  
+\begin{verbatim}
+error: method id() not found
+\end{verbatim}
+\end{ans}
+
+\question{**,@2} Explain the error messages in terms of co-/contra-/nonvariance.
+
+\begin{ans}
+  In an interface implementation, types should be covariant, because the users
+  of the interface expect to supply arguments of generic types and to get a
+  return value of a generic type, not of the narrow ones.
+\end{ans}
 
 \question{***} The corresponding program in Java behaves differently. Briefly
 explain how, consult the Java Language Specification (JLS), and back your answer
@@ -805,68 +857,76 @@ abstract class IntersectVisitor {
 \end{java2}
 }
 
+\DeactivateAnswers
+
 \section{Functional Programming}
 \subsection{Algebraic Data Types and Pattern Matching}
 
-\question{*} Write functions between the types $(Either A B, Either C
-D)$ and $Either (A,C) (B,D)$.
+\question{*} Write functions between the types \[(Either\,A\,B,
+Either\,C\,D)\] and \[Either (Either (A,C)\, (B,D))\,(Either (A,D)\,(B,C))\].
 
 \question{*} Define an algebraic type for binary trees
-\question{*\correctedLastYear 3} define an algebraic type for arithmetic expressions
-\question{*\correctedLastYear 3} define a simple interpreter for the above type
+\question{*,@3} define an algebraic type for arithmetic expressions
+\question{*,@3} define a simple interpreter for the above type
 
-\question{*\correctedLastYear 3} Translate the above 2 structures to an OO language. (Hint: One
+\question{*,@3} Translate the above 2 structures to an OO language. (Hint: One
 class corresponds to leaves, one to branching.)
 
-\question{*\correctedLastYear 3} Translate the interpreter to an OO
+\question{*,@3} Translate the interpreter to an OO
 language. You are not allowed to use 'instanceof'
 
-\question{*} Translate the interpreter to an OO language. You must use
+\question{*,@3} Translate the interpreter to an OO language. You must use
 'instanceof'.
 
 \subsection{Currification and partial application}
 
-\question{*\correctedLastYear 3} Define a function $\mathsf{f}$ following this spec: given a
+\question{*,@3} Define a function \texttt{f} following this spec: given a
 integer, return it unchanged if it is greater than zero, and zero
-otherwise. (The type must be Int → Int.)
+otherwise. (The type must be \texttt{Int → Int}.)
 
-\question{*\correctedLastYear 3} Assuming a function max : (Int × Int) → Int, define the function $\mathsf{f}$.
+\question{*,@3} Assuming a function max : \texttt{(Int × Int) → Int}, define the function \texttt{f}.
 
-\question{*} Define a function max', by currifying the function max.
+\question{*,@3} Define a function \texttt{max'}, by currifying the function \texttt{max}.
 
-\question{*} Define f using max'.
+\question{*} Define \texttt{f} using \texttt{max'}.
 
 \subsection{Higher-order functions}
 
-Assume the filter, map, foldr functions as in the Haskell prelude. f
-comes from the previous section.
+Assume the \texttt{filter}, \texttt{map}, \texttt{foldr} functions as in the Haskell prelude. \texttt{f
+} comes from the previous section.
 
-\question{*\correctedLastYear 3} Unfold the following expressions:
-\begin{enumerate}
-\item map f
-\item filter ($>=$ 0)
-\item foldr [] (++)
-\end{enumerate}
-
+\question{*,@3} For each of the following
+expressions, remove occurences of the higher-order functions by
+inlining them.
+\begin{minted}{haskell}
+exp1 = map f
+exp2 = filter (>= 0)
+exp3 = foldr (:) []
+exp4 = foldr (++) []
+exp5 = foldr (\ x xs -> xs ++ [x]) []
+\end{minted}
+%
 Consider the following imperative program:
-\begin{verbatim}
+\begin{minted}{c}
 for (i=0;i<sizeof(a);i++)
   if (a[i].grade >= 24)
      *b++ = a[i];
-\end{verbatim}
-\begin{ex}{*\correctedLastYear 3}
+\end{minted}
+\begin{ex}{*,@3}
   How would the same algorithm be naturally expressed in a functional
   language? (Use functions from the Haskell prelude to shorten your code)
 \end{ex}
 
 
+Assume we reprent a vector as a list of integers.
+
 \question{*} write a function that does the dot-product of two
-vectors;
+vectors using explicit recursion and pattern matching.
 
-\question{*} make an abstract version of the above.
+\question{*} In the above code, abstract over sum and prodcuts on integers.
 
-\question{**} Can you find the function you created in the Haskell
-Data.List module?
+\question{**} Can you find the functions you created in the Haskell
+\texttt{Data.List} module?
 
 \question{}
 The standard function \verb!insert! inserts an element into an ordered
@@ -883,6 +943,8 @@ use explicit recursion).
 
 \subsection{Closures}
 
+% Assume zipWith as defined in the Data.List module.
+
 Consider the program:
 \begin{verbatim}
 test1 xs = foldr (+) 0 xs
@@ -894,17 +956,18 @@ test2 xs = foldr (*) 1 xs
 \end{ex}
 
 \begin{ex}{*\correctedLastYear 4}
-  Assuming that $\mathsf{xs}$ are lists of integers, replace the above
-  uses of higher-order application by explicit closures.
-  (Hint: you need to also change the definition of foldr/map).
+  Assuming that \texttt{xs} are lists of integers, replace the above
+  uses of higher-order application by explicit closures.  (Hint: you
+  need to also change the definition of \texttt{foldr}/\texttt{map}).
 \end{ex}
 
 \begin{ex}{**\correctedLastYear 4}
-  Add the following line to the above program and repeat the above 2
+  Add the following lines to the above program and repeat the above 2
   exercises.
-\begin{verbatim}
+\begin{minted}{haskell}
 replace a b xs = map (\x -> if x == a then b else x) xs
-\end{verbatim}
+moment n xs = sum (map (\x -> x ^ n) xs)
+\end{minted}
 \end{ex}
 
 
@@ -925,13 +988,13 @@ Loop.
 We terminate when no numbers remain in our list. At this point, all
 prime numbers up to the limit have been found.
 
-The algorithm can be implemented in Haskell as follows:
-
 Write the algorithm in Haskell.
-
+\begin{ans}
+  See next question.
+\end{ans}
 \question{*\correctedLastYear 4}
 
-Consider the following (totally unrelated) algorithm:
+Consider the following algorithm:
 \begin{verbatim}
 primes = sieve [2..1000]
 sieve (n:ns) = n:sieve (filter (not . (`isDivisibleBy` n)) ns)
@@ -1026,7 +1089,7 @@ lazy logical disjunction operator? Test it.
 \question{**} Repeat the above steps with the algorithm to compute the
 least edit distance. \url{http://en.wikipedia.org/wiki/Levenshtein_distance}
 
-\begin{cplus}
+\begin{verbatim}
 int LevenshteinDistance(char s[1..m], char t[1..n])
 {
   // for all i and j, d[i,j] will hold the Levenshtein distance between
@@ -1057,7 +1120,7 @@ int LevenshteinDistance(char s[1..m], char t[1..n])
 
   return d[m,n]
 }
-\end{cplus}
+\end{verbatim}
 
 \begin{ans}
 \inputminted{haskell}{Diff.hs}
@@ -1245,14 +1308,14 @@ What is the result of each of the following unifications?
 Try to come up with the result without using the prolog/curry interpreter!
 
 \Prolog{}
-\begin{prolog}
+\begin{minted}{prolog}
 a(X,Y) = a(b,c) 
 a(X,Y) = a(Z,Z) 
 a(X,X) = a(b,c) 
 e(X) = a(b,b) 
 d(X,X,Y) = d(Z,W,W) 
 a(X,X) = d(Z,W,W) 
-\end{prolog}
+\end{minted}
 
 
 \Curry{}
@@ -1294,10 +1357,10 @@ concatenation. It uses unification in a clever way to that end.
 The difference-list representation for a list can be obtained as follows:
 
 \Prolog{}
-\begin{prolog}
+\begin{minted}{prolog}
 fromList([],d(X,X)).
 fromList([A|As],d(A:Out,In)) :- fromList(As,d(Out,In)).
-\end{prolog}
+\end{minted}
 
 
 \Curry{}
@@ -1325,9 +1388,9 @@ $$[1,2] \longrightarrow D [1,2,3,4] [3,4] $$
 
 You can check how fromList works by testing it:
 \Prolog{
-\begin{prolog}
+\begin{minted}{prolog}
 fromList([1,2,3],X).
-\end{prolog}
+\end{minted}
 }
 \Curry{
 \begin{verbatim}
@@ -1343,10 +1406,10 @@ Write a predicate \textsf{toList :: DList a $\rightarrow$ [a] $\rightarrow$ Succ
 
 \begin{ans}
 ~
-\begin{prolog}
+\begin{minted}{prolog}
 toList(d(X,X),[]).
 toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
-\end{prolog}
+\end{minted}
 
 \begin{minted}{haskell}
 toList (D x y) [] 
@@ -1369,9 +1432,9 @@ using the direct representation.
 
 If \texttt{dconcat} is properly defined, then the queries
 \Prolog{
-\begin{prolog}
+\begin{minted}{prolog}
 dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
-\end{prolog}
+\end{minted}
 }
 
 \Curry{
@@ -1390,13 +1453,13 @@ final = [1,2,3,4,5]
 
 \begin{ans}
 ~
-\begin{prolog}
+\begin{minted}{prolog}
 dconcat(d(Out2,In2),d(Out1,In1),d(Out,In)) :- Out = Out2, In2 = Out1, In = In1.
-\end{prolog}
+\end{minted}
 or
-\begin{prolog}
+\begin{minted}{prolog}
 dconcat(d(Out,Intermediate),d(Intermediate,In),d(Out,In)).
-\end{prolog}
+\end{minted}
 \end{ans}
 
 \end{ex}
@@ -1443,11 +1506,11 @@ N = [-5,-1,-9].
   you can recover the original list if you pass it the split lists.
   \begin{ans}
     
-    \begin{prolog}
+    \begin{minted}{prolog}
       split([],[],[]).
       split([X|A],[X|P],N) :- X >= 0, split(A,P,N).
       split([X|A],P,[X|N]) :- X <  0, split(A,P,N).
-    \end{prolog}
+    \end{minted}
   \end{ans}
 \end{question}
 

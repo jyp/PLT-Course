@@ -1,0 +1,41 @@
+
+map f = go where
+  go [] = []
+  go (x:xs) = f x : go xs
+
+filter (>= 0) = go where
+  go [] = []
+  go (x:xs) | x >= 0    = x : go xs
+            | otherwise = go xs
+
+-- foldr :: (a -> b -> b) -> b -> [a] -> b
+-- so there's a typo
+
+-- Maybe foldr (:) [] is meant?
+
+foldr f z []     = z
+foldr f z (x:xs) = f x (foldr f z (x:xs))
+
+-- then unrolling this gives
+foldr (:) [] []     = []
+foldr (:) [] (x:xs) = x : foldr (:) [] xs
+
+-- assuming it's equal to the identity function on list,
+-- induction gives
+foldr (:) [] = id
+
+-- on the other hand,
+foldl f z []     = z
+foldl f z (x:xs) = foldl (f z x) xs
+
+unfolding foldl (flip (:)) []:
+
+foldl (flip (:)) z []     = z
+foldl (flip (:)) z (x:xs) = foldl (flip (:)) (flip (:) z x) xs
+                          = foldl (flip (:)) (x : z) xs
+
+-- which is by induction equal to an accumulative version of reverse
+-- which is with some effort equal to a quadratic version of reverse
+
+
+
