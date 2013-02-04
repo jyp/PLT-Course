@@ -769,16 +769,17 @@ Mechanisms to make the fields private
 
 *** Paradigm: Abstract Data Type (ADT) 
  - Example: "stack", "priority queue", ... from your data structures course
- - Every data type comes with a specification
+ - Every data type comes with a specification (a class invariant)
  - ... maybe in the form of _unit tests_
  - Notion of data-invariant:
      + a condition which the representation must verify at all times
      (seen form outside the object)
- - Advantage: it's easy to change representation of data
+ - Advantage: it is easy to change representation of data
+
+ - Dogma: never any direct field access (cf. "set" and "get")
 
  - Note: not every piece of data fits the ADT model. 
    Example: "Person" record.
- - Dogma: never any direct field access (cf. "set" and "get")
 
 *** Exercise
 Write a unit test for a valid date, and call it at appropriate points
@@ -791,7 +792,6 @@ counts the number of days since Jan 1st 2000.
 
 Simple example of inheritance:
 #+INCLUDE "Animals.cpp" src cpp
-
 
 *** Transformation: embed method pointers
 
@@ -823,7 +823,7 @@ This means that
 
 1. ~x~ has multiple types 
 
-2. That is Whenever a function ~f~ has an parameter of type ~A~, one
+2. That is whenever a function ~f~ has an parameter of type ~A~, one
    can pass an argument of type ~B~.  By deriving from ~A~, a lot of
    code is automatically ready to work with ~B~.  (Conversely, if you
    write code working for ~A~, it will be useful in many contexts)
@@ -856,7 +856,7 @@ Apply the transformation on the resulting code.
 *** What happens when functions have arguments?
 In many languages, the type of the arguments of derived functions must
 be the SAME as that of the overridden function.
-**** Contra-variance (⋆⋆)
+**** Co/Contra-variance (⋆⋆⋆)
 A perhaps natural expectation is that you could make the arguments
 change as the type of the object. Ex.:
 
@@ -869,12 +869,13 @@ change as the type of the object. Ex.:
 
 ... but in fact this violates the substitution principle!
 
-Exercise: use the above two classes in a way that shows violation of
+See also the [[http://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)][wikipedia article]].
+**** Exercise
+Use the above two classes in a way that shows violation of
 substitution.
 
-See also the [[http://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)][wikipedia article]].
 
-*** Extension (✪): function tables
+*** Extension (✪): method tables
 
 - Is the ~sound~ function pointer ever modified?
 - How can we save space if there are many methods per class? 

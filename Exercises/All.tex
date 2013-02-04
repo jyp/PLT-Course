@@ -558,6 +558,26 @@ same purpose, using an accumulator parameter.
 \question{**} Implement a version of each of the two functions above
 by using an explicit stack.
 
+Consider the following function:
+\begin{minted}{c}
+void move_many(int n, int source, int intermediate, int target) {
+  if (n != 0) {
+    move_many(n-1,source,target,intermediate);
+    move_disk(source,target);
+    move_many(n-1,intermediate,source,target);
+  }
+}  
+\end{minted}
+\question{**} Remove recursion, using an explicit stack.
+
+\question{**} Eliminate the tail call. (Do not use the stack for
+them).
+
+\question{***} The structure of the other call is particular: it is
+possible to recover the arguments of the caller from the arguments of
+the call. Use this property to avoid using the stack for these
+arguments.
+
 \question{**}
 Implement the Ackermann function without recursion.
 (See \url{http://en.wikipedia.org/wiki/Ackermann_function}).

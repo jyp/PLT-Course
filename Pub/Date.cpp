@@ -3,7 +3,8 @@
 class Date {
 private:
   int year, month, day;
-  
+  // invariant: month >= 1 && month <= 12 && ... day ...  
+
 public:
   void shiftBy(int days) {
     day += days;
@@ -31,7 +32,7 @@ public:
 };
 
 int main () {
-  Date appointment;
+  Date appointment; // calls the default constructor
   appointment.shiftBy(7);
   appointment.show();
 }

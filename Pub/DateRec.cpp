@@ -3,7 +3,6 @@
 
 struct Date {
   int year, month, day;
-   
 };
   
 void shiftBy(struct Date* this_, int days) {
@@ -16,11 +15,11 @@ void show(struct Date* this_) {
 }
 
 Date ymd(int y, int m, int d) {
-  // check that we have a valid date here
   struct Date this_;
   this_.year = y;
   this_.month = m;
   this_.day = d;
+  // check that we have a valid date here
   return this_;
 }
   
