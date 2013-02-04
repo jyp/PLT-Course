@@ -1,19 +1,16 @@
 import Prelude hiding (sum, product)
 
-data List a = Nil a | Cons a (List a)
+-- data List a = Nil a | Cons a (List a) | ...
 
 exercise = error "todo"
 
-sum :: List Int -> Int
-sum = exercise 
-  
-product :: List Int -> Int  
-product = exercise
-  
+sum :: [Int] -> Int
+sum xs = exercise
 
-append :: List Int -> List Int -> List Int
-append = exercise
+product xs = exercise
 
+append :: ([Int],[Int]) -> [Int]
+append (xs,ys) = exercise
 
 
 

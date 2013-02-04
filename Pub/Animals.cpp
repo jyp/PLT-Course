@@ -7,10 +7,11 @@ public:
   }
 };
 
-
 class Cat : public Animal {
+  int x;
   virtual void sound() {
-    printf("meow\n");
+    
+    printf("meow %d\n",x);
   }
 };
 
@@ -31,6 +32,6 @@ void test2(Animal a) {
 
 main() {
   Cat a;
-  test(&a);
-  // test2(a);
+  // test(&a);
+  test2(a);
 }

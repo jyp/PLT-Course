@@ -1020,8 +1020,6 @@ Translation of interfaces via method tables.
  encoded as state/environment + function. pointer.
 ** TODO Traits & Objects as fix-points (✪)
 * Functional programming
-** Reading (as necessary to understand Haskell syntax): "Learn you a Haskell, for great good!"
-http://learnyouahaskell.com/
 ** A bit of syntax
 *** Function definitions
 Similar to mathematical notation:
@@ -1037,7 +1035,6 @@ In the literature:
 : minimum = λ(x,y). if x < y 
 :                       then x
 :                       else y
-
 
 In Haskell:
 
@@ -1055,6 +1052,9 @@ In Haskell:
 
 :   a -> b -> c     ===       a -> (b -> c)
 
+*** Reading (as necessary to understand Haskell syntax)
+- The gentle introduction to Haskell
+- [[http://learnyouahaskell.com/][Learn you a Haskell, for great good!]]
 ** Algebraic Types
 Given a type ~A~ and a type ~B~, we can construct:
 
@@ -1152,6 +1152,10 @@ Some more laws, which all translate to isomorphisms:
 In Haskell syntax one must choose tags:
 
 : data Bool = True | False
+*** Count the number of values
+
+: Bool × Bool = (1 + 1) × (1 + 1)
+: Bool + Bool = (1 + 1) + (1 + 1) 
 
 *** Parametric types
     
@@ -1183,7 +1187,7 @@ Haskell syntax:
 
 Trees with any number of children:
 
-: RoseTree a = RT a (List a)
+: RoseTree a = RT a (List (RoseTree a))
 
 In fact there is a special syntax for lists in Haskell:
 
@@ -1220,12 +1224,12 @@ class Cons extends ListOfInt
   int head;
   ListOfInt tail;
   int sum () {
-    return head + tail.sum;
+    return head + tail.sum();
   }
 #+end_src
 **** Exercise
  Translate the append function.
-**** (⋆⋆⋆) Type-parametric version
+**** (✴) Type-parametric version
 Java has parametric classes, so a polymorphic list can even be encoded
 as follows. Review this code after <<Closures>> have been introduced.
 
@@ -1268,12 +1272,38 @@ the List interface.
 
 - In an OO language such as Java, it is convenient to add new cases to
   sum types, but it is cumbersome to add a new algorithm. (In the
-  above example, 'fold' is scattered among 3 classes/interfaces)
+  above example, ~sum~ is scattered among 3 classes/interfaces)
 - In a language such as Haskell, it is convenient to add a new
   algorithm (the fold function is localized at a single place), but
   cumbersome to add a case in a sum type (why?).
 
-** Higher-order functions
+** Function types
+~A → B~ corresponds to ~B^A~
+
+Indeed:
+
+- Bool → A ≅ A × A
+- (A+B) → C ≅ (A → C) × (B → C)
+- (A × B) → C ≅ A → (B → C)
+
+*** Transformation: Currification
+
+The last of these isomorphisms is (implicitly) used all the time in
+Haskell programming.
+
+#+begin_example
+currify : ((A × B) → C)  →   (A → (B → C))
+currify = \f -> \a -> \b -> f (a,b)
+
+uncurrify :: (A → (B → C)) → ((A × B) → C)
+uncurrify = \g -> \(a,b) -> (f a) b
+#+end_example
+
+Indeed, one almost always write ~A → B → C~ (which is equal to ~A → (B
+→ C)~ by associativity rules) for a function which takes two
+arguments, one of type ~A~ and one of type ~B~.
+
+** Higher-order functions in practice
 *** Example: fold (sometimes called reduce)
 
 Consider the following function, to sum the elements in a list:
@@ -1341,37 +1371,11 @@ Backus, 1977 Turing Award Lecture
 http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
 (recommended to read up to p. 620).
 
-** Some more algebra
-~A → B~ corresponds to ~B^A~
-
-Indeed:
-
-- Bool → A ≅ A × A
-- (A+B) → C ≅ (A → C) × (B → C)
-- (A × B) → C ≅ A → (B → C)
-
-*** Transformation: Currification
-
-The last of these isomorphisms is (implicitly) used all the time in
-Haskell programming.
-
-#+begin_example
-currify : ((A × B) → C)  →   (A → (B → C))
-currify = \f -> \a -> \b -> f (a,b)
-
-uncurrify :: (A → (B → C)) → ((A × B) → C)
-uncurrify = \g -> \(a,b) -> f a b
-#+end_example
-
-Indeed, one almost always write ~A → B → C~ (which is equal to ~A → (B
-→ C)~ by associativity rules) for a function which takes two
-arguments, one of type ~A~ and one of type ~B~.
-
 ** Removing Higher-Order functions
+
+Remark that 1st order Haskell programs are easy to translate to C.
+
 *** Transformation: Inlining higher-order functions
-
-Example/Exercise: from "filter/map" to for loop...
-
 This transformation is essentially the inverse of abstraction.
 
 #+begin_src haskell
@@ -1383,8 +1387,8 @@ map f xs = case xs of
 multiply n xs = map (\x -> x * n) xs
 #+end_src
 
-Substitute the formal parameter 'f' by its argument '(\x -> x * n)' in
-the code of 'map' (this is called β-reduction):
+Substitute the formal parameter ~f~ by its argument ~(\x -> x * n)~ in
+the code of ~map~.
 
 #+begin_src haskell
 multiply n xs = case xs of
@@ -1392,7 +1396,7 @@ multiply n xs = case xs of
     (x:xs) -> (\x -> x * n) x : map (\x -> x * n) xs
 #+end_src
 
-But we know that multiply n xs == map (\x -> x * n) xs
+But we know that ~multiply n xs == map (\x -> x * n) xs~
 
 #+begin_src haskell
 multiply n xs = case xs of
@@ -1400,7 +1404,7 @@ multiply n xs = case xs of
     (x:xs) -> (\x -> x * n) x : multiply n xs
 #+end_src
 
-β-reduce again:
+Reduce again:
 
 #+begin_src haskell
 multiply n xs = case xs of
@@ -1548,7 +1552,7 @@ button.onPress(new MyPrintAction("Hello there"));
 Hence: "Objects are Poor Man's closures."
 
 **** Exercise: polymorphic closures
-In the above we had closures of type Int -> Int. How would you support
+In the above we had closures of type ~Int -> Int~. How would you support
 polymorphic closures?
 
 ** Transformation: Explicit State

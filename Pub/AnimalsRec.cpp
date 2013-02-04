@@ -9,19 +9,22 @@ void animal_sound(Animal* a) {
 }
 
 struct Animal construct_animal() {
-  return {animal_sound};
+  Animal a = {animal_sound};
+  return a;
 }
 
 struct Cat {
   void (*sound)(Cat*);
+  int x;
 };
 
 void cat_sound(Cat* a) {
-  printf("meow\n");
+  printf("meow %d\n",a->x);
 }
 
 struct Cat construct_cat() {
-  return {cat_sound};
+  Cat c = {cat_sound, 87654};
+  return c;
 }
 
 struct Dog {
@@ -33,7 +36,8 @@ void dog_sound(Dog* a) {
 }
 
 struct Dog construct_dog() {
-  return {dog_sound};
+  Dog d = {dog_sound};
+  return d;
 }
 
 void test(Animal* a) {
@@ -41,11 +45,14 @@ void test(Animal* a) {
 }
 
 void test2(Animal a) {
-   animal_sound(&a);
+  animal_sound(&a);
+  // a.sound(&a);  
  }
 
 main() {
-  Cat a = construct_cat();
-  test((Animal*)&(a)); // (2)
+  Cat c = construct_cat();
+  test((Animal*)&c); // (2)
+  Animal a = { (void (*)(Animal*)) c.sound};
+  test2(a);
   //  test2(reinterpret_cast<struct Animal>(a));
 }
