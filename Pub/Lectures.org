@@ -1372,7 +1372,6 @@ http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
 (recommended to read up to p. 620).
 
 ** Removing Higher-Order functions
-
 Remark that 1st order Haskell programs are easy to translate to C.
 
 *** Transformation: Inlining higher-order functions
@@ -1464,40 +1463,11 @@ lambda-abstraction. Do not be confused: remember the above definition.
 **** Exercise (⋆⋆): Implement the above example C. 
 Hint: Instead of a 'tag', use a function pointer.
 
-Here's "pseudo-c" draft to get you started:
+Solution: 
 
-#+begin_src pseudo-c
-list map(closure* c, list p) {
-   while (p /= null) {
-     apply(c,p.info); 
-     // Attn: to be faithful to the Haskell code we'd need to create a new list.
-   }
-}
-
-struct {
-  int *f();
-  byte[] env;
-} closure
-
-
-int apply(closure* c, args...) {
-  c.f(c.env,args);
-}
-
-
-int add4(byte* env, int x) {
-  return x+4;
-}
-
-// call0
-add4Closure = new (void*); // we only need space for a function pointer, because add4 has no environment.
-add4Closure.f = add4;
-map(add4Closure,xs);
-
-#+end_src
+#+INCLUDE "closure.cpp" src cpp
 
 Note the similarity with the implementation of [[objects]]!
-
 **** Exercise: Implement the above example Java
 Hints
  - Instead of a tag, make a derived class ('apply' is a method)
