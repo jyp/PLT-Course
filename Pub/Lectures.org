@@ -1321,10 +1321,10 @@ product (Cons x xs) = x * product xs
 
 *Same pattern ⟶ Abstract out the difference ! (Parametrize)*
 
-Exercise: fill in the question mark in the following snippet
 #+begin_src haskell
 foldr :: (a -> b -> b) -> b -> [a] -> b
-foldr f k xs = ?
+foldr (?) k [] = k
+foldr (?) k (x:xs) = x ? foldr (?) k xs
 #+end_src
 such that
 
@@ -1336,8 +1336,8 @@ and
 - Notes
   + I give some help by writing the type of the foldr function; but 
     you can ignore it for now.
-  + 'foldr' is a function taking another function in parameter: a
-    higher order function.
+  + ~foldr~ is a function taking another function in parameter: a
+    higher-order function.
 
 *** Example: map
 
@@ -1408,7 +1408,7 @@ Reduce again:
 #+begin_src haskell
 multiply n xs = case xs of
     [] ->  []
-    (x:xs) -> x * n : recursiveCall f xs
+    (x:xs) -> x * n : multiply f xs
 #+end_src
 
 Downsides:
@@ -1513,7 +1513,7 @@ interface Listener -- "Closure"
 class MyPrintAction implements Listener -- "Function representation"
    String text -- "environment"
    respond() {
-     print text;
+     print(text);
    }
   
 button.onPress(new MyPrintAction("Hello there"));
