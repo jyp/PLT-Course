@@ -1537,9 +1537,11 @@ polymorphic closures?
 
 
 Assuming the "state of the world" is only the contents of the output
-file, then 'print' does what?
+file, then ~print~ writes in the appropriate "file" found in there. In
+the simplest case, ~State~ is a list of characters, and ~print~ just
+appends to it.
 
-*** Exercise: implement "safePrint" functionally...
+*** Exercise: make the state explicit in "safePrint" 
 
 #+begin_example
 procedure safePrint(line) : ErrorCode
@@ -1555,26 +1557,26 @@ procedure safePrint(line) : ErrorCode
 : outOfInk : Bool
 
 **** Questions
- 1. What is the type of outOfInk in the functional representation ?
+ 1. What is the type of ~outOfInk~ in the functional representation ?
  2. What is the translation ?
 
 **** Answers
-outOfInk :: State -> Bool × State
-
-safePrint :: String -> State -> ErrorCode × State
-safePrint    line      s1 =
-   let (noInk,s2) = outOfInk s1
-   in  if noInk then (-1,s2)
-                else let (s3,()) = print line s2
-                     in  (0,s3)
+: outOfInk :: State -> Bool × State
+: 
+: safePrint :: String -> State -> ErrorCode × State
+: safePrint    line      s1 =
+:    let (noInk,s2) = outOfInk s1
+:    in  if noInk then (-1,s2)
+:                 else let (s3,()) = print line s2
+:                      in  (0,s3)
 
 *** Imperative syntax in Haskell
 
-'IP a' = type of imperative programs returning a value of type a.
+~IP a~ = the type of imperative programs returning a value of type ~a~.
 
 : type IP a = State -> State × a
 
-Generic way to sequence two 'IP a':
+There is a generic way to sequence two values of type ~IP a~:
 
 #+begin_src haskell
 andThen :: IP a -> IP b -> IP b
@@ -1584,7 +1586,7 @@ f `andThen` g = \s0 -> let (s1,a) = f s0
 #+end_src
 
 But what if the 2nd program uses the returned value of the 1st?
-Then (in general) the 2nd program must depend on 'a':
+Then (in general) the 2nd program must depend on ~a~:
 
 #+begin_src haskell
 andThen :: IP a -> (a -> IP b) -> IP b
@@ -1614,7 +1616,8 @@ Then the following is valid:
               return 0
 #+end_src
             
-In fact, the meaning of "imperative" is given by that function -- andThen in our case:
+In fact, the meaning of "imperative" is given by that function
+(~andThen~ in our case):
 
 #+begin_src haskell 
 safePrint line = 
