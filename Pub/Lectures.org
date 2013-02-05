@@ -1538,8 +1538,8 @@ button.onPress(new MyPrintAction("Hello there"));
 Hence: "Objects are Poor Man's closures."
 
 **** Exercise: polymorphic closures
-In the above we had closures of type ~Int -> Int~. How would you support
-polymorphic closures?
+In the above we had closures of type ~Int → Int~. How would you
+support polymorphic closures?
 
 ** Purity and its Consequences
 
@@ -1557,43 +1557,50 @@ Did you know that side effects...
 | Mathematical function  | sin     |
 | Function in (say) Java | getChar |
 
-The behavior of sin depends only on its arguments; whereas the
+The behavior of ~sin~ depends only on its arguments; whereas the
 behavior of getChar depends on an (implicit) environment.
 
-In other words, all the dependencies of a function are /explicit/.
+In other words, all the dependencies of a pure function are /explicit/.
 
 **** Attention: contrast with the Haskell function getChar
 
 : getChar :: IO Char
 
-and remember... 
+we will see later that ~IO~ hides something:
 
 : IO x  ≃   StateOfTheWorld -> (StateOfTheWorld, x)
 
+**** Example of purity
 
-**** TODO: sin + cos
+In mathematics you have ~(sin x)^2 + (cos x)^2 = 1~. So, you can
+always replace this complex expression by just the constant
+~1~. However, in the presence of side effects, this cannot be done!
 
 *** Testing is /much/ easier
 
-Example: 
-
+For example, in order to test the function ~getChar~ in an imperative
+language, one has to
 
 - emulate the user pressing key 'x'
 : a = getChar()
 - verify a == 'x'
 
-Contrast with:
+This might even not be enough: maybe the function depends on more
+'hidden variable' (is the character buffered, ...)
+
+Contrast the above with testing a pure function:
 
 : sin π == 0 
 
 In general:
-- no guesswork to know what a function depends on
-- can (relatively) easily explore the input space of the function
+- there is no guesswork to know what a function depends on
+- one can (relatively) easily explore the input space of the function
 
-*** More optimizations possible (which ones?)
-- CSE (gotchas)
-- Fusion
-- ...
+*** More optimizations are possible
+Examples:
+  - Common Subexpression Elimination (caveat: changes the complexity of the code)
+  - Fusion
+  - ...
 *** Easier parallelism/concurrency (cf. Erlang)
 
 :    x = 0
@@ -1601,8 +1608,8 @@ In general:
   
     Value of x ?     
 
-*** Sharing is ALWAYS safe! (see in a moment)
-*** Possible to use laziness  (see in a moment)
+*** Sharing is ALWAYS safe! (see below)
+*** Possible to use laziness  (see below)
 *** John Carmack on Purity:
 
 http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/
