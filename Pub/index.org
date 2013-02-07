@@ -8,6 +8,7 @@ Looking for [[file:Lectures.org][the lecture notes]]?
 - <2013-02-07 Thu> Exercise session EX 3 which was supposed to be on Tuesday
   Feb 5 at 13:15 will be held on Tuesday Feb 12 at 8:00 instead. Sorry for the
   inconvenience.
+- <2013-02-05 Tue> Uploaded video on [[file:Closure.mov][explicit closures]].
 - <2013-01-31 Thu> Because of lack of attendance, the Thursday morning
   session is CANCELLED from now on.
 - <2013-01-31 Thu> Answers for week 2 questions for week 3 [[file:All.pdf][ready]].
