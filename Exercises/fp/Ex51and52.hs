@@ -12,5 +12,5 @@ eval env (Add u v) = eval env u + eval env v
 eval env (Mul u v) = eval env u * eval env v
 eval env (Var v)   = case lookup v env of
     Just x  -> x
-    Nothing -> error $ "Unbound variable " ++ show x
+    Nothing -> error $ "Unbound variable " ++ v
 

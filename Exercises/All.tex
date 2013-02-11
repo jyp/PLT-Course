@@ -73,7 +73,7 @@ which is supported by C++?
 \begin{ex}{**,@1}
 Explain the meaning of the following types. (Hint: what
 kind of values can inhabit those types?)
-  
+
 \begin{enumerate}
 \item String
 \item String → String
@@ -87,7 +87,7 @@ kind of values can inhabit those types?)
 
 \begin{ans}
 Example of values which have these types:
-  \begin{enumerate} 
+  \begin{enumerate}
    \item a string constant
    \item a function that reverses/doubles/etc a string
    \item a concatenation function
@@ -263,7 +263,7 @@ if (var == pattern1) {
     statement1;
 } else if (var == pattern2) {
     statement2;
-} else 
+} else
     def_statement;
 \end{minted}
 
@@ -396,7 +396,7 @@ Many things happen in the assignment ``\textsf{*to++ = *from++;}''. Can you figu
 \begin{ex}{*}
   Translate the above to multiple statements, so that for each of them
   only one variable (or memory location) is updated.  Explain in your
-  own words what happens (draw a picture if necessary).  
+  own words what happens (draw a picture if necessary).
   \begin{ans}
     It is equivalent to \texttt{*to = *from; to++; from++;}.  In other
     words, the memory pointed by \texttt{from} is copied to the memory
@@ -522,7 +522,7 @@ void move_many(int n, int source, int intermediate, int target) {
     move_disk(source,target);
     move_many(n-1,intermediate,source,target);
   }
-}  
+}
 \end{minted}
 \question{**} Remove recursion, using an explicit stack.
 
@@ -558,7 +558,7 @@ while n > 0 do
 return x
 \end{verbatim}
 
-\item 
+\item
 
 \begin{verbatim}
 a = 0
@@ -567,7 +567,7 @@ for i in [1..n] do
   c = a + b
   a = b
   b = c
-return a  
+return a
 \end{verbatim}
 \end{enumerate}
 \newpage % avoid breaking up the code which follows.
@@ -710,7 +710,7 @@ Define objects \textsf{a,b}, of appropriate types, so that
     b = new IntegerAdditiveMonoid(4);
     a.op(b);
   \end{minted}
-  
+
 \begin{verbatim}
 error: method op() not found
 \end{verbatim}
@@ -726,7 +726,7 @@ the answer is not obvious to you.)
     a = new IntegerAdditiveMonoid(3);
     a.id();
   \end{minted}
-  
+
 \begin{verbatim}
 error: method id() not found
 \end{verbatim}
@@ -857,7 +857,6 @@ abstract class IntersectVisitor {
 \end{java2}
 }
 
-\DeactivateAnswers
 
 \section{Functional Programming}
 \subsection{Algebraic Data Types and Pattern Matching}
@@ -865,18 +864,54 @@ abstract class IntersectVisitor {
 \question{*} Write functions between the types \[(Either\,A\,B,
 Either\,C\,D)\] and \[Either (Either (A,C)\, (B,D))\,(Either (A,D)\,(B,C))\].
 
+\begin{ans}
+  \inputminted[firstline=3]{haskell}{fp/Ex49.hs}
+\end{ans}
+
 \question{*} Define an algebraic type for binary trees
+
+\begin{ans}
+  \inputminted[firstline=3]{haskell}{fp/Ex50.hs}
+\end{ans}
+
 \question{*,@3} define an algebraic type for arithmetic expressions
+
+\begin{ans}
+  \inputminted[firstline=3,lastline=7]{haskell}{fp/Ex51and52.hs}
+\end{ans}
+
 \question{*,@3} define a simple interpreter for the above type
+
+\begin{ans}
+  \inputminted[firstline=9,lastline=15]{haskell}{fp/Ex51and52.hs}
+\end{ans}
 
 \question{*,@3} Translate the above 2 structures to an OO language. (Hint: One
 class corresponds to leaves, one to branching.)
 
+\begin{ans}
+  \inputminted[]{java}{fp/Ex53/Tree.java}
+  \inputminted[]{java}{fp/Ex53/Branch.java}
+  \inputminted[]{java}{fp/Ex53/Empty.java}
+\end{ans}
+
 \question{*,@3} Translate the interpreter to an OO
 language. You are not allowed to use 'instanceof'
 
+\begin{ans}
+  \inputminted[]{java}{fp/Ex53to55/Expr.java}
+  \inputminted[firstline=3]{java}{fp/Ex53to55/Lit.java}
+  \inputminted[firstline=3]{java}{fp/Ex53to55/Add.java}
+  \inputminted[firstline=3]{java}{fp/Ex53to55/Mul.java}
+  \inputminted[firstline=3]{java}{fp/Ex53to55/Var.java}
+\end{ans}
+
 \question{*,@3} Translate the interpreter to an OO language. You must use
 'instanceof'.
+
+\begin{ans}
+  \inputminted[]{java}{fp/Ex53to55/Eval.java}
+\end{ans}
 
 \subsection{Currification and partial application}
 
@@ -884,11 +919,27 @@ language. You are not allowed to use 'instanceof'
 integer, return it unchanged if it is greater than zero, and zero
 otherwise. (The type must be \texttt{Int → Int}.)
 
+\begin{ans}
+  \inputminted[firstline=7,lastline=9]{haskell}{fp/Ex56to59.hs}
+\end{ans}
+
 \question{*,@3} Assuming a function max : \texttt{(Int × Int) → Int}, define the function \texttt{f}.
+
+\begin{ans}
+  \inputminted[firstline=15,lastline=16]{haskell}{fp/Ex56to59.hs}
+\end{ans}
 
 \question{*,@3} Define a function \texttt{max'}, by currifying the function \texttt{max}.
 
+\begin{ans}
+  \inputminted[firstline=19,lastline=20]{haskell}{fp/Ex56to59.hs}
+\end{ans}
+
 \question{*} Define \texttt{f} using \texttt{max'}.
+
+\begin{ans}
+  \inputminted[firstline=23,lastline=24]{haskell}{fp/Ex56to59.hs}
+\end{ans}
 
 \subsection{Higher-order functions}
 
@@ -906,6 +957,11 @@ exp4 = foldr (++) []
 exp5 = foldr (\ x xs -> xs ++ [x]) []
 \end{minted}
 %
+
+\begin{ans}
+  \inputminted[]{haskell}{fp/Ex60.txt}
+\end{ans}
+
 Consider the following imperative program:
 \begin{minted}{c}
 for (i=0;i<sizeof(a);i++)
@@ -917,13 +973,29 @@ for (i=0;i<sizeof(a);i++)
   language? (Use functions from the Haskell prelude to shorten your code)
 \end{ex}
 
+\begin{ans}
+  \inputminted[firstline=7,lastline=9]{haskell}{fp/Ex61.hs}
+\end{ans}
 
 Assume we reprent a vector as a list of integers.
 
 \question{*} write a function that does the dot-product of two
 vectors using explicit recursion and pattern matching.
 
-\question{*} In the above code, abstract over sum and prodcuts on integers.
+\begin{ans}
+  This can be done with two functions, or with an accumulating parameter. The latter is shown here:
+  \inputminted[firstline=1,lastline=5]{haskell}{fp/Ex62.hs}
+\end{ans}
+
+\question{*} In the above code, abstract over sum and products on integers.
+
+\begin{ans}
+    We use \texttt{sum} and \texttt{zipWith}, from \texttt{Data.List}
+    (answers the next question, too):
+  \inputminted[firstline=9,lastline=9]{haskell}{fp/Ex62.hs}
+    Note that this solution does not error if the lists are of different
+    lengths (unlike the answer to the previous question).
+\end{ans}
 
 \question{**} Can you find the functions you created in the Haskell
 \texttt{Data.List} module?
@@ -938,8 +1010,18 @@ sort :: [Integer] -> [Integer]
 \end{verbatim}
 to sort lists, using \texttt{insert}.
 
+\begin{ans}
+  \inputminted[firstline=5,lastline=7]{haskell}{fp/Ex65to66.hs}
+\end{ans}
+
 \question{} Express \texttt{sort} in terms of \texttt{foldr} (do not
 use explicit recursion).
+
+\begin{ans}
+  \inputminted[firstline=9,lastline=10]{haskell}{fp/Ex65to66.hs}
+\end{ans}
+
+\DeactivateAnswers
 
 \subsection{Closures}
 
@@ -1158,7 +1240,7 @@ You know what's coming...
 
 \question{***} Remove higher-orderness using the best technique available.
 \begin{ans}
-\inputminted{haskell}{Sieve2.hs}  
+\inputminted{haskell}{Sieve2.hs}
 \end{ans}
 
 \newcommand{\inputjava}[1]{
@@ -1168,11 +1250,11 @@ You know what's coming...
 
 \begin{ex}{**\correctedLastYear5}
   Write a version of lazy sieve in imperative (or OO)
-language. 
+language.
 \begin{ans}
-\inputjava{SieveJava/Thunk.java}  
-\inputjava{SieveJava/CommonLazyLists.java}  
-\inputjava{SieveJava/LazyList.java}  
+\inputjava{SieveJava/Thunk.java}
+\inputjava{SieveJava/CommonLazyLists.java}
+\inputjava{SieveJava/LazyList.java}
 \end{ans}
 \end{ex}
 
@@ -1182,7 +1264,7 @@ infinite lists.
 \question{***} Do so for a few meaningful inputs, and interpret what
 you see.
 \begin{ans}
- \inputjava{SieveJava/Main.java}   
+ \inputjava{SieveJava/Main.java}
 \end{ans}
 
 
@@ -1309,12 +1391,12 @@ Try to come up with the result without using the prolog/curry interpreter!
 
 \Prolog{}
 \begin{minted}{prolog}
-a(X,Y) = a(b,c) 
-a(X,Y) = a(Z,Z) 
-a(X,X) = a(b,c) 
-e(X) = a(b,b) 
-d(X,X,Y) = d(Z,W,W) 
-a(X,X) = d(Z,W,W) 
+a(X,Y) = a(b,c)
+a(X,Y) = a(Z,Z)
+a(X,X) = a(b,c)
+e(X) = a(b,b)
+d(X,X,Y) = d(Z,W,W)
+a(X,X) = d(Z,W,W)
 \end{minted}
 
 
@@ -1412,13 +1494,13 @@ toList(d(Head:Rest,Tail),[Head|OtherTail]):- toList(d(Rest,Tail),OtherTail).
 \end{minted}
 
 \begin{minted}{haskell}
-toList (D x y) [] 
+toList (D x y) []
    = x =:= y
-toList (D (head:rest) tail) (head':otherTail) 
-   = head =:= head' & 
-     toList (D rest tail) otherTail  
+toList (D (head:rest) tail) (head':otherTail)
+   = head =:= head' &
+     toList (D rest tail) otherTail
 \end{minted}
-  
+
 \end{ans}
 
 \end{question}
@@ -1439,7 +1521,7 @@ dconcat(X,Y,Z), fromList([1,2,3],X), fromList([4,5],Y), toList(Z, Final).
 
 \Curry{
 \begin{minted}{haskell}
-dconcat x y z & fromList [1,2,3] x & fromList [4,5] y & toList z final 
+dconcat x y z & fromList [1,2,3] x & fromList [4,5] y & toList z final
    where x, y, z, final free
 \end{minted}
 }
@@ -1467,7 +1549,7 @@ dconcat(d(Out,Intermediate),d(Intermediate,In),d(Out,In)).
 \begin{question}{***}
 What happens when you concatenate a difference list with itself?
 \begin{ans}
-The difference list will contain circular, infinite lists.  
+The difference list will contain circular, infinite lists.
 \end{ans}
 \end{question}
 
@@ -1505,7 +1587,7 @@ N = [-5,-1,-9].
   Write the predicate \textsf{split}. Make sure that it is \emph{reversible}. That is,
   you can recover the original list if you pass it the split lists.
   \begin{ans}
-    
+
     \begin{minted}{prolog}
       split([],[],[]).
       split([X|A],[X|P],N) :- X >= 0, split(A,P,N).
