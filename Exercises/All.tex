@@ -857,6 +857,7 @@ abstract class IntersectVisitor {
 \end{java2}
 }
 
+\DeactivateAnswers
 
 \section{Functional Programming}
 \subsection{Algebraic Data Types and Pattern Matching}
@@ -977,7 +978,7 @@ for (i=0;i<sizeof(a);i++)
   \inputminted[firstline=7,lastline=9]{haskell}{fp/Ex61.hs}
 \end{ans}
 
-Assume we reprent a vector as a list of integers.
+Assume we represent a vector as a list of integers.
 
 \question{*} write a function that does the dot-product of two
 vectors using explicit recursion and pattern matching.
@@ -991,10 +992,10 @@ vectors using explicit recursion and pattern matching.
 
 \begin{ans}
     We use \texttt{sum} and \texttt{zipWith}, from \texttt{Data.List}
-    (answers the next question, too):
-  \inputminted[firstline=9,lastline=9]{haskell}{fp/Ex62.hs}
+    (answers the next question, too).
     Note that this solution does not error if the lists are of different
     lengths (unlike the answer to the previous question).
+  \inputminted[firstline=9,lastline=9]{haskell}{fp/Ex62.hs}
 \end{ans}
 
 \question{**} Can you find the functions you created in the Haskell
@@ -1021,7 +1022,6 @@ use explicit recursion).
   \inputminted[firstline=9,lastline=10]{haskell}{fp/Ex65to66.hs}
 \end{ans}
 
-\DeactivateAnswers
 
 \subsection{Closures}
 
@@ -1037,13 +1037,23 @@ test2 xs = foldr (*) 1 xs
   Identify higher-order applications in the above program.
 \end{ex}
 
-\begin{ex}{*\correctedLastYear 4}
+\begin{ans}
+  \texttt{foldr},
+  \texttt{(+)} and
+  \texttt{(*)}.
+\end{ans}
+
+\begin{ex}{*\correctedLastYear 4,@4}
   Assuming that \texttt{xs} are lists of integers, replace the above
   uses of higher-order application by explicit closures.  (Hint: you
   need to also change the definition of \texttt{foldr}/\texttt{map}).
 \end{ex}
 
-\begin{ex}{**\correctedLastYear 4}
+\begin{ans}
+  \inputminted[firstline=4]{haskell}{fp/Ex70to71.hs}
+\end{ans}
+
+\begin{ex}{**\correctedLastYear 4,@4}
   Add the following lines to the above program and repeat the above 2
   exercises.
 \begin{minted}{haskell}
@@ -1052,6 +1062,9 @@ moment n xs = sum (map (\x -> x ^ n) xs)
 \end{minted}
 \end{ex}
 
+\begin{ans}
+  \inputminted[firstline=4]{haskell}{fp/Ex72.hs}
+\end{ans}
 
 \question{*}
 Eratosthenes' sieve is a method for finding prime numbers, dating from
@@ -1103,12 +1116,21 @@ not use arrays instead of lists). (Hint: write this one as a recursive program).
 
 Consider a binary tree structure with integer values in the nodes.
 
-\question{*\correctedLastYear 4} In the Java version, write a function that replaces each
+\question{*\correctedLastYear 4,@4} In the Java version, write a function that replaces each
 element with its index in preorder traversal of the tree.
 
-\question{**\correctedLastYear 4} Translate the function above to Haskell thinking of it
+\begin{ans}
+  \inputminted[]{java}{fp/Ex78/Tree.java}
+  \inputminted[]{java}{fp/Ex78/Preorder.java}
+\end{ans}
+
+\question{**\correctedLastYear 4,@4} Translate the function above to Haskell thinking of it
 as an imperative algorithm. You should use \emph{IP} from the lecture notes.
 What is the ``state of the world'' in this case?
+
+\begin{ans}
+  \inputminted[]{haskell}{fp/Ex79.hs}
+\end{ans}
 
 \question{*\correctedLastYear 4} Rewrite the Haskell version, in such a way that passing
 ``state of the world'' is made visible as such, that is, eliminate your
