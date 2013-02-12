@@ -857,8 +857,6 @@ abstract class IntersectVisitor {
 \end{java2}
 }
 
-\DeactivateAnswers
-
 \section{Functional Programming}
 \subsection{Algebraic Data Types and Pattern Matching}
 
@@ -1022,6 +1020,7 @@ use explicit recursion).
   \inputminted[firstline=9,lastline=10]{haskell}{fp/Ex65to66.hs}
 \end{ans}
 
+\DeactivateAnswers
 
 \subsection{Closures}
 
@@ -1240,18 +1239,24 @@ the \verb!sieve! function also works given the {\em infinite} list
 \verb![2..]!---the output should be the {\em infinite} list of all
 prime numbers.
 
-
 \begin{ex}{*\correctedLastYear5}
 How would you find the first 100 prime numbers?
+\begin{ans}
+  \begin{minted}{haskell}
+    test = take 100 primes
+  \end{minted}
+\end{ans}
 \end{ex}
 
-Remark: start by answering the following questions on a simpler
+Hint: start by answering the following questions on a simpler
 algorithm, for example the function \textsf{enumFrom} which generates
 the infinite list of numbers starting at a given one.
 
-\begin{ex}{*\correctedLastYear5} Translate sieve to use explicit thunks (as in the lecture)
+\begin{ex}{*\correctedLastYear5} Translate \textsf{sieve} to use explicit thunks.
+  \begin{ans}
+    \inputminted{haskell}{Sieve1.hs}
+  \end{ans}
 \end{ex}
-
 Oh noes, this introduced higher-order function(s).
 
 \begin{ex}{**}

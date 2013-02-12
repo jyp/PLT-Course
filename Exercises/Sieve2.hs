@@ -33,8 +33,4 @@ take :: Int -> List -> [Int]
 take 0 x = []
 take n (Cons x xs) = x:take (n-1) (force xs)
 
--- cool to test this
-drop :: Int -> List -> List
-drop 0 x = x
-drop n (Cons x xs) = drop (n-1) (force xs)
-
+test = take 10 primes
