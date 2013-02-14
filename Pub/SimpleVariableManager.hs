@@ -1,11 +1,9 @@
-
 import Control.Concurrent
 import Control.Concurrent.Chan
 
-
 data Queries = Get (Chan Int) | Set Int
 
-manager :: Int -> (Chan Queries) -> IO ()
+manager :: Int -> Chan Queries -> IO ()
 manager value c = do
   q <- readChan c
   case q of
@@ -13,11 +11,7 @@ manager value c = do
     Get returnChannel -> do writeChan returnChannel value
                             manager value c
 
-
-
-
 -- writeChan c (Get returnChannel)
-
 
 -- writeChan c (Set v)
 

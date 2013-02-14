@@ -5,7 +5,6 @@ data Command a = Get (Chan a) | Set a
 
 type Variable a = Chan (Command a)
 
-
 handler :: Variable a -> a -> IO ()
 handler c a = do
   command <- readChan c
