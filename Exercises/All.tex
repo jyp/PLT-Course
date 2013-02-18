@@ -1137,7 +1137,7 @@ usage of \emph{IP}.
 
 
 \subsection{Laziness}
-There are no lazy languages that permit mutation.  \question{*** \correctedLastYear 5} Why not?
+There are no lazy languages that permit mutation.  \question{*** \correctedLastYear 5,@5} Why not?
 
 \subsubsection{Lazy Dynamic Programming}
 
@@ -1239,7 +1239,7 @@ the \verb!sieve! function also works given the {\em infinite} list
 \verb![2..]!---the output should be the {\em infinite} list of all
 prime numbers.
 
-\begin{ex}{*\correctedLastYear5}
+\begin{ex}{*\correctedLastYear5,@5}
 How would you find the first 100 prime numbers?
 \begin{ans}
   \begin{minted}{haskell}
@@ -1252,7 +1252,7 @@ Hint: start by answering the following questions on a simpler
 algorithm, for example the function \textsf{enumFrom} which generates
 the infinite list of numbers starting at a given one.
 
-\begin{ex}{*\correctedLastYear5} Translate \textsf{sieve} to use explicit thunks.
+\begin{ex}{*\correctedLastYear5,@5} Translate \textsf{sieve} to use explicit thunks.
   \begin{ans}
     \inputminted{haskell}{Sieve1.hs}
   \end{ans}
@@ -1275,7 +1275,7 @@ You know what's coming...
 \inputminted{java}{#1}
 }
 
-\begin{ex}{**\correctedLastYear5}
+\begin{ex}{**\correctedLastYear5,@5}
   Write a version of lazy sieve in imperative (or OO)
 language.
 \begin{ans}
@@ -1300,25 +1300,25 @@ you see.
 
 \subsection{Channels and Processes}
 
-\begin{ex}{*\correctedLastYear5}
+\begin{ex}{*\correctedLastYear5,@5}
   Write a process that manages a bank account. It has a channel for
   queries; which can be deposits and withdrawals. The answer is posted
   to a channel that comes with the query.  (Note: you cannot use
   references to store any state -- see variable-managing process for inspiration)
 \end{ex}
 
-\begin{ex}{*}
+\begin{ex}{*,@5}
   Write a client for the above process that move ``money'' from an
   account to another. (``transaction'')
 \end{ex}
 
-\begin{ex}{*}
+\begin{ex}{*,@5}
   Assume that withdrawals/deposits can fail. (For example if there is
   too much/litte on the account). Modify the server process
   accordingly.
 \end{ex}
 
-\begin{ex}{**\correctedLastYear5}
+\begin{ex}{**\correctedLastYear5,@5}
   Is the total amount of money a constant of your system? (Consider
   that transactions may fail in the ``middle''.) How can you ensure
   that it is?  Write the corresponding code.
