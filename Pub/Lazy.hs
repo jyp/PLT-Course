@@ -1,3 +1,4 @@
+import Prelude hiding (filter)
 
 type Thunk x = () -> x
 
@@ -39,5 +40,6 @@ takeSome n (Cons x xs) = x:takeSome (n-1) (force xs)
 -- One more example:
 filter :: (a -> Bool) -> LList a -> LList a
 filter p Nil = Nil
-filter p (Cons x xs) = if p x then Cons x xs
-                              else force xs
+filter p (Cons x xs) = if p x then Cons x (delay $ 
+                                          filter p $ force xs)
+                              else filter p (force xs)
