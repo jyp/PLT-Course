@@ -9,6 +9,7 @@ type Request = String
 ------------------------------------------
 -- Server code:
 
+handleClient :: Chan Request -> Chan Reply -> IO ()
 handleClient input output = do
   writeChan output "What is your name?"
   name <- readChan input
@@ -18,6 +19,7 @@ handleClient input output = do
     True  -> writeChan output "You shall pass!"
     False -> writeChan output "Incorrect login or password"
   
+server :: Chan Connect -> IO ()
 server c = do  
   Connect input output <- readChan c
   forkIO $ handleClient input output
