@@ -14,3 +14,4 @@ main = do
   increment 10000 v
   x <- readIORef v
   print x
+

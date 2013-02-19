@@ -1,5 +1,4 @@
 import Control.Concurrent
-
 ones = do
   putStrLn "1"
   ones
@@ -7,7 +6,6 @@ ones = do
 twos = do
   putStrLn "2"
   twos
-
 
 main = do
   forkIO twos -- create a new process

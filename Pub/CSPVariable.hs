@@ -6,20 +6,21 @@ data Command a = Get (Chan a) | Set a
 type Variable a = Chan (Command a)
 
 handler :: Variable a -> a -> IO ()
-handler c a = do
-  command <- readChan c
+handler v a = do
+  command <- readChan v
   case command of
-    Set a' -> handler c a'
-    Get c' -> do 
-      writeChan c' a
-      handler c a
+    Kill -> return ()
+    Set a' -> handler v a'
+    Get c -> do 
+      writeChan c a
+      handler v a
 
 newVariable :: a -> IO (Variable a)
 newVariable a = do
   c <- newChan
   forkIO (handler c a)
   return c
-  
+
 get :: Variable a -> IO a
 get v = do
   c <- newChan

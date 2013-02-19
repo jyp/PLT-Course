@@ -1987,13 +1987,19 @@ If you need to evaluate thunks many times, it's a good idea to have
 explicit memoization.
 
 
-Example: computation of fibonacci numbers:
+**** Example: computation of fibonacci numbers
 
 #+INCLUDE "FibMemo.hs" src haskell
 
+It takes some time to allocate the array. Then computing fib!50 is
+instant. Then computing fib!100000 takes a bit of time. (Compare this
+performance with the naive double recursion scheme.)
+
 The efficiency of the above example relies not only on laziness, but
 also on /memoisation/. That is, by using the array as an intermediate
-data structure, each intermediate result is computed only once.
+data structure, each intermediate result is computed only once. This
+is realised in the implementation by updating the thunk with its value
+once it is forced.
 
 *** Evil combination of features
 The combination of side effects and laziness is practically
@@ -2002,7 +2008,7 @@ points, and thus it is very difficult to figure out when side effects
 occur or not.
 
 My advice: be /very cautious/ when using side effects and lazy
-evaluation together.
+evaluation together. In Haskell, beware ~unsafePerformIO~!
 * Concurrent programming
 ** Disclaimer: Concurrent programming ≠ Parallel programming
 Parallel programming = expose (lack of) dependencies between parts of
@@ -2019,12 +2025,10 @@ In this course we will focus on concurrency.
 ** Motivation: the world is concurrent
 #+begin_quote
 The world is concurrent
-
 Things in the world don't share data
-
 Things communicate with messages
-
-Things fail                                      ⟵ the part we will not discuss in this course
+Things fail                
+            ⟵ the part we will not discuss in this course
 #+end_quote
   — Joe Armstrong 
 ** Process
@@ -2058,7 +2062,7 @@ Big danger of "screwing up"!
   - Semaphores
   - Locks
   - Critical sections
-  - Synchronized classes
+  - Synchronized classes (monitors)
   - ...
 
 - ... but these solutions come with problems of their own:
@@ -2123,6 +2127,8 @@ Assume now two client processes with code:
 It may happen that each tape is allocated to either client, and each
 of them will wait forever for the other to yield.
 
+Solution: have a single processes that manages copies of tapes.
+
 *** Example
 In fact, one can simulate an updatable variable using channels and
 processes. Here is how to do it:
@@ -2131,10 +2137,10 @@ This clearly shows that, /if they are used indiscriminately/, channels
 are no safer than shared memory.
 
 *** Exercises
-- Use newVariable, set and get in the ghci prompt.
+- Use ~newVariable~, set and get in the ghci prompt.
 - How many processes are running?
 - Transform the handler function to do a sum instead of overwriting
-  when 'set' is called.
+  when ~set~ is called.
 - Can you change the program so that the get command does not need to
   create a channel? (⋆⋆)
 
@@ -2149,11 +2155,13 @@ are no safer than shared memory.
   - but strict.
 - Processes have a single "mailbox" instead of multiple channels
 ** Exercise: remote procedure call.
+Write a server which accepts arguments to the function + channel where
+to post the reply.
 
-server: accepts arguments to the function + channel where to post the reply.
-gotcha: laziness!
-
-*** TODO answer
+*** Answer
+#INCLUDE "GenericServer.hs" src haskell
+Attention: as it is the server will only create a thunk to the
+computation; only the client will force it!
 
 ** Transformation: explicit continuations
 
