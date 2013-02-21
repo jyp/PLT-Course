@@ -15,6 +15,7 @@ data AccResp = AccOk | AccFail | AccSt Int deriving Show
 type Account = Chan AccReq
 type Amount = Int
 
+-- | The account-manager code
 account :: Account -> Amount -> IO ()
 account c s = do
   req <- readChan c
@@ -34,6 +35,7 @@ account c s = do
       writeChan c' $ AccSt s
       account c s
 
+-- | Spawn a manager and return a channel for communication with it.
 openAccount :: Amount -> IO Account
 openAccount n = do
   c <- newChan
