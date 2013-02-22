@@ -1123,6 +1123,17 @@ element with its index in preorder traversal of the tree.
   \inputminted[]{java}{fp/Ex78/Preorder.java}
 \end{ans}
 
+Here is how to get and set the ``state of the world'' using \emph{IP} from the lecture notes.
+\begin{minted}{haskell}
+getState :: IP State
+getState = \s -> (s,s)
+
+setState :: State -> IP ()
+setState newState = \s -> (newState,())
+\end{minted}
+
+
+
 \question{**\correctedLastYear 4,@4} Translate the function above to Haskell thinking of it
 as an imperative algorithm. You should use \emph{IP} from the lecture notes.
 What is the ``state of the world'' in this case?
