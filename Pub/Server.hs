@@ -11,9 +11,9 @@ type Request = String
 
 handleClient :: Chan Request -> Chan Reply -> IO ()
 handleClient input output = do
-  writeChan output "What is your name?"
+  writeChan output "Username:"
   name <- readChan input
-  writeChan output "What is your quest?"
+  writeChan output "Password:"
   pass <- readChan input
   case name == "King Arthur" && pass == "Holy Grail"  of
     True  -> writeChan output "You shall pass!"

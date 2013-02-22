@@ -2,15 +2,16 @@ import Text.Groom
 import RuntimeSystem
 
 data Connect = Connect Chan Chan
+-- We only support transmission of Strings here
 
 ------------------------------------------
 -- Server code:
 
 handleClient :: Chan -> Chan -> Process
 handleClient input output = 
-  writeChan output "What is your name?" (
+  writeChan output "User name:" (
   readChan input ( \name ->
-  writeChan output "What is your quest?" (
+  writeChan output "Password:" (
   readChan input ( \pass -> 
   (case name == "King Arthur" && pass == "Holy Grail"  of
      False -> writeChan output "Incorrect login or password" die
