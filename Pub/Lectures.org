@@ -2203,7 +2203,6 @@ The transformation can then be summarized as follows.
 | Result      | ~return result~  | ~k result~          |
 | Sequence    | ~do x <- f;g(x)~ | ~\k -> f (g k)~     |
 
-
 *** Example
 Let us write a trivial server:
 #+INCLUDE "Server.hs" src haskell
@@ -2212,7 +2211,6 @@ Same with explicit continuations:
 
 We can now also explain how a scheduler might work:
 #+INCLUDE "RuntimeSystem.hs" src haskell
-
 
 *** Exercises
 - How many processes are created in the 1st version of the server?
