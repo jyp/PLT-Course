@@ -2347,7 +2347,7 @@ Install either PAKCS or [[http://www-ps.informatik.uni-kiel.de/kics2/][KiCS2]]:
     - untar
     - make
     If the installation says you need libgmp, try this package:
-      : sudo aptitude install libgmp3c2
+      : sudo apt-get install libgmp3c2
   + Run the interpreter and load file:
      :  .../pakcs/bin/pakcs
      :  :l Family.curry  
@@ -2392,7 +2392,7 @@ are aliased). That is, if we have
 : x =:= y 
 
 and later
-: y  =:=  2
+: y =:= 2
 
 then
 : x = 2
@@ -2403,8 +2403,8 @@ Note that, in Curry, regular arithmetic works only on ground terms.
 : x + 2
 :   where x free 
 fails 
-(actually KiCS2 extends this and returns something!)
 
+(actually, KiCS2 is more clever and returns something!)
 *** Exercise (⋆): what are the bindings after...
 
  1) 
@@ -2445,11 +2445,21 @@ fails, because x cannot be unified with something where occurs.
   recursive behavior.
 *** Exercise (⋆⋆⋆)
 Write an algorithm implementing the above specification.
-*** Implementing unification in an imperative language (a sketch)
+*** Implementing unification in an imperative language
 
-Have indirection for meta-variables occurrences; indirection for meta
-(meta = unbound / ground / meta).  After unifying, overwrite the
-meta-variable with its value
+A possible way to implement unification, using side effects is the
+following. Each occurence of a meta-variable should be represented by
+a reference to the meta-variable. When the unification algorithm gets
+a constraint of the form
+: variable = value
+then the meta-variable can be overwritten with the ~value~ above.
+
+This works even if the value is a meta-variable itself (call it
+~y~). Indeed, the unification will overwrite the original
+meta-variable with a reference to ~y~. Later, when ~y~ becomes bound,
+it will be overwritten with a value --- and all the references to it
+will take the new value of ~y~, including the ones created by
+unification.
 
 **** Question
 How do we reconciliate referential transparency with the need to

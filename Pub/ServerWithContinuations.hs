@@ -7,15 +7,14 @@ data Connect = Connect Chan Chan
 ------------------------------------------
 -- Server code:
 
-handleClient :: Chan -> Chan -> Process
-handleClient input output = 
+handleClient input output k = 
   writeChan output "User name:" (
   readChan input ( \name ->
   writeChan output "Password:" (
   readChan input ( \pass -> 
   (case name == "King Arthur" && pass == "Holy Grail"  of
-     False -> writeChan output "Incorrect login or password" die
-     True  -> writeChan output "You shall pass!" die)
+     False -> writeChan output "Incorrect login or password" k
+     True  -> writeChan output "You shall pass!" k)
   ))))
   
 
@@ -25,16 +24,16 @@ server c k =
       input  = read [d1]
       output = read [d2]
       -- This code differs because we only support string channels
-  in fork (handleClient input output) 
-     (server c k))
+  in fork (handleClient input output)
+          (server c k))
     
 -------------------------------------------
--- Startup code 
-     
+-- Startup code      
+
 startServer k = 
-  newChan (\c ->
-  fork (server c die)
-  (k c))
+  newChan $ \c ->
+  fork (server c) $
+  k c
 
 -- connect a client; given the server to connect to
 connectClient c k = 

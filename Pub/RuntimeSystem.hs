@@ -56,9 +56,8 @@ unblockChannels chs = (chs',concat ps)
 ----------------------
 -- System calls
 
-fork :: Process -> Process -> (System -> System)
-     -- Process -> Process -> Process
-fork p k s = scheduler $ addProcess p $ addProcess k $ s
+fork :: (Process -> Process) -> Process -> (System -> System)
+fork p k s = scheduler $ addProcess (p die) $ addProcess k $ s
 
 -- | Write a message to a channel, and continue with 'k'
 writeChan :: Chan -> String -> Process -> Process
