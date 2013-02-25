@@ -2186,9 +2186,11 @@ language --- remember the representation of functions as closures).
 *** Transformation: explicit continuations
 
 In any program, one can make the flow of control manifest by
-explicitly passing continuations to every function. Each function will
-take an extra argument (the continuation). Instead of returning a
-result directly, the result is passed to the continuation. 
+explicitly passing continuations to every function (this is not
+specific to concurrent programming --- it works for any
+paradigm). Each function will take an extra argument (the
+continuation). Instead of returning a result directly, the result is
+passed to the continuation.
 
 The first step in this transformation is to decide an order of
 execution (which is already done if, for example, the code executes in
@@ -2200,8 +2202,8 @@ The transformation can then be summarized as follows.
 | Object kind | Source           | Target              |
 |-------------+------------------+---------------------|
 | Type        | ~IO a~           | ~(a → cont) → cont~ |
-| Result      | ~return result~  | ~k result~          |
-| Sequence    | ~do x <- f;g(x)~ | ~\k -> f (g k)~     |
+| Result      | ~return result~  | ~\k -> k result~    |
+| Sequence    | ~do x <- f; g x~ | ~\k -> f (g k)~     |
 
 *** Example
 Let us write a trivial server:

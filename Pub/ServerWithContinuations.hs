@@ -20,22 +20,21 @@ handleClient input output =
   
 
 server c k = 
-  readChan c $ \chs ->
+  readChan c (\chs ->
   let [d1,d2] = chs 
       input  = read [d1]
       output = read [d2]
       -- This code differs because we only support string channels
-  in fork (handleClient input output) $
-     server c k
+  in fork (handleClient input output) 
+     (server c k))
     
 -------------------------------------------
 -- Startup code 
      
-startServer :: (Chan -> Process) -> Process
 startServer k = 
-  newChan $ \c ->
-  fork (server c die) $
-  k c
+  newChan (\c ->
+  fork (server c die)
+  (k c))
 
 -- connect a client; given the server to connect to
 connectClient c k = 
