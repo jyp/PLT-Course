@@ -89,7 +89,7 @@ die = scheduler -- just go back to the scheduler to see if there is more work to
 addMessage m (ChanelState ms ws) = ChanelState (ms++[m]) ws
 
 -- | Add a listener to a channel
-addListener w (ChanelState ms ws) = ChanelState ms (w:ws)
+addListener k (ChanelState ms ks) = ChanelState ms (k:ks)
 
 -- | Update a given channel in the system
 updateChan :: Chan -> (ChanelState -> ChanelState) -> System -> System

@@ -4,7 +4,7 @@ import Control.Concurrent.Chan
 data Connect = Connect (Chan Request) (Chan Reply)
 
 type Reply = String
-type Request = String 
+type Request = String
 
 ------------------------------------------
 -- Server code:
@@ -36,10 +36,10 @@ startServer = do
   return c
 
 -- connect a client; given the server to connect to
-connectClient s = do
+connectClient c = do
   inp <- newChan
   out <- newChan
-  writeChan s (Connect inp out)
+  writeChan c (Connect inp out)
   return (inp,out)
 
 -------------------------------------
@@ -48,11 +48,8 @@ connectClient s = do
 main = do
   s <- startServer
   (i,o) <- connectClient s
-  readChan o >>= putStrLn
   writeChan i "Sir Lancelot"
-  readChan o >>= putStrLn    
   writeChan i "I seek the holy grail!"
-  readChan o >>= putStrLn    
 
 -- Exercise: start two clients concurrently.
 

@@ -2186,9 +2186,11 @@ language --- remember the representation of functions as closures).
 *** Transformation: explicit continuations
 
 In any program, one can make the flow of control manifest by
-explicitly passing continuations to every function. Each function will
-take an extra argument (the continuation). Instead of returning a
-result directly, the result is passed to the continuation. 
+explicitly passing continuations to every function (this is not
+specific to concurrent programming --- it works for any
+paradigm). Each function will take an extra argument (the
+continuation). Instead of returning a result directly, the result is
+passed to the continuation.
 
 The first step in this transformation is to decide an order of
 execution (which is already done if, for example, the code executes in
@@ -2200,8 +2202,8 @@ The transformation can then be summarized as follows.
 | Object kind | Source           | Target              |
 |-------------+------------------+---------------------|
 | Type        | ~IO a~           | ~(a → cont) → cont~ |
-| Result      | ~return result~  | ~k result~          |
-| Sequence    | ~do x <- f;g(x)~ | ~\k -> f (g k)~     |
+| Result      | ~return result~  | ~\k -> k result~    |
+| Sequence    | ~do x <- f; g x~ | ~\k -> f (g k)~     |
 
 *** Example
 Let us write a trivial server:
@@ -2339,10 +2341,14 @@ Install either PAKCS or [[http://www-ps.informatik.uni-kiel.de/kics2/][KiCS2]]:
   + Linux (tested on Ubuntu Oneiric):
     - Install swi-prolog *5.x*
       : sudo aptitude install swi-prolog
-    - download the PACKS Linux binary http://www.informatik.uni-kiel.de/~pakcs/download/pakcs_Linux.tar.gz
+    - download packs Linux binary
+      + 32 bit: http://www.informatik.uni-kiel.de/~pakcs/download/pakcs-1.11.1-i386-Linux.tar.gz
+      + 64 bit: http://www.informatik.uni-kiel.de/~pakcs/download/pakcs-1.11.1-amd64-Linux.tar.gz
     - untar
-    - make     
-  + Run the interpreter and load file:   
+    - make
+    If the installation says you need libgmp, try this package:
+      : sudo aptitude install libgmp3c2
+  + Run the interpreter and load file:
      :  .../pakcs/bin/pakcs
      :  :l Family.curry  
   + The [[http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi][web interface of PAKCS]] can also be used for small examples.
