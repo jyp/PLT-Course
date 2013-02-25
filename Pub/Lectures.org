@@ -2348,10 +2348,14 @@ In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_lang
   + Linux (tested on Ubuntu Oneiric):
     - Install swi-prolog *5.x*
       : sudo aptitude install swi-prolog
-    - download packs Linux binary http://www.informatik.uni-kiel.de/~pakcs/download/pakcs_Linux.tar.gz
+    - download packs Linux binary
+      + 32 bit: http://www.informatik.uni-kiel.de/~pakcs/download/pakcs-1.11.1-i386-Linux.tar.gz
+      + 64 bit: http://www.informatik.uni-kiel.de/~pakcs/download/pakcs-1.11.1-amd64-Linux.tar.gz
     - untar
-    - make     
-  + Run the interpreter and load file:   
+    - make
+    If the installation says you need libgmp, try this package:
+      : sudo aptitude install libgmp3c2
+  + Run the interpreter and load file:
      :  .../pakcs/bin/pakcs
      :  :l Family.curry  
 - ... or just use web interface: http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi
