@@ -2,8 +2,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage[utf8]{inputenc}
-\usepackage{listings}
-\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+\usepackage{minted}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
@@ -97,33 +96,6 @@ grade 4, and 48 points is required for grade 5.
 24 points is required to pass (grade G) and 42 points is
 required for grade VG.
 
-\section{Calls and recursion}
-
-Consider the following function, which solves the Hanoi tower problem.
-
-\begin{minted}{c}
-void Hanoi(int n,int s,int i,int d) {
-  if (n>0) {
-    Hanoi(n-1,s,d,i);
-    move(s,d);
-    Hanoi(n-1,i,s,d);
-  }
-}
-\end{minted}
-
-Solve the following two exercises independently.
-\begin{enumerate}
-\item Replace the last recursive call by a while loop (tail-call
-  elimination). Remark: do not use a stack. (4 points)
-\item Assume a stack; with the usual push, top and top
-  functions. Transform the original Hanoi function by making the calls
-  explicit. Remark: use gotos, and stack to tranform each recursive
-  call. Remark: Transform the original Hanoi function, not the one
-  obtained in the previous exercise.
-\end{enumerate}
-
-
-\newpage
 \section{Objects as records}
 
 Consider the following C++ code, which is an encoding of a class
@@ -172,7 +144,31 @@ Quick refresher:
 \item \texttt{p->f} is used to access a field \texttt{f} in a
   structure pointed by \texttt{p}.
 \end{itemize}
-\newpage
+\section{Calls and recursion}
+
+Consider the following function, which solves the Hanoi tower problem.
+
+\begin{minted}{c}
+void Hanoi(int n,int s,int i,int d) {
+  if (n>0) {
+    Hanoi(n-1,s,d,i);
+    move(s,d);
+    Hanoi(n-1,i,s,d);
+  }
+}
+\end{minted}
+
+Solve the following two exercises independently.
+\begin{enumerate}
+\item Replace the last recursive call by a while loop (tail-call
+  elimination). Remark: do not use a stack. (4 points)
+\item Assume a stack; with the usual push, top and top
+  functions. Transform the original Hanoi function by making the calls
+  explicit. Remark: use gotos, and stack to tranform each recursive
+  call. Remark: Transform the original Hanoi function, not the one
+  obtained in the previous exercise.
+\end{enumerate}
+
 \section{Pattern matching Higher-Order Abstractions}
 
 Assume the following Haskell data types:
@@ -180,7 +176,7 @@ Assume the following Haskell data types:
 data List = Nil | Cons Int List
 \end{minted}
 and consider the following code:
-\begin{minted}
+\begin{minted}{haskell}
 map f Nil = Nil
 map f (Cons x xs) = Cons (f x) (map f xs)
 
@@ -199,11 +195,9 @@ of the higher-order function provided below.  Remark: you may
 fold k f [] = k
 fold k f (x:xs) = f x (fold k f xs)
 \end{minted}
-
 \section{Closures}
 Consider the following partial implementation of the ``Observer''
 pattern in Java:
-
 \begin{minted}{java}
 interface Observer {
   bool notify(Event e); 
@@ -224,11 +218,13 @@ class Button {
   void onPress (Observer l) {
     os.add(l);
   }
-} 
+}
+\end{minted}
 
-... 
+And the example user code:
+
+\begin{minted}{java}
 button.onPress(new MyPrintAction("Hello there"));
-...
 \end{minted}
 
 Assuming that the interface \texttt{Observer} represents a closure, how
@@ -250,19 +246,19 @@ concurrency. In particular, assume primitives for creating processes
 and channels, and primitives for reading and writing to to
 channels. For example C++-style:
 
-\begin{verbatim}
+\begin{minted}{cpp}
 Chan<A> newChan();
 A readChan(Chan<A> c);
 void writeChan(Chan<A> c,A x);
 void forkProcess(*void());
-\end{verbatim}
+\end{minted}
 or Haskell-style:
-\begin{verbatim}
+\begin{minted}{haskell}
 newChan :: IO (Chan a)
 readChan :: Chan a -> IO a
 writeChan :: Chan a -> a -> IO ()
 forkProcess :: IO () -> IO ()
-\end{verbatim}
+\end{minted}
 
 The channels can transmit any type of information, including
 references to channels. Your task is to simulate references to mutable
@@ -275,22 +271,22 @@ process that manages the variable state.
 \item Write the code for the process that manages the variable state.
 \item Write the code for primitives to read and write references.
 Their type should be:
-\begin{verbatim}
+\begin{minted}{cpp}
 int readRef(Reference);
 void writeRef(Reference, int);
-\end{verbatim}
+\end{minted}
 or Haskell-style:
-\begin{verbatim}
+\begin{minted}{haskell}
 readRef :: Reference -> IO Int
 writeRef :: Reference -> Int -> IO ()
-\end{verbatim}
+\end{minted}
 \end{enumerate}
 
 \section{Relations}
 
 Consider the following Haskell code:
 
-\begin{verbatim}
+\begin{minted}{haskell}
 data List = Nil | Cons Int List
 data Tree = Tip | Bin Tree Int Tree 
 
@@ -301,14 +297,14 @@ append (Cons x xs) ys = Cons x (append xs ys)
 flatten :: Tree -> List
 flatten Tip = Nil
 flatten (Bin a x b) = append (flatten a) (Cons x (flatten b))
-\end{verbatim}
+\end{minted}
 
 Translate the above functions to relations \texttt{flatten'} and
 \texttt{append'} such that:
-\begin{verbatim}
+\begin{minted}{haskell}
+       append' x y z       is equivalent to      append x y == z
        flatten' x y        is equivalent to      flatten x == y
-       append' x y z      is equivalent to       append x y == z
-\end{verbatim}
+\end{minted}
 
 \begin{enumerate}
 \item Write the type of the relations \texttt{flatten'} and
