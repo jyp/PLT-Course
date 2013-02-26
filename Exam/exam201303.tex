@@ -191,82 +191,58 @@ reverse Nil = Nil
 reverse (Cons x xs) = append (reverse xs) (Cons x Nil)
 \end{minted}
 
+Express each of the functions above (map, append and reverse) in terms
+of the higher-order function provided below.  Remark: you may
+\emph{not} use recursion directly in your solution.
 
-Express the each of the functions (map, append and reverse) in terms of the
-higher-order function provided below.  Remark: you may \emph{not} use
-recursion directly in your solution.
-
-\begin{minted}
+\begin{minted}{haskell}
 fold k f [] = k
 fold k f (x:xs) = f x (fold k f xs)
 \end{minted}
 
 \section{Closures}
-Consider the following pattern in Java:
+Consider the following partial implementation of the ``Observer''
+pattern in Java:
 
-\begin{minted}
-interface Listener {
-  bool respond(); 
+\begin{minted}{java}
+interface Observer {
+  bool notify(Event e); 
 }
 
-class MyPrintAction implements Listener -- "Function representation"
-   String text -- "environment"
-   respond() {
+class MyPrintAction implements Observer {
+   String text;
+
+   void respond() {
      print(text);
+     return true;
    }
+}
 
 class Button {
-  void onPress (Listener l) {
-    
-  }
-  
-} 
- 
-button.onPress(new MyPrintAction("Hello there"));
+  List<Observer> os;
 
+  void onPress (Observer l) {
+    os.add(l);
+  }
+} 
+
+... 
+button.onPress(new MyPrintAction("Hello there"));
+...
 \end{minted}
 
-Assuming that the interface \texttt{???} represents a closure, how
+Assuming that the interface \texttt{Observer} represents a closure, how
 could this pattern be implemented naturally in a language with native
 support for higher-order functions?
 
-Demonstrate your answer as follows:
+Demonstrate your answer by translating the pattern to Haskell as
+follows:
 \begin{enumerate}
-\item Tranlate the type of the onPress action
-\item Translate the MyPrintAction class
-\item Translate the example call to onPress 
+\item Translate the type of the onPress to a Haskell type.
+\item Translate the MyPrintAction class.
+\item Translate the example call to onPress.
 \end{enumerate}
 
-\section{Continuations}
-
-Consider the following function, which computes the fibbonaci number
-of its argument.
-\begin{minted}
-fib 0 = return 1
-fib n = do x1 <- fib (n-1)
-           yield
-           x2 <- fib (n-2)
-           return (x1 + x2)
-\end{minted}
-
-The above algorithm will be used on very big numbers, hence
-potentially running for a long time, concurrently with other
-processes. Therefore, the implementer of \texttt{fib} has decided to
-insert a call to \texttt{yield}, which performs no useful
-computational task, but gives the opportunity for the runtime
-environment to schedule another processes. (The computation of the
-fibbonaci number will be continued later.)
-
-Transform \texttt{fib} to use explicit continuations. Remarks: 
-\begin{itemize}
-\item In the translation, you will use a different version of
-  \texttt{yield}, which takes an explicit continuation as argument.
-\item The translation of \texttt{fib} should also take an explicit
-  continuation as argument.
-\item Do not change the algorithm. Do not ``optimize'' it.
-\end{itemize}
-
-\newpage
 \section{Variable-managing process}
 
 Assume a language without pointers nor variables, but support for
@@ -277,12 +253,15 @@ channels. For example C++-style:
 \begin{verbatim}
 Chan<A> newChan();
 A readChan(Chan<A> c);
-writeChan(Chan<A> c,A x);
+void writeChan(Chan<A> c,A x);
 void forkProcess(*void());
 \end{verbatim}
 or Haskell-style:
 \begin{verbatim}
-TODO
+newChan :: IO (Chan a)
+readChan :: Chan a -> IO a
+writeChan :: Chan a -> a -> IO ()
+forkProcess :: IO () -> IO ()
 \end{verbatim}
 
 The channels can transmit any type of information, including
@@ -302,12 +281,43 @@ void writeRef(Reference, int);
 \end{verbatim}
 or Haskell-style:
 \begin{verbatim}
-TODO
+readRef :: Reference -> IO Int
+writeRef :: Reference -> Int -> IO ()
 \end{verbatim}
 \end{enumerate}
 
 \section{Relations}
 
+Consider the following Haskell code:
 
+\begin{verbatim}
+data List = Nil | Cons Int List
+data Tree = Tip | Bin Tree Int Tree 
 
+append :: List -> List -> List
+append Nil xs = xs
+append (Cons x xs) ys = Cons x (append xs ys)
+
+flatten :: Tree -> List
+flatten Tip = Nil
+flatten (Bin a x b) = append (flatten a) (Cons x (flatten b))
+\end{verbatim}
+
+Translate the above functions to relations \texttt{flatten'} and
+\texttt{append'} such that:
+\begin{verbatim}
+       flatten' x y        is equivalent to      flatten x == y
+       append' x y z      is equivalent to       append x y == z
+\end{verbatim}
+
+\begin{enumerate}
+\item Write the type of the relations \texttt{flatten'} and
+  \texttt{append'}.
+\item Write their code.
+\end{enumerate}
+
+Remark: you cannot use any other helper function in your answer, only
+constructors and relations.
+
+You may write your answer in Curry syntax or Prolog syntax. 
 \end{document}
