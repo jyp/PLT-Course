@@ -3,14 +3,19 @@ import Data.Map (Map)
 
 data Term = Con String [Term] -- the terms are the arguments to the constant
           | Var Int -- metavariable
+  deriving Eq
 
 type Substitution = Map Int Term
 
 both f (x,y) = (f x, f y)
 
+-- Specification: after applying the returned substitution, every
+-- assertion made in the input (1st argument) will be verified. That
+-- is the 1st elemet of the pair will be syntactically equal to the
+-- second element.
 unify :: [(Term,Term)] -> Substitution -> Maybe Substitution
 unify [] s = Just s -- Base case
-unify ((t,t'):ts) | t == t' = unify ts t
+unify ((t,t'):ts) s | t == t' = unify ts s
 unify ((Con f as,Con g bs):ts) s
   | f == g && length as == length bs = unify (zip as bs ++ ts) s
   | otherwise = Nothing -- Clash
