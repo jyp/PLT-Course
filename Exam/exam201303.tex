@@ -64,8 +64,8 @@ There are 6 questions: each worth 10 points. The total sum is 60
 points.
 
 Some questions come with \emph{remarks}: you must take those
-into account.  Some questions come with \emph{hints}: you may ignore
-those.
+into account.  
+Some questions come with \emph{hints}: you may ignore those.
 
 You will be asked to write programs in various paradigms. Choose the
 language appropriately in each case, and indicate which you choose at
@@ -293,8 +293,8 @@ follows:
 
   example = onPress button (myPrintAction "button pressed");
 }
-\newpage
 
+\newpage
 \section{Variable-managing process}
 
 Assume a language without pointers nor variables, but support for
@@ -316,39 +316,44 @@ writeChan :: Chan a -> a -> IO ()
 forkProcess :: IO () -> IO ()
 \end{minted}
 
-The channels can transmit any type of information, including
-references to channels. Your task is to simulate references to mutable
-variables using the above primitives. This can be done be using a
-process that manages the variable state.
+Your task is to simulate references to mutable variables using the
+above primitives. This can be done be using a process that manages the
+variable state.
 
 \begin{enumerate}
 \item Define the representation for a variable of type ``reference to
-  Integer''. Name this type \texttt{Reference} \points 3
+  Integer''. Name this type \texttt{Reference}. \points 3
 \item Write the code for the process that manages the variable state. \points 4
-\item Write the code for primitives to read and write references. \points 3
+\item Write the code for primitives to create, read and write references. \points 3
 Their type should be:
 \begin{minted}{cpp}
+Reference newRef();
 int readRef(Reference);
 void writeRef(Reference, int);
 \end{minted}
 or Haskell-style:
 \begin{minted}{haskell}
+newRef :: IO Reference
 readRef :: Reference -> IO Int
 writeRef :: Reference -> Int -> IO ()
 \end{minted}
 \end{enumerate}
 
+Hint: The channels can transmit any type of information, including
+references to channels.
+
+Remark: you may not use any global variable nor primitive reference
+types in your answer.
+
 \answer{
   \begin{minted}{haskell}    
 data Command a = Get (Chan a) | Set a
-
 type Variable a = Chan (Command a)
 
 handler :: Variable a -> a -> IO ()
 handler v a = do
   command <- readChan v
   case command of
-    Kill -> return ()
     Set a' -> handler v a'
     Get c -> do 
       writeChan c a
@@ -369,14 +374,9 @@ get v = do
 set :: Variable a -> a -> IO ()
 set v a = do
   writeChan v (Set a)
-  
-
-main = do
-  v <- newVariable "initial value"
-  set v "new value"
-  get v >>= putStrLn
   \end{minted}
 }
+
 \newpage
 \section{Relations}
 

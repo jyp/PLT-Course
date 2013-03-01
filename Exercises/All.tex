@@ -504,9 +504,16 @@ numbers:
 \question{*}
 Implement the recursive function computing the n-th Fibonacci number based on
 the expression above.
+\begin{ans}
+  \inputminted[firstline=4,lastline=15]{c}{fib.c}
+\end{ans}
 
 \question{*} What is the complexity of the computation? (How many
 calls will there be to compute $fib_{n}$?)
+\begin{ans}
+  There will be approximately $\phi^n$ calls, where $\phi = \frac {1 +
+    \sqrt 5} 2$. ($\phi$ is the golden ratio.)
+\end{ans}
 
 \question{*} Implement a slightly-optimized recursive function for the
 same purpose, using an accumulator parameter.
@@ -514,10 +521,10 @@ same purpose, using an accumulator parameter.
 \question{**} Implement a version of each of the two functions above
 by using an explicit stack.
 
-\begin{answer}
+\begin{ans}
   The non-optimised version yields:
   \inputminted[firstline=43,lastline=70]{c}{fib.c}
-\end{answer}
+\end{ans}
 
 Consider the following function:
 \begin{minted}{c}
