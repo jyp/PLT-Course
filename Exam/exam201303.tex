@@ -98,12 +98,6 @@ required for grade VG.
 
 \section{Objects as records}
 
-\comment{
-I changed the functions to be called f and g,
-and the ints to be called m and n. It was
-a bit confusing.
-}
-
 Consider the following C++ code, which is an encoding of a class
 hierarchy.
 \begin{minted}{c}
@@ -151,10 +145,6 @@ Quick refresher:
   structure pointed by \texttt{p}.
 \end{itemize}
 \section{Calls and recursion}
-
-\comment{
-Changed function name Hanoi to hanoi
-}
 
 Consider the following function \texttt{hanoi},
 which solves the Hanoi tower problem.
@@ -214,23 +204,18 @@ fold k f (Cons x xs) = f x (fold k f xs)
 \end{minted}
 \section{Closures}
 
-\comment{
-the interface and the implementation does not match
-}
-
 Consider the following partial implementation of the ``Observer''
 pattern in Java:
 \begin{minted}{java}
 interface Observer {
   bool notify(Event e);
-  // notify in interface ?
 }
 
 class MyPrintAction implements Observer {
    String text;
 
-   void respond() {
-     // respond in implementation ?
+   bool notify(Event e) {
+     print("Got the event:" + e);
      print(text);
      return true;
    }
@@ -248,7 +233,7 @@ class Button {
 And the example user code:
 
 \begin{minted}{java}
-button.onPress(new MyPrintAction("Hello there"));
+button.onPress(new MyPrintAction("Button pressed."));
 \end{minted}
 
 Assuming that the interface \texttt{Observer} represents a closure, how

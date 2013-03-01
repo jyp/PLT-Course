@@ -514,6 +514,11 @@ same purpose, using an accumulator parameter.
 \question{**} Implement a version of each of the two functions above
 by using an explicit stack.
 
+\begin{answer}
+  The non-optimised version yields:
+  \inputminted[firstline=43,lastline=70]{c}{fib.c}
+\end{answer}
+
 Consider the following function:
 \begin{minted}{c}
 void move_many(int n, int source, int intermediate, int target) {
@@ -526,8 +531,7 @@ void move_many(int n, int source, int intermediate, int target) {
 \end{minted}
 \question{**} Remove recursion, using an explicit stack.
 
-\question{**} Eliminate the tail call. (Do not use the stack for
-them).
+\question{**} Eliminate the tail call. (Do not use the stack for it).
 
 \question{***} The structure of the other call is particular: it is
 possible to recover the arguments of the caller from the arguments of
