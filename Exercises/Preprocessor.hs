@@ -17,8 +17,8 @@ updStatus Status {..} s
   | otherwise = Status {transmit = Just s, ..}
 
 main = do
-  [f,g] <- getArgs
+  [withAnswers,f,g] <- getArgs
   x <- readFile f
-  let y = unlines . catMaybes . map transmit $ scanl updStatus (Status Nothing False False) . lines $ x
+  let y = unlines . catMaybes . map transmit $ scanl updStatus (Status Nothing False (not $ read withAnswers)) . lines $ x
   writeFile g y
   

@@ -23,19 +23,23 @@ agenda = do
         
 cp a b = system ["cp",a,b]
         
-prep = produce "../Exercises/Preprocessor" $ do
-  system ["ghc","--make","../Exercises/Preprocessor.hs"]
+prep = do 
+  need p
+  produce "../Exercises/Preprocessor" $ do
+    cut $ system ["ghc","--make",p]
+  where p = "../Exercises/Preprocessor.hs"
   
-exercises = produce "All.pdf" $ do
+exercises withAnswers target = produce target $ do
   prep
   let input =  "../Exercises/All.tex"
-  let intermediate =  "../Exercises/P.tex"
+  let intermediate = "../Exercises/P.tex"
   need input
-  system ["../Exercises/Preprocessor", input, intermediate]
-  liftIO $ setCurrentDirectory "../Exercises"   -- So that pdflatex sees includes, etc.
-  system ["pdflatex", "-shell-escape", intermediate]
-  liftIO $ setCurrentDirectory "../Pub"
-  cp "../Exercises/P.pdf" "All.pdf"
+  cut $ do
+    system ["../Exercises/Preprocessor", show withAnswers, input, intermediate]
+    liftIO $ setCurrentDirectory "../Exercises"   -- So that pdflatex sees includes, etc.
+    system ["pdflatex", "-shell-escape", intermediate]
+    liftIO $ setCurrentDirectory "../Pub"
+    cp "../Exercises/P.pdf" target
 
 html x = do
   let html = x ++ ".html"
@@ -69,7 +73,8 @@ pub = system ["rsync", "-r", ".",
   ]
 
 action = do
-  exercises
+  exercises True "All.pdf"
+  exercises False "OnlyQuestions.pdf"
   html "index"
   html "Schedule"
   html "Lectures"
