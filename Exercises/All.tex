@@ -18,7 +18,7 @@
   \paragraph{Exercise~\arabic{question}  \percents{#1}}
  }
 \newenvironment{ex}[1]{\question{#1}}{\vspace{1em}}
-\newenvironment{ans}{\begin{framed}\paragraph{Answer~to~exercise~\arabic{question}}}{\end{framed}}
+\newenvironment{ans}{\begin{oframed}\paragraph{Answer~to~exercise~\arabic{question}}}{\end{oframed}}
 \newcommand{\removed}[1]{}
 \newcommand{\correctedLastYear}[1]{}
 \newcommand{\correctedThisYear}[1]{,@#1}
@@ -1395,7 +1395,6 @@ you see.
   Implement two library functions that help communicate with the above
   server. (Hint: you may have to create channels.)
 \end{ex}
-\DeactivateAnswers
 \subsection{Explicit continuations}
 
 Consider the following outline for the ``business logic'' of a
@@ -1515,7 +1514,7 @@ In this section, exercises are sometimes formulated both in Prolog and Curry syn
 \providecommand{\Curry}{{\tiny Curry}}
 \subsection{Metavariables and unification}
 
-\begin{ex}{*\correctedLastYear6,@6}
+\begin{ex}{*,@6}
 What is the result of each of the following unifications?
 Try to come up with the result without using the prolog/curry interpreter!
 
@@ -1685,8 +1684,6 @@ The difference list will contain circular, infinite lists.
 
 
 
-
-
 \subsection{Functions ↔ Relations}
 
 Consider the following haskell function, that splits a list of
@@ -1714,8 +1711,9 @@ N = [-5,-1,-9].
 
 
 \begin{question}{**}
-  Write the predicate \textsf{split}. Make sure that it is \emph{reversible}. That is,
-  you can recover the original list if you pass it the split lists.
+  Write the predicate \textsf{split}. Make sure that it is written in
+  relational style. That is, do not use any function (only other
+  relations and constructors).
   \begin{ans}
 
     \begin{minted}{prolog}
@@ -1727,15 +1725,29 @@ N = [-5,-1,-9].
 \end{question}
 
 \begin{question}{**}
-    What are the lists that are returned by \textsf{split/3} when used in reverse? Can it fail?
+    What are the lists that are returned by \textsf{split} when used in reverse? Can it fail?
     \begin{ans}
       All the possible interleavings of the inputs. If a number of the wrong class is
       in either of the inputs, it will fail.
     \end{ans}
 \end{question}
+\DeactivateAnswers
 
 \subsection{Explicit Search}
 
+Consider the following relation.
+\begin{minted}{haskell}
+ancestor x y = parent x y
+ancestor x y = ancestor x z & parent z y
+  where z free
+\end{minted}
+
+\begin{question}{*,@7}
+Convert the program from relational to functional style. That is,
+write a function \texttt{ancestors} that returns all the ancestors of
+a given person.  More precisely, given a person \texttt{c}, construct the
+list of \texttt{x}s such that \texttt{ancestor x c} is true.
+\end{question}
 
 Consider the following list comprehension, in Haskell syntax:
 \begin{verbatim}

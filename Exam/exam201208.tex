@@ -275,7 +275,8 @@ Transform \texttt{fib} to use explicit continuations. Remarks:
 
 Consider the Curry program
 \begin{verbatim}
-ancestor a c = (parent a x & ancestor x c) | a =:= c
+ancestor a c = a =:= c
+ancestor a c = (parent a x & ancestor x c) 
 \end{verbatim}
 
 
