@@ -545,9 +545,41 @@ possible to recover the arguments of the caller from the arguments of
 the call. Use this property to avoid using the stack for these
 arguments.
 
+
+Consider the Ackerman function:
+\begin{minted}{c}
+int a(int m, int n) {
+  if (m == 0)
+    return n+1;
+  else if (n == 0)
+    return a(m-1,1);
+  else {
+    return a(m-1,a(m,n-1)); // note the non-tail call 
+  }
+}
+\end{minted}
+
 \question{**}
-Implement the Ackermann function without recursion.
-(See \url{http://en.wikipedia.org/wiki/Ackermann_function}).
+Transform the tail calls to loops.
+\begin{ans}
+  \begin{minted}{c}
+int a(int m, int n) {
+  while (m != 0) {
+    if (n == 0) {
+      m = m-1;
+      n = 1;
+    } else {
+      m = m-1;
+      n = a(m,n-1);
+    }
+  }
+  return n+1;
+}    
+  \end{minted}
+\end{ans}
+
+\question{**}
+Implement the Ackermann function without recursion. (use a stack)
 
 \question{**} Implement the algorithm from the previous section
 without loops (only recursion allowed).
