@@ -132,7 +132,7 @@ corresponding to an object of type...
 \item \texttt B. \points{3}
 \item \texttt C. \points{6}
 \end{itemize}
-Remarks: make sure all the fields are initialised to some value. The
+Remarks: make sure all the fields are initialized to some value. The
 values can be arbitrary but must be consistent with the idea of the
 translation to records with explicit method pointers. If your solution
 contains pointers, you must show what they point to.
@@ -169,7 +169,7 @@ Solve the following two exercises independently.
     \end{minted}}
 \item Assume a stack; with the usual push, pop and top
   functions. Transform the original \texttt{hanoi} function by making
-  the calls explicit. Remarks: use gotos, and stack to tranform \emph{each}
+  the calls explicit. Remarks: use gotos, and stack to transform \emph{each}
   recursive call. Transform the original \texttt{hanoi} function, not
   the one obtained in the previous exercise. \points 6
   \answer{
@@ -232,7 +232,7 @@ fold k f (Cons x xs) = f x (fold k f xs)
 \section{Closures}
 
 Consider the following partial implementation of the ``Observer''
-pattern in Java:
+pattern in a Java-like language:
 \begin{minted}{java}
 interface Observer {
   bool notify(Event e);
@@ -280,7 +280,7 @@ objects of any type.  You may (if you prefer) answer questions 3. and
 4. in a single piece of code.
 
 \answer{ 
-  type Obsever = Event e -> IO Bool
+  type Observer = Event e -> IO Bool
   
   onPress :: Button -> Observer -> IO ()
   
