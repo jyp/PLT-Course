@@ -98,52 +98,45 @@ required for grade VG.
 
 \section{Objects as records}
 
-Consider the following C++ code, which is an encoding of a class
-hierarchy.
-\begin{minted}{c}
-struct C {
-   float x;
-   float y;
+Consider the following class hierarchy written in a Java-like
+language:
+\begin{minted}{java}
+class A {
+  float x;
+  float y;
 };
 
-struct B {
-   void *f(B*, B*);
-   int m;
-   void *g(B*, C*);
-   int n;
+class B {
+  int n;
+  void f(A p) {
+    <BODY 1>
+  };
+
 };
 
-struct A {
-   void *f(A*, B*);
-   int m;
+class C extends B {
+  int m;
+  // the following method overrides f from class B
+  void f(A p) { 
+    <BODY 2>
+  }
 };
-
-void B_g(B* p, C* q) {
-  q->x += p->m;
-  q->y += p->n;
-}
-
-void B_f(B* p, B* q) {
-  q->m += p->m;
-  q->n += p->n;
-}
-
-void A_f(A* p, B* q) {
-  q->m += p->m;
-}
 \end{minted}
 
-Write the original class hierarchy in a C++-like or Java-like language.\points{10}
+Translate the above classes to records with explicit method pointers.
 
-Quick refresher:
+Demonstrate your solution by drawing a diagram of a memory area
+corresponding to an object of type...
 \begin{itemize}
-\item If \texttt{A} is a type, then \texttt{A*} is the type of
-  pointers to \texttt{A}.
-\item \texttt{void *f(A,B,...)} stands for a pointer to a function
-  \texttt{f} taking arguments \texttt{A},\texttt{B},...
-\item \texttt{p->f} is used to access a field \texttt{f} in a
-  structure pointed by \texttt{p}.
+\item \texttt A. \points{1}
+\item \texttt B. \points{3}
+\item \texttt C. \points{6}
 \end{itemize}
+Remarks: make sure all the fields are initialised to some value. The
+values can be arbitrary but must be consistent with the idea of the
+translation to records with explicit method pointers. If your solution
+contains pointers, you must show what they point to.
+\newpage
 \section{Calls and recursion}
 
 Consider the following function \texttt{hanoi},
@@ -282,7 +275,11 @@ follows:
 \item Translate the MyPrintAction class. \points 2
 \item Translate the example call to onPress. \points 3
 \end{enumerate}
-\answer{
+Hints: You may assume a Haskell function \texttt{print} which prints
+objects of any type.  You may (if you prefer) answer questions 3. and
+4. in a single piece of code.
+
+\answer{ 
   type Obsever = Event e -> IO Bool
   
   onPress :: Button -> Observer -> IO ()
