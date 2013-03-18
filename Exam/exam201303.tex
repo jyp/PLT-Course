@@ -25,7 +25,7 @@
 %\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
 
 %\newcommand{\comment}[1]{}
-\newcommand{\answer}[1]{}
+\newcommand{\answer}{\paragraph{Answer:}}
 \newcommand{\comment}[1]{\marginpar{#1}}
 
 
@@ -136,6 +136,25 @@ Remarks: make sure all the fields are initialized to some value. The
 values can be arbitrary but must be consistent with the idea of the
 translation to records with explicit method pointers. If your solution
 contains pointers, you must show what they point to.
+
+\answer
+\begin{minted}{c}
+    struct A {
+      float x = 0
+      float y = 0
+    }
+    struct B {
+      int n = 0
+      void* f(A* p) = <BODY1>;
+    }
+    struct C {
+      int n = 0
+      void* f(A* p) = <BODY2>;
+      int m;
+    }
+\end{minted}
+
+
 \newpage
 \section{Calls and recursion}
 
@@ -156,8 +175,9 @@ Solve the following two exercises independently.
 \begin{enumerate}
 \item Replace the last recursive call by a while loop (tail-call
   elimination). Remark: do not use a stack. \points 4
-  \answer{
-    \begin{minted}{c}
+
+\answer
+\begin{minted}{c}
     void move_many(int n, int source, int intermediate, int target) {
       while (n > 0) {
         move_many(n-1,source,target,intermediate);
@@ -166,13 +186,14 @@ Solve the following two exercises independently.
         swap(source,intermediate);
       }
     }
-    \end{minted}}
+\end{minted}
+
 \item Assume a stack; with the usual push, pop and top
   functions. Transform the original \texttt{hanoi} function by making
   the calls explicit. Remarks: use gotos, and stack to transform \emph{each}
   recursive call. Transform the original \texttt{hanoi} function, not
   the one obtained in the previous exercise. \points 6
-  \answer{
+  \answer
     \begin{minted}{c}
       void move_many(int n, int s, int i, int d) {
         push(n,s,i,d,0);
@@ -192,8 +213,9 @@ Solve the following two exercises independently.
         if (caller == 2) goto loc2;
       }
     \end{minted}
-  }
+  
 \end{enumerate}
+\newpage
 \section{Pattern matching Higher-Order Abstractions}
 
 Assume the following Haskell data type:
@@ -222,13 +244,14 @@ should remain the same.
 fold k f Nil = k
 fold k f (Cons x xs) = f x (fold k f xs)
 \end{minted}
-\answer{
+\answer
   \begin{minted}{haskell}
     map f = fold Nil (\x -> Cons (f x))
     append xs ys = fold ys Cons xs
     reverse = fold Nil (\x xs -> append xs (Cons x Nil))
   \end{minted}
-}
+
+\newpage
 \section{Closures}
 
 Consider the following partial implementation of the ``Observer''
@@ -279,7 +302,8 @@ Hints: You may assume a Haskell function \texttt{print} which prints
 objects of any type.  You may (if you prefer) answer questions 3. and
 4. in a single piece of code.
 
-\answer{ 
+\answer
+\begin{minted}{haskell}
   type Observer = Event e -> IO Bool
   
   onPress :: Button -> Observer -> IO ()
@@ -289,7 +313,7 @@ objects of any type.  You may (if you prefer) answer questions 3. and
     print text
 
   example = onPress button (myPrintAction "button pressed");
-}
+\end{minted}
 
 \newpage
 \section{Variable-managing process}
@@ -339,11 +363,12 @@ writeRef :: Reference -> Int -> IO ()
 Hint: The channels can transmit any type of information, including
 references to channels.
 
-Remark: you may not use any global variable nor primitive reference
-types in your answer.
+Remark: You can use either a functional or imperative language to
+write your answer, however you may not use any global variable nor
+primitive reference types in it.
 
-\answer{
-  \begin{minted}{haskell}    
+\answer
+\begin{minted}{haskell}    
 data Command a = Get (Chan a) | Set a
 type Variable a = Chan (Command a)
 
@@ -371,8 +396,8 @@ get v = do
 set :: Variable a -> a -> IO ()
 set v a = do
   writeChan v (Set a)
-  \end{minted}
-}
+\end{minted}
+
 
 \newpage
 \section{Relations}
@@ -410,8 +435,8 @@ constructors and relations. The types should be written in Curry or
 Haskell-like syntax.
 
 You may write the code in Curry syntax or Prolog syntax. 
-\answer{
-  \begin{minted}{haskell}
+\answer
+\begin{minted}{haskell}
     append :: List -> List -> List -> Success
     append []     ys zs = ys =:= zs
     append (x:xs) ys zs = append xs ys zs' &
@@ -423,5 +448,5 @@ You may write the code in Curry syntax or Prolog syntax.
    flatten (Bin a x b) zs = flatten a xs & flatten b ys & append xs (Cons x ys) zs
       where xs, ys free
   \end{minted}
-}
+
 \end{document}
