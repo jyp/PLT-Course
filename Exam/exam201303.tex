@@ -145,11 +145,11 @@ contains pointers, you must show what they point to.
     }
     struct B {
       int n = 0
-      void* f(A* p) = <BODY1>;
+      void* f(B* this, A* p) = <BODY1>;
     }
     struct C {
       int n = 0
-      void* f(A* p) = <BODY2>;
+      void* f(C* this, A* p) = <BODY2>;
       int m;
     }
 \end{minted}
@@ -304,11 +304,11 @@ objects of any type.  You may (if you prefer) answer questions 3. and
 
 \answer
 \begin{minted}{haskell}
-  type Observer = Event e -> IO Bool
+  type Observer = Event -> IO Bool
   
   onPress :: Button -> Observer -> IO ()
   
-  myPrintAction text = do
+  myPrintAction text e = do
     print ("Got the event" ++ show e)
     print text
 
