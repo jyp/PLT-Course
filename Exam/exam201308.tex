@@ -1,0 +1,314 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage{minted}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\usepackage{pgf, tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{arrows}
+
+
+\newcommand{\Blue}[1]{\color{blue}#1\color{black}\xspace}
+
+\usepackage{array}
+% This is needed because raggedright in table elements redefines \\:
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\let\PBS=\PreserveBackslash
+
+%%%%%%%%%%%%%%
+\newcommand{\solution}[1] {}
+%\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
+
+%\newcommand{\comment}[1]{}
+\newcommand{\answer}{\paragraph{Answer:}}
+\newcommand{\comment}[1]{\marginpar{#1}}
+
+
+\begin{document}
+
+\setlength{\parskip}{2pt}
+
+\newcommand{\examtime}{14:00, August 30th, 2013}
+\newcommand{\points}[1]{\marginpar{\bf #1 points}}
+\noindent
+\begin{tabular}{lr}
+CHALMERS TEKNISKA H\"OGSKOLA &\examtime{}.\\
+Dept. of Computer Science and Engineering & Programming Paradigms\\
+Jean-Philippe Bernardy                 & DAT121 / DIT331(GU) \\
+\end{tabular}
+
+\vspace{2.5cm} \noindent
+\begin{center} {\LARGE
+Exam in Programming Paradigms}
+\end{center}
+
+\vspace{1.5cm}
+
+\noindent
+\examtime{}.\\
+\begin{tabular}{ll}
+\textbf{Examiner:} & Jean-Philippe Bernardy
+\end{tabular}
+\vspace{1cm}
+
+\noindent
+Permitted aids: Pen and paper.
+% English-Swedish or English-other language dictionary.
+
+There are 6 questions: each worth 10 points. The total sum is 60
+points.
+
+Some questions come with \emph{remarks}: you must take those
+into account.  
+Some questions come with \emph{hints}: you may ignore those.
+
+You will be asked to write programs in various paradigms. Choose the
+language appropriately in each case, and indicate which you choose at
+the beginning of your answer.
+
+\begin{tabular}[p]{cc}
+  Paradigm & Acceptable language \\ \hline
+  Imperative   & C or (an OO language where you refrain to use Objects) \\
+  Object oriented & C++ or Java \\
+  Functional & Haskell, ML \\
+  Concurrent & Erlang, Concurrent-Haskell \\
+  Logic & Prolog, Curry
+\end{tabular}
+
+You may also use pseudo-code resembling an actual language in the
+relevant list. In that case, make sure your code can only be
+interpreted in the way you intent (the responsibility lies with
+you). In particular, in the case of functional/logic languages,
+omitting parentheses is NOT acceptable: \texttt{a b c} is not
+acceptable pseudo-code for \texttt{a (b c)}.
+
+
+\textbf{Chalmers:}
+24 points is required to pass (grade 3), 36 points is required for
+grade 4, and 48 points is required for grade 5.
+
+\textbf{GU:}
+24 points is required to pass (grade G) and 42 points is
+required for grade VG.
+
+\section{Objects as records}
+
+Consider the following class hierarchy written in a Java-like
+language:
+\begin{minted}{java}
+class A {
+  float x;
+  float y;
+};
+
+class B {
+  int n;
+  void f(A p) {
+    <BODY 1>
+  };
+
+};
+
+class C extends B {
+  int m;
+  // the following method overrides f from class B
+  void f(A p) { 
+    <BODY 2>
+  }
+};
+\end{minted}
+
+Translate the above classes to records with explicit method pointers.
+
+Complete your solution by drawing a diagram of a memory area
+corresponding to an object of type each type \texttt A,\texttt B,\texttt C.
+\begin{itemize}
+\item \texttt A. \points{1}
+\item \texttt B. \points{3}
+\item \texttt C. \points{6}
+\end{itemize}
+Remarks: make sure all the fields are initialized to some value. The
+values can be arbitrary but must be consistent with the idea of the
+translation to records with explicit method pointers. If your solution
+contains pointers, you must show what they point to.
+
+\answer{
+\begin{minted}{c}
+    struct A {
+      float x = 0
+      float y = 0
+    }
+    struct B {
+      int n = 0
+      void* f(B* this, A* p) = <BODY1>;
+    }
+    struct C {
+      int n = 0
+      void* f(C* this, A* p) = <BODY2>;
+      int m;
+    }
+\end{minted}}
+
+
+\newpage
+\section{Calls and recursion}
+Consider the function
+\begin{verbatim}
+procedure fib(n : Int)
+  if n == 0
+    return 0
+  else if n == 1
+    return 1
+  else 
+    tmp1 := fib (n-1)
+    tmp2 := fib (n-2)
+    return tmp1 + tmp2
+\end{verbatim}
+
+Remove recursion, using an explicit stack. Remarks:
+
+\begin{itemize}
+\item  You should assume a ``global'' stack accessed via \texttt{push}
+  and \texttt{pop} primitives.
+
+\item You must implement \emph{the same algorithm}. Do not change the
+  algorithm in the process of doing the translation. Do not apply
+  tail-call optimisation.
+\end{itemize}
+
+Hints: you should first define the type of values that you can push on
+the stack, and you can assume that labels can be used as values.
+
+
+\newpage
+\section{Pattern matching Higher-Order Abstractions}
+
+Assume the following Haskell data type:
+\begin{minted}{haskell}
+data List = Nil | Cons Int List
+\end{minted}
+and consider the following code:
+\begin{minted}{haskell}
+
+foobar :: List -> List
+foobar []     = 0
+foobar (x:xs)
+  | x > 3     = (7*x + 2) + foobar xs
+  | otherwise = foobar xs
+
+map f Nil = Nil
+map f (Cons x xs) = Cons (f x) (map f xs)
+
+filter f Nil = Nil
+filter f (Cons x xs) = if f x then Cons x (filter f xs) else filter f xs
+
+fold k f Nil = k
+fold k f (Cons x xs) = f x (fold k f xs)
+\end{minted}
+
+Express the function \texttt{foobar} in terms of \texttt{map} and \texttt{filter}.\points {5}
+Express the function \texttt{foobar} in terms of \texttt{fold}.\points {5}
+
+\newpage
+\section{Closures}
+
+You will demonstrate how to transformation of higher order functions
+to use explicit closures.  That is, how to use a Haskell \emph{data
+  structure} to represent $\lambda$-expressions.
+
+Consider again the function filter:
+\begin{minted}{haskell}
+filter f Nil = Nil
+filter f (Cons x xs) = if f x then Cons x (filter f xs) else filter f xs
+\end{minted}
+
+Translate the code of \texttt{filter} \points{3}
+Give the type of the closure application function used in the translation. \points{2}
+
+Consider the following use of \texttt{filter}:
+\begin{minted}{Haskell}
+above x xs = filter (greaterThan x) xs
+greaterThan x y = x < y
+\end{minted}
+
+Translate the function \texttt{above} to use explicit closures. \points{3}
+Give the code of the closure application function. \points{2}
+
+\newpage
+\section{Continuations}
+
+Consider the following function, which solve the Hanoi tower problem:
+\begin{verbatim}
+hanoi 0 s i d = return ()
+hanoi n s i d = do
+    hanoi (n-1) s d i
+    move s d 
+    hanoi (n-1) i s d 
+\end{verbatim}
+
+Transform \texttt{hanoi} to use explicit continuations. Remarks: 
+\begin{itemize}
+\item In the translation, you will use a different version of
+  \texttt{move}, which takes an explicit continuation as argument.
+\item The translation of \texttt{hanoi} should also take an explicit
+  continuation as argument.
+\item Do not change the algorithm. Do not ``optimize'' it. The call
+  structure should remain the same.
+\end{itemize}
+
+\newpage
+\section{Relations}
+
+Consider the following Haskell code:
+
+\begin{minted}{haskell}
+data List = Nil | Cons Int List
+data Tree = Tip | Bin Tree Int Tree
+
+append :: List -> List -> List
+append Nil xs = xs
+append (Cons x xs) ys = Cons x (append xs ys)
+
+flatten :: Tree -> List
+flatten Tip = Nil
+flatten (Bin a x b) = append (flatten a) (Cons x (flatten b))
+\end{minted}
+
+Translate the above functions to relations \texttt{flatten'} and
+\texttt{append'} such that:
+\begin{minted}{haskell}
+       append' x y z       is equivalent to      append x y == z
+       flatten' x y        is equivalent to      flatten x == y
+\end{minted}
+
+\begin{enumerate}
+\item Write the type of the relations \texttt{flatten'} and
+  \texttt{append'}. \points 4
+\item Write their code. \points 6
+\end{enumerate}
+
+Remark: you cannot use any other helper function in your answer, only
+constructors and relations. The types should be written in Curry or
+Haskell-like syntax.
+
+You may write the code in Curry syntax or Prolog syntax. 
+\answer
+\begin{minted}{haskell}
+    append :: List -> List -> List -> Success
+    append []     ys zs = ys =:= zs
+    append (x:xs) ys zs = append xs ys zs' &
+                          zs =:= x:zs'
+       where zs' free
+
+   flatten :: Tree -> List -> Success
+   flatten Tip Nil = success
+   flatten (Bin a x b) zs = flatten a xs & flatten b ys & append xs (Cons x ys) zs
+      where xs, ys free
+  \end{minted}
+
+\end{document}
