@@ -77,6 +77,7 @@ action = do
   exercises False "OnlyQuestions.pdf"
   html "index"
   html "Schedule"
+  html "admin"
   html "Lectures"
   pub
   
