@@ -5,8 +5,7 @@
 - Programming paradigms
 - Chalmers Course code: DAT121
 - G.U. Course Code: DIT331
-
-** The teaching team
+* The teaching team
 + JP Bernardy
   - Course responsible & lecturer
   - Room: EDIT 5469
@@ -21,9 +20,9 @@
   - Room: EDIT 5453
   - E-mail: danr (chalmers.se)
     
-** Schedule
+* Schedule
 
-*** Weekly schedule:
+** Weekly schedule:
 
 + Lecture 1 - Mon 8.00
 + Lecture 2 - Tue 8.00
@@ -40,7 +39,7 @@
 See also timeedit:
 https://web.timeedit.se/chalmers_se/db1/timeedit/p/public/r.html?sid=3&h=t&p=0.days%2C20130607.x&objects=201044.182&ox=0&types=0&fe=0
 
-*** <<Timetable>>
+** <<Timetable>>
 
 | Week | Starts | Lecture 1 | Lecture 2      | Exercises |
 |------+--------+-----------+----------------+-----------|
@@ -83,21 +82,21 @@ Note: the contents of each exercise session is about the topics
 covered in the two previous lectures. Remember to re-fetch the
 file:All.pdf file each week: exercises may have been updated.
 
-** Organisation
-*** Formal requirements
+* Organisation
+** Formal requirements
 - Pass the exam
 - That's it!
-*** Informal requirements and learning aids
+** Informal requirements and learning aids
 - Do the exercises
 - Participate in the exercises correction sessions: see [[<<Exercises>>][below]] for details.
 - Attend the lectures
 - Prepare lectures by reading lecture notes and follow relevant links.
-*** Lectures
+** Lectures
 - The lecture notes can be accessed here [[http://www.cse.chalmers.se/~bernardy/pp/Lectures.html][here]]
 - You can also use the source if you fancy emacs org-mode.
 - I prefer to have interaction during the lectures, so feel free to
   interrupt me.
-*** Exercises
+** Exercises
 - 2 groups (go to only 1 session).
 - Find out which is your group by using [[file:GroupAssignment.hs][this Haskell program]]. See [[file:Schedule.org::timetable][the schedule]] for times.
 - Prepare exercises.
@@ -107,7 +106,7 @@ file:All.pdf file each week: exercises may have been updated.
     printout of the questions.
   + See [[file:Schedule.org::timetable][the schedule]] for which exercises you need to prepare for each
     session.
-** Reading material
+* Reading material
 + Unfortunately, I do not know of a single textbook covering all the
   material in a suitable way. Therefore, [[file:Lectures.org][the lecture notes]] are the "master"
   source for the course.
@@ -136,41 +135,41 @@ file:All.pdf file each week: exercises may have been updated.
   - "Concepts, Techniques, and Models of Computer Programming", Van Roy (http://www.info.ucl.ac.be/~pvr/book.html)
   - ...
 
-** Outline of the course
-*** Brief exposition of each paradigm
-*** (Some) Transformations between paradigms
+* Outline of the course
+** Brief exposition of each paradigm
+** (Some) Transformations between paradigms
 *This is the focus of the course.*
-*** Learning outcomes
-**** Awareness of multiple paradigms
+** Learning outcomes
+*** Awareness of multiple paradigms
 First questions of the design phase: "How should I think about this
 problem? (Do I know a paradigm suitable to express the solution?)"
-**** Recognise "encoded" thoughts:
+*** Recognise "encoded" thoughts:
 + what is the natural paradigm
 + decode them
 
 From this point of view, this course teaches "design patterns", /in reverse/.
 
-**** Encode thoughts expressed in a paradigm in another one
-**** The exam questions will be similar to exercises
+*** Encode thoughts expressed in a paradigm in another one
+*** The exam questions will be similar to exercises
 Note in particular that exercises are integral part of the course material.
 
-** Course evaluation
+* Course evaluation
 
 For an overview of the process, see [[http://www.chalmers.se/insidan/SV/utbildning-och-forskning/grundutbildning/undervisningsstod-for/kursutvarderingar][here]].
 
-*** Designated representatives:
+** Designated representatives:
 
 - RAN XUXIN xuxin student.chalmers.se
 - KIOKSOGLOU ANTONIOS antkio student.chalmers.se
 - BERG JOAKIM bergjoa student.chalmers.se
 - OLSSON JONATHAN jonolss student.chalmers.se
-*** Evaluation Meeting 2
+** Evaluation Meeting 2
 
 Ran and Jonathan present; other two nowhere to be found.
 
 Items:
-**** Changes in the course since last year (History).
-***** 2012
+*** Changes in the course since last year (History).
+**** 2012
 - Moved from Master (served as a common ground in programming for
   students with various backgrounds -- the course was given to many
   international students)
@@ -178,15 +177,15 @@ Items:
   focus of the course is now to explain the links between the
   paradigms, and explain new concepts by translation into known (old)
   concepts.
-***** 2013
+**** 2013
 - Different style of exercise sessions (less interactive)
 - More course material produced
-**** Study climate (communication, level of workload, tutorials)
+*** Study climate (communication, level of workload, tutorials)
 - Good, maybe bad time for lectures in early morning
-**** Problematic course items; can resources be used better?
+*** Problematic course items; can resources be used better?
 - See below planned changes for next year.
 - Should know earlier which exercises are relevant.
-**** Course-specific questions in questionnaire; other material for final meeting?
+*** Course-specific questions in questionnaire; other material for final meeting?
 - No extra material
 
 
