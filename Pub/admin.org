@@ -163,9 +163,10 @@ For an overview of the process, see [[http://www.chalmers.se/insidan/SV/utbildni
 - KIOKSOGLOU ANTONIOS antkio student.chalmers.se
 - BERG JOAKIM bergjoa student.chalmers.se
 - OLSSON JONATHAN jonolss student.chalmers.se
-** Evaluation Meeting 2
+** DONE Evaluation Meeting 1
+** DONE Evaluation Meeting 2
 
-Ran and Jonathan present; other two nowhere to be found.
+Ran and Jonathan present; other two representatives nowhere to be found.
 
 Items:
 *** Changes in the course since last year (History).
@@ -190,7 +191,7 @@ Items:
 
 
 
-* TODO Plans for Next year
+*** TODO Plans for Next year
 - FP1: Algebraic Types, Pattern matching, Parametric types, Currification & HOF
 - FP2: Polymorphic functions Translating away HOF (Inlining, Closures)
 - FP3: Explicit state and laziness
