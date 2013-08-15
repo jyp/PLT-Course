@@ -478,7 +478,7 @@ one can capture the pattern in a procedure
 #+begin_example
 procedure swap(by reference x, by reference y) 
   local var tmp;
-  tmp := x;
+  tmp := y;
   y := x;
   x := tmp;
 #+end_example
