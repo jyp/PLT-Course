@@ -222,7 +222,7 @@ data List = Nil | Cons Int List
 and consider the following code:
 \begin{minted}{haskell}
 
-foobar :: List -> List
+foobar :: List -> Int
 foobar []     = 0
 foobar (x:xs)
   | x > 3     = (7*x + 2) + foobar xs
@@ -241,8 +241,8 @@ fold k f Nil = k
 fold k f (Cons x xs) = f x (fold k f xs)
 \end{minted}
 
-Express the function \texttt{foobar} in terms of \texttt{fold} ONLY.\points {5}
 Express the function \texttt{foobar} in terms of \texttt{sum}, \texttt{map} and \texttt{filter}.\points {5}
+Express the function \texttt{foobar} in terms of \texttt{fold} ONLY.\points {5}
 
 Remark: In particular you may use recursion (directly) in your definitions.
 
