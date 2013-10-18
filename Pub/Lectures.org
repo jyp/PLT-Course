@@ -2243,6 +2243,7 @@ There are more models for concurrency than channels + processes
 (eg. revisions)
 
 * Logic programming
+** TODO Add the example of map coloring; see  https://bernardopires.com/2013/10/try-logic-programming-a-gentle-introduction-to-prolog/
 ** Notion: Proposition
 A /proposition/ is a statement. It can be a statement made about
 people, the world, etc. but also about mathematical and computational
