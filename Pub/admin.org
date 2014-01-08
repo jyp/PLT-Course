@@ -19,7 +19,10 @@
   - Exercise tutor
   - Room: EDIT 5453
   - E-mail: danr (chalmers.se)
-+ Inari     
++ Inari Listenmaa
+  - Exercise tutor
+  - Room: EDIT 6461
+  - E-mail: inari (chalmers.se) 
 * Schedule
 
 ** Weekly schedule:
