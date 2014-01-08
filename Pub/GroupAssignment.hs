@@ -11,7 +11,7 @@ sho False = "Group B"
 
 group = foldr xor False . bits 
 
-myPersonNumber = 197812150666
+myPersonNumber = 197812151234 -- replace by your number
 myGroup = sho $ group myPersonNumber
 
 main = putStrLn $ myGroup
