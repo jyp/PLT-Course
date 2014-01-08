@@ -1,42 +1,9 @@
-#+TITLE: DAT121 - Programming Paradigms
+#+TITLE: DAT121 - DIT331 - Programming Paradigms
 #+EMAIL: bernardy@chalmers.se
 #+STYLE: <link rel="stylesheet" type="text/css" href="pp.css" />
 
 
 * Announcements
-- <2013-08-09 Fri> Hints for March's exams are [[file:exam201303.pdf][available]].
-- <2013-04-17 Wed> The exam (March) is [[file:exam201303.pdf][available]].
-- The exam review will happen on April 8th 10.00-11.00, in room 4128.
-- <2013-03-05 Tue> Removing the tail calls from the Ackermann function
-  is explained in exercise 37.
-- <2013-03-04 Mon> Tomorrow's lecture time will be for questions and
-  answers. Wednesday exercise session will be on a single exercise on
-  search (newly added), and a correction of last year's exam. By
-  request, here is the [[file:OnlyQuestions.pdf][exercise questions with no answers]].
-- <2013-03-01 Fri> Answers for exercise session 6 are [[file:All.pdf][ready]].
-- <2013-02-28 Thu> The answer for the fibbonaci exercise that was
-  requested in one of the exercise session groups is available. See
-  exercise number 33.
-- <2013-02-25 Mon> Another [[file:exam201208.pdf][sample exam]] is available.
-- <2013-02-15 Fri> Answers for week 5 and questions for week 6
-  [[file:All.pdf][ready]].
-- <2013-02-21 Thu> Both the exams TDA382 Parallell Programmering and
-  DAT121 Programming paradigms will run on the same time. Students can
-  instead take the DAT121 at a different time, but on the same day. In
-  that case, they should contact the exam administration about the
-  exact procedure.
-- <2013-02-18 Mon> Uploaded video on [[file:Thunks.mov][explicit thunks]].
-- <2013-02-12 Tue> Answers for week 3 and questions for week 4
-  [[file:All.pdf][ready]]. An [[file:exam201203.pdf][example exam]] is available.
-- <2013-02-07 Thu> Due to miscommunication, the exercise session EX g3
-  was not given on Tuesday Feb 5 at 13:15. It will be given again on
-  Tuesday Feb 12 at 8:00 instead for those who have missed it. Sorry
-  for the inconvenience.
-- <2013-02-05 Tue> Uploaded video on [[file:Closure.mov][explicit closures]].
-- <2013-01-31 Thu> Because of lack of attendance, the Thursday morning
-  session is CANCELLED from now on.
-- <2013-01-31 Thu> Answers for week 2 questions for week 3 [[file:All.pdf][ready]].
-- <2013-01-30 Wed> Uploaded videos: [[file:factorial.mov][recursion and stack]], [[file:factorial-tail.mov][tail recursion]].
 - <2013-01-21 Mon> Course begins
 
 * Course material and organisation

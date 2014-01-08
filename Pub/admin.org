@@ -19,7 +19,7 @@
   - Exercise tutor
   - Room: EDIT 5453
   - E-mail: danr (chalmers.se)
-    
++ Inari     
 * Schedule
 
 ** Weekly schedule:
@@ -64,8 +64,8 @@ See table below for detail of contents.
 | EX 2 | Exercises:  marked with @2 in file:All.pdf                                          |
 | FP 1 | Algebraic Types, Pattern matching, Parametric types, Currification & HO Abstraction |
 | EX 3 | Exercises marked with @3 in file:All.pdf                                            |
-| FP 2 | HOF, HOT paradigm and eliminating HOF: Inlining; Closures                           |
-| FP 3 | Explicit state and purity                                                           |
+| FP 2 | Polymorphic functions Translating away HOF (Inlining, Closures)                     |
+| FP 3 | Explicit state, purity and laziness                                                 |
 | EX 4 | Exercises marked with @4 in file:All.pdf                                            |
 | FP 4 | Laziness & Explicit thunks                                                          |
 | CP 1 | Resource-managing processes                                                         |
@@ -83,7 +83,7 @@ file:All.pdf file each week: exercises may have been updated.
 
 * Organisation
 ** Formal requirements
-- Pass the exam
+- Pass the exam (written exam)
 - That's it!
 ** Informal requirements and learning aids
 - Do the exercises
@@ -169,7 +169,7 @@ Ran and Jonathan present; other two representatives nowhere to be found.
 
 Items:
 *** Changes in the course since last year (History).
-**** 2012
+**** new in 2012
 - Moved from Master (served as a common ground in programming for
   students with various backgrounds -- the course was given to many
   international students)
@@ -177,22 +177,12 @@ Items:
   focus of the course is now to explain the links between the
   paradigms, and explain new concepts by translation into known (old)
   concepts.
-**** 2013
+**** new in 2013
 - Different style of exercise sessions (less interactive)
 - More course material produced
-*** Study climate (communication, level of workload, tutorials)
-- Good, maybe bad time for lectures in early morning
-*** Problematic course items; can resources be used better?
-- See below planned changes for next year.
+**** new in 2014 (Plans)
 - Should know earlier which exercises are relevant.
-*** Course-specific questions in questionnaire; other material for final meeting?
-- No extra material
-
-
-
-*** TODO Plans for Next year
-- FP1: Algebraic Types, Pattern matching, Parametric types, Currification & HOF
-- FP2: Polymorphic functions Translating away HOF (Inlining, Closures)
-- FP3: Explicit state and laziness
 - Write the solution for all questions/exercises in the lecture notes
 - Publish the complete code for answers
+
+*** TODO Plans for next year
