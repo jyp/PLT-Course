@@ -1,6 +1,6 @@
 #+TITLE: DAT121 - DIT331 - Programming Paradigms
 #+EMAIL: bernardy@chalmers.se
-#+STYLE: <link rel="stylesheet" type="text/css" href="pp.css" />
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pp.css" />
 
 
 * Announcements

@@ -1,6 +1,6 @@
 #+TITLE: Programming Paradigms: Lecture Notes
 #+EMAIL: bernardy@chalmers.se
-#+STYLE: <link rel="stylesheet" type="text/css" href="pp.css" />
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pp.css" />
 
 This document is generated form an org-mode file. 
    - To access it replace .html by .org in the above link
@@ -100,7 +100,9 @@ How do you think of your computer?
 
 ** Paradigms and Languages
 *** The big-bang of languages
-file:LangPop.png
+file:LangPop.png 
+
+(image credit: http://redmonk.com/sogrady/2012/02/08/language-rankings-2-2012/)
 
 - In the old days: languages were built around a central idea,
   crystallized in a paradigm.
@@ -111,6 +113,8 @@ file:LangPop.png
 - A given paradigm needs a specific set of features to be supported.
 
 The situation is summed up in [[file:paradigmsDIAGRAMeng.pdf][this diagram]]
+
+See also: http://langpop.com/
 
 *** PL Features we will see
 - Structured data / Records

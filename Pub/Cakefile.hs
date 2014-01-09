@@ -50,9 +50,9 @@ html x = do
     cut $ 
         system ["emacs", 
                 "--batch", 
-                "--eval", "(setq org-export-headline-levels 2)",
+                "--eval", "(progn (require 'org) (require 'org-exp) (setq org-export-headline-levels 2))",
                 "--visit=" ++ org,
-                "--funcall", "org-export-as-html-batch"]
+                "--funcall", "org-html-export-to-html"]
 
 tex = do
   produce "Lectures.pdf" $ do
@@ -71,14 +71,17 @@ pub = system ["rsync", "-r", ".",
           -- I don't use the "official" thing; see e-mail correspondence (Edu2009)
           -- bernardy@remote12.chalmers.se:/chalmers/groups/edu2009/www/www.cse.chalmers.se/course/DAT121
   ]
-
-action = do
-  exercises True "All.pdf"
-  exercises False "OnlyQuestions.pdf"
+      
+htmlAll = do
   html "index"
   html "Schedule"
   html "admin"
   html "Lectures"
+
+action = do
+  exercises True "All.pdf"
+  exercises False "OnlyQuestions.pdf"
+  htmlAll
   pub
   
 
