@@ -24,7 +24,8 @@
   - Room: EDIT 6461
   - E-mail: inari (chalmers.se) 
 * Schedule
-
+** On TimeEdit:
+https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q5Y61Y5.html
 ** <<Weekly Schedule>>:
 
 + Lecture 1 - Mon 10.00
@@ -32,15 +33,13 @@
 + Exercises
    - group A - Wed 13.15
    - group B - Wed 15.15
-+ Exercises
++ Exercise corrections
    - open to all: Thu 8.00
 + Office hours:
   - JP: Thu: 13.15
   - Nik: Mon. 13.15
   - Dan: Tue: 13.15
   - Ina:
-See also timeedit:
-https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q5Y61Y5.html
 ** <<Timetable>>
 
 | Week | Starts | Lecture 1 | Lecture 2      | Exercises       | TA  |
