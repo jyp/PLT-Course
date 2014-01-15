@@ -42,15 +42,15 @@ https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q
   - Ina:
 ** <<Timetable>>
 
-| Week | Starts | Lecture 1 | Lecture 2      | Exercises       | TA  |
-|------+--------+-----------+----------------+-----------------+-----|
-|    1 |   0120 | Intr      | IP 1           | EX 1            | Ina |
-|      |   0127 | IP 2      | OO             | EX 2            | Nik |
-|    3 |   0203 | FP 1      | No lecture (∗) | No exercise (∗) |     |
-|    4 |   0210 | FP 2      | FP 3           | EX 3            | Ina |
-|    5 |   0217 | CP 1      | CP 2           | EX 4            | Nik |
-|    6 |   0224 | LP 1      | LP 2           | EX 5            | Dan |
-|    7 |   0303 | Review    | Guest Lecture? | EX 6            | Dan |
+| Week | Starts | Lecture 1 | Lecture 2      | Exercises       | TA        |
+|------+--------+-----------+----------------+-----------------+-----------|
+|    1 |   0120 | Intr      | IP 1           | EX 1            | Ina + Nik |
+|      |   0127 | IP 2      | OO             | EX 2            | Nik + Ina |
+|    3 |   0203 | FP 1      | No lecture (∗) | No exercise (∗) |           |
+|    4 |   0210 | FP 2      | FP 3           | EX 3            | Ina + Dan |
+|    5 |   0217 | CP 1      | CP 2           | EX 4            | Nik + Dan |
+|    6 |   0224 | LP 1      | LP 2           | EX 5            | Dan + Ina |
+|    7 |   0303 | Review    | Guest Lecture? | EX 6            | Dan + Nik |
 
   (∗): Charm Days
 

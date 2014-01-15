@@ -42,19 +42,19 @@ Consider the language C++ (or your favourite programming language,
 ...).
 
 \question{*} Write a list of features (programming constructs)
-implemented in C++. Be as exhaustive as you can (list at least 10
+implemented in this language. Be as exhaustive as you can (list at least 10
 features).
 
 \question{*} For each programming paradigm (Imperative, OO, etc.),
-evaluate how well C++ supports that paradigm. Argue using the list
+evaluate how well this language supports that paradigm. Argue using the list
 compiled in the previous answer.
 
 \question{***} Can you identify a paradigm not studied in the course
-which is supported by C++?
+which is supported by this language?
 
 \subsection{Types}
 
-\question{*} Give a meaningful type to the following values.
+\question{*,@1} Give a meaningful type to the following values.
 
 \begin{enumerate}
 \item 4
@@ -283,7 +283,11 @@ C/C++/Java. Implement a function that adds a value to the tree and one that
 deletes a certain value from the tree.
 
 \question{*}
-Write a recursive traversal of the above tree.
+Write a recursive pre-order traversal of the above tree.
+
+\begin{ans}
+  \inputminted[firstline=20,lastline=26]{c}{dan/trav/trav.c}
+\end{ans}
 
 \question{*,@1}
 Write a swap function using call by reference.
@@ -488,7 +492,11 @@ see
 
 \subsection{From recursion to explicit stack}
 \begin{ex}{**,@2}
-Re-implement the tree traversal (from above), but using explicit stacks.
+
+Consider the following tree data structure:
+\inputminted[firstline=4,lastline=9]{c}{dan/trav/trav.c}
+
+Implement a pre-order traversal, using explicit stack(s).
 \begin{ans}
 \inputminted[firstline=52,lastline=62]{c}{dan/trav/trav.c}
 \end{ans}
@@ -546,7 +554,7 @@ possible to recover the arguments of the caller from the arguments of
 the call. Use this property to avoid using the stack for these
 arguments.
 
-
+\question{**,@2}
 Consider the Ackerman function:
 \begin{minted}{c}
 int a(int m, int n) {
@@ -559,8 +567,6 @@ int a(int m, int n) {
   }
 }
 \end{minted}
-
-\question{**}
 Transform the tail calls to loops.
 \begin{ans}
   \begin{minted}{c}
@@ -644,8 +650,11 @@ struct IntegerAdditiveMonoid : Monoid {
 \subsection{Explicit method pointers}
 
 \question{*,@2} Translate the above code to a C-like language, using
-explicit method pointers. (Hint: you can simply consider the interface
-as a class without fields.)
+explicit method pointers. Store the method pointers directly in the
+object.  (Hint: you can simply consider the interface as a class
+without fields.)
+
+\question{*} Same as above, but using method tables.
 
 \begin{ans}
   \begin{minted}{c}
@@ -917,13 +926,14 @@ Either\,C\,D)\] and \[Either (Either (A,C)\, (B,D))\,(Either (A,D)\,(B,C))\].
   \inputminted[firstline=3]{haskell}{fp/Ex50.hs}
 \end{ans}
 
-\question{*,@3} define an algebraic type for arithmetic expressions
+\question{*,@3} define an algebraic type for arithmetic expressions (+, *, ...)
 
 \begin{ans}
   \inputminted[firstline=3,lastline=7]{haskell}{fp/Ex51and52.hs}
 \end{ans}
 
-\question{*,@3} define a simple interpreter for the above type
+\question{*,@3} Define a simple interpreter for the above type; that
+is given an expression, compute its value.
 
 \begin{ans}
   \inputminted[firstline=9,lastline=15]{haskell}{fp/Ex51and52.hs}

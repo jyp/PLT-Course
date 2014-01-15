@@ -1,0 +1,24 @@
+Hello,
+
+I need to grant access to XXXXXXXXX to the programming paradigms course group area (prgprd) that I own.
+
+
+Current info of the GroupFileArea
+
+> GroupFileArea Owner
+> ===================
+> * CID (User Name): bernardy
+> * Full Name: Jean-Philippe Bernardy
+> * E-mail Address: bernardy@chalmers.se
+>
+> GroupFileArea Information
+> =========================
+> * Cost center (Kostnadsställe): 3725
+> * Project Number (Projektnummer): 3710125
+> * GroupFileArea name: prgprd
+> * Description: Group for teaching the Programming Paradigms course (DAT121)
+> * Size (GB): 2
+
+Change to perform:
+
+  * New member to add: XXXXXXXXX

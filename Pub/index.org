@@ -4,7 +4,8 @@
 
 
 * Announcements
-- <2013-01-21 Mon> Course begins
+- <2014-01-20 Mon> Course begins
+- <2014-01-15 Wed> Exercises for sessions 1. and 2. are ready.
 
 * Course material and organisation
  - [[file:Lectures.org][Lecture notes]]
