@@ -104,7 +104,7 @@ types. (Eg. in Java, generic classes).
 
 For example, the following type is a suitable type for a sorting
 function: it expresses that the function works for any element type,
-OBas long as you can compare its inhabitants.
+as long as you can compare its inhabitants.
 
 ∀ a. (a → a → Bool) → Array a → Array a
 
@@ -112,9 +112,10 @@ OBas long as you can compare its inhabitants.
 \question{**} Does \texttt{sort} in your favourite language have a similar
 type? How close/far is it?
 
+\question{***}
 Consider the type
 \[∀ a\,b. \mathsf{Pair}\,a\,b → \mathsf{Pair}\,b\,a\]
-\question{***} What programs can possibly have this type?
+What programs can possibly have this type?
 
 
 \newpage % so the algorithm below is not broken
@@ -161,9 +162,9 @@ Consider the algorithm:
 
 \question{*}
 
-implement binary search without gotos in the context of the
+Implement binary search without gotos in the context of the
 algorithm. There is a slight change compared to the classical
-algorithm, since the scope of the search is different. Keep in mind!
+algorithm, since the scope of the search is different. % Keep in mind!
 \footnote{If that is too easy, do it for red-black trees.}
 
 
@@ -554,7 +555,7 @@ int a(int m, int n) {
   else if (n == 0)
     return a(m-1,1);
   else {
-    return a(m-1,a(m,n-1)); // note the non-tail call 
+    return a(m-1,a(m,n-1)); // note the non-tail call
   }
 }
 \end{minted}
@@ -574,7 +575,7 @@ int a(int m, int n) {
     }
   }
   return n+1;
-}    
+}
   \end{minted}
 \end{ans}
 
@@ -1086,7 +1087,7 @@ test2 xs = foldr (*) 1 xs
 \begin{ex}{*\correctedLastYear 4,@4}
   Assuming that \texttt{xs} are lists of integers, replace the above
   uses of higher-order application by explicit closures.  (Hint: you
-  need to also change the definition of \texttt{foldr}/\texttt{map}).
+  need to also change the definition of \texttt{foldr}). % /\texttt{map}).
 \end{ex}
 
 \begin{ans}
@@ -1231,7 +1232,7 @@ Note that the best-case performance is Cubic.
 cell in a matrix. (What do you need to do to make this at all
 possible?)
 
-\question{*\correctedLastYear5} Using the same formula, fill the Roy-Warshall matrix
+\question{*\correctedLastYear5} Using the same formula, fill the Floyd-Warshall matrix
 using an array comprehension in a lazy language (optionally use
 explicit thunks for the contents of each cell). Discuss the best-case
 performance.
@@ -1239,7 +1240,7 @@ performance.
 \question{-} Does your favourite spreadsheet program have strict, or
 lazy logical disjunction operator? Test it.
 
-\question{-} Can you write the Roy-Warshall algorithm in it?
+\question{-} Can you write the Floyd-Warshall algorithm in it?
 
 \question{**} Repeat the above steps with the algorithm to compute the
 least edit distance. \url{http://en.wikipedia.org/wiki/Levenshtein_distance}
@@ -1381,7 +1382,7 @@ you see.
   would be to have a ``central server'' (corresponding to the bank)
   which manages transaction requests atomically.
   \inputminted{haskell}{BankAccounts.hs}
-  
+
 \end{ans}
 
 \begin{ex}{*}
