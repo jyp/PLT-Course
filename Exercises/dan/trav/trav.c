@@ -17,7 +17,7 @@ Tree *branch(Tree *l,int v,Tree *r) {
 }
 
 // preorder dfs traversal
-void dfs(Tree *t) {
+void preorder(Tree *t) {
     if (t != NULL) {
         printf("%d\n",t->v);
         dfs(t->l);
@@ -49,7 +49,7 @@ Tree *pop() {
     return t;
 }
 
-void dfs_stack(Tree *u) {
+void preorder_stack(Tree *u) {
     push(u);
     do {
         Tree *t = pop();

@@ -290,13 +290,13 @@ Write a swap function using call by reference.
 
 \begin{ans}
 In C++ syntax:
-\begin{verbatim}
+\begin{minted}{c}
     void swap(int& a, int& b) {
         int t = a;
         a = b;
         b = a;
     }
-\end{verbatim}
+\end{minted}
 \end{ans}
 
 \question{*,@1}
@@ -333,7 +333,7 @@ explicit):
    struct pair swap(struct pair p) {
         int t = p.fst;
         p.fst = p.snd;
-        p.snd = p.fst;
+        p.snd = t;
         return p;
     }
 \end{minted}
@@ -731,7 +731,8 @@ happens at runtime when the expression is evaluated. (Which code is executed?)
 
 \subsection{Co/Contra variance}
 
-Surprise: the above code is refused by the C\# compiler:
+Surprise: the above C# code defining the IntegerAdditiveMonoid is refused by
+the C\# compiler:
 \begin{verbatim}
 > gmcs Monoids.cs
 Monoids.cs(6,8): error CS0535: `IntegerAdditiveMonoid' does not implement
@@ -917,13 +918,13 @@ Either\,C\,D)\] and \[Either (Either (A,C)\, (B,D))\,(Either (A,D)\,(B,C))\].
   \inputminted[firstline=3]{haskell}{fp/Ex50.hs}
 \end{ans}
 
-\question{*,@3} define an algebraic type for arithmetic expressions
+\question{*,@3} Define an algebraic type for arithmetic expressions
 
 \begin{ans}
   \inputminted[firstline=3,lastline=7]{haskell}{fp/Ex51and52.hs}
 \end{ans}
 
-\question{*,@3} define a simple interpreter for the above type
+\question{*,@3} Define a simple interpreter for the above type
 
 \begin{ans}
   \inputminted[firstline=9,lastline=15]{haskell}{fp/Ex51and52.hs}
