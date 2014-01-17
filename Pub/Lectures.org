@@ -2,7 +2,7 @@
 #+EMAIL: bernardy@chalmers.se
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pp.css" />
 
-This document is generated form an org-mode file. 
+This document is generated from an org-mode file.
    - To access it replace .html by .org in the above link
    - It can be read in plain text: header level is indicated by number
      of *
@@ -99,6 +99,11 @@ How do you think of your computer?
   really am convinced that language shapes thought.
 
 ** Paradigms and Languages
+
+Paradigms are underpinned by programming language features.
+
+"If you cannot formulate it, you can't think it"
+
 *** The big-bang of languages
 file:LangPop.png 
 
@@ -142,7 +147,7 @@ programmers, and they used a wrong method for the implementation.
 After writing many programs, you may notice patterns emerging. These
 patterns may become codified, either informally (cf. "Design
 Patterns", the seminal book) or formally within the language
-(cf. Haskell Monads). 
+(cf. Haskell type-classes).
 
 Eventually, all programming may revolve around a number of patterns;
 the old ways are abandoned.  This is the paradigm shift: a new way of
@@ -154,7 +159,7 @@ Types are essential to get a quick overview of what a program is
 "about". Very useful when facing unknown programs! We use them a lot in
 this course to structure the thinking about programs.
 
-The colon is used ':' to denote the typing relation:
+The colon ':' is usedto denote the typing relation:
 
 :           someValue : ItsType
 
@@ -167,39 +172,67 @@ The colon is used ':' to denote the typing relation:
 - 0.5 : Float
 - (1/2) : Rational
 
+*** Feature: naming things
+
+One could write a program to compute the area of the floor of the
+copper-dome as follows, assuming the floor is a circle of radius 20
+meter.
+
+area = 20 * 20 * 3.141592
+
+It is error-prone to write the radius multiple times. (if someone were
+to give a better measure for the radius, or a better approximation for
+π, I might forget to update one of the instances in the program.)
+Furthermore it might be useful to give a meaningful name to the
+value. Hence most programming languages allow you to write:
+
+radius = 20
+pi = 3.141592
+
 *** Feature: Parametrization and function types
 
-This is a good time to see our first programming language feature. It
-is so ubiquitous (nearly every language has it -- can you think of a
-counter-example?) that you may not have thought of it as a "feature"
-at all so far. We are talking about the ability to /abstract/ over
-parameters.
+Now is a good time to see our first programming language feature. This
+feature is so ubiquitous that nearly every language has it. (Can you
+think of a counter-example?). In fact, you may not have thought of it
+as a "feature" at all so far. We are talking about the ability to
+/abstract/ over parameters.
 
 
-Take a simple value like this:
+Consider a simple value like this:
 
-:    greetMe = "Hello, Jean-Philippe! How are you today?" 
 :    greetMe : String
+:    greetMe = "Hello, Jean-Philippe! How are you today?"
 
 
 That's very useless as a program! We want to be able to greet more
-than one person, and parametrize (or abstract) over the name of the
-person greeted:
+than one person. To do so, we should and parametrize (or abstract)
+over the name of the person greeted.
+
+As an intermediate step, let us name the part we wish to abstract over:
 
 
-:    greet(name) = "Hello, " ++ name ++ " How are you today?" 
+:    name = "Jean-Philippe"
+:    greet = "Hello, " ++ name ++ "! How are you today?"
 
 
-A problem of abstraction is that it may not be so clear what the code
-is doing. What could this do if ~name~ is a floating point number? In
-this simple example it is pretty obvious, but in reality things get
-hairy pretty fast without types.
+Now, we can leave the name abstract. (Most programming languages
+require the programmer to mark abstract things explicitly. In this
+example we write the parameter inside parentheses):
+
+:    greet(name) = "Hello, " ++ name ++ "! How are you today?"
+
+
+When using abstraction, programs get more complicated. In particular,
+it might not be so clear that /every/ value can be used for the
+parameter.  What if ~name~ is a floating point number? In this simple
+example it is pretty obvious, but in reality things get hairy pretty
+fast.
 
 In our example, we may declare that the above code makes sense only
-when ~name~ is a string (in fact /any/ string); and in that case
-~greet(name)~ is a string.
-Equivalently, we will say that ~greet~ is a function converting a
-string into another string, and we will write:
+when ~name~ is a string (more precisely /any/ string); and in that
+case ~greet(name)~ is also a string.  Equivalently, we will say that
+~greet~ is a function converting a string into another string, and we
+will write:
 
 :   greet : String → String
 
@@ -213,39 +246,27 @@ concrete cases.
 
 Philosophical remark: if there is no application possible; abstraction
 is useless --- so they really are two sides of the same coin.
-*** Trivia: types of the following
-1. factorial : ?  
-2. π : ?  
-3. sin : ?
-4. × : ?   (multiplication)
-5. derivative : ? (or ∫ : ?) (review this question after FP paradigm...)
-   - hint: remember that derivative maps sin to cos.
-*** Feature: naming things
-
-Naming things is a *special case* of abstraction. (Abstraction is a
-generalization of naming things).
-
-Example:
-
-: circle_area(r) = 3.14 * r * r
-: circle_perimeter(r) = 2 * 3.14 * r
-
-We can abstract over pi
-
-: module Some_Code(pi : Float)
-:   circle_area(r) = pi * r * r
-:   circle_perimeter(r) = 2 * pi * r
-
-And immediately fix it:
-
-: Some_Code(3.14);
-
-This pattern of abstraction/application is so common that most
-(every?) programming language has special support for it.
 
 Benjamin Pierce's "Good Language" test: Can you abstract over
 everything you can name?
 
+*** Aside: Functions as a sepcial kind of relations?
+You may have encountered the arrow notation for types earlier in your
+studies, in the context of maths. Usually, math is built on top of set
+theory, and hence functions are defined as a special kind of
+relation. (We will revist this idea in the chapter on logic
+programming.)
+
+However, in this course, we take the view that arrow (function) type
+is a primitive (foundational) notion, based on the intuition discussed above.
+*** Exercises: types of the following
+1. factorial : ?
+2. π : ?
+3. sin : ?
+4. × : ?   (multiplication)
+5. derivative : ? (or ∫ : ?) (review this question after FP paradigm...)
+   - hint: remember that derivative maps sin to cos.
+(answers given in exercise sheet)
 *** Feature: Higher-order parametrization
 "What can be named/abstracted on" is an important characteristic of
 programming languages. Consider you favorite programming
@@ -262,7 +283,15 @@ language. Does it support abstraction over:
 - ...
 
 Higher-order functions refer to functions which are parametrized by
-other functions.  Typically in mathematics abstraction is
+other functions.
+
+Higher-order abstraction is useful because
+- it is theoretically as powerful as possible (Every other feature can
+  be reduced to higher order abstraction)
+- it is very useful in practice, as we shall see in the chapter on
+  functional programming.
+
+Typically in mathematics abstraction is
 unrestricted. Consider for example the types of derivative and
 integrals!
 
@@ -1064,8 +1093,8 @@ Given a type ~A~ and a type ~B~, we can construct:
 
 - a product type ~A × B~
 - a sum type ~A + B~
-   
-*** Sum types 
+
+*** Sum types
 
 From a value of type ~A + B~, one can extract /either/ an ~A~ /or/ a
 ~B~. Conversely, it suffices of either an ~A~ or a ~B~ to construct a
