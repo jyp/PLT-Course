@@ -267,6 +267,23 @@ is a primitive (foundational) notion, based on the intuition discussed above.
 5. derivative : ? (or ∫ : ?) (review this question after FP paradigm...)
    - hint: remember that derivative maps sin to cos.
 (answers given in exercise sheet)
+
+*** Model: substitution
+**** The meaning of application is substitution.
+  area 20 ⟶ (\r -> r * r * pi) 20
+          ⟶ 20 * 20 * pi
+          ⟶ 400 * pi
+          ⟶ ...
+
+**** remember 'inlining'
+inlining usually means 'substitution' of the reference by its value.
+**** pitfall: name-capture
+Example:
+
+area r = let r2 = r * r in r * pi
+
+ringArea r1 r2 = area r2 - area r2
+
 *** Feature: Higher-order parametrization
 "What can be named/abstracted on" is an important characteristic of
 programming languages. Consider you favorite programming
@@ -295,35 +312,39 @@ Typically in mathematics abstraction is
 unrestricted. Consider for example the types of derivative and
 integrals!
 
-*** Every problem can be solved by adding a level of indirection
+*** ✪ Every problem can be solved by adding a level of indirection
 
 "All problems in computer science can be solved by another level of indirection" --- Butler Lampson
 
 My version: every problem can be solved by adding a level of abstraction.
 
 * Imperative programming
-** Paradigm
-
-1. do this
-2. then do that
-3. then do some other thing 
-4. if not done, then repeat 2. and 3. 
-
-(cf. cookbook... for beginner cooks :)
-
-*** Computing model
+** Model: von Neumann computer
 "von Neumann" model of the computer:
 
 - Memory cells
 - Program (assignments, arithmetic, logic, (conditional) jumps)
 
-See also: Turing Machine
+This is similiar to what you may find in a cookbook:
 
-** Example
+1. do this
+2. then do that
+3. then do some other thing
+4. if not done, then repeat 2. and 3.
+
+(cf. cookbook... for beginner cooks :)
+
+** TODO Model: Turing machine
+** Example: Sorting
 *** Feature: GOTO
-A pretty basic feature of imperative language is the jump ("GOTO");
-which may be conditional. Try to figure out what the following code
-does.
+A pretty basic feature of imperative language is the jump (also known
+as "GOTO").  A goto is an instruction to jump to a particular point in
+the program. Sometimes, a contition is associated with the jump: the
+jump is performed only if the condition is true.
+
+Based on your understanding of GOTO, try to figure out what the
+following code does. Do you find it easy to understand? In the next
+section we will propose an improvement.
 #+begin_example
    -- Assume A : array of comparable items
 
@@ -341,15 +362,18 @@ does.
 #+end_example
 
 *** Feature: Loops & Ifs
-It has been noted that programs written using only gotos are pretty
-hard to understand.  If one programs using gotos, it is advisable to
-restrict oneself to a few easy patterns (loops; or conditional
-execution). Nowadays gotos have almost disappeared from usage and all
-code is written using special-purpose instructions for the above
-patterns. This is an instance of paradigm shift.
+It has been noted that programs written using only gotos in arbitrary
+ways are pretty hard to understand. (One sometimes refers to this sort
+of programs as "spaghetti code")
 
-Here is a piece of code so-written. Is it easier to understand than
-the above?
+Therefore, usage of gotos should be restricted to a few easy patterns
+(loops; or conditional execution). Nowadays gotos have almost
+disappeared from usage and all code is written using special-purpose
+instructions for the above patterns. This is an instance of paradigm
+shift.
+
+Here is a program doing the same as the above, but using only loops
+and if. Is it easier to understand?
 #+begin_example
    -- Assume A : array of comparable items
 
@@ -366,8 +390,8 @@ the above?
 
 *** Feature: procedures
 The above code is parametric over the array ~A~. If the language
-supports this abstraction we should take advantage of it and present
-the above as a procedure.
+supports abstraction over arrays we should take advantage of it and
+present the above program as a procedure.
 #+begin_example
     procedure bubbleSort( A : array of comparable items )
       swapped = true
@@ -379,12 +403,13 @@ the above as a procedure.
             swapped = true
           end if
         end for
-      end 
+      end
     end procedure
 #+end_example
 
 *** Extra reading
-It has not always been clear that GOTO was a bad idea. See for example:
+It has not always been clear that GOTO was a bad idea. Dijkstra had to
+battle against goto! See:
 
 [[http://portal.acm.org/citation.cfm%3Fid%3D362947][GOTO statement considered harmful]], E. G. Dijkstra
 
@@ -409,7 +434,7 @@ test:
   p := not (i>0)
   if p then goto done
   a[i] := b[i]
-  i = i-1  
+  i = i-1
   goto test
 done:
 #+end_example
@@ -418,18 +443,31 @@ Note in passing that such a job is typically performed by a C (or
 Java...) compiler. Indeed, the computer code has no notion of loop, it
 only knows about jumps.
 
-*** Exercise (⋆)
-1. Translate the following to explicit gotos:
+*** Feature: do ... until
 #+begin_example
 do
    body
 until cond
 #+end_example
-2. Translate insertion sort
-** Transformation: If then else ⟶ Gotos
+
+is translated to
+
+#+begin_example
+loop:
+do
+   body
+   if not (cond) goto loop
+until cond
+#+end_example
+
 In fact the above transformation is parametric on the
 condition and body of the loop. Hence we may just abstract over these
 parts. We will present the next transformation in this format.
+
+*** In-class exercise: insertion sort
++INCLUDE "Templates/InsertionSort.c" src C
++INCLUDE "Final/InsertionSort.c" src C
+** Transformation: If then else ⟶ Gotos
 *** Source
 Assuming a Boolean-valued expression ~cond~ and two blocks of code
 ~part1~ and ~part2~, and the following pattern:
@@ -472,25 +510,50 @@ end
 done:
 #+end_example
 Can you figure out the type of the ~target~ variable?
-*** Exercise (⋆⋆) 
+*** Exercise (⋆⋆)
 Translate switch/case construct to code which uses an indirect
 jump. Hint: use an array of labels
-*** Exercise (⋆⋆⋆) 
+*** Exercise (⋆⋆⋆)
 Translate the indirect jump in the above to code to direct jumps
 only. (You may use if statements)
 
-** Transformation (Gotos ⟶ Loops)
+** Reverse transformation: (Gotos ⟶ Loops)
 The reverse transformation (from jumps to structured constructions) is
 not so easy. That is, there is no general formula that gives you
 "beautiful" code from "spaghetti" code. To do so you must be creative!
 A good idea is to try to recognize the patterns generated above and
 reconstruct the source from them.
-** Feature: parameter passing by reference
-*** Example
-Passing by reference means that the programmer can name /blocks of
-code/.
+** Feature: parameter passing by value
+Passing a parameter by value is equivalent to making a /copy/ of the
+parameter before passing it to the function procedure.
 
-That is, if we have a piece of code that often swaps two variables:
+This means that, if the function/procedure updates the parameter, the
+argument remains untouched at the call site.
+
+This is what happens in C (pitfall: arrays) and (by defaut) in C++.
+
+** Feature: parameter passing by reference
+*** Explanation by Example
+Consider a declaration of the procedure 'swap' together with a number of calls:
+#+begin_example
+procedure swap(by reference x, by reference y) 
+  local var tmp;
+  tmp := y;
+  y := x;
+  x := tmp;
+#+end_example
+
+#+begin_example
+  swap(x,y)
+  ...
+  ...
+  swap(x,y)
+  ...
+  ...
+  swap(x,z)
+#+end_example
+
+It is equivalent to the following program:
 
 #+begin_example
   tmp := x;
@@ -507,26 +570,14 @@ That is, if we have a piece of code that often swaps two variables:
   z := x;
   x := tmp;
 #+end_example
-one can capture the pattern in a procedure
-#+begin_example
-procedure swap(by reference x, by reference y) 
-  local var tmp;
-  tmp := y;
-  y := x;
-  x := tmp;
-#+end_example
-and simply call where needed.
-#+begin_example
-  swap(x,y)
-  ...
-  ...
-  swap(x,y)
-  ...
-  ...
-  swap(x,z)
-#+end_example
-Can you see why this would not work with parameter passing by value?
+
+In other words: if parameters are passed by reference, calling the
+function/procedure is equivalent to copying its body at the call
+site. (pitfall: name capture)
 *** Why is passing by reference useful?
+
+- Passing by reference means that the programmer can name /blocks of
+  code/.
 - "expressive power" : you can factor out parts of the computation
   that update any (sub-part of) the state
 - save time : no need to copy around things
@@ -537,35 +588,49 @@ Assume a variable x:
 
 #+begin_example
  x : Integer {-Variable -}
+ x : int;
 #+end_example
 
 Then
 
 #+begin_example
  addressOf(x) : PointerTo Integer
+ &x           : int*;
 #+end_example
    ≃ where in the memory is the variable x
 
-We can express this with the following typing for ~addressOf~:
+We could express this with the following typing for ~addressOf~:
 : addressOf : Integer {-By Ref-} → PointerTo Integer
 
+
 **** "De-reference"
-: variableAt : PointerTo Integer → Integer 
+: variableAt : PointerTo Integer → Integer
+or
+: p : Integer ⊢ variableAt(p) : Integer
+
+or, borrowing some C syntax
+
+: p : int ⊢ *p : int
 
 **** Trivia: whats the meaning of addressOf(addressOf(x))?
  none! because addressOf(x) is just a value, there is no location for it in the memory.
-**** Exercise (⋆)
-re-write the above in C syntax and let your compiler check your code.
 *** Translation: from reference-parameters to pointers 
 **** Source:
 (Supposing the language supports passing arguments by reference:)
 
 : procedure increment(by ref. x : Int)
 :   x := x + 1
-
 with a call
-
 : increment(y)
+
+
+or in C++ syntax:
+
+: void increment(int &x) {
+:   x = x+1;
+: }
+with a call
+: increment(y);
 
 **** Target
 
@@ -573,13 +638,21 @@ with a call
 
 : increment(x : PointerTo Int)
 :  variableAt(x) := variableAt(x) + 1
-
 and the call
-
 : increment(addressOf(y))
-*** Exercise: Does Java use call by reference? 
-  Show example(s) that says yes/no
-** Transformation: inlining procedure calls
+
+or in C syntax:
+
+: void increment(int *x) {
+:   *x = *x+1;
+: }
+with a call
+: increment(&y);
+
+
+*** Exercise: Does Java use call by reference?
+  Show example(s) that says yes or no (see exercise sheet for an answer)
+** Transformation: inlining procedure calls (forward reference: the substitution model)
 This is the reverse of naming code blocks.
 *** Source
 #+begin_example
@@ -612,7 +685,8 @@ b := b + a
 #+end_example
 
 *** Exercise: redo the transformations above, assuming call-by-value.
-*** TODO Name capture when substituting (✪)
+Solution: every variable must be copied to a temporary before proceeding.
+*** TODO Name capture when substituting
 *** Question: What happens when the original program is recursive?
 Start:
 #+begin_example
@@ -639,7 +713,7 @@ procedure fib(int x)
 
 We end up with more calls than we started! The process never finishes!
 
-As a model for procedure calls, inlining is 
+As a model for procedure calls, inlining/substitution is
 - OK as a dynamic model: it works on concrete programs. For example
 inlining, ~fib(5)~ would eventually terminate
 - Not OK as a static model, at least in the presence of recursion.
@@ -2202,6 +2276,7 @@ to post the reply.
 Attention: as it is the server will only create a thunk to the
 computation; only the client will force it!
 
+** TODO Translation GOTO -> Continuation
 ** Concurrency via Continuations
 
 Possible meaning for Concurrent Programming: processes are executed in
@@ -2757,10 +2832,11 @@ Courses:
 - The essence of functional programming (Wadler) — Actually a tutorial on monads.
 - Poor man's concurrency monad (Claessen)
 - The essence of list comprehensions (Wadler)
-- Andre Pang's thesis
 - Introduction to programming with shift and reset http://okmij.org/ftp/continuations/index.html#tutorial1
 - Transforming failure into a list of successes (Wadler)
 - Typed logical variables in Haskell
+- Continuation-based multiprocessing
+- Continuation-Based Program Transformation Strategies
 
 *** Local Words (ignore)
 LocalWords:  stylesheet css href html renderer Neumann shaper Perlis

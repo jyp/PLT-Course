@@ -184,6 +184,8 @@ Items:
 - The solution for all questions/exercises to be found in the lecture notes
 - Publish the complete code for exercise answers
 **** TODO new in 2015 (plans)
+Introduce the substitution model in the first lecture; when explaining
+abstraction and naming.
 *** Study climate (communication, level of workload, tutorials)
 *** Problematic course items; can resources be used better?
 *** Course-specific questions in questionnaire; other material for final meeting?
