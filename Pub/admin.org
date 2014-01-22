@@ -2,17 +2,25 @@
 #+EMAIL: bernardy@chalmers.se
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pp.css" />
 
+This document is generated from an org-mode file.
+   - To access it replace .html by .org in the URL for this file
+   - It can be read in plain text: header level is indicated by number
+     of *
+   - Or more conveniently by using Emacs [[http://orgmode.org/][org mode]].
+     + Use <TAB> to expand/collapse nodes.
+     + C-c C-e b to do HTML rendering and open in your browser
+     + Check out the [[http://orgmode.org/orgcard.txt][reference card]].
+
 - Programming paradigms
 - Chalmers Course code: DAT121
 - G.U. Course Code: DIT331
 * The teaching team
-+ JP Bernardy
++ Jean-Philippe Bernardy
   - Course responsible & lecturer
   - Room: EDIT 5469
   - E-mail: bernardy (chalmers.se)
 + Nikita Frolov
   - Exercise tutor
-
   - Room: EDIT 5461
   - E-mail: frolov (chalmers.se)
 + Dan Rosén
@@ -42,10 +50,10 @@ https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q
   - Ina:
 ** <<Timetable>>
 
-| Week | Starts | Lecture 1 | Lecture 2      | Exercises       | TA        |
+| Week | Starts | Lecture 1 | Lecture 2      | Exercises       | TAs       |
 |------+--------+-----------+----------------+-----------------+-----------|
 |    1 |   0120 | Intr      | IP 1           | EX 1            | Ina + Nik |
-|      |   0127 | IP 2      | OO             | EX 2            | Nik + Ina |
+|    2 |   0127 | IP 2      | OO             | EX 2            | Nik + Ina |
 |    3 |   0203 | FP 1      | No lecture (∗) | No exercise (∗) |           |
 |    4 |   0210 | FP 2      | FP 3           | EX 3            | Ina + Dan |
 |    5 |   0217 | CP 1      | CP 2           | EX 4            | Nik + Dan |
@@ -142,6 +150,7 @@ file:All.pdf file each week: exercises may have been updated.
 * Outline of the course
 ** Brief exposition of each paradigm
 ** (Some) Transformations between paradigms
+- Explanation of programming languages features by translation.
 *This is the focus of the course.*
 ** Learning outcomes
 *** Awareness of multiple paradigms
@@ -151,7 +160,7 @@ problem? (Do I know a paradigm suitable to express the solution?)"
 + what is the natural paradigm
 + decode them
 
-From this point of view, this course teaches "design patterns", /in reverse/.
+From this point of view, this course teaches "design patterns"
 
 *** Encode thoughts expressed in a paradigm in another one
 *** The exam questions will be similar to exercises
@@ -162,7 +171,7 @@ Note in particular that exercises are integral part of the course material.
 For an overview of the process, see [[http://www.chalmers.se/insidan/SV/utbildning-och-forskning/grundutbildning/undervisningsstod-for/kursutvarderingar][here]].
 
 ** Designated representatives:
-
+- ????
 ** Evaluation Meeting 1
 ** Evaluation Meeting 2
 

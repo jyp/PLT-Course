@@ -2,14 +2,6 @@
 #+EMAIL: bernardy@chalmers.se
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pp.css" />
 
-This document is generated from an org-mode file.
-   - To access it replace .html by .org in the above link
-   - It can be read in plain text: header level is indicated by number
-     of *
-   - Or more conveniently by using Emacs [[http://orgmode.org/][org mode]]. 
-     + Use <TAB> to expand/collapse nodes. 
-     + C-c C-e b to do HTML rendering and open in your browser
-     + Check out the [[http://orgmode.org/orgcard.txt][reference card]].
 * What is a "programming paradigm"?
 ** Definition
 
@@ -23,8 +15,8 @@ broadly: a philosophical or theoretical framework of any kind"
 
 ** Paradigms as "ways of organizing thought"
 
-:             Programming paradigm 
-:                        = 
+:             Programming paradigm
+:                        =
 : The basic structuring of thought underlying the programming activity
 
 e.g.. when you think of a programming problem, what are you thinking of?
@@ -50,7 +42,7 @@ How do you think of your computer?
 - (evaluator of) Mathematical functions
 - A network: a number of units of execution communicating with messages 
 - ...
-  
+
 *** Quotes on the ability to think "big thoughts"
 - Anecdote: MULTICS
 - "Language as thought shaper", from http://soft.vub.ac.be/~tvcutsem/whypls.html
@@ -129,6 +121,7 @@ See also: http://langpop.com/
 - Memory (cell) / State
 - Processes
 - Communication channels
+- Unification
 - Search
 
 ** Fluidity between paradigms
@@ -159,7 +152,7 @@ Types are essential to get a quick overview of what a program is
 "about". Very useful when facing unknown programs! We use them a lot in
 this course to structure the thinking about programs.
 
-The colon ':' is usedto denote the typing relation:
+The colon ':' is used to denote the typing relation:
 
 :           someValue : ItsType
 
@@ -251,6 +244,7 @@ Benjamin Pierce's "Good Language" test: Can you abstract over
 everything you can name?
 
 *** Aside: Functions as a sepcial kind of relations?
+(Will be revisited when we see logic programming)
 You may have encountered the arrow notation for types earlier in your
 studies, in the context of maths. Usually, math is built on top of set
 theory, and hence functions are defined as a special kind of
@@ -267,7 +261,10 @@ is a primitive (foundational) notion, based on the intuition discussed above.
 5. derivative : ? (or ∫ : ?) (review this question after FP paradigm...)
    - hint: remember that derivative maps sin to cos.
 (answers given in exercise sheet)
-*** Feature: Higher-order parametrization
+*** Teaser: Higher-order abstraction
+
+Will be revisited when we see functional programming.
+
 "What can be named/abstracted on" is an important characteristic of
 programming languages. Consider you favorite programming
 language. Does it support abstraction over:
@@ -295,7 +292,9 @@ Typically in mathematics abstraction is
 unrestricted. Consider for example the types of derivative and
 integrals!
 
-*** Every problem can be solved by adding a level of indirection
+**** Every problem can be solved by adding a level of indirection
+
+Folklore theorem:
 
 "All problems in computer science can be solved by another level of indirection" --- Butler Lampson
 
