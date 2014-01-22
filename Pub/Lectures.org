@@ -314,7 +314,6 @@ integrals!
 Folklore theorem:
 =======
 *** ✪ Every problem can be solved by adding a level of indirection
->>>>>>> c6674ad8eeef393a6cab642d8c607543dc8b9ac7
 
 "All problems in computer science can be solved by another level of indirection" --- Butler Lampson
 
