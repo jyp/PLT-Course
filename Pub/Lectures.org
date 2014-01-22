@@ -182,8 +182,9 @@ to give a better measure for the radius, or a better approximation for
 Furthermore it might be useful to give a meaningful name to the
 value. Hence most programming languages allow you to write:
 
-radius = 20
-pi = 3.141592
+: radius = 20
+: pi = 3.141592
+: area = radius * radius * pi
 
 *** Feature: Parametrization and function types
 
@@ -630,6 +631,9 @@ or, borrowing some C syntax
 *** Translation: from reference-parameters to pointers 
 We can give a meaning to reference parameters in the von Neumann model
 as well, by using pointers.
+
++INCLUDE "Templates/Pointers.c" src C
+
 **** Source:
 (Supposing the language supports passing arguments by reference:)
 
