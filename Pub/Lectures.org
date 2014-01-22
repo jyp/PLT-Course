@@ -33,15 +33,18 @@ e.g.. when you think of a programming problem, what are you thinking of?
 Note that the same way of thinking is not adapted to all
 problems. Hence, it is important to know many paradigms!
 
-*** To each paradigm corresponds a "mental model of the computer"
-
+*** To each paradigm corresponds a "(mental) model of the computer"
 How do you think of your computer?
 
-- Memory + instructions (von Neumann model)
-- Rewriting engine
+- A bunch of transistors? (Very hard to reason at this level...)
+- (∗) Memory + instructions (von Neumann model)
+- (∗) Rewriting engine (substitution model)
 - (evaluator of) Mathematical functions
-- A network: a number of units of execution communicating with messages 
+- (∗) A network: a number of units of execution communicating with messages 
+- (∗) A prover of theorems (search model)
 - ...
+
+(∗) We will see these in the course.
 
 *** Quotes on the ability to think "big thoughts"
 - Anecdote: MULTICS
@@ -328,14 +331,19 @@ My version: every problem can be solved by adding a level of abstraction.
 
 This is similiar to what you may find in a cookbook:
 
-1. do this
-2. then do that
-3. then do some other thing
-4. if not done, then repeat 2. and 3.
+Ingredients:
+- Pasta
+- Water
+
+1. Boil water
+2. Throw pasta in water
+3. Taste
+4. if too hard, then goto 2.
 
 (cf. cookbook... for beginner cooks :)
 
 ** TODO Model: Turing machine
+-> turing completeness.
 ** Example: Sorting
 *** Feature: GOTO
 A pretty basic feature of imperative language is the jump (also known
@@ -455,10 +463,8 @@ is translated to
 
 #+begin_example
 loop:
-do
    body
-   if not (cond) goto loop
-until cond
+   if not (cond) goto loop;
 #+end_example
 
 In fact the above transformation is parametric on the
@@ -510,20 +516,23 @@ label2:
 end
 done:
 #+end_example
-Can you figure out the type of the ~target~ variable?
-*** Exercise (⋆⋆)
-Translate switch/case construct to code which uses an indirect
-jump. Hint: use an array of labels
-*** Exercise (⋆⋆⋆)
-Translate the indirect jump in the above to code to direct jumps
-only. (You may use if statements)
+Can you figure out the type of the ~target~ variable? (Answer: pointer to code)
+
+Remark: Computed jumps are not present in C or C++.
+*** Remark: goto+if vs. conditional jump
+
+It is trivial to convert back and forth between an if statement with a
+single goto in the body and a conditional jump, so we consider them
+equivalent in this course.
 
 ** Reverse transformation: (Gotos ⟶ Loops)
 The reverse transformation (from jumps to structured constructions) is
 not so easy. That is, there is no general formula that gives you
-"beautiful" code from "spaghetti" code. To do so you must be creative!
-A good idea is to try to recognize the patterns generated above and
-reconstruct the source from them.
+structured/"beautiful" code from "spaghetti" code made up of arbitrary
+gotos. Inventing a beautiful structure requires a creative leap!  A
+good first step is to try to recognize the patterns generated above
+and reconstruct the source from them... But it fails on true
+spaghetti code.
 ** Feature: parameter passing by value
 Passing a parameter by value is equivalent to making a /copy/ of the
 parameter before passing it to the function procedure.
@@ -533,11 +542,15 @@ argument remains untouched at the call site.
 
 This is what happens in C (pitfall: arrays) and (by defaut) in C++.
 
++INCLUDE "Template/ByValue.c" src C
+
 ** Feature: parameter passing by reference
-*** Explanation by Example
+*** Example
++INCLUDE "Template/ByRef.c" src C
+*** Meaning in the substitution model
 Consider a declaration of the procedure 'swap' together with a number of calls:
 #+begin_example
-procedure swap(by reference x, by reference y) 
+procedure swap(by reference x, by reference y)
   local var tmp;
   tmp := y;
   y := x;
@@ -603,7 +616,6 @@ Then
 We could express this with the following typing for ~addressOf~:
 : addressOf : Integer {-By Ref-} → PointerTo Integer
 
-
 **** "De-reference"
 : variableAt : PointerTo Integer → Integer
 or
@@ -616,6 +628,8 @@ or, borrowing some C syntax
 **** Trivia: whats the meaning of addressOf(addressOf(x))?
  none! because addressOf(x) is just a value, there is no location for it in the memory.
 *** Translation: from reference-parameters to pointers 
+We can give a meaning to reference parameters in the von Neumann model
+as well, by using pointers.
 **** Source:
 (Supposing the language supports passing arguments by reference:)
 
@@ -649,7 +663,6 @@ or in C syntax:
 : }
 with a call
 : increment(&y);
-
 
 *** Exercise: Does Java use call by reference?
   Show example(s) that says yes or no (see exercise sheet for an answer)
@@ -687,7 +700,6 @@ b := b + a
 
 *** Exercise: redo the transformations above, assuming call-by-value.
 Solution: every variable must be copied to a temporary before proceeding.
-*** TODO Name capture when substituting
 *** Question: What happens when the original program is recursive?
 Start:
 #+begin_example
@@ -700,7 +712,7 @@ procedure fib(int x)
 #+end_example
 Inlining the 1st procedure call:
 #+begin_example
-procedure fib(int x) 
+procedure fib(int x)
   if x <= 1 then
     return 1;
   else
@@ -716,8 +728,9 @@ We end up with more calls than we started! The process never finishes!
 
 As a model for procedure calls, inlining/substitution is
 - OK as a dynamic model: it works on concrete programs. For example
-inlining, ~fib(5)~ would eventually terminate
-- Not OK as a static model, at least in the presence of recursion.
+  expanding ~fib(5)~ eventually terminates to a concrete integer
+- Not OK as a static model in the presence of recursion, unless one
+  understands infinite programs.
 ** Transformation: Procedures ⟶ Gotos & Variables
 Source:
 #+begin_example
@@ -759,7 +772,7 @@ out2:
 #+end_example
 
 ** Transformation: Recursion ⟶ Explicit stack
-If there is recursion, one must use a stack.
+We can understand recursion in the von Neumann model, by using a stack.
 
 Translation of a call as goto:
 
@@ -840,7 +853,7 @@ the stack can be removed altogether!
 
 #+INCLUDE "factTail.c" src C
 
-* Interlude: Garbage Collection
+* ✪ Interlude: Garbage Collection
 aka. Automatic memory management
 The memory is freed automatically for you! (Magic!?)
 - Nah, chase pointers. (but what is a pointer)?
@@ -848,7 +861,6 @@ The memory is freed automatically for you! (Magic!?)
 Why GC discussed here?
 - Allows for much easier OOP (sharing)
 - Practically impossible to do FP/Logic programming without it (sharing)
-
 ** Question
 Firefox uses a GC, but still, it is leaking memory. What is going on?
 ** Question

@@ -13,3 +13,4 @@ int main(void) {
 // use echo $? to see the result
 
 // substitution model meaning?
+// von neumann model meaning?

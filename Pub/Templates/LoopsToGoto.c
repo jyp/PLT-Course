@@ -2,10 +2,10 @@
 
 void copy (int a[], int b[], int n) {
   int i = n;
-  while(i >= 0) {
+  do {
     i = i-1;
     a[i] = b[i];
-  }
+  } while(i > 0);
 }
 
 int input[9] = {34,23,435,124,5,4,1235,123,4};
