@@ -171,7 +171,12 @@ Note in particular that exercises are integral part of the course material.
 For an overview of the process, see [[http://www.chalmers.se/insidan/SV/utbildning-och-forskning/grundutbildning/undervisningsstod-for/kursutvarderingar][here]].
 
 ** Designated representatives:
-- ????
+| Name                     | email (at student.chalmers.se) |
+|--------------------------+--------------------------------|
+| SARAR INNAB              | innab                          |
+| ERIK JOHANNESEN          | joherx                         |
+| NIKLAS JOHANSSON MIGLAVS | miglav                         |
+| DANIEL LARSSON           | dalars                         |
 ** Evaluation Meeting 1
 ** Evaluation Meeting 2
 
