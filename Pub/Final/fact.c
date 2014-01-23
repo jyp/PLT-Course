@@ -1,20 +1,20 @@
 #include <stdio.h>
 
 int fact1 (int x) {
-  if (x == 1) 
+  if (x == 1)
     return x;
   else
-    return x * fact1(x-1);               
+    return x * fact1(x-1);
 }
 
 
 // pre-work: make order of evaluation explicit
-int fact2 (int x) {  
+int fact2 (int x) {
   int y;
-  if (x == 1) 
+  if (x == 1)
     return x;
   else {
-    y = fact2(x-1);    
+    y = fact2(x-1);
     return x * y;
   }
 }
@@ -22,11 +22,11 @@ int fact2 (int x) {
 // put result in a global var
 int result;
 
-void fact3 (int x) {  
-  if (x == 1) 
+void fact3 (int x) {
+  if (x == 1)
     result = x;
-  else {    
-    fact3(x-1);    
+  else {
+    fact3(x-1);
     // i don't need the temporary here
     result = result * x;
   }
@@ -34,7 +34,7 @@ void fact3 (int x) {
 
 // put arguments on a stack
 
-struct stack{ 
+struct stack{
   int x;
   int ret;
   struct stack* next;
@@ -59,10 +59,10 @@ void pop() {
 }
 
 
-void fact4() {  
-  if (s->x == 1) 
+void fact4() {
+  if (s->x == 1)
     result = s->x;
-  else {    
+  else {
     push(s->x-1,0);
     fact4();
     pop();

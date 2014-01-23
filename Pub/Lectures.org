@@ -312,12 +312,7 @@ Typically in mathematics abstraction is
 unrestricted. Consider for example the types of derivative and
 integrals!
 
-<<<<<<< HEAD
-**** Every problem can be solved by adding a level of indirection
-
-Folklore theorem:
-=======
-*** ✪ Every problem can be solved by adding a level of indirection
+**** ✪ Every problem can be solved by adding a level of indirection
 
 "All problems in computer science can be solved by another level of indirection" --- Butler Lampson
 
@@ -343,8 +338,26 @@ Ingredients:
 
 (cf. cookbook... for beginner cooks :)
 
-** TODO Model: Turing machine
--> turing completeness.
+*** Model: Turing machine
+An idealised version of the von Neumann computer is the "Turing
+Machine" (invented by Alan Turing).  The memory of the turing machine
+consist of an infinitely-long 1-dimensional tape divided into
+equal-size pieces each containing one bit.
+
+The "computing" is performed by a transition function from the
+internal state of the machine, and the current symbol on the tape, to
+a new state and an instruction, which can be either to move the tape
+or write a symbol (bit) at the current position.
+
+This extremely idealised machine is interesting from a theoretical
+viewpoint, because it is at least powerful as the von Neumann
+computer, while being even simpler. Furthermore, any computer (and any
+programming interface built on top of it) can be reduced to a turing
+machine.
+
+A programming language is said to be "Turing-complete" if one can do
+as much as a Turing machine.
+
 ** Example: Sorting
 *** Feature: GOTO
 A pretty basic feature of imperative language is the jump (also known
@@ -534,6 +547,69 @@ gotos. Inventing a beautiful structure requires a creative leap!  A
 good first step is to try to recognize the patterns generated above
 and reconstruct the source from them... But it fails on true
 spaghetti code.
+** Transformation: inlining procedure calls
+This is the reverse of naming code blocks.
+*** Source
+#+begin_example
+procedure g(by ref. x,y)
+  x := x + y
+
+procedure f(by ref. x,y)
+  g(x,y)
+  x := x + 1
+  g(y,x)
+
+f(a,b)
+#+end_example
+*** Intermediate
+#+begin_example
+procedure f(x,y)
+  x := x + y
+  x := x + 1
+  y := y + x
+
+
+f(a,b)
+#+end_example
+
+*** Final
+#+begin_example
+a := a + b
+a := a + 1
+b := b + a
+#+end_example
+
+*** Question: What happens when the original program is recursive?
+Start:
+#+begin_example
+procedure fib(int x)
+  if x <= 1 then
+    return 1;
+  else
+    tmp := fib (x-1)
+    return tmp + fib(x-2);
+#+end_example
+Inlining the 1st procedure call:
+#+begin_example
+procedure fib(int x)
+  if x <= 1 then
+    return 1;
+  else
+    if x-1 <= 1 then
+      return 1;
+    else
+      tmp2 := fib (x-2)
+      tmp := tmp2 + fib(x-3);
+    return tmp + fib(x-2);
+#+end_example
+
+We end up with more calls than we started! The process never finishes!
+
+As a model for procedure calls, inlining/substitution is
+- OK as a dynamic model: it works on concrete programs. For example
+  expanding ~fib(5)~ eventually terminates to a concrete integer
+- Not OK as a static model in the presence of recursion, unless one
+  understands infinite programs.
 ** Feature: parameter passing by value
 Passing a parameter by value is equivalent to making a /copy/ of the
 parameter before passing it to the function procedure.
@@ -588,7 +664,7 @@ It is equivalent to the following program:
 
 In other words: if parameters are passed by reference, calling the
 function/procedure is equivalent to copying its body at the call
-site. (pitfall: name capture)
+site. (pitfall: name capture; side effects)
 *** Why is passing by reference useful?
 
 - Passing by reference means that the programmer can name /blocks of
@@ -598,6 +674,8 @@ site. (pitfall: name capture)
 - save time : no need to copy around things
 
 *** Reminder: References (aka. pointers)
+**** Example
++INCLUDE "Templates/Pointers.c" src C
 **** Addresses
 Assume a variable x:
 
@@ -632,7 +710,6 @@ or, borrowing some C syntax
 We can give a meaning to reference parameters in the von Neumann model
 as well, by using pointers.
 
-+INCLUDE "Templates/Pointers.c" src C
 
 **** Source:
 (Supposing the language supports passing arguments by reference:)
@@ -670,76 +747,26 @@ with a call
 
 *** Exercise: Does Java use call by reference?
   Show example(s) that says yes or no (see exercise sheet for an answer)
-** Transformation: inlining procedure calls (forward reference: the substitution model)
-This is the reverse of naming code blocks.
-*** Source
-#+begin_example
-procedure g(by ref. x,y)
-  x := x + y
+** Remark: on side effects
+When inlining a function, one may duplicate the arguments (or place
+them somewhere else in the code); and so one must wonder whether
+inlining will duplicate the side-effects associated with these
+arguments.
 
-procedure f(by ref. x,y)
-  g(x,y)
-  x := x + 1
-  g(y,x)
+In the by-value case, even if there were side effects in the arguments, inlining will not
+duplicate them since we have to first copy their value to a temporary
+variable.
 
-f(a,b)
-#+end_example
-*** Intermediate
-#+begin_example
-procedure f(x,y)
-  x := x + y
-  x := x + 1
-  y := y + x
-
-
-f(a,b)
-#+end_example
-
-*** Final
-#+begin_example
-a := a + b
-a := a + 1
-b := b + a
-#+end_example
-
-*** Exercise: redo the transformations above, assuming call-by-value.
-Solution: every variable must be copied to a temporary before proceeding.
-*** Question: What happens when the original program is recursive?
-Start:
-#+begin_example
-procedure fib(int x) 
-  if x <= 1 then
-    return 1;
-  else
-    tmp := fib (x-1)
-    return tmp + fib(x-2);
-#+end_example
-Inlining the 1st procedure call:
-#+begin_example
-procedure fib(int x)
-  if x <= 1 then
-    return 1;
-  else
-    if x-1 <= 1 then
-      return 1;
-    else
-      tmp2 := fib (x-2)
-      tmp := tmp2 + fib(x-3);
-    return tmp + fib(x-2);
-#+end_example
-
-We end up with more calls than we started! The process never finishes!
-
-As a model for procedure calls, inlining/substitution is
-- OK as a dynamic model: it works on concrete programs. For example
-  expanding ~fib(5)~ eventually terminates to a concrete integer
-- Not OK as a static model in the presence of recursion, unless one
-  understands infinite programs.
+In the by-reference case, the situation is more complex. In most
+cases, the argument won't have a side effect since it must be a memory
+location. If the argument is an effectful expression computing a
+memory location, then we must use the translation to pointers before
+inlining.
 ** Transformation: Procedures ⟶ Gotos & Variables
 Source:
 #+begin_example
 function sqrt(x : Float) : Float
-  result := x / 2 
+  result := x / 2
   while distance (result * result, x) > ε
     -- Newton approx to refine the result
     ...
@@ -775,46 +802,44 @@ goto sqrt;
 out2:
 #+end_example
 
+In sum, the translation of a call is:
+  1. copy the arguments to the variables corresponding to the
+    parameters;
+  2. save the return address in a variable;
+  3. goto the procedure's code.
+
+At the end of the procedure/function, one must
+  - put the result in a global variable. (if applicable)
+  - add an explicit jump to the caller.
 ** Transformation: Recursion ⟶ Explicit stack
-We can understand recursion in the von Neumann model, by using a stack.
+In case of a recursive call, the steps 1. and 2. above are
+problematic. Indeed, they will overwrite the previous value! Hence one
+must use a new location each time: use a stack.
 
-Translation of a call as goto:
+The translation of a call then becomes:
 
- - save local variables/arguments/caller (in the presence of recursion: push)
- - goto
- - restore local variables/... (pop)
+  1. push the arguments to the variables corresponding to the
+    parameters on a stack;
+  2. push the return address;
+  3. goto the procedure's code.
 
-Translation of a return:
+... and the translation of the procedure/function must access its
+parameters on the stack.
 
-- goto caller
+(note that the result may remain a global: it is not used in the body of the function)
 
 *** Example: factorial.
 
 The following example shows step-by-step how to transform recursion to
 jumps+stack.
-#+INCLUDE "fact.c" src C
+#+INCLUDE "Final/fact.c" src C
 
 ** Transformation: Tail Recursion ⟶ Loop
 
-We will explain the transformation by using another algorithm to
-compute the factorial.
 
-*** Source
-#+begin_example
-function fact (n:Int,acc:Int)
-  if n = 0 then
-    return acc
-  else
-    return fact(n-1,n * acc)
-
--- assuming that fact will be called with (acc = 1) from the outside:
-function wrapper(n:Int)
-  return fact(n,1);
-#+end_example
-*** Question: explain the algorithm.
 *** Transformation: tail-call elimination
 
-The pattern 
+The pattern
 
 :   push (arguments,locals,caller)
 :   caller := continue
@@ -842,20 +867,42 @@ Hence we obtain the pattern
 :   pop(caller);
 :   goto caller
 
+(Another, simpler way to explain this optimisation is that the last call
+can overwrite the previous values, since they will never be used again)
+
 But the only thing we do after the call is to pop the caller and jump
 back...  So we might as well not jump to the piece of code labeled
 ~continue~, and let the caller do the cleanup job.
 
-:   top_of_stack := (arguments,locals) // do not overwrite the caller
+:   top_of_stack := (arguments,locals) // do not overwrite the pointer to the caller
 :   goto fact
+
 
 This is called [[http://en.wikipedia.org/wiki/Tail_call][tail-call elimination]].
 
 In the case of the factorial function, there are only tail calls, so
 the stack can be removed altogether!
 
+*** Source
+We will explain the transformation by using another algorithm to
+compute the factorial.
 
-#+INCLUDE "factTail.c" src C
+#+begin_example
+function fact (n:Int,acc:Int)
+  if n = 0 then
+    return acc
+  else
+    return fact(n-1,n * acc)
+
+-- assuming that fact will be called with (acc = 1) from the outside:
+function wrapper(n:Int)
+  return fact(n,1);
+#+end_example
+
+The algorithm works by keeping the product of from ~n~ to the desired
+value in the parameter ~acc~.
+
+#+INCLUDE "Final/factTail.c" src C
 
 * ✪ Interlude: Garbage Collection
 aka. Automatic memory management
@@ -888,7 +935,7 @@ able to call such methods, you better have a reference to it.
 
 See also the Java calling convention.
 
-** Encapsulation 
+** Encapsulation
 Mechanisms to make the fields private
 
 *** Paradigm: Abstract Data Type (ADT) 

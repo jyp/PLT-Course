@@ -27,10 +27,10 @@ void pop() {
 }
 
 int fact1 (int x,int y) {
-  if (x == 1) 
+  if (x == 1)
     return y;
   else
-    return fact1(x-1,y*x);               
+    return fact1(x-1,y*x);
 }
 
 // make order of eval. explicit
