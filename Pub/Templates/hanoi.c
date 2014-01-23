@@ -27,8 +27,8 @@ void init_pegs() {
   int i;
   for (i = 0; i < N; i++) {
     pegs[0][i] = i+1;
-    pegs[1][i] = 0;    
-    pegs[2][i] = 0;    
+    pegs[1][i] = 0;
+    pegs[2][i] = 0;
   }
 }
 
@@ -68,7 +68,7 @@ void move_many(int n, int source, int intermediate, int target) {
 int main() {
   init_pegs();
   show_pegs();
-  move_many_tc(N,0,1,2);
+  move_many(N,0,1,2);
   show_pegs();
   return 0;
 }

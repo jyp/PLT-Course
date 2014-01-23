@@ -811,7 +811,8 @@ In sum, the translation of a call is:
 At the end of the procedure/function, one must
   - put the result in a global variable. (if applicable)
   - add an explicit jump to the caller.
-** Transformation: Recursion ⟶ Explicit stack
+** Recursion
+*** Transformation: Recursion ⟶ Explicit stack
 In case of a recursive call, the steps 1. and 2. above are
 problematic. Indeed, they will overwrite the previous value! Hence one
 must use a new location each time: use a stack.
@@ -828,16 +829,14 @@ parameters on the stack.
 
 (note that the result may remain a global: it is not used in the body of the function)
 
-*** Example: factorial.
+**** Example: factorial.
 
 The following example shows step-by-step how to transform recursion to
 jumps+stack.
 #+INCLUDE "Final/fact.c" src C
 
-** Transformation: Tail Recursion ⟶ Loop
-
-
-*** Transformation: tail-call elimination
+*** Transformation: Tail Recursion ⟶ Loop
+**** Transformation: tail-call elimination
 
 The pattern
 
@@ -883,7 +882,7 @@ This is called [[http://en.wikipedia.org/wiki/Tail_call][tail-call elimination]]
 In the case of the factorial function, there are only tail calls, so
 the stack can be removed altogether!
 
-*** Source
+**** Example
 We will explain the transformation by using another algorithm to
 compute the factorial.
 
@@ -903,7 +902,11 @@ The algorithm works by keeping the product of from ~n~ to the desired
 value in the parameter ~acc~.
 
 #+INCLUDE "Final/factTail.c" src C
-
+**** Conclusion
+Tail calls and loops are essentially equivalent: they are two
+different manifestations of the same computing structure.
+*** Other example: Tour de Hanoi
+file:Templates/hanoi.c
 * ✪ Interlude: Garbage Collection
 aka. Automatic memory management
 The memory is freed automatically for you! (Magic!?)
