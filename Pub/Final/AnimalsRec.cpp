@@ -46,7 +46,7 @@ void test(Animal* a) {
 
 void test2(Animal a) {
   animal_sound(&a);
-  // a.sound(&a);  
+  // a.sound(&a);
  }
 
 main() {

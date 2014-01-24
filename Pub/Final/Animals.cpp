@@ -10,7 +10,7 @@ public:
 class Cat : public Animal {
   int x;
   virtual void sound() {
-    
+    x++;
     printf("meow %d\n",x);
   }
 };
@@ -23,7 +23,7 @@ class Dog : public Animal {
 
 
 void test(Animal* a) {
-  a->sound(); 
+  a->sound();
 }
 
 void test2(Animal a) {

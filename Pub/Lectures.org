@@ -925,23 +925,22 @@ Why are imperative languages usually not using GC?
 
 #+INCLUDE "Date.cpp" src cpp
 
-**** Translation: records + procedures
+**** Translation: object ⟶ records + procedures
 #+INCLUDE "DateRec.cpp" src cpp
 
-
 **** Note: calling convention
-
 Objects are, almost always, passed by reference.
 
-Methods often update the object they are applied to. If you want to be
+Methods often /update/ the object they are applied to. If you want to be
 able to call such methods, you better have a reference to it.
 
-See also the Java calling convention.
+See also the Java calling convention (exercises).
 
 ** Encapsulation
-Mechanisms to make the fields private
+Mechanisms to make the fields private; such fields are then accessible
+only via (public) method.
 
-*** Paradigm: Abstract Data Type (ADT) 
+*** Paradigm: Abstract Data Type (ADT)
  - Example: "stack", "priority queue", ... from your data structures course
  - Every data type comes with a specification (a class invariant)
  - ... maybe in the form of _unit tests_
@@ -952,7 +951,7 @@ Mechanisms to make the fields private
 
  - Dogma: never any direct field access (cf. "set" and "get")
 
- - Note: not every piece of data fits the ADT model. 
+ - Note: not every piece of data fits the ADT model.
    Example: "Person" record.
 
 *** Exercise
@@ -965,13 +964,13 @@ counts the number of days since Jan 1st 2000.
 *** Example
 
 Simple example of inheritance:
-#+INCLUDE "Animals.cpp" src cpp
+#+INCLUDE "Final/Animals.cpp" src cpp
 
 *** Transformation: embed method pointers
 
 The above example gets translated as follows:
 
-#+INCLUDE "AnimalsRec.cpp" src cpp
+#+INCLUDE "Final/AnimalsRec.cpp" src cpp
 
 **** Question: what happens on line (1)
 
@@ -986,18 +985,25 @@ The layout of the parent class is exactly the same as that of the subclass.
 (In general, there can be more fields/methods in the subclass, found
 _after_ the fields of the top class)
 **** Question: could you copy objects instead of passing by reference?
-Hint: what happens in the ~test~ function in the above example?
+No! If one passes a copy, the inherited methods/fields are not
+accessible when doing an "upcast". This means that, when one calls a
+method which is overriden, it could try to access fields that are not
+present.
+
+In C++: the method pointer is accessed only if the object is a
+reference.
+
 **** Liskov substitution principle and Polymorphism
 
 if class ~B~ inherits class ~A~, then, for any x,
 
 :   x : B  ⇒  x : A
 
-This means that 
+This means that
 
-1. ~x~ has multiple types 
+1. ~x~ has multiple types
 
-2. That is whenever a function ~f~ has an parameter of type ~A~, one
+2. That is: whenever a function ~f~ has an parameter of type ~A~, one
    can pass an argument of type ~B~.  By deriving from ~A~, a lot of
    code is automatically ready to work with ~B~.  (Conversely, if you
    write code working for ~A~, it will be useful in many contexts)
@@ -1016,17 +1022,11 @@ Liskov proposes the principle:
 if ~A~ is a subtype of ~B~ and prove a property about any object of
 ~A~, then it should be true of any object of type ~B~.
 
-This is somewhat stronger than the above.
+This is somewhat stronger than the definition of having multiple types
+given above.
 
 Read (✪) more about [[http://en.wikipedia.org/wiki/Polymorphism_(computer_science)][polymorphism]] and the [[http://en.wikipedia.org/wiki/Liskov_substitution_principle][substitution principle]] on
 Wikipedia.
-
-*** Exercises
-Modify the ~Cat~ class so that after meowing 10 times it makes another
-sound.
-
-Apply the transformation on the resulting code.
-    
 *** What happens when functions have arguments?
 In many languages, the type of the arguments of derived functions must
 be the SAME as that of the overridden function.
@@ -1051,10 +1051,14 @@ substitution.
 
 *** Extension (✪): method tables
 
-- Is the ~sound~ function pointer ever modified?
+Is the ~sound~ function pointer ever modified? No!
+
 - How can we save space if there are many methods per class? 
 
-⟶ One more indirection!
+⟶ Use one more indirection!
+
+- group the method pointers in a single table per class. Each object
+  then points to this table.
 **** Example
 #+begin_example
 record AnimalMethods
@@ -1072,7 +1076,7 @@ dogMethods = {Pet := petDog, ...}
   - Multiple "cases" can be implemented by inheriting a common class
   - Dogma: no "if".
   - Specific behavior is implemented in derived methods
-  
+
   - Open question: multiple dispatch!
 
 *** ✪ Reading/Exercise: Javascript prototypes
@@ -1113,9 +1117,8 @@ digraph G {
 [[file:diamond.svg]]
 
 Does a grad student have two names? ... no
+Does a grad student have two bosses? ... yes (one as a teacher and one as a student).
 BUT some other fields might need to be duplicated, if they have a
-function specific to (Student, or Teacher class). (eg. A grad student
-has a Boss as a Teacher and another boss as a Student)
 
 ⟶ Big headache
 
@@ -1173,7 +1176,7 @@ complicated.
 *** Interfaces
 
 As it is often the case, the issue is due to side effects
-(modification of hidden state). It appears only if the shared class
+(hidden modification of state). It appears only if the shared class
 has mutable fields. An important case of immutable fields are methods
 (their code is fixed once an for the lifetime of the object, in fact
 it is the same for all objects in a class). Hence the notion of
@@ -1183,11 +1186,11 @@ for interfaces, and one can inherit many of them.
 In sum, interfaces are for multiple subtyping but not multiple
 inheritance: polymorphism is well-supported, but not code-reuse.
 
-**** Exercise (⋆⋆)
-Modify the translation above to support interfaces
+**** ✪ Exercise (⋆⋆)
+Adapt the translation from objects to records to support interfaces
 
-**** Exercise (⋆⋆)
-Translation of interfaces via method tables.
+**** ✪ Exercise (⋆⋆)
+Adapt the translation of interfaces to use method tables.
 
 ** Forward reference: ``objects are poor man's [[closures]]''
  Note the similarity between objects and closures: they are both
