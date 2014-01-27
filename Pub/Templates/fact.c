@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int fact (int x) {
   if (x == 1)
     return x;
   else
-    return x * fact1(x-1);
+    return x * fact(x-1);
 }
 
 // pre-work: make order of evaluation explicit
