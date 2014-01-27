@@ -1,50 +1,16 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-int fact1 (int x) {
-  if (x == 1)
-    return x;
-  else
-    return x * fact1(x-1);
-}
-
-
-// pre-work: make order of evaluation explicit
-int fact2 (int x) {
-  int y;
-  if (x == 1)
-    return x;
-  else {
-    y = fact2(x-1);
-    return x * y;
-  }
-}
-
-// put result in a global var
-int result;
-
-void fact3 (int x) {
-  if (x == 1)
-    result = x;
-  else {
-    fact3(x-1);
-    // i don't need the temporary here
-    result = result * x;
-  }
-}
-
-// put arguments on a stack
 
 struct stack{
   int x;
-  int ret;
+  int ret; // rename to caller
   struct stack* next;
 };
 
 typedef struct stack* stk;
 
 stk s = NULL;
-
-
 
 void push(int x,int ret) {
   stk t = malloc(sizeof (struct stack));
@@ -58,45 +24,34 @@ void pop() {
   s = s->next;
 }
 
-
-void fact4() {
-  if (s->x == 1)
-    result = s->x;
-  else {
-    push(s->x-1,0);
-    fact4();
-    pop();
-    result = result * s->x;
+int fact (int x) {
+  int tmp;
+  push (x,0);
+ start:
+  if (s->x == 1) {
+    tmp = 1;
+    if (s->ret == 1) goto recCall; else return tmp;
+    /* goto s->ret; */
+  } else {
+    push (s->x-1, 1);
+    goto start;
+  recCall:
+    pop ();
+    tmp = s->x * tmp;
+    if (s->ret == 1) goto recCall; else return tmp;
+    /* goto s->ret; */
   }
+  return tmp;
 }
 
-int label1 = 0;
-int stop = 1;
-
-// put the return address on the stack and do the jumps by hand
-void fact5() {
-  fact5:
-  if (s->x == 1) 
-    result = s->x;
-  else {
-    push(s->x-1,label1);
-    goto fact5;
-  label1:
-    pop();
-    result = result * s->x;
-  }
-  
-  if (s->ret == label1) 
-    goto label1;
-}
-
+// 1. pre-work: make order of evaluation explicit
+// 2. put result in a var
+// 3.a use the stack instead of argument
+// 3.b prologue/epilogue (push 1st stack frame)
+// 4. transform the call into gotos
+// 6. encode translate computed goto
 
 int main(){
-  printf("%d\n",fact1(5));
-  printf("%d\n",fact2(5));
-  fact3(5); printf("%d\n",result);
-  push(5,stop); fact4(); pop(); printf("%d\n",result);
-  push(5,stop); fact5(); pop(); printf("%d\n",result);
+  printf("%d\n",fact(5));
 }
 
-int result;
