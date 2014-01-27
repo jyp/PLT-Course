@@ -1195,7 +1195,7 @@ Adapt the translation of interfaces to use method tables.
 ** Forward reference: ``objects are poor man's [[closures]]''
  Note the similarity between objects and closures: they are both
  encoded as state/environment + function. pointer.
-** TODO Traits & Objects as fix-points (✪)
+** TODO Traits; Objects as fix-points (✪)
 * Functional programming
 ** A bit of syntax
 *** Function definitions
