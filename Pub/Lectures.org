@@ -995,7 +995,7 @@ present.
 In C++: the method pointer is accessed only if the object is a
 reference.
 
-**** Liskov substitution principle and Polymorphism
+*** Liskov substitution principle and Polymorphism
 
 if class ~B~ inherits class ~A~, then, for any x,
 
@@ -1049,7 +1049,6 @@ See also the [[http://en.wikipedia.org/wiki/Covariance_and_contravariance_(compu
 **** Exercise
 Use the above two classes in a way that shows violation of
 substitution.
-
 
 *** Extension (✪): method tables
 
@@ -1176,7 +1175,6 @@ translation to "pure" imperative programming becomes much more
 complicated.
 
 *** Interfaces
-
 As it is often the case, the issue is due to side effects
 (hidden modification of state). It appears only if the shared class
 has mutable fields. An important case of immutable fields are methods

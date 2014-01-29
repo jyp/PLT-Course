@@ -3,38 +3,52 @@
 
 struct Date {
   int year, month, day;
+
 };
-  
-void shiftBy(struct Date* this_, int days) {
+
+void check_invariant(Date* this_) {
+  // (in reality this should be more clever)
+  if (this_->month <= 12 && this_->month >=1 && this_->day >= 1) //; day <= number_of_days_in(month);
+    {
+      // OK
+    } else {
+    // if we come here it means that the class breaks its own
+    // invariant. That is: is is badly implemented.
+
+    // throw badly_implemented_class;
+    
+  }
+}
+
+void shiftBy(Date* this_, int days) {
+  check_invariant(this_);
   this_->day += days;
-    // in reality this should be more clever
+  while (this_->day > 31)
+    {
+      this_->day -= 31;
+      this_->month ++;
+    }
+  // (in reality this should be more clever)
+  check_invariant(this_);
 }
 
-void show(struct Date* this_) {
+void show(Date* this_) {
   printf("%d-%d-%d\n",this_->year,this_->month,this_->day);
+  check_invariant(this_);
 }
 
-Date ymd(int y, int m, int d) {
-  struct Date this_;
-  this_.year = y;
-  this_.month = m;
-  this_.day = d;
-  // check that we have a valid date here
-  return this_;
-}
-  
-struct Date today() {
-  struct Date this_;
-  this_.year = 2013;
-  this_.month = 2;
-  this_.day = 3;
-  // initialise to today's date by querying the OS
+Date default_constructor() {
+  Date this_;
+  this_.year = 2014;
+  this_.month = 1;
+  this_.day = 29;
+  // in reality: initialise to today's date by querying the OS
+  check_invariant(&this_);
   return this_;
 }
 
 int main () {
-  struct Date appointment = today();
+  Date appointment = default_constructor(); // calls the default constructor
   shiftBy(&appointment,7);
   show(&appointment);
 }
-
