@@ -46,13 +46,13 @@ void test(Animal* a) {
 
 void test2(Animal a) {
   animal_sound(&a);
-  // a.sound(&a);
+  // a.sound(&a); // This may cause crashes!
  }
 
 main() {
   Cat c = construct_cat();
   test((Animal*)&c); // (2)
-  Animal a = { (void (*)(Animal*)) c.sound};
+  Animal a = construct_animal();
   test2(a);
-  //  test2(reinterpret_cast<struct Animal>(a));
+  // test2(*reinterpret_cast<struct Animal*>(&c));
 }

@@ -4,7 +4,7 @@
 
 struct stack{
   int x;
-  int ret; // rename to caller
+  int caller;
   struct stack* next;
 };
 
@@ -15,7 +15,7 @@ stk s = NULL;
 void push(int x,int ret) {
   stk t = malloc(sizeof (struct stack));
   t->x = x;
-  t->ret = ret;
+  t->caller = ret;
   t->next = s;
   s = t;
 }
@@ -26,22 +26,24 @@ void pop() {
 
 int fact (int x) {
   int tmp;
-  push (x,0);
+  push(x,0 /* 0 represents top-level call */);
  start:
   if (s->x == 1) {
     tmp = 1;
-    if (s->ret == 1) goto recCall; else return tmp;
-    /* goto s->ret; */
-  } else {
-    push (s->x-1, 1);
-    goto start;
-  recCall:
-    pop ();
-    tmp = s->x * tmp;
-    if (s->ret == 1) goto recCall; else return tmp;
-    /* goto s->ret; */
   }
-  return tmp;
+  else {
+    /* tmp = fact(x-1); */
+    push(s->x-1,1 /* 1 represents the recursive call */);
+    goto start;
+  returnFromRecCall:
+    pop();
+    tmp = s->x * tmp;
+  }
+  /* goto s->caller; (invalid C; we must encode it)*/
+  if (s->caller == 1)
+    goto returnFromRecCall;
+  else
+    return tmp;
 }
 
 // 1. pre-work: make order of evaluation explicit
@@ -52,6 +54,6 @@ int fact (int x) {
 // 6. encode translate computed goto
 
 int main(){
-  printf("%d\n",fact(5));
+  printf("%d\n",fact(10));
 }
 
