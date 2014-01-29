@@ -30,7 +30,7 @@ This document is generated from an org-mode file.
 + Inari Listenmaa
   - Exercise tutor
   - Room: EDIT 6461
-  - E-mail: inari (chalmers.se) 
+  - E-mail: inari (chalmers.se)
 * Schedule
 ** On TimeEdit:
 https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q5Y61Y5.html
@@ -46,7 +46,7 @@ https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q
 + Office hours:
   - JP: Thu: 13.15
   - Nik: Mon. 13.15
-  - Dan: Tue: 13.15
+  - Dan: Tue: 13.15 (moved on 28/1 and 4/2 to Friday 13.15)
   - Ina:
 ** <<Timetable>>
 
