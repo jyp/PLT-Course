@@ -178,6 +178,7 @@ For an overview of the process, see [[http://www.chalmers.se/insidan/SV/utbildni
 | NIKLAS JOHANSSON MIGLAVS | miglav                         |
 | DANIEL LARSSON           | dalars                         |
 ** Evaluation Meeting 1
+Only Erik was present at the meeting.
 ** Evaluation Meeting 2
 
 Items:
