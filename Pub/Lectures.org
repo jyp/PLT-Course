@@ -1201,7 +1201,7 @@ Adapt the translation of interfaces to use method tables.
 *** Function definitions
 Similar to mathematical notation:
 
-: minimum (x,y) = if x < y 
+: minimum (x,y) = if x < y
 :                   then x
 :                   else y
 
@@ -1209,13 +1209,13 @@ Similar to mathematical notation:
 
 In the literature:
 
-: minimum = λ(x,y). if x < y 
+: minimum = λ(x,y). if x < y
 :                       then x
 :                       else y
 
 In Haskell:
 
-: minimum = \(x,y) -> if x < y 
+: minimum = \(x,y) -> if x < y
 :                       then x
 :                       else y
 
@@ -1227,16 +1227,42 @@ In Haskell:
 
 *** Function arrow is RIGHT associative
 
-:   a -> b -> c     ===       a -> (b -> c)
+:   a -> b -> c     ==       a -> (b -> c)
 
-*** Reading (as necessary to understand Haskell syntax)
-- The gentle introduction to Haskell
+*** Reading (as much as necessary to understand Haskell syntax)
+- [[http://www.haskell.org/tutorial][The "gentle" introduction to Haskell]]
 - [[http://learnyouahaskell.com/][Learn you a Haskell, for great good!]]
 ** Algebraic Types
-Given a type ~A~ and a type ~B~, we can construct:
+In this subsection we will refine our understanding of the type
+structure, which we have used implicitly so far.
 
-- a product type ~A × B~
-- a sum type ~A + B~
+Summed up here:
+file:Final/AlgebraicTypes.hs
+
+*** Parametric types
+Parameterize a type by another type means to have abstraction over
+types.
+
+Most functional languages have abstraction over types, but some
+(many?) OO languages as well.
+
+Example in Java:
+
+:   Interface List<E> extends Collection<E>
+
+In this case ~E~ is the the type of elements in the list.
+
+In C++ one can use templates to abstract over types, but the semantics
+is a bit strange, so we won't discuss it further.
+
+
+In haskell one can write:
+
+:  type T a = ... some type referring to a ...
+
+or
+
+: data T a = ... constructors referring to a ...
 
 *** Sum types
 
@@ -1253,21 +1279,20 @@ bit of information (the tag) must be used for that purporse)
 
 - In Haskell, a sum type can be implemented like this:
 
-: data APlusB = ATag A | BTag B
+: data a + b = Inl a | Inr b
 
 note that each case uses a tag (~ATag~ or ~BTag~ in this case). The
 tags is used in pattern matching:
 
-:  test :: APlusB -> String
-:  test (ATag x) = "I got an A: " ++ show x
-:  test (BTag y) = "I got a  B: " ++ show y
+:  test :: String + Int -> String
+:  test (Inl x) = "I got an A: " ++ show x
+:  test (Inr y) = "I got a  B: " ++ show y
 
 The tags can be used to construct values, indeed, they are also (and
 most commonly) called constructors.
 
-:  ATag :: A -> APlusB
-
-:  BTag :: B -> APlusB
+:  Inl :: a -> a + b
+:  Inr :: b -> a + b
 
 *** Product types
 
@@ -1280,31 +1305,37 @@ of type ~A × B~.
 
 - In Haskell, a product type can be implemented like this:
 
-:  data ACrossB = Tag A B
+:  data a * b = Pair A B
 
-when pattern matching on the ~Tag~ one gets both an ~A~ and a ~B~.
+when pattern matching on the ~Pair~ tag one gets both an ~A~ and a ~B~.
 
-: test :: ACrossB -> String
-: test (Tag x y) = "I got an A: " ++ show x ++ " and a B:" ++ show y
+: test :: String * Int -> String
+: test (Pair x y) = "I got an A: " ++ show x ++ " and a B:" ++ show y
 
 There is also special syntax for product types. (Note: the syntax is
 the same for types and values)
 
-:  test : (A,B) -> String
+:  test : (String,Int) -> String
 :  test (x,y) = "I got an A: " ++ show x ++ " and a B:" ++ show y
 
 Product types are also called tuples.
 
 *** A bit of algebra
 
+An isomorphism ~A ≅ B~ is a pair of functions ~f : A -> B~ and ~g : B -> A~,
+with ~f ∘ g = id = g ∘ f~.
+
 For every a algebraic law, there is an isomorphism. Consider:
 
 :   (A + B)×C ≅ A×C + B×C
 
-Then we have two functions between them (and composing them is the
-identity).
+: f :: (a+b)*c -> (a*c) + (b*c)
+: f (Pair (Inl x) z) = Inl (Pair x z)
+: f (Pair (Inr x) z) = Inr (Pair x z)
 
-#+INCLUDE "Algebra1.hs" src haskell
+: g :: (a*c) + (b*c) -> (a+b)*c
+: g (Inl (Pair x z)) = (Pair (Inl x) z)
+: g (Inr (Pair x z)) = (Pair (Inr x) z)
 
 This is why the types are called algebraic!
 
@@ -1316,9 +1347,9 @@ Some more laws, which all translate to isomorphisms:
 :   (A × 0) ≅ 0
 
 - The unit type ~1~ is a tuple with no element; in Haskell written ~()~.
-- The empty type ~0~ is a , which can be defined in Haskell by 
+- The empty type ~0~ is a , which can be defined in Haskell by
 
-:  data Void
+:  data Zero
 
  with no constructors.
 
@@ -1328,7 +1359,7 @@ A boolean can be either of two given specific values. Hence:
 
 :   Bool ≅ 1 + 1
 
-In Haskell syntax one must choose tags:
+In Haskell the ~Bool~ type is predefined, with meaningful tag names.
 
 : data Bool = True | False
 *** Counting
@@ -1337,26 +1368,7 @@ Reading the type expression as a natural number gives you the number
 of distinct values that the type has:
 
 : Bool × Bool = (1 + 1) × (1 + 1)
-: Bool + Bool = (1 + 1) + (1 + 1) 
-
-*** Parametric types
-    
-In functional languages it is common to use abstraction in types
-themselves.
-
-For example we can abstract over ~A~ and ~B~ in the type
-
-:  data APlusB = ATag A | BTag B
-
-to obtain
-
-:  data Plus a b = ATag a | BTag b
-
-Notes:
-- the type variables start with a lower case character; the tags with
-  an upper case character
-- the type variables appear just before the ~=~ sign (as in function
-  definitions)
+: Bool + Bool = (1 + 1) + (1 + 1)
 
 *** Recursive types
 Lists can be defined as follows, using _recursion_:
@@ -1387,88 +1399,16 @@ Examples:
 
 #+INCLUDE "Lists.hs" src haskell
 
-*** Transformation: Algebraic data type ⟶ inheritance
-- ×: supported by records
-- +: one can use inheritance to implement sum types, as in the
-  following example.
-#+begin_src pseudo-java
-
-interface ListOfInt 
-   int sum(); 
-
-class Nil extends ListOfInt
-  -- no field
-  int sum() {
-    return 0;
-  }
-
-class Cons extends ListOfInt
-  int head;
-  ListOfInt tail;
-  int sum () {
-    return head + tail.sum();
-  }
-#+end_src
-**** Exercise
- Translate the append function.
-**** (✴) Type-parametric version
-Java has parametric classes, so a polymorphic list can even be encoded
-as follows. Review this code after <<Closures>> have been introduced.
-
-#+begin_src haskell
-data List a = Cons a (List a) | Nil
-
-fold k f Nil = k
-fold k f (Cons a xs) = f a (fold k f xs)
-#+end_src
-
-#+begin_example
-interface List<A> {
-  B fold<B>(B k¸ Function<A,B> f)
-}
-
-class Cons<A> extends List<A> {
-  A head;
-  List<A> tail;
-
-  B fold<B>(k,f) {
-    return f.apply(head,xs.fold(k,f));
-  }
-}
-
-class Nil<A> extends List<A> {
- -- no field
- 
-  B fold<B>(k,f) {
-    return k;
-  }
-}
-
-#+end_example
-Missing aspect: one should not allow to implement other instance of
-the List interface.
-
-(Note: one could also just represent Nil by a null object)
-
-*** Remark: the expression problem
-
-- In an OO language such as Java, it is convenient to add new cases to
-  sum types, but it is cumbersome to add a new algorithm. (In the
-  above example, ~sum~ is scattered among 3 classes/interfaces)
-- In a language such as Haskell, it is convenient to add a new
-  algorithm (the fold function is localized at a single place), but
-  cumbersome to add a case in a sum type (why?).
-
-** Function types
+*** Function types
 ~A → B~ corresponds to ~B^A~
 
 Indeed:
 
-- Bool → A ≅ A × A
-- (A+B) → C ≅ (A → C) × (B → C)
-- (A × B) → C ≅ A → (B → C)
+: Bool → A     ≅  A × A
+: (A+B) → C    ≅  (A → C) × (B → C)
+: (A × B) → C  ≅  A → (B → C)
 
-*** Transformation: Currification
+**** Transformation: Currification
 
 The last of these isomorphisms is (implicitly) used all the time in
 Haskell programming.
@@ -1484,6 +1424,22 @@ uncurrify = \g -> \(a,b) -> (f a) b
 Indeed, one almost always write ~A → B → C~ (which is equal to ~A → (B
 → C)~ by associativity rules) for a function which takes two
 arguments, one of type ~A~ and one of type ~B~.
+
+*** Transformation: Algebraic data type ⟶ inheritance
+- ×: supported by records
+- +: one can use inheritance to implement sum types, as in the
+  following example.
+
+:+INCLUDE "Final/AlgebraicTypes.java" src java
+
+*** Remark: the expression problem
+
+- In an OO language such as Java, it is convenient to add new cases to
+  sum types, but it is cumbersome to add a new algorithm. (In the
+  above example, ~sum~ is scattered among 3 classes/interfaces)
+- In a language such as Haskell, it is convenient to add a new
+  algorithm (the fold function is localized at a single place), but
+  cumbersome to add a case in a sum type (why?).
 
 ** Abstracting over functions
 *** Example: fold (sometimes called reduce)
