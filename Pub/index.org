@@ -4,6 +4,9 @@
 
 
 * Announcements
+- <2014-02-03 Mon> Answers for the first to exercise sheets are available.
+- <2014-02-01 Sat> Find the 'live-coding' templates [[file:/Templates][here]], and the
+  final states [[file:/Final][here]].
 - <2014-01-30 Thu> From now on, the 2nd exercise session
   (wed. 15.15-17.00) is CANCELED
 - <2014-01-28 Tue> The exercise session of Thu. Jan 30th will start at
