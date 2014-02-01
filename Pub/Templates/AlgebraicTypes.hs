@@ -1,18 +1,19 @@
 {-# LANGUAGE TypeOperators #-}
+module AlgebraicTypes where
 
 
 -- Example of parametric type
 type NewNameForList a = [a]
 
 
--- Sum
-data a + b = Inl a | Inr b
-data Zero -- no constructors
-
-
 -- Product
-data a * b = Pair a b
-type One = ()
+data a * b =
+type One =
+
+-- Sum
+data a + b =
+data Zero
+
 
 
 -- Examples:
@@ -25,18 +26,11 @@ type One = ()
 -- * Shape = Circle or Rectangle
 
 
+type Iso a b = (a -> b, b -> a) -- and function are inverses
 -- Algebra example: (a + b)×c  =  a×c + b×c
 -- Every algebraic equation induces an isomorphism.
 
 -- Note that Haskell does not understand precedence at the level of type operators
-f :: (a+b)*c -> (a*c) + (b*c)
-f (Pair (Inl x) z) = Inl (Pair x z)
-f (Pair (Inr x) z) = Inr (Pair x z)
-
-g :: (a*c) + (b*c) -> (a+b)*c
-g (Inl (Pair x z)) = (Pair (Inl x) z)
-g (Inr (Pair x z)) = (Pair (Inr x) z)
-
 
 -- Exponentials
 
