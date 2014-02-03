@@ -5,29 +5,29 @@ module AlgebraicTypes where
 -- Example of parametric type
 type NewNameForList a = [a]
 
-
 -- Product
-data a * b =
-type One =
+-- data a * b =
+-- data One =
+
+-- ex.
+-- Circle
+-- Rectangle
 
 -- Sum
-data a + b =
-data Zero
+-- data a + b =
+-- data Zero
 
+-- ex.
+-- Animal = Cat + Dog
+-- Shape = Circle + Rectangle
+-- Bool = 1+1
 
+-- Bool is predefined in the Haskell prelude, with more intuitive tags
 
--- Examples:
-
--- * Bool = 1+1
-
--- Note that, in the Haskell prelude, Bool is predefined with more
--- interesting tags
-
--- * Shape = Circle or Rectangle
-
-
-type Iso a b = (a -> b, b -> a) -- and function are inverses
--- Algebra example: (a + b)×c  =  a×c + b×c
+type a ≅ b = (a -> b, b -> a)
+-- and the functions are inverses
+-- (also known as bijection)
+-- Algebra example: (a + b)×c  ≅  a×c + b×c
 -- Every algebraic equation induces an isomorphism.
 
 -- Note that Haskell does not understand precedence at the level of type operators
@@ -44,11 +44,15 @@ type Iso a b = (a -> b, b -> a) -- and function are inverses
 
 -- Example 1. List a = 1 + (a * List a)
 
--- What is a list? 
+-- What is a list?
 
--- substitution model: Just expand the equation 
--- (For the brave: solve it and do Taylor series expansion.)
--- operational (von Neumann): Need an indirection
+-- Three possible models for types, three different answers:
+
+-- 1. substitution model: Just expand the List equation
+
+-- 2. (For the brave) use the algebraic model. ie. solve the equation and do Taylor series expansion.)
+
+-- 3. operational (von Neumann): Need an indirection
 
 -- In Haskell, recursive types must be introduced with 'data'. (No good reason)
 
