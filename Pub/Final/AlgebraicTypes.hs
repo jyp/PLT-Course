@@ -1,62 +1,167 @@
 {-# LANGUAGE TypeOperators #-}
+module AlgebraicTypes where
 
+import Prelude hiding (sum, reverse)
 
 -- Example of parametric type
-type NewNameForList a = [a]
-
-
--- Sum
-data a + b = Inl a | Inr b
-data Zero -- no constructors
-
+type MyList a = [a]
 
 -- Product
 data a * b = Pair a b
-type One = ()
+-- type a * b = (a,b)
+data One = Unit
 
+-- ex.
+type Point = Float * Float
+type Circle = Point * Float
+-- data Circle = Circle { center :: Point, radius :: Float }
 
--- Examples:
+type Rectangle = Point * Point
 
--- * Bool = 1+1
+-- Sum
+data a + b = Inl a | Inr b
+data Zero
 
--- Note that, in the Haskell prelude, Bool is predefined with more
--- interesting tags
+-- ex.
+-- type Animal = Cat + Dog
+type Shape = Circle + Rectangle
+-- type Bool = One + One
+-- data Bool = False | True
 
--- * Shape = Circle or Rectangle
+true = Inl Unit
+false = Inr Unit
 
+-- Bool is predefined in the Haskell prelude, with more intuitive tags
 
--- Algebra example: (a + b)×c  =  a×c + b×c
+type a ≅ b = (a -> b, b -> a)
+-- type a ≅ b = (a -> b) * (b -> a)
+-- and the functions are inverses
+-- (also known as bijection)
+-- Algebra example: (a + b)×c  ≅  a×c + b×c
 -- Every algebraic equation induces an isomorphism.
 
--- Note that Haskell does not understand precedence at the level of type operators
-f :: (a+b)*c -> (a*c) + (b*c)
+f :: (a + b)*c  ->  (a*c) + (b*c)
 f (Pair (Inl x) z) = Inl (Pair x z)
-f (Pair (Inr x) z) = Inr (Pair x z)
+f (Pair (Inr y) z) = Inr (Pair y z)
 
-g :: (a*c) + (b*c) -> (a+b)*c
+g :: (a*c) + (b*c) -> (a + b)*c
 g (Inl (Pair x z)) = (Pair (Inl x) z)
-g (Inr (Pair x z)) = (Pair (Inr x) z)
+g (Inr (Pair y z)) = (Pair (Inr y) z)
+  
+test1 :: ((a + b)*c)  ≅  ((a*c) + (b*c))
+test1 = (f,g)
 
+{-
+Check that the functions are inverses:
+
+∀ x -> f (g x) = x
+∀ x -> g (f x) = x
+
+let x = Inl (Pair x z)
+
+compute:
+f (g (Inl (Pair x z)))
+== f (Pair (Inl x) z)
+== (Inl (Pair x z))
+-}
+
+
+-- Note that Haskell does not understand precedence at the level of
+-- type operators
 
 -- Exponentials
+{-
+f' :: (Bool -> a)   ->  (a * a)
+f' h = Pair (h False) (h True)
 
---  Bool → A     ≅  A × A
+g' :: (a * a) -> (Bool -> a)
+g' (Pair x y) = \b -> case b of
+  False -> x
+  True -> y
+
+test2 :: (Bool -> a)   ≅  (a * a)
+test2 = (f',g')
+-}
 --  (A+B) → C    ≅  (A → C) × (B → C)
+
+f'' :: ((a+b) -> c)   ->  ((a -> c) * (b -> c))
+f'' h = Pair (\x -> h (Inl x)) (\y -> h (Inr y))
+
+g'' :: ((a -> c) * (b -> c)) -> ((a+b) -> c)
+g'' (Pair ac bc) = \b -> case b of
+  Inl x -> ac x
+  Inr y -> bc y
+
+
+test3 :: ((a+b) -> c)   ≅  ((a -> c) * (b -> c))
+test3 = (f'',g'')
+
 
 -- (de)Currification:
 --  (A × B) → C  ≅  A → B → C
+
+currify :: ((a * b) -> c) -> a -> b -> c
+currify f x y = f (Pair x y)
+
+uncurrify :: (a -> b -> c) -> ((a*b) -> c)
+uncurrify g = \(Pair x y) -> g x y
+
 
 -- Recursion
 
 -- Example 1. List a = 1 + (a * List a)
 
--- What is a list? 
 
--- substitution model: Just expand the equation 
--- (For the brave: solve it and do Taylor series expansion.)
--- operational (von Neumann): Need an indirection
+
+-- What is a list?
+
+-- Three possible models for types, three different answers:
+
+-- 1. substitution model: Just expand the List equationv
+{-
+List a = 1 + (a * List a)
+List a = 1 + (a * (1 + (a * List a)))
+       = 1 + a * 1 + a * (a * List a)
+       = 1 + a     + a^2 * List a
+       = ...
+       = 1 + a + a^2 + a^3 + ... + a^k + ...
+-}
+
+
+
+-- 2. (For the brave) use the algebraic model. ie. solve the equation
+-- and do Taylor series expansion.)
+
+
+
+-- 3. operational (von Neumann): Need an indirection
+
+-- List a = 1 + (a * List a)
+-- every recursive occurence must be accessed via a pointer.
 
 -- In Haskell, recursive types must be introduced with 'data'. (No good reason)
+
+-- type List a = One + (a * List a)
+
+-- data List a = TagName (One + (a * List a))
+
+data List a = Nil | Cons a (List a) 
+
+-- data [a] = [] | (:) a [a]
+
+sum' Nil = 0
+sum' (Cons x xs) = x + sum' xs
+
+sum [] = 0
+sum (x:xs) = x + sum xs
+
+append :: [a] -> [a] -> [a]
+append [] ys = ys
+append (x:xs) ys = x : append xs ys
+
+reverse :: [a] -> [a]
+reverse [] = []
+reverse (x:xs) = reverse xs ++ [x]
 
 -- In fact, there is special syntax for list based on colon, brackets and commas.
 
