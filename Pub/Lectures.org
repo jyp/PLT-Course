@@ -2148,13 +2148,98 @@ occur or not.
 
 My advice: be /very cautious/ when using side effects and lazy
 evaluation together. In Haskell, beware ~unsafePerformIO~!
+** Continuations (A tool to understand concurrency)
+*** What is a continuation?
+A continuation is simply the part of the program /execution/ that will
+take place after some given point. That is, a continuation can be
+represented by the point in the program to start execution plus the
+the values of variables to use.
+
+In Haskell, one can simply use a function to represent a continuation
+(the variables used in the function will automatically be saved by the
+language --- remember the representation of functions as closures).
+
+*** Transformation: explicit continuations
+
+In any program, one can make the flow of control manifest by
+explicitly passing continuations to every function (this is not
+specific to concurrent programming --- it works for any
+paradigm). Each function will take an extra argument (the
+continuation). Instead of returning a result directly, the result is
+passed to the continuation.
+
+The first step in this transformation is to decide an order of
+execution (which is already done if, for example, the code executes in
+~IO~ or is in imperative style). Hence we will work on code which uses
+the ~do~ notation.
+
+The transformation can then be summarized as follows, where 'io' is
+the type of side-effects.
+
+| Object kind | Source           | Target           |
+|-------------+------------------+------------------|
+| Type        | ~IO a~           | ~(a → io) → io~  |
+| Result      | ~return result~  | ~\k -> k result~ |
+| Sequence    | ~do x <- f; g x~ | ~\k -> f (g k)~  |
+
+After this transformation, there remains ONLY tail calls!  Hence,
+doing the transformation is similar to converting code to use explicit
+gotos.
+
+Remark: in essence, we have explained gotos only in terms of
+'functional' features; that is, in terms of the substitution model.
+
+*** Example
+Source:
+: fact :: Int -> Int
+: fact 0 = 1
+: fact n = n * (fact (n-1))
+
+: test = fact 12
+
+Target:
+: fact :: Int -> (Int -> eff) -> eff
+: fact 0 k = k 1
+: fact n k = fact (n-1) $ \fn ->
+:            k (n * fn)  -- Mult. closure
+:
+: test = fact id 12 -- the test function is not transformed.
+
+(Here, there is no side-effect occuring, so the type of side-effect
+can be abstract)
+*** Recovering the stack
+By making the new closures explicit we recover the stack.
+
+Let us fix ~eff~ to be ~Int~, as in the example.
+
+: data FactClosures = Mult Closure -- k
+:                          Int     -- n 
+:                   | Id 
+
+(This is our stack)
+
+: apply (Mult k n) m = apply k (m * n)
+: apply Id         m = m
+
+(This function is our "return" code)
+
+: fact :: Int -> Closure -> Int
+: fact 0 k = apply k 1
+: fact n k = fact (n-1) $ Mult k n
+
+(Note how the stack is built at each step)
+
+: test = fact 12 Id
+
+(We start with an empty stack)
+
 * Concurrent programming
 ** Disclaimer: Concurrent programming ≠ Parallel programming
-Parallel programming = expose (lack of) dependencies between parts of
-the computation, so that the computer can run subtasks in parallel.
-
 Concurrent programming = spawn independent processes, which live
 independent lives (dependencies might come, but "after the fact").
+
+Parallel programming = expose (lack of) dependencies between parts of
+the computation, so that the computer can run subtasks in parallel.
 
 In summary:
 - parallelism: about /speed/.
@@ -2302,7 +2387,6 @@ to post the reply.
 Attention: as it is the server will only create a thunk to the
 computation; only the client will force it!
 
-** TODO Translation GOTO -> Continuation
 ** Concurrency via Continuations
 
 Possible meaning for Concurrent Programming: processes are executed in
@@ -2313,47 +2397,18 @@ precisely. Namely, when a process is stopped, we need to have an
 object that represents /how to continue/ when control is returned to
 it.
 
-*** What is a continuation?
-A continuation is simply the part of the program /execution/ that will
-take place after some given point. That is, a continuation can be
-represented by the point in the program to start execution plus the
-the values of variables to use.
-
-In Haskell, one can simply use a function to represent a continuation
-(the variables used in the function will automatically be saved by the
-language --- remember the representation of functions as closures).
-
-*** Transformation: explicit continuations
-
-In any program, one can make the flow of control manifest by
-explicitly passing continuations to every function (this is not
-specific to concurrent programming --- it works for any
-paradigm). Each function will take an extra argument (the
-continuation). Instead of returning a result directly, the result is
-passed to the continuation.
-
-The first step in this transformation is to decide an order of
-execution (which is already done if, for example, the code executes in
-~IO~ or is in imperative style). Hence we will work on code which uses
-the ~do~ notation.
-
-The transformation can then be summarized as follows.
-
-| Object kind | Source           | Target              |
-|-------------+------------------+---------------------|
-| Type        | ~IO a~           | ~(a → cont) → cont~ |
-| Result      | ~return result~  | ~\k -> k result~    |
-| Sequence    | ~do x <- f; g x~ | ~\k -> f (g k)~     |
-
 *** Example
 Let us write a trivial server:
 #+INCLUDE "Server.hs" src haskell
 Same with explicit continuations:
 #+INCLUDE "ServerWithContinuations.hs" src haskell
 
+*** A continuation-based OS
 We can now also explain how a scheduler might work:
 #+INCLUDE "RuntimeSystem.hs" src haskell
 
+Note: saving/restoring the process state is done by the functional
+language (closures).
 *** Exercises
 - How many processes are created in the 1st version of the server?
 - How many are created in the transformed version?
