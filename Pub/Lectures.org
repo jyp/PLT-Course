@@ -1442,6 +1442,7 @@ arguments, one of type ~A~ and one of type ~B~.
   cumbersome to add a case in a sum type (why?).
 
 ** Abstracting over functions
+file:Final/Fold.hs
 *** Example: fold (sometimes called reduce)
 
 Consider the following function, to sum the elements in a list:
@@ -1503,7 +1504,7 @@ the type of map.
 Effectively, map has mutliple types. Because the type is parametrized
 over any types ~a~ and ~b~, this is called /parametric polymorphism/.
 
-*** Reading: 
+*** Reading:
 "Can Programming Be Liberated From the von Neumann Style?", John
 Backus, 1977 Turing Award Lecture
 http://www.thocp.net/biographies/papers/backus_turingaward_lecture.pdf
@@ -1525,11 +1526,13 @@ Higher-Order and Typed
    + especially, sec. 6.1, 7, 8
    + http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.117.1208&rep=rep1&type=pdf
 
+file:Final/HOT.hs
+
 ** Removing Higher-Order functions
 Remark that 1st order Haskell programs are easy to translate to C.
 
 *** Transformation: Inlining higher-order functions
-This transformation is essentially the inverse of abstraction.
+We can use the substitution model to see the meaning of higher-order abstraction.
 
 #+begin_src haskell
 map :: (a -> b) -> List a -> List b
@@ -1565,12 +1568,17 @@ multiply n xs = case xs of
     (x:xs) -> x * n : multiply f xs
 #+end_src
 
-Downsides:
-- explosion of the code size
-- maybe impossible! (e.g. if the code of map is not available; that is
-  if ~map~ itself is abstract)
+Inlining/the substition model can be used in real programs to get rid
+of higher-order functions. There are however to problems with this:
+
+1. explosion of the code size
+2. maybe impossible! (e.g. if the code of the function arguments is
+   not available.  That is, if we want to make a library of
+   higher-order functions.)
 
 *** Transformation: Defunctionalisation (explicit <<closures>>)
+file:Template/ExplicitClosures.hs
+file:Final/ExplicitClosures.hs
 **** Example
 - Source
 #+begin_src haskell
@@ -1578,7 +1586,7 @@ map :: (a -> b) -> List a -> List b
 map f [] = []
 map f (x:xs) = f x : map f xs
 
-call0 = map (\x -> x + 4) 
+call0 = map (\x -> x + 4)
 call1 n = map (\x -> x * n)
 #+end_src
 
@@ -1618,8 +1626,7 @@ lambda-abstraction. Do not be confused: remember the above definition.
 **** Exercise (⋆⋆): Implement the above example C. 
 Hint: Instead of a 'tag', use a function pointer.
 
-Solution: 
-
+Solution:
 #+INCLUDE "closure.cpp" src cpp
 
 Note the similarity with the implementation of [[objects]]!
@@ -1628,36 +1635,7 @@ Hints
  - Instead of a tag, make a derived class ('apply' is a method)
  - Or just apply the Algebraic Data Type ==> Classes transformation seen above.
 
-#+begin_src pseudo-Java
-List map(Closure c, List xs) {
-  while (xs != null) {
-    ... construct new list
-    ys.info = c.apply(xs.info);
-  }
-}
-
-interface Closure
-  int apply(int);
-  
-class Add4 implements Closure
-  int apply(int x);
-    return x+4
-
-class MultiplyBy implements Closure
-  field
-    int n; 
-  int apply(int x);
-    return x * n
-  constructor MultiplyBy(int n_arg) {
-     n = n_arg;
-  }
-
-// call0
-map(new Add4(), xs)
-
-// call1
-map(new MultipyBy(n), xs)
-#+end_src
+file:Final/ExplicitClosures.java
 
 See the similarity with Observer/EventListener pattern in Java:
 
@@ -2149,13 +2127,15 @@ occur or not.
 My advice: be /very cautious/ when using side effects and lazy
 evaluation together. In Haskell, beware ~unsafePerformIO~!
 ** Continuations (A tool to understand concurrency)
+source code: file:Final/Continuations.hs
 *** What is a continuation?
-A continuation is simply the part of the program /execution/ that will
-take place after some given point. That is, a continuation can be
-represented by the point in the program to start execution plus the
-the values of variables to use.
+A continuation is a part of the program /execution/ that will take
+place after some given point. That is, a continuation can be
+represented by the point in the program to start execution plus an
+environment (the values to use for the  of variables in scope at that
+point).
 
-In Haskell, one can simply use a function to represent a continuation
+In Haskell, one can use a mere function to represent a continuation
 (the variables used in the function will automatically be saved by the
 language --- remember the representation of functions as closures).
 
@@ -2213,8 +2193,8 @@ By making the new closures explicit we recover the stack.
 Let us fix ~eff~ to be ~Int~, as in the example.
 
 : data FactClosures = Mult Closure -- k
-:                          Int     -- n 
-:                   | Id 
+:                          Int     -- n
+:                   | Id
 
 (This is our stack)
 

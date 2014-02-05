@@ -2,20 +2,15 @@
 
 import Prelude hiding (map)
 
-type List a = [a]
-
-
 data Closure a b where
     Multiply :: Int -> Closure Int Int
-    
+
 apply :: Closure a b -> a -> b
 apply (Multiply n) x = n * x
 
-
-map :: Closure a b -> List a -> List b
+map :: a -> b -> [a] -> [b]
 map f [] = []
-map f (x:xs) = apply f x : map f xs
+map f (x:xs) = f x : map f xs
 
-
-multiply n = map (Multiply n)
+multiply n = map (\x -> x * 2)
 
