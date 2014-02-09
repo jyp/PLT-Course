@@ -12,6 +12,10 @@ product (x:xs) = x * product xs
 passed [] = []
 passed (x:xs) = if x >= 24 then x:passed xs else passed xs
 
+fold k f [] = k
+fold k f (x:xs) = f x (fold k f xs)
+
+filter p = fold [] (\x xs -> if p x then x:xs else xs)
 
 
 

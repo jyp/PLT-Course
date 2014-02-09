@@ -1,0 +1,35 @@
+* Models of computations; substition model
+NamesAbstractionSubstitution.hs
+
+
+* Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference
+InsertionSort
+LoopsToGoto
+
+Pointers
+ByRef
+ByValue
+* Recursion. Substitution model in the presence of recursion, Explicit stack
+fact
+factTail
+hanoi
+* Inheritance, Interfaces
+Date
+DateRec
+Animals
+AnimalsRec
+
+* Algebraic Types (Pattern matching, Parametric types, Currification)
+file:AlgebraicTypes.hs
+file:AlgebraicTypes.java
+* HO Abstraction, Polymorphic functions, Closures
+file:Fold.hs
+file:HOT.hs
+file:ExplicitClosure.hs
+file:ExplicitClosure.java
+* purity and laziness, continuations, Explicit state
+* Resource-managing processes                                                              
+* Explicit continuations                                                                   
+* Intro to LP; Unification                                                                 
+* Functions to Relations, Search as list of successes                                      
+

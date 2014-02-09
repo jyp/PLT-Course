@@ -27,7 +27,7 @@ This document is generated from an org-mode file.
   - Exercise tutor
   - Room: EDIT 5453
   - E-mail: danr (chalmers.se)
-+ Inari Listenmaa
++ Inari Listenmaa (retired)
   - Exercise tutor
   - Room: EDIT 6461
   - E-mail: inari (chalmers.se)
@@ -47,7 +47,6 @@ https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q
   - JP: Thu: 13.15
   - Nik: Mon. 13.15
   - Dan: Tue: 13.15 (moved on 28/1 and 4/2 to Friday 13.15)
-  - Ina:
 ** <<Timetable>>
 
 | Week | Starts | Lecture 1 | Lecture 2      | Exercises       | TAs       |
@@ -66,13 +65,13 @@ See table below for detail of contents.
 
 | Abbr   | Contents                                                                                 |
 |--------+------------------------------------------------------------------------------------------|
-| Intr   | Generalities                                                                             |
+| Intr   | Models of computations; types; abstraction                                               |
 | IP 1   | Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference |
 | IP 2   | Recursion. Substitution model in the presence of recursion, Explicit stack               |
 | OO     | Inheritance, Interfaces, Notion of co/contra variance                                    |
 | FP 1   | Algebraic Types (Pattern matching, Parametric types, Currification)                      |
 | FP 2   | HO Abstraction, Polymorphic functions, Translating away HOF (Inlining, Closures)         |
-| FP 3   | Explicit state, purity and laziness                                                      |
+| FP 3   | Explicit state, purity and laziness (+ continuations?)                                   |
 | CP 1   | Resource-managing processes                                                              |
 | CP 2   | Explicit continuations                                                                   |
 | LP 1   | Intro to LP; Unification                                                                 |

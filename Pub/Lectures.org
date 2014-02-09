@@ -1528,7 +1528,7 @@ Higher-Order and Typed
 
 file:Final/HOT.hs
 
-** Removing Higher-Order functions
+** Meaning of Higher-Order functions
 Remark that 1st order Haskell programs are easy to translate to C.
 
 *** Transformation: Inlining higher-order functions
