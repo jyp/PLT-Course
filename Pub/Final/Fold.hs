@@ -1,21 +1,29 @@
+{-# LANGUAGE RankNTypes #-}
 module Fold where
 
 import Prelude hiding (sum,product,map,filter)
 
 
-sum [] = 0
-sum (x:xs) = x + sum xs
+-- fold :: Int -> (Int -> Int -> Int) -> [Int] -> Int
+-- fold :: Char -> (Char -> Char -> Char) -> [Char] -> Char
+fold :: forall a b. b -> (a -> b -> b) -> [a] -> b
+fold base (#) [] = base
+fold base (#) (x:xs) = x # fold base (#) xs
 
-product [] = 1
-product (x:xs) = x * product xs
+-- fold :: [Int] -> (Int -> [Int] -> [Int]) -> [Int] -> [Int]
 
-passed [] = []
-passed (x:xs) = if x >= 24 then x:passed xs else passed xs
+passed :: [Int] -> [Int]
+passed = fold [] (\x t -> if x >= 24 then x:t else t)
 
-fold k f [] = k
-fold k f (x:xs) = f x (fold k f xs)
+-- passed [] = []
+-- passed (x:xs) = if x >= 24 then x:passed xs else passed xs
 
-filter p = fold [] (\x xs -> if p x then x:xs else xs)
+sum :: [Int] -> Int
+sum = fold 0 (+)
+
+product :: [Int] -> Int
+product = fold 1 (*)
+
 
 
 

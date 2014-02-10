@@ -66,7 +66,7 @@ See table below for detail of contents.
 | Abbr   | Contents                                                                                 |
 |--------+------------------------------------------------------------------------------------------|
 | Intr   | Models of computations; types; abstraction                                               |
-| IP 1   | Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference |
+| IP 1  | Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference |
 | IP 2   | Recursion. Substitution model in the presence of recursion, Explicit stack               |
 | OO     | Inheritance, Interfaces, Notion of co/contra variance                                    |
 | FP 1   | Algebraic Types (Pattern matching, Parametric types, Currification)                      |
