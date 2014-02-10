@@ -1623,11 +1623,11 @@ lambda-abstraction. Do not be confused: remember the above definition.
 
 (The definition of [[http://en.wikipedia.org/wiki/Closure][closures on wikipedia]] agrees with me.)
 
-**** Exercise (⋆⋆): Implement the above example C. 
+**** Exercise: Implement the above example C. 
 Hint: Instead of a 'tag', use a function pointer.
 
 Solution:
-#+INCLUDE "closure.cpp" src cpp
+file:Final/ExplicitClosure.cpp
 
 Note the similarity with the implementation of [[objects]]!
 **** Exercise: Implement the above example Java
@@ -1653,10 +1653,6 @@ button.onPress(new MyPrintAction("Hello there"));
 #+end_src
 
 Hence: "Objects are Poor Man's closures."
-
-**** Exercise: polymorphic closures
-In the above we had closures of type ~Int → Int~. How would you
-support polymorphic closures?
 
 ** Purity and its Consequences
 Did you know that side effects...
