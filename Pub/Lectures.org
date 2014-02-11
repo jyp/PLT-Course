@@ -1623,11 +1623,11 @@ lambda-abstraction. Do not be confused: remember the above definition.
 
 (The definition of [[http://en.wikipedia.org/wiki/Closure][closures on wikipedia]] agrees with me.)
 
-**** Exercise (⋆⋆): Implement the above example C. 
+**** Exercise: Implement the above example C. 
 Hint: Instead of a 'tag', use a function pointer.
 
 Solution:
-#+INCLUDE "closure.cpp" src cpp
+file:Final/ExplicitClosure.cpp
 
 Note the similarity with the implementation of [[objects]]!
 **** Exercise: Implement the above example Java
@@ -1652,11 +1652,10 @@ class MyPrintAction implements Listener -- "Function representation"
 button.onPress(new MyPrintAction("Hello there"));
 #+end_src
 
-Hence: "Objects are Poor Man's closures."
+Corresponding haskell code: 
+  onPress button $ print "Hello there"
 
-**** Exercise: polymorphic closures
-In the above we had closures of type ~Int → Int~. How would you
-support polymorphic closures?
+Hence the proverb: "Objects are Poor Man's closures."
 
 ** Purity and its Consequences
 Did you know that side effects...
@@ -1927,7 +1926,96 @@ not very good at predicting the future time integrated suffering their
 changes will result in.
 *** TODO Downsides of purity
 - Can be difficult to engineer efficient pure algorithms
-** Transformation: Explicit State
+** Continuations
+source code: file:Final/Continuations.hs
+*** What is a continuation?
+A continuation is a part of the program /execution/ that will take
+place after some given point. That is, a continuation can be
+represented by the point in the program to start execution plus an
+environment (the values to use for the  of variables in scope at that
+point).
+
+In Haskell, one can use a mere function to represent a continuation
+(the variables used in the function will automatically be saved by the
+language --- remember the representation of functions as closures).
+
+*** Transformation: explicit continuations
+
+In any program, one can make the flow of control manifest by
+explicitly passing continuations to every function. Each function will
+take an extra argument (the continuation). Instead of returning a
+result directly, the result is passed to the continuation.
+
+The first step in this transformation is to decide an order of
+execution. In this case we will evaluate the arguments first.
+
+The transformation can then be summarized as follows, where 'eff' is
+the type of (side-)effects.
+
+| Object kind     | Source        | Target                    |
+|-----------------+---------------+---------------------------|
+| Type            | ~args -> b~   | ~args -> (b → eff) → eff~ |
+| Function params | ~x1 x2 ... xn | ~x1 ... xn k~             |
+| Result          | ~result~      | ~k result~                |
+| Function call   | ~f a~         | ~a $ \x -> f x k~         |
+
+After this transformation, there remains ONLY tail calls!  Hence,
+doing the transformation is similar to converting code to use explicit
+gotos.
+
+Remark: in essence, we have explained gotos only in terms of
+'functional' features; that is, in terms of the substitution model.
+
+*** Example
+Source:
+: fact :: Int -> Int
+: fact 0 = 1
+: fact n = n * (fact (n-1))
+
+: test = fact 12
+
+Target:
+: fact :: Int -> (Int -> eff) -> eff
+: fact 0 k = k 1
+: fact n k = fact (n-1) $ \fn ->
+:            k (n * fn)  -- Mult. closure
+:
+: test = fact id 12 -- the test function is not transformed.
+
+(Here, there is no side-effect occuring, so the type of side-effect
+can be abstract)
+*** Recovering the stack
+By making the new closures explicit we recover the stack.
+
+Let us fix ~eff~ to be ~Int~, as in the example.
+
+: data FactClosures = Mult Closure -- k
+:                          Int     -- n
+:                   | Id
+
+(This is our stack)
+
+: apply (Mult k n) m = apply k (m * n)
+: apply Id         m = m
+
+(This function is our "return" code)
+
+: fact :: Int -> Closure -> Int
+: fact 0 k = apply k 1
+: fact n k = fact (n-1) $ Mult k n
+
+(Note how the stack is built at each step)
+
+: test = fact 12 Id
+
+(We start with an empty stack)
+
+*** TODO Application: accumulator side effect
+** TODO State
+Using continuation we can implement get and put
+
+
+** ✪ The State Monad
 
 - How can we represent imperative programs without using side effects?
 - Idea: pass around the "state of the world" explicitly
@@ -2126,93 +2214,6 @@ occur or not.
 
 My advice: be /very cautious/ when using side effects and lazy
 evaluation together. In Haskell, beware ~unsafePerformIO~!
-** Continuations (A tool to understand concurrency)
-source code: file:Final/Continuations.hs
-*** What is a continuation?
-A continuation is a part of the program /execution/ that will take
-place after some given point. That is, a continuation can be
-represented by the point in the program to start execution plus an
-environment (the values to use for the  of variables in scope at that
-point).
-
-In Haskell, one can use a mere function to represent a continuation
-(the variables used in the function will automatically be saved by the
-language --- remember the representation of functions as closures).
-
-*** Transformation: explicit continuations
-
-In any program, one can make the flow of control manifest by
-explicitly passing continuations to every function (this is not
-specific to concurrent programming --- it works for any
-paradigm). Each function will take an extra argument (the
-continuation). Instead of returning a result directly, the result is
-passed to the continuation.
-
-The first step in this transformation is to decide an order of
-execution (which is already done if, for example, the code executes in
-~IO~ or is in imperative style). Hence we will work on code which uses
-the ~do~ notation.
-
-The transformation can then be summarized as follows, where 'io' is
-the type of side-effects.
-
-| Object kind | Source           | Target           |
-|-------------+------------------+------------------|
-| Type        | ~IO a~           | ~(a → io) → io~  |
-| Result      | ~return result~  | ~\k -> k result~ |
-| Sequence    | ~do x <- f; g x~ | ~\k -> f (g k)~  |
-
-After this transformation, there remains ONLY tail calls!  Hence,
-doing the transformation is similar to converting code to use explicit
-gotos.
-
-Remark: in essence, we have explained gotos only in terms of
-'functional' features; that is, in terms of the substitution model.
-
-*** Example
-Source:
-: fact :: Int -> Int
-: fact 0 = 1
-: fact n = n * (fact (n-1))
-
-: test = fact 12
-
-Target:
-: fact :: Int -> (Int -> eff) -> eff
-: fact 0 k = k 1
-: fact n k = fact (n-1) $ \fn ->
-:            k (n * fn)  -- Mult. closure
-:
-: test = fact id 12 -- the test function is not transformed.
-
-(Here, there is no side-effect occuring, so the type of side-effect
-can be abstract)
-*** Recovering the stack
-By making the new closures explicit we recover the stack.
-
-Let us fix ~eff~ to be ~Int~, as in the example.
-
-: data FactClosures = Mult Closure -- k
-:                          Int     -- n
-:                   | Id
-
-(This is our stack)
-
-: apply (Mult k n) m = apply k (m * n)
-: apply Id         m = m
-
-(This function is our "return" code)
-
-: fact :: Int -> Closure -> Int
-: fact 0 k = apply k 1
-: fact n k = fact (n-1) $ Mult k n
-
-(Note how the stack is built at each step)
-
-: test = fact 12 Id
-
-(We start with an empty stack)
-
 * Concurrent programming
 ** Disclaimer: Concurrent programming ≠ Parallel programming
 Concurrent programming = spawn independent processes, which live

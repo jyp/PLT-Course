@@ -25,8 +25,10 @@ file:AlgebraicTypes.java
 * HO Abstraction, Polymorphic functions, Closures
 file:Fold.hs
 file:HOT.hs
+file:HOTExplicitClosure.hs
 file:ExplicitClosure.hs
 file:ExplicitClosure.java
+** TODO file:ExplicitClosure.cpp
 * purity and laziness, continuations, Explicit state
 * Resource-managing processes                                                              
 * Explicit continuations                                                                   
