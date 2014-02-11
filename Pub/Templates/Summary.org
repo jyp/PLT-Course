@@ -33,9 +33,10 @@ file:ExplicitClosure.java
 file:ContinuationsStack.hs
 file:ContinueAccum.hs
 file:ContinueState.hs
+file:Roots.hs
 file:Lazy.hs
 * Resource-managing processes
-* Explicit continuations                                                                   
-* Intro to LP; Unification                                                                 
-* Functions to Relations, Search as list of successes                                      
+* Explicit continuations
+* Intro to LP; Unification
+* Functions to Relations, Search as list of successes
 
