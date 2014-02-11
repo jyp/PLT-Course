@@ -29,8 +29,12 @@ file:HOTExplicitClosure.hs
 file:ExplicitClosure.hs
 file:ExplicitClosure.java
 ** TODO file:ExplicitClosure.cpp
-* purity and laziness, continuations, Explicit state
-* Resource-managing processes                                                              
+* purity, continuations, explicit state, and laziness
+file:ContinuationsStack.hs
+file:ContinueAccum.hs
+file:ContinueState.hs
+file:Lazy.hs
+* Resource-managing processes
 * Explicit continuations                                                                   
 * Intro to LP; Unification                                                                 
 * Functions to Relations, Search as list of successes                                      

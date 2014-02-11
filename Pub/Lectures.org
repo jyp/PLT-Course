@@ -1941,16 +1941,19 @@ language --- remember the representation of functions as closures).
 
 *** Transformation: explicit continuations
 
-In any program, one can make the flow of control manifest by
-explicitly passing continuations to every function. Each function will
-take an extra argument (the continuation). Instead of returning a
-result directly, the result is passed to the continuation.
+One can make the flow of control of a program manifest by transforming
+it as follows. Each function takes an extra parameter (the
+continuation).  If the function used to return a value of type ~b~,
+the continuation has type ~b -> eff~ (where ~eff~ is abstract for now
+--- we shall see later that it can be embued with arbitrary side
+effects).
 
-The first step in this transformation is to decide an order of
-execution. In this case we will evaluate the arguments first.
+Instead of returning a result directly, the result is passed to the
+continuation. The new return type of the function is therefore ~eff~.
 
-The transformation can then be summarized as follows, where 'eff' is
-the type of (side-)effects.
+In order to do this transformation, one must decide an order of
+execution. In this case we will evaluate the arguments first.  The
+transformation can then be summarized as follows.
 
 | Object kind     | Source        | Target                    |
 |-----------------+---------------+---------------------------|
@@ -1959,12 +1962,15 @@ the type of (side-)effects.
 | Result          | ~result~      | ~k result~                |
 | Function call   | ~f a~         | ~a $ \x -> f x k~         |
 
-After this transformation, there remains ONLY tail calls!  Hence,
-doing the transformation is similar to converting code to use explicit
+After this transformation, there remains ONLY tail calls. Indeed, calling the continuation
+is the last step in a function. Remember
+that tail calls can be implemented by simple gotos. Hence, calling
+a continuation is similar to doing a GOTO, and the transformation we
+have seen is similar to converting code to use explicit
 gotos.
 
-Remark: in essence, we have explained gotos only in terms of
-'functional' features; that is, in terms of the substitution model.
+In essence, this translation is a way to explaine GOTOs only in terms
+of 'functional' features; that is, in terms of the substitution model.
 
 *** Example
 Source:
@@ -2010,10 +2016,14 @@ Let us fix ~eff~ to be ~Int~, as in the example.
 
 (We start with an empty stack)
 
-*** TODO Application: accumulator side effect
+*** Application: accumulator side effect
+file:Template/ContinueAccum.hs
 ** TODO State
-Using continuation we can implement get and put
+Using continuation we can implement get and put.
 
+file:Template/ContinueState.hs
+
+The 
 
 ** ✪ The State Monad
 
