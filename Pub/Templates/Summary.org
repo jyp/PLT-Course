@@ -36,7 +36,9 @@ file:ContinueState.hs
 file:Roots.hs
 file:Lazy.hs
 * Resource-managing processes
-* Explicit continuations
-* Intro to LP; Unification
+file:CSPVariable.hs
+file:RPCServer.hs
+* Concurency to continuatinos
+* Intro to Logic Prog.; Unification
 * Functions to Relations, Search as list of successes
 
