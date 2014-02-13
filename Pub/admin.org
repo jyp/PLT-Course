@@ -201,7 +201,9 @@ Items:
 - Introduce the substitution model in the first lecture; when explaining
 abstraction and naming.
 
-- Move laziness translation to the next lecture.
+- Show the final step in the closure-conv + cps style (gotos + stack)
+- Move laziness to the next lecture.
+
 *** Study climate (communication, level of workload, tutorials)
 *** Problematic course items; can resources be used better?
 *** Course-specific questions in questionnaire; other material for final meeting?

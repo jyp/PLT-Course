@@ -1,0 +1,248 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage{minted}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\usepackage{pgf, tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{arrows}
+
+
+\newcommand{\Blue}[1]{\color{blue}#1\color{black}\xspace}
+
+\usepackage{array}
+% This is needed because raggedright in table elements redefines \\:
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\let\PBS=\PreserveBackslash
+
+%%%%%%%%%%%%%%
+\newcommand{\solution}[1] {}
+%\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
+
+%\newcommand{\comment}[1]{}
+\newcommand{\answer}[0]{\paragraph{Answer:}}
+% \newcommand{\answer}[1]{}
+\newcommand{\comment}[1]{\marginpar{#1}}
+
+
+\begin{document}
+
+\setlength{\parskip}{2pt}
+
+\newcommand{\examtime}{8:00, March 15th, 2014  (Location:Maskin)}
+\newcommand{\points}[1]{\marginpar{\bf #1 points}}
+\noindent
+\begin{tabular}{lr}
+CHALMERS TEKNISKA H\"OGSKOLA &\examtime{}.\\
+Dept. of Computer Science and Engineering & Programming Paradigms\\
+Jean-Philippe Bernardy                 & DAT121 / DIT331(GU) \\
+\end{tabular}
+
+\vspace{2.5cm} \noindent
+\begin{center} {\LARGE
+Exam in Programming Paradigms}
+\end{center}
+
+\vspace{1.5cm}
+
+\noindent
+\examtime{}.\\
+\begin{tabular}{ll}
+\textbf{Examiner:} & Jean-Philippe Bernardy
+\end{tabular}
+\vspace{1cm}
+
+\noindent
+Permitted aids: Pen and paper.
+% English-Swedish or English-other language dictionary.
+
+There are 5 questions, each worth 12 points. The total sum is 60
+points.
+
+Some questions come with \emph{remarks}: you must take those
+into account.
+Some questions come with \emph{hints}: even though they are meant to help you, you may ignore those.
+
+You will be asked to write programs in various paradigms. Choose the
+language appropriately in each case, and indicate which you choose at
+the beginning of your answer.
+
+\begin{tabular}[p]{cc}
+  Paradigm & Acceptable language \\ \hline
+  Imperative   & C or (an OO language where you refrain to use Objects) \\
+  Object oriented & C++ or Java \\
+  Functional & Haskell, ML \\
+  Concurrent & Erlang, Concurrent-Haskell \\
+  Logic & Prolog, Curry
+\end{tabular}
+
+You may also use pseudo-code resembling an actual language in the
+relevant list. In that case, make sure your code can only be
+interpreted in the way you intent (the responsibility lies with
+you). In particular, in the case of functional/logic languages,
+omitting necessary parentheses is NOT acceptable: \texttt{a b c} means
+\texttt{(a b) c} and is not acceptable pseudo-code for \texttt{a (b
+  c)}.
+
+
+\textbf{Chalmers:}
+24 points is required to pass (grade 3), 36 points is required for
+grade 4, and 48 points is required for grade 5.
+
+\textbf{GU:}
+24 points is required to pass (grade G) and 42 points is
+required for grade VG.
+
+\section{Explicit gotos}
+
+Consider the following optimised code for array copy:
+\begin{verbatim}
+  short *to, *from;
+  int count;
+  ...
+  {
+     /* pre: count > 0 */
+     int n = (count + 7) / 8;
+     switch(count % 8){
+       case 0:	do{     *to++ = *from++;
+       case 7:	        *to++ = *from++;
+       case 6:	        *to++ = *from++;
+       case 5:	        *to++ = *from++;
+       case 4:	        *to++ = *from++;
+       case 3:	        *to++ = *from++;
+       case 2:	        *to++ = *from++;
+       case 1:	        *to++ = *from++;
+                } while (--n > 0);
+     }
+  }
+\end{verbatim}
+
+Translate the above snippet to equivalent code that does not use
+\texttt{switch} nor \texttt{while}: use explicit gotos instead.
+Write your answer in a C-like language.
+
+Remark: you must retain the optimisation. Do not test the loop
+condition after each copy of a byte.
+
+Note: You can get partial credit for removing either the switch or the
+while.
+
+\section{Objects as records}
+
+Consider the following class hierarchy written in a Java-like
+language:
+\begin{minted}{java}
+class A {
+  float x;
+  float y;
+};
+
+class B {
+  int n;
+  void f(A p) {
+    <BODY 1>
+  };
+
+};
+
+class C extends B {
+  int m;
+  // the following method overrides f from class B
+  void f(A p) {
+    <BODY 2>
+  }
+};
+\end{minted}
+
+Translate the above classes to records with explicit method pointers.
+
+\answer{
+\begin{minted}{c}
+    struct A {
+      float x = 0
+      float y = 0
+    }
+    struct B {
+      int n = 0
+      void* f(B* this, A* p) = <BODY1>;
+    }
+    struct C {
+      int n = 0
+      void* f(C* this, A* p) = <BODY2>;
+      int m;
+    }
+\end{minted}
+}
+
+\newpage
+\section{Pattern matching and Higher-Order Abstractions}
+
+Assume the following Haskell data type:
+\begin{minted}{haskell}
+data List = Nil | Cons Int List
+\end{minted}
+and consider the following code:
+\begin{minted}{haskell}
+
+foobar :: List -> Int
+foobar []     = 0
+foobar (x:xs)
+  | x > 3     = (7*x + 2) + foobar xs
+  | otherwise = foobar xs
+
+sum [] = 0
+sum (x:xs) = x + sum xs
+
+map f Nil = Nil
+map f (Cons x xs) = Cons (f x) (map f xs)
+
+filter f Nil = Nil
+filter f (Cons x xs) = if f x then Cons x (filter f xs) else filter f xs
+
+fold k f Nil = k
+fold k f (Cons x xs) = f x (fold k f xs)
+\end{minted}
+
+Express the function \texttt{foobar} in terms of \texttt{sum}, \texttt{map} and \texttt{filter}.\points {5}
+Express the function \texttt{foobar} in terms of \texttt{fold} ONLY.\points {5}
+
+Remark: In particular you may NOT use recursion (directly) in your definitions.
+
+\answer{}{
+  \begin{minted}{haskell}
+  foobar = sum . map (\x -> 7*x+2) . filter (>3)
+  foobar = fold 0 f where
+     f x acc = if x > 3 then 7*x + 2 + acc else acc
+   \end{minted}
+}
+\section{Continuations,Closures}
+
+Consider the following code:
+\begin{minted}{haskell}
+f # x = f x
+
+data Tree a = Leaf | Bin (Tree a) a (Tree a)
+
+traverseC :: Tree Int -> (Int -> Int) -> Int
+traverseC Leaf k = k 0
+traverseC (Bin l x r) k =
+  traverseC l # \tl ->
+  traverseC r # \tr ->
+  k (tl + x + tr)
+
+traverse t = traverseC t id
+\end{minted}
+
+Replace function parametrers by explicit closures.
+
+\section{Relations}
+
+TODO
+
+
+\end{document}
