@@ -1,27 +1,27 @@
-module ContinueState where
-
-import Prelude hiding (sum)
+module ContinueAccum where
 
 data Tree a = Leaf | Bin (Tree a) a (Tree a)
+  deriving Show
+
 one x = Bin Leaf x Leaf
 example = Bin (one 1) 2 (Bin (one 3) 4 (one 5))
+
+
+-- flatten Leaf = []
+-- flatten (Bin l x r) = flatten l ++ x : flatten r
 
 (<>) :: () -> () -> ()
 _ <> _ = ()
 
-traverse :: (a -> ()) -> Tree a -> ()
-traverse visit Leaf = ()
-traverse visit (Bin l x r) =
-  traverse visit l <> visit x <> traverse visit r
+traverse :: (a -> (() -> eff) -> eff) -> Tree a -> (() -> eff) -> eff
+traverse _visit Leaf k = k ()
+traverse visit (Bin l x r) k =
+   traverse visit l $ \tl ->
+   visit x $ \vx ->
+   traverse visit r $ \tr ->
+   k (tl <> vx <> tr)
 
-traverseC :: (a -> (() -> f) -> f) -> Tree a -> (() -> f) -> f
-traverseC visit Leaf k = k () 
-traverseC visit (Bin l x r) k =
-  traverseC visit l $ \tl ->
-  visit x $ \fx ->
-  traverseC visit r $ \tr ->
-  k (tl <> fx <> tr)
+-- eff = [a]
 
-flatten t = traverseC (\x xs -> x:xs ()) t (\() -> [])
-
+flatten tree = traverse (\x xs -> x : xs ()) tree (\() -> [])
 

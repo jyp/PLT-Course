@@ -1722,7 +1722,6 @@ Examples:
   
     Value of x ?     
 
-*** Sharing is ALWAYS safe! (see below)
 *** Possible to use laziness  (see below)
 *** Copying and sharing
 
@@ -1955,12 +1954,12 @@ In order to do this transformation, one must decide an order of
 execution. In this case we will evaluate the arguments first.  The
 transformation can then be summarized as follows.
 
-| Object kind     | Source        | Target                    |
-|-----------------+---------------+---------------------------|
-| Type            | ~args -> b~   | ~args -> (b → eff) → eff~ |
-| Function params | ~x1 x2 ... xn | ~x1 ... xn k~             |
-| Result          | ~result~      | ~k result~                |
-| Function call   | ~f a~         | ~a $ \x -> f x k~         |
+| Object kind     | Source         | Target                    |
+|-----------------+----------------+---------------------------|
+| Type            | ~args -> b~    | ~args -> (b → eff) → eff~ |
+| Function params | ~x1 x2 ... xn~ | ~x1 ... xn k~             |
+| Result          | ~result~       | ~k result~                |
+| Function call   | ~f a~          | ~a $ \x -> f x k~         |
 
 After this transformation, there remains ONLY tail calls. Indeed, calling the continuation
 is the last step in a function. Remember
@@ -2129,6 +2128,29 @@ safePrint line =
 #+end_src
 
 ** Laziness
+
+From 'Why functional programming matters', John Hughes:
+
+The other new kind of glue that functional languages provide enables
+whole programs to be glued together. Recall that a complete functional
+program is just a function from its input to its output. If f and g
+are such programs, then (g . f) is a program that, when applied to
+its input, computes g (f input) The program f computes its output,
+which is used as the input to program g.  This might be implemented
+conventionally by storing the output from f in a temporary ﬁle. The
+problem with this is that the temporary ﬁle might occupy so much
+memory that it is impractical to glue the programs together in this
+way.  Functional languages provide a solution to this problem. The two
+programs f and g are run together in strict synchronization. Program f
+is started only when g tries to read some input, and runs only for
+long enough to deliver the output g is trying to read. Then f is
+suspended and g is run until it tries to read another input. As an
+added bonus, if g terminates without reading all of f's output, then
+f is aborted. Program f can even be a nonterminating program,
+producing an inﬁnite amount of output, since it will be terminated
+forcibly as soon as g is ﬁnished. This allows termination conditions
+to be separated from loop bodies — a powerful modularization.
+
 *** Example: map
 Assuming
 
