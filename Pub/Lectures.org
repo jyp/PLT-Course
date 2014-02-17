@@ -2264,7 +2264,7 @@ In this course we will focus on concurrency.
 The world is concurrent
 Things in the world don't share data
 Things communicate with messages
-Things fail                
+Things fail
             ⟵ the part we will not discuss in this course
 #+end_quote
   — Joe Armstrong 
@@ -2275,12 +2275,13 @@ create new processes using ~Control.Concurrent.forkIO~.
 For [[file:Process.hs][example]]:
 #+INCLUDE "Process.hs" src haskell
 
-*** Exercise (⋆)
+*** Exercise
 - Run the above example
 - What is the output?
 ** Shared state (aka Concurrent + Imperative)
 
-How should processes communicate? First idea: via a shared memory. For this we can use Haskell's [[http://hackage.haskell.org/packages/archive/base/4.4.1.0/doc/html/Data-IORef.html][IO Refs]].
+How should processes communicate? First idea: via a shared memory. For
+this we can use Haskell's [[http://hackage.haskell.org/packages/archive/base/4.4.1.0/doc/html/Data-IORef.html][IO Refs]].
 
 : Data.IORef.newIORef 
 
@@ -2289,6 +2290,8 @@ Big danger of "screwing up"!
 : x = 0
 : x = x + 1   //   x = x + 1
 : x ???
+
+We can test this using concurrent haskell:
 
 #INCLUDE "ConcurrentIORef.hs" src haskell
 
@@ -2308,6 +2311,19 @@ Big danger of "screwing up"!
   - priority inversion
   - ...
 
+** Paradigm: Concurrent + Functional
+A possible approach not to screw up:
+- NO shared state!
+- communication only happens via messages over channels.
+- In general: a shared resource is managed by a single process
+- Approach of [[http://en.wikipedia.org/wiki/Communicating_sequential_processes][CSP]], [[http://en.wikipedia.org/wiki/%CE%A0-calculus][π-calculus]], Erlang
+
+It is the approach we describe here, using "Concurrent Haskell" syntax.
+
+For example, the ordered binary tree we discussed before would be
+managed by a single process accepting (say) "insert" and "query"
+messages.
+
 ** Channels
 A channel is a medium for communication between processes. In Haskell,
 channels can be created with the ~newChan~ function. (Note that the
@@ -2317,20 +2333,8 @@ communicate via a channel (~c~).
 #+INCLUDE "Channel.hs" src haskell
 
 *** Exercise
-Execute each line of the main function in ghci, and try to guess what
-will happen.
-
-** Paradigm: Concurrent + Functional
-A possible approach not to screw up:
-- NO shared state!
-- communication only happens via messages over channels.
-- In general: a shared resource is managed by a single process
-- Approach of [[http://en.wikipedia.org/wiki/Communicating_sequential_processes][CSP]], [[http://en.wikipedia.org/wiki/%CE%A0-calculus][π-calculus]], Erlang
-- The approach we will describe here, using "Concurrent Haskell" syntax.
-
-For example, the ordered binary tree we discussed before would be
-managed by a single process accepting (say) "insert" and "query"
-messages.
+Execute each line of the main function in ghci, guessing what
+happens beforehand.
 
 ** Understanding the tradeoffs
 
@@ -2347,31 +2351,33 @@ Reading/Writing to a channel is a harmless kind of side effect... Or is it?
     to maintain it.
 
 *** Example
-Assume two discrete resources (ie. tape reader 1, tape reader
-2). Further assume that each tape reader is managed by a separate
-process (server), with a standard protocol "open", "read", "write", "close". 
+Assume two discrete resources, for example two tape readers. Further
+assume that each tape reader is managed by a separate process
+(server), with a standard protocol "open", "read", "write", "close".
 
 Assume now two client processes with code:
 
-:  do tape1 <- getTapeServer
-:     tape2 <- getTapeServer
-:     tape1 "open"
-:     tape2 "open"
+:  do tape1 <- openTape "some tape"
+:     tape2 <- openTape "some otherTape"
 :     ... copy between tapes
 :     tape1 "close"
 :     tape2 "close"
 
-It may happen that each tape is allocated to either client, and each
-of them will wait forever for the other to yield.
+It may happen that each tape reader is allocated to either client, and
+each of them will wait forever for the other to yield.
 
-Solution: have a single processes that manages copies of tapes.
+Solution: have a single processes which manages all tape readers. Its
+clients must declare upfront how many tape readers they will need.
 
 *** Example
 In fact, one can simulate an updatable variable using channels and
 processes. Here is how to do it:
-#+INCLUDE "CSPVariable.hs" src haskell
+#+INCLUDE "Final/CSPVariable.hs" src haskell
 This clearly shows that, /if they are used indiscriminately/, channels
 are no safer than shared memory.
+
+In practice though, the concurrent-functional paradigm discourages
+doing 'bad' things.
 
 *** Exercises
 - Use ~newVariable~, set and get in the ghci prompt.
@@ -2381,7 +2387,7 @@ are no safer than shared memory.
 - Can you change the program so that the get command does not need to
   create a channel? (⋆⋆)
 
-** Some erlang peculiarities
+** ✪ Some erlang peculiarities
 - Syntax (inspired by prolog?!)
 - Dynamic typing
 - Hot-code swapping
@@ -2396,19 +2402,16 @@ Write a server which accepts arguments to the function + channel where
 to post the reply.
 
 *** Answer
-#INCLUDE "GenericServer.hs" src haskell
+#INCLUDE "Final/RPCServer.hs" src haskell
 Attention: as it is the server will only create a thunk to the
 computation; only the client will force it!
 
 ** Concurrency via Continuations
-
 Possible meaning for Concurrent Programming: processes are executed in
 an interleaved fashion. A process can be "put on hold" at some point,
 and control is given to some other process. To understand this, we
-must first capture the notion of a "running process"
-precisely. Namely, when a process is stopped, we need to have an
-object that represents /how to continue/ when control is returned to
-it.
+must first capture the notion of a "running process" precisely. We are
+going to use the notion of "Continuation" for this purpose.
 
 *** Example
 Let us write a trivial server:
@@ -2434,15 +2437,13 @@ language (closures).
 Note that this sort of transformation to explicit continuations is
 often performed "in the wild". Indeed, this is useful when the right
 paradigm is concurrency, but the OS-level processes (or threads) are
-too costly to use. 
+too costly to use.
 
 For example, in a web server, it is convenient to have a process for
 each client, but there are often very many clients, and hence OS
-processes are too costly. (Older example: ATM.)
+processes are too costly.
 
-** Closing
-There are more models for concurrency than channels + processes
-(eg. revisions)
+(Older example: ATM.)
 
 * Logic programming
 ** TODO Add the example of map coloring; see  https://bernardopires.com/2013/10/try-logic-programming-a-gentle-introduction-to-prolog/
