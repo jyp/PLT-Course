@@ -2266,7 +2266,7 @@ Things in the world don't share data
 Things communicate with messages
 Things fail ⟵ the part we will not discuss in this course
 #+end_quote
-  — Joe Armstrong 
+  — Joe Armstrong
 ** Process
 A process is an independent thread of computation. In Haskell, we can
 create new processes using ~Control.Concurrent.forkIO~.
