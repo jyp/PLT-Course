@@ -2264,8 +2264,7 @@ In this course we will focus on concurrency.
 The world is concurrent
 Things in the world don't share data
 Things communicate with messages
-Things fail
-            ⟵ the part we will not discuss in this course
+Things fail ⟵ the part we will not discuss in this course
 #+end_quote
   — Joe Armstrong 
 ** Process
@@ -2273,7 +2272,7 @@ A process is an independent thread of computation. In Haskell, we can
 create new processes using ~Control.Concurrent.forkIO~.
 
 For [[file:Process.hs][example]]:
-#+INCLUDE "Process.hs" src haskell
+#+INCLUDE "Final/Process.hs" src haskell
 
 *** Exercise
 - Run the above example
@@ -2293,7 +2292,7 @@ Big danger of "screwing up"!
 
 We can test this using concurrent haskell:
 
-#INCLUDE "ConcurrentIORef.hs" src haskell
+#INCLUDE "Final/ConcurrentIORef.hs" src haskell
 
 - more realistic example: concurrent insertions in a balanced tree
 - In general: access to a shared resource must be controlled.
@@ -2330,7 +2329,7 @@ channels can be created with the ~newChan~ function. (Note that the
 channel is polymorphic, you may need to force the type to that you
 need.)  For [[file:Channel.hs][example]], in the following snippet, two processes
 communicate via a channel (~c~).
-#+INCLUDE "Channel.hs" src haskell
+#+INCLUDE "Final/Channel.hs" src haskell
 
 *** Exercise
 Execute each line of the main function in ghci, guessing what

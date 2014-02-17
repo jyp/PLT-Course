@@ -36,6 +36,8 @@ file:ContinueState.hs
 file:Roots.hs
 file:Lazy.hs
 * Resource-managing processes
+file:Process.hs
+file:ConcurrentIORef.hs
 file:CSPVariable.hs
 file:RPCServer.hs
 * Concurency to continuatinos
