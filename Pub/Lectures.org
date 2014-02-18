@@ -2413,10 +2413,12 @@ must first capture the notion of a "running process" precisely. We are
 going to use the notion of "Continuation" for this purpose.
 
 *** Example
-Let us write a trivial server:
-#+INCLUDE "Server.hs" src haskell
+Let us write a query-reply server. It is convenient to have one
+process handling each client.
+
+#+INCLUDE "Final/Server.hs" src haskell
 Same with explicit continuations:
-#+INCLUDE "ServerWithContinuations.hs" src haskell
+#+INCLUDE "Final/ServerWithContinuations.hs" src haskell
 
 *** A continuation-based OS
 We can now also explain how a scheduler might work:

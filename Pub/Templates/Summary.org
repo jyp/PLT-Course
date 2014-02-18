@@ -41,6 +41,9 @@ file:ConcurrentIORef.hs
 file:CSPVariable.hs
 file:RPCServer.hs
 * Concurency to continuatinos
+file:Server.hs
+file:ServerWithContinuations.hs
+file:RuntimeSystem.hs
 * Intro to Logic Prog.; Unification
 * Functions to Relations, Search as list of successes
 
