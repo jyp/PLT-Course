@@ -223,7 +223,8 @@ Remark: In particular you may NOT use recursion (directly) in your definitions.
 \newpage
 \section{Continuations and Closures}
 
-Consider the following code:
+Replace lambda abstractions by explicit closures in the following
+code.
 \begin{minted}{haskell}
 f # x = f x
 
@@ -239,8 +240,10 @@ traverseC (Bin l x r) k =
 traverse t = traverseC t (\x -> x)
 \end{minted}
 
-Replace lambda abstractions by explicit closures.
-
+\answer{
+  \begin{minted}{haskell}
+  \end{minted}
+}
 \section{Unification}
 
 The following implementation of the unification algorithm contains two mistakes. Hint: they are within the code of 'unify'.
@@ -295,5 +298,13 @@ applySubst f (Var i) = case M.lookup i f of
 applySubst f (Con c xs) = Con c (map (applySubst f) xs)
 \end{minted}
 
+\answer{
+  \begin{itemize}
+  \item The errors are in lines 4 and 7.
+  \item 4. One needs to check equality of f and g
+        7. One must add the occurs check.
+  \item if (x `elems` varsOf t) then Nothing else ...
+  \end{itemize}
+}
 
 \end{document}
