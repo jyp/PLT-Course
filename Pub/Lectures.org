@@ -2578,7 +2578,7 @@ Install either PAKCS or [[http://www-ps.informatik.uni-kiel.de/kics2/][KiCS2]]:
   some statement true (proof)
 - Invertible programs
   + if X known, Y is computed (f(X))
-  + if Y known, X is computed (f-1(Y))  
+  + if Y known, X is computed (f-1(Y))
   + Compute both directions with one piece of code
   + Very cool!!!! (parser/pretty-printer, compiler/decompiler...)
 - Sadly, often inefficient
@@ -2598,75 +2598,71 @@ only: a variable was always bound 'somewhere'.
 ** Unification
 
 The ~=:=~ specifies that that two values should be /unified/.
+Unification is the process of solving equation between symbolic terms.
 
-On ground terms, ~=:=~ behaves as ~==~ (equality test). However, if
-one side is a meta-variable, it /binds/ it.
+We can get a grip on unification by examining a few examples:
 
-For example, after performing the following unification ~x~ is /bound/ to ~'a'~.
-#+begin_example
-  x =:= 'a'
-#+end_example
+- if both sides are constants, then unification behaves as a test of
+  equality.  For example, ~2 =:= 2~ succeeds while ~1 =:= 2~ fails.
+- if one side is a metavariable and the other is a constant,
+  unification behaves as a definition for the metavariable: ~x =:= 2~
+  succeeds with x = 2
+- Unification is symmetric: we could also write the following ~2 =:=
+  x~ which succeeds with x = 2
+- Unification can even bind multiple variables at once: ~[x,1] =:=
+  [2,y]~ succeeds with x = 2 and y = 1
+- But unification can also fail. For example ~[] =:= [x,y]~ fails:
+  the lists have fixed, different lengths.
+- If both sides are variables, they become aliases of each other.
+  That is, if we solve both ~x =:= y~ and ~y =:= 2~ (together), then
+  we have x = y = 2
+- In a single constraint, the bindings made by unification propagate
+  everywhere. For exam ~[x,y,z] =:= [2,x,y]~ succeeds with all
+  variables equal to 2.
+- Unification can bind whole lists. For example ~x:xs =:= [a,b,c]]~
+  yields x = a, xs = [b,c].
 
-Unification is even more general than that: unification can bind
-multiple variables at once. For example, assume the following data
-type
+
+Unification can work on arbitrary data structures. 
+Given:
 : data Tree = Leaf Int | Bin Tree Tree
 
-and the (unbound) meta-variables ~x~ and ~y~. Then, after
+Solving the following
 : Bin (Leaf x) y =:= Bin (Leaf 1) (Bin (Leaf 2) (Leaf 3))
 
-we have
+yields
 : x = 1
 : y = Bin (Leaf 2) (Leaf 3)
 
-Finally, meta-variables can be bound to each other (we say that they
-are aliased). That is, if we have
-: x =:= y 
-
-and later
-: y =:= 2
-
-then
-: x = y = 2
-
-Note that aliasing is symmetric.
-
-Note that, in Curry, regular arithmetic works only on ground terms.
-: x + 2
-:   where x free 
-fails 
+Unification can not in general solve equations involving functions.
+: x + 2 =:= 4
+:   where x free
+fails
 
 (actually, KiCS2 is more clever and returns something!)
-*** Exercise (⋆): what are the bindings after...
-
- 1) 
-    : 2 =:= x
- 2) 
-    : [] =:= [x,y]
- 3) 
-    : [x,1] =:= [2,y]
- 4) 
-    : [x,y,z] =:= [w,x,y] 
-
 *** Unification failures
-Sometimes, the unification procedule /fails/. This can be caused by
-one of the following reasons:
+Let us examine systematically the causes of unification failure.
 **** Different structures
 
-The query 
+The queries
 : [] =:= [x] where x free
+: Leaf z =:= Bin x y
 fails because lists on the left and right have rigid, different
-shapes.
+shapes. In general, unification can succeed only if the constructors
+are the same on both sides.
 
 **** Occurs check
 
 The query
 : x =:= (1 : x) where x free
-fails, because x cannot be unified with something where occurs.
+fails, because ~x~ cannot be unified with something where it occurs.
 
 (✪) Could it make sense to succeed though?
 
-*** A specification of unification 
+*** Unification algorithm
+Informally, unification works as follows:
+- Unification should return a substitution. (A substitution is a
+  mapping from metavariables to terms.)
 - A variable which is uninstantiated—i.e. no previous unifications
   were performed on it—can be unified with an atom, a term, or another
   uninstantiated variable, thus effectively becoming its alias. A
@@ -2677,31 +2673,27 @@ fails, because x cannot be unified with something where occurs.
   function symbols and arities of the terms are identical and if the
   parameters can be unified simultaneously. Note that this is a
   recursive behavior.
-*** Exercise (⋆⋆⋆)
-Write an algorithm implementing the above specification. Hints
-- the unification algorithm should return a substitution from
-  metavariables to terms.
-- the unification algorithm should be generalised to a list of
-  unifications
 
-**** Answer.
+In order to implement the above, we need to generalize it, to work on
+a list of unification constraints and a current substitution, which
+can be seen as a partial result of the algorithm.
 
-Assume a list of assertions ~ts~ of the form ~{t₁=t'₁,...}~ and a
-substitution ~s~. A substitution is a mapping from free variables to
-terms. If ~ts~ is empty, the result is ~s~. Otherwise extract the
-first assertion in ~ts~ and proceed by case analysis:
+The algorithm is then as follows. Assume a list of assertions ~ts~ of
+the form ~{t₁=t'₁,...}~ and a substitution ~s~. If ~ts~ is empty, the result is
+~s~. Otherwise extract the first assertion in ~ts~ and proceed by case
+analysis:
 | First assertion in ~s~            | Action                                                          |
 |-----------------------------------+-----------------------------------------------------------------|
 | t = t                             | continue                                                        |
-| f(t₁,...) = f(t'₁,...)            | add the assertions t₁=t'₁,... to ts                             |
-| f(t₁,...) = g(t'₁,...)            | fail                                                            |
+| C(t₁,...) = C(t'₁,...)            | add the assertions t₁=t'₁,... to ts                             |
+| C(t₁,...) = D(t'₁,...)            | fail                                                            |
 | x = t where x occurs in t         | fail                                                            |
 | x = t where x does not occur in t | apply the substitution ~x ==> t~ to ~s~ and ~ts~, add it to ~s~ |
 | t = x                             | restart with x = t                                              |
 
 In code:
-#+INCLUDE "Unify.hs" src haskell
-*** Implementing unification in an imperative language
+#+INCLUDE "Final/Unify.hs" src haskell
+*** (✪) Implementing unification in an imperative language
 
 A possible way to implement unification, using side effects is the
 following. Each occurence of a meta-variable should be represented by

@@ -220,7 +220,7 @@ Remark: In particular you may NOT use recursion (directly) in your definitions.
      f x acc = if x > 3 then 7*x + 2 + acc else acc
    \end{minted}
 }
-\section{Continuations,Closures}
+\section{Continuations and Closures}
 
 Consider the following code:
 \begin{minted}{haskell}
@@ -238,7 +238,7 @@ traverseC (Bin l x r) k =
 traverse t = traverseC t id
 \end{minted}
 
-Replace function parametrers by explicit closures.
+Replace function parameters by explicit closures.
 
 \section{Relations}
 
