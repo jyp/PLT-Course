@@ -137,7 +137,7 @@ values can be arbitrary but must be consistent with the idea of the
 translation to records with explicit method pointers. If your solution
 contains pointers, you must show what they point to.
 
-\answer{}
+\answer{
 \begin{minted}{c}
     struct A {
       float x = 0
@@ -153,7 +153,7 @@ contains pointers, you must show what they point to.
       int m;
     }
 \end{minted}
-
+}
 
 
 \newpage
@@ -187,7 +187,7 @@ Remarks
 Hints: you should first define the type of values that you can push on
 the stack, and you can assume that labels can be used as values.
 
-\answer{}{
+\answer{
   \begin{minted}{c}
     
 Stack frame: (n:Int,tmp:Int,caller:Pointer)
@@ -211,9 +211,9 @@ ret2:
      pop;
      result := result + top.tmp;
      goto top.caller;  
+  \end{minted}
 }
 
-  \end{minted}
 
 \newpage
 \section{Pattern matching and Higher-Order Abstractions}
@@ -249,7 +249,7 @@ Express the function \texttt{foobar} in terms of \texttt{fold} ONLY.\points {5}
 
 Remark: In particular you may NOT use recursion (directly) in your definitions.
 
-\answer{}{
+\answer{
   \begin{minted}{haskell}
   foobar = sum . map (\x -> 7*x+2) . filter (>3)
   foobar = fold 0 f where
@@ -289,7 +289,7 @@ greaterThan x y = x < y
 \item Give the code of the closure application function. \points{2}
 \end{itemize}
 
-\answer{}{
+\answer{
   \begin{minted}{haskell}
     
 1.
@@ -333,7 +333,7 @@ Remarks:
   structure should remain the same.
 \end{itemize}
 
-\answer{}{
+\answer{
 hanoi 0 s i d k = k ()
 hanoi n s i d k = 
     hanoi (n-1) s d i (
@@ -377,7 +377,7 @@ constructors and relations. The types should be written in Curry or
 Haskell-like syntax.
 
 You may write the code in Curry syntax or Prolog syntax. 
-\answer{}{
+\answer{
 \begin{minted}{haskell}
     append :: List -> List -> List -> Success
     append []     ys zs = ys =:= zs
