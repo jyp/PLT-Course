@@ -180,6 +180,8 @@ For an overview of the process, see [[http://www.chalmers.se/insidan/SV/utbildni
 Only Erik was present at the meeting.
 ** Evaluation Meeting 2
 
+Niklas and Erik were present at the meeting.
+
 Items:
 *** Changes in the course since last year (History).
 **** new in 2012
@@ -202,8 +204,14 @@ Items:
 abstraction and naming.
 
 - Show the final step in the closure-conv + cps style (gotos + stack)
-- Move laziness to the next lecture.
+  - Move laziness to the next lecture.
+- Clarify in the schedule which parts of the lecture notes are relevant.
 
 *** Study climate (communication, level of workload, tutorials)
+- What is the purpose of each exercise session. This wasn't very clear.
+- It should be made clear to everyone that the (wednesdays) exercise
+  sessions are about working on exercises with the help of the TA.
 *** Problematic course items; can resources be used better?
+- Not so easy to find which part of the lecture notes correspond to the lectures
+
 *** Course-specific questions in questionnaire; other material for final meeting?

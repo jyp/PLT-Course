@@ -25,8 +25,8 @@
 %\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
 
 %\newcommand{\comment}[1]{}
-\newcommand{\answer}[0]{\paragraph{Answer:}}
-% \newcommand{\answer}[1]{}
+% \newcommand{\answer}[0]{\paragraph{Answer:}}
+\newcommand{\answer}[1]{}
 \newcommand{\comment}[1]{\marginpar{#1}}
 
 
@@ -131,7 +131,7 @@ condition after each copy of a byte.
 
 Note: You can get partial credit for removing either the switch or the
 while.
-
+\newpage
 \section{Objects as records}
 
 Consider the following class hierarchy written in a Java-like
@@ -208,21 +208,23 @@ fold k f Nil = k
 fold k f (Cons x xs) = f x (fold k f xs)
 \end{minted}
 
-Express the function \texttt{foobar} in terms of \texttt{sum}, \texttt{map} and \texttt{filter}.\points {5}
-Express the function \texttt{foobar} in terms of \texttt{fold} ONLY.\points {5}
+Express the function \texttt{foobar} in terms of \texttt{sum}, \texttt{map} and \texttt{filter}.\points {6}
+Express the function \texttt{foobar} in terms of \texttt{fold} ONLY.\points {6}
 
 Remark: In particular you may NOT use recursion (directly) in your definitions.
 
-\answer{}{
+\answer{
   \begin{minted}{haskell}
   foobar = sum . map (\x -> 7*x+2) . filter (>3)
   foobar = fold 0 f where
      f x acc = if x > 3 then 7*x + 2 + acc else acc
    \end{minted}
 }
-\section{Continuations,Closures}
+\newpage
+\section{Continuations and Closures}
 
-Consider the following code:
+Replace lambda abstractions by explicit closures in the following
+code.
 \begin{minted}{haskell}
 f # x = f x
 
@@ -235,14 +237,74 @@ traverseC (Bin l x r) k =
   traverseC r # \tr ->
   k (tl + x + tr)
 
-traverse t = traverseC t id
+traverse t = traverseC t (\x -> x)
 \end{minted}
 
-Replace function parametrers by explicit closures.
+\answer{
+  \begin{minted}{haskell}
+  \end{minted}
+}
+\section{Unification}
 
-\section{Relations}
+The following implementation of the unification algorithm contains two mistakes. Hint: they are within the code of 'unify'.
+\begin{itemize}
+\item In which lines(s) of the unify function do the mistake occur?
+  \points{4}
+\item Explain each of the mistakes. \points{4}
+\item Write a correct version of t4 pointshe algorithm. You need only write
+  the lines that need to be changed. In that case write which lines
+  replaces which source line. \points{4}
+\end{itemize}
 
-TODO
 
+
+\begin{minted}{haskell}
+    both f (x,y) = (f x, f y)
+    data Term = Con String [Term] -- the terms are the arguments to the constant
+              | Var Int -- metavariable
+      deriving Eq
+(1) unify :: [(Term,Term)] -> Substitution -> Maybe Substitution
+(2) unify [] s = Just s -- Base case
+(3) unify ((t,t'):ts) s | t == t' = unify ts s
+(4) unify ((Con f as,Con g bs):ts) s
+(5)   | length as == length bs = unify (zip as bs ++ ts) s
+(6)   | otherwise = Nothing -- Clash
+(7) unify ((Var x,t):ts) s = unify (map (both (applySubst (x ==> t))) ts) (s +> (x,t))
+(8) unify ((t, Var x):ts) s = unify ((Var x, t):ts) s -- Re-orient
+\end{minted}
+
+
+For completeness here is the code for management of substitutions.
+
+\begin{minted}{haskell}
+type Substitution = Map Int Term
+
+-- | Identity (nothing is substituted)
+idSubst = M.empty
+
+-- | Add an "assignment" to a substitution
+(+>) :: Substitution -> (Int, Term) -> Substitution
+s +> (x,t) = M.insert x t (M.map (applySubst (x ==> t)) s)
+
+-- | Single substitution
+(==>) :: Int -> Term -> Substitution
+x ==> t = M.singleton x t
+
+-- | Apply a substitution to a term
+applySubst :: Substitution -> Term -> Term
+applySubst f (Var i) = case M.lookup i f of
+                          Nothing -> Var i
+                          Just t -> t
+applySubst f (Con c xs) = Con c (map (applySubst f) xs)
+\end{minted}
+
+\answer{
+  \begin{itemize}
+  \item The errors are in lines 4 and 7.
+  \item 4. One needs to check equality of f and g
+        7. One must add the occurs check.
+  \item if (x `elems` varsOf t) then Nothing else ...
+  \end{itemize}
+}
 
 \end{document}
