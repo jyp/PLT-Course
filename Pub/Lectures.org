@@ -2412,20 +2412,31 @@ and control is given to some other process. To understand this, we
 must first capture the notion of a "running process" precisely. We are
 going to use the notion of "Continuation" for this purpose.
 
+Then, we must implement the concurrently primitives using this
+representation.
+
 *** Example
-Let us write a query-reply server. It is convenient to have one
-process handling each client.
+Let us write a server which has to manage many clients, each following
+a specific sequential protocol (dialogue). It is convenient to have one process
+handling each client.
 
 #+INCLUDE "Final/Server.hs" src haskell
-Same with explicit continuations:
+
+This server can be written using explicit continuations, as follows.
+
 #+INCLUDE "Final/ServerWithContinuations.hs" src haskell
 
 *** A continuation-based OS
-We can now also explain how a scheduler might work:
-#+INCLUDE "RuntimeSystem.hs" src haskell
+We now need to implement the concurrency primitives. To do so we must
+implement an operating system --- or at least the part of an operating
+system handling processes and communication between them.
 
-Note: saving/restoring the process state is done by the functional
-language (closures).
+#+INCLUDE "Final/RuntimeSystem.hs" src haskell
+
+Note: In a usual OS, there is a part dedicated to saving/restoring the
+state of each process.  Here, we did it by taking advantage of
+higher-order functions. The state of each process is implicitly stored
+in each closure, by the implementation of the functional language.
 *** Exercises
 - How many processes are created in the 1st version of the server?
 - How many are created in the transformed version?
