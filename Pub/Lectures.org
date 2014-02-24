@@ -2842,6 +2842,10 @@ At this point one can backtrack to the point B, and continue with the
 Note that this process works only if the program is written in the
 pure relational style.
 
+We can implement all this in Haskell as follows:
+
+file:Final/Search.hs
+
 *** List of successes
 Explicit representation of disjunction. That is, suppose we want to
 encode the (inverse) of the Parent relation from file:Family.curry as
@@ -2899,7 +2903,7 @@ digraph G {
    Imperative -> Concurrent [label="state-managing process"]
    Concurrent -> Functional [label="explicit continuations"]   
    Functional -> Logic [label="explicit result\n(embedding functions into relations)"]
-   Logic -> Functional [label="explicit list of successes"]
+   Logic -> Functional [label="explicit search"]
 }
 #+end_src
 
