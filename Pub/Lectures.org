@@ -2458,7 +2458,6 @@ processes are too costly.
 (Older example: ATM.)
 
 * Logic programming
-** TODO Add the example of map coloring; see  https://bernardopires.com/2013/10/try-logic-programming-a-gentle-introduction-to-prolog/
 ** Notion: Proposition
 A /proposition/ is a statement. It can be a statement made about
 people, the world, etc. but also about mathematical and computational
@@ -2583,11 +2582,12 @@ Install either PAKCS or [[http://www-ps.informatik.uni-kiel.de/kics2/][KiCS2]]:
 ** Paradigm
 
 Write a proposition, let the system find values for free variables
-which make it true.
+which make it true. In other words, just write a function to test if
+something is a solution, the system will find the solutions for you.
 
 - No more functions, only relations
-  + Y = f(X) is replaced by f(X,Y)
-  + if X and Y are known, f(X,Y) is a testable proposition
+  + Y = f(X) is replaced by r(X,Y)
+  + if X and Y are known, r(X,Y) is a testable proposition
 - Provide a number of facts (axioms/rules)
 - Let the computer search for an assignment of variables that make
   some statement true (proof)
@@ -2606,6 +2606,8 @@ which make it true.
   + restricted to very specific domains
 ** Example: family tree
 #+INCLUDE "Final/Family.curry" src curry
+** Example: Map coloring
+#+INCLUDE "Final/Map.curry" src curry
 ** Notion: ground terms
 The distinction between open/closed extends to arbitrary expressions
 (terms). We say that a term is ground if it has no free variable.
@@ -2668,11 +2670,11 @@ Given:
 : data Tree = Leaf Int | Bin Tree Tree
 
 Solving the following
-: Bin (Leaf x) y =:= Bin (Leaf 1) (Bin (Leaf 2) (Leaf 3))
+: Bin (Leaf x) y =:= Bin (Leaf 1) (Bin (Leaf x) (Leaf 3))
 
 yields
 : x = 1
-: y = Bin (Leaf 2) (Leaf 3)
+: y = Bin (Leaf 1) (Leaf 3)
 
 Unification can not in general solve equations involving functions.
 : x + 2 =:= 4
@@ -2906,7 +2908,7 @@ digraph G {
 #+results:
 [[file:transformations.svg]]
 
-* Postlude: Where to go from here?
+* ✪ Postlude: Where to go from here?
 ** Exam :)
 - re-do the exercises
 - exam will be in the same style
