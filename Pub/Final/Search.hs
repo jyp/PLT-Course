@@ -25,11 +25,11 @@ solve i eqs (p:ps) s = do
       i' = i + length fvs
       newVars :: Substitution
       newVars = M.fromList $ zipWith newName fvs [i..]
-      given = applySubst newVars $ fst eq
-      requ = map (applySubst newVars) $ snd eq
-  case unify2 given p of
+      lhs = applySubst newVars $ fst eq
+      rhs = map (applySubst newVars) $ snd eq
+  case unify2 lhs p of
     Nothing -> []
-    Just s' -> solve i' eqs (map (applySubst s') (requ++ps)) (s +> s')
+    Just s' -> solve i' eqs (map (applySubst s') (rhs++ps)) (s +> s')
 
 colors = ["Red","Green","Blue"]
 
