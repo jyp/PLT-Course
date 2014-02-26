@@ -2914,11 +2914,12 @@ digraph G {
 
 * ✪ Postlude: Where to go from here?
 ** Exam :)
+- review the code that we went through in the lectures
 - re-do the exercises
 - exam will be in the same style
 ** More features we did not discuss:
 - Exceptions
-- Constraints
+- (Inequational) Constraints
 - ...
 ** Explore the paradigms you like!
 You can take courses dedicated to specific paradigms
@@ -2948,8 +2949,9 @@ Courses:
 - Typed logical variables in Haskell
 - Continuation-based multiprocessing
 - Continuation-Based Program Transformation Strategies
+** A master/candidate project on Programming Languages?
 
-*** Local Words (ignore)
+* Local Words (ignore)
 LocalWords:  stylesheet css href html renderer Neumann shaper Perlis
 LocalWords:  Clojure de Erlang's multithreading GOTO Hoare's izable
 LocalWords:  shapers Prolog Prolog's Monads someValue ItsType greetMe

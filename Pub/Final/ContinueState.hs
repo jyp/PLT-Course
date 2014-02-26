@@ -13,7 +13,8 @@ type State s a = Cont (StateEffect s) a
 get :: State s s
 get k currentState = k currentState currentState
 
--- put :: s -> ()
+-- put :: s -> () (if we were to have side effects.)
+-- put :: s -> State s ()
 -- put :: s -> (() -> StateEffect s) -> StateEffect s
 put :: s -> (() -> s -> s) -> s -> s
 put newState k currentState = k () newState
