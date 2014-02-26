@@ -4,6 +4,9 @@
 
 
 * Announcements
+- <2014-02-26 Wed> Next monday's lecture will be about the lambda
+  calculus.  Sample examination problems can be found in the directory
+  file:OldExams
 - <2014-02-20 Thu> Nikita forgot about the correction session this morning. Apologies!
   You can still get your solutions corrected by coming to Nikita's office hours
   or arranging another time of your convenience by emailing him.

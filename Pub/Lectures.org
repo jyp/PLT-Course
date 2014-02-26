@@ -2920,6 +2920,7 @@ digraph G {
 ** More features we did not discuss:
 - Exceptions
 - (Inequational) Constraints
+- Stack-based
 - ...
 ** Explore the paradigms you like!
 You can take courses dedicated to specific paradigms
@@ -2936,7 +2937,7 @@ You can take courses dedicated to specific paradigms
 Courses:
 - Programming Languages
 - Compiler construction Course
-** Formal study of Syntax, Types, and Semantics
+** Formal study of Syntax, Types
    + Programming Languages Course
    + "Types and Programming Languages", Pierce
    + Types For Proofs And Programs Course
