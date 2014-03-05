@@ -147,7 +147,7 @@ class B {
   // this method is overridable (the default in Java)
   // in C++ it would be marked 'virtual'
   void f(A p) {
-    <BODY 1>
+    n = n+n;
   };
 
 };
@@ -156,14 +156,15 @@ class C extends B {
   int m;
   // the following method overrides f from class B
   void f(A p) {
-    <BODY 2>
+    n = n+n;
+    m = m+n;
   }
 };
 \end{minted}
 
 Translate the above classes to records with explicit method pointers.
 Remark: remember to write the code which initialises the explicit
-method pointers.
+method pointers. 
 
 \answer{
 \begin{minted}{c}

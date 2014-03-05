@@ -4,51 +4,42 @@ import Text.Show
 import Data.List
 import Prelude hiding (succ)
 
-type Sym = String
-data Term = Var Sym | Lam Sym Term | App Term Term
---  deriving Show
+type Variable = String
+
+data Term = Var Variable | App Term Term | Lam Variable Term
+ -- deriving Show
 
 instance Show Term where
     showsPrec _ (Var x) = showString x
     showsPrec d (Lam x t) = showParen (d > 0) (showString "\\" . showString x . showString "->" . showsPrec 0 t)
     showsPrec d (App t1 t2) = showParen (d > 1) (showsPrec 1 t1 . showString " " . showsPrec 2 t2)
 
-data Closure = Term :+ Env
-  deriving Show
-type Env = [(Sym,Closure)]
-type State = (Closure, Stack)
-type Stack = [Closure]
 
-lookupEnv :: Sym -> Env -> Closure
-lookupEnv x [] = error $ x ++ " not found in env!"
-lookupEnv x ((y,v):rho) = if x == y then v else lookupEnv x rho
+-- zero = Lam "f" $ Lam "z" $ Var "z"
+zero = Lam "c" $ Lam "n" $ Var "n"
+succ = Lam "xs" $ Lam "c" $ Lam "n" $
+           App (Var "c") (Var "xs" `App` Var "c" `App` Var "n")
+one = succ `App` zero
 
-eval :: Closure -> Stack -> Term
-eval (Var x    :+ rho) s   = case lookup x rho of
-  Just v -> eval v s
-  Nothing -> foldl App (Var x) (map (flip eval []) s)
-eval (Lam x t  :+ rho) (v:s) = eval (t :+ ((x,v):rho)) s
-eval (Lam x t  :+ rho) []  = Lam x $ eval (t :+ rho) []
-eval (App t1 t2 :+ rho) s  = eval (t1 :+ rho) ((t2 :+ rho):s)
+-- append :: List a -> List a -> List a
+plus = Lam "xs" $ Lam "ys" $ Var "xs" `App` succ `App` Var "ys"
 
-
-
-i_ = Lam "x" (Var "x")
+two = plus `App` one `App` one
 
 infixl `App`
 
+type Stack = [Closure]
+type Env = [(Variable,Closure)]
+data Closure = C Term Env
 
-zero = Lam "f" $ Lam "x" $ Var "x"
-succ = Lam "n" $ Lam "f" $ Lam "x" $ ((Var "n") `App` (Var "f")) `App` ((Var "f") `App` (Var "x"))
-two = succ `App` (succ `App` zero)
-twice = Lam "f" $ Lam "x" $ (Var "f" `App` ( Var "f" `App` Var "x"))
-_id = Lam "y" $ Var "y"
+eval :: Stack -> Closure -> Term
+eval s      (C (Var x)   env) = case lookup x env of
+  Nothing -> foldl App (Var x) (map (eval []) s)
+  Just  c -> eval s c
+eval (s:ss) (C (Lam x t) env) = eval ss (C t ((x,s):env))
+eval []     (C (Lam x t) env) = Lam x $ eval [] (C t env)
+eval s      (C (App t u) env) = eval (C u env:s) (C t env)
 
-value1 = twice `App` _id
+eval' t = eval [] (C t [])
 
-
-delta = Lam "x" $ App (Var "x") (Var "x") 
-
-s0 = (App delta delta, [], [])
-
-
+-- Closures?
