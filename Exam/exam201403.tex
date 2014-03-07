@@ -144,8 +144,10 @@ class A {
 
 class B {
   int n;
+  // this method is overridable (the default in Java)
+  // in C++ it would be marked 'virtual'
   void f(A p) {
-    <BODY 1>
+    n = n+n;
   };
 
 };
@@ -154,12 +156,15 @@ class C extends B {
   int m;
   // the following method overrides f from class B
   void f(A p) {
-    <BODY 2>
+    n = n+n;
+    m = m+n;
   }
 };
 \end{minted}
 
 Translate the above classes to records with explicit method pointers.
+Remark: remember to write the code which initialises the explicit
+method pointers. 
 
 \answer{
 \begin{minted}{c}
@@ -189,23 +194,23 @@ data List = Nil | Cons Int List
 and consider the following code:
 \begin{minted}{haskell}
 
-foobar :: List -> Int
+foobar :: [Int] -> Int
 foobar []     = 0
 foobar (x:xs)
-  | x > 3     = (7*x + 2) + foobar xs
+  | x > 20     = (5*x-20) + foobar xs
   | otherwise = foobar xs
 
 sum [] = 0
 sum (x:xs) = x + sum xs
 
-map f Nil = Nil
-map f (Cons x xs) = Cons (f x) (map f xs)
+map f [] = []
+map f (x:xs) = (f x) : (map f xs)
 
-filter f Nil = Nil
-filter f (Cons x xs) = if f x then Cons x (filter f xs) else filter f xs
+filter f [] = []
+filter f (x:xs) = if f x then x:(filter f xs) else filter f xs
 
-fold k f Nil = k
-fold k f (Cons x xs) = f x (fold k f xs)
+fold k f [] = k
+fold k f (x:xs) = f x (fold k f xs)
 \end{minted}
 
 Express the function \texttt{foobar} in terms of \texttt{sum}, \texttt{map} and \texttt{filter}.\points {6}
