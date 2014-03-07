@@ -187,11 +187,7 @@ method pointers.
 \newpage
 \section{Pattern matching and Higher-Order Abstractions}
 
-Assume the following Haskell data type:
-\begin{minted}{haskell}
-data List = Nil | Cons Int List
-\end{minted}
-and consider the following code:
+Consider the following code:
 \begin{minted}{haskell}
 
 foobar :: [Int] -> Int
@@ -213,8 +209,10 @@ fold k f [] = k
 fold k f (x:xs) = f x (fold k f xs)
 \end{minted}
 
-Express the function \texttt{foobar} in terms of \texttt{sum}, \texttt{map} and \texttt{filter}.\points {6}
-Express the function \texttt{foobar} in terms of \texttt{fold} ONLY.\points {6}
+\begin{itemize}
+  \item Express the function \texttt{foobar} in terms of \texttt{sum}, \texttt{map} and \texttt{filter}.\points {6}
+  \item Express the function \texttt{foobar} in terms of \texttt{fold} ONLY.\points {6}
+\end{itemize}
 
 Remark: In particular you may NOT use recursion (directly) in your definitions.
 
@@ -249,6 +247,7 @@ traverse t = traverseC t (\x -> x)
   \begin{minted}{haskell}
   \end{minted}
 }
+\newpage
 \section{Unification}
 
 The following implementation of the unification algorithm contains two mistakes. Hint: they are within the code of 'unify'.
@@ -256,7 +255,7 @@ The following implementation of the unification algorithm contains two mistakes.
 \item In which lines(s) of the unify function do the mistake occur?
   \points{4}
 \item Explain each of the mistakes. \points{4}
-\item Write a correct version of t4 pointshe algorithm. You need only write
+\item Write a correct version of the algorithm. You need only write
   the lines that need to be changed. In that case write which lines
   replaces which source line. \points{4}
 \end{itemize}
