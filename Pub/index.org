@@ -4,6 +4,10 @@
 
 
 * Announcements
+- <2014-03-06 tor> Answers to last August't exam can be found here: file:exam201308.pdf
+- <2014-03-04 tis> Answers to all corrected exercises can be found here: file:All.pdf
+- <2014-03-03 mån> Next lecture (Wednesday) is replaced by an exercise session where
+  students will work on the exam from last August.
 - <2014-02-26 Wed> Next monday's lecture will be about the lambda
   calculus.  Sample examination problems can be found in the directory
   file:OldExams
