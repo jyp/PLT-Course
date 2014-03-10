@@ -486,8 +486,10 @@ condition and body of the loop. Hence we may just abstract over these
 parts. We will present the next transformation in this format.
 
 *** In-class exercise: insertion sort
-+INCLUDE "Templates/InsertionSort.c" src C
-+INCLUDE "Final/InsertionSort.c" src C
+
+#+INCLUDE: "Templates/InsertionSort.c" src c
+
+#+INCLUDE: "Final/InsertionSort.c" src c
 ** Transformation: If then else ⟶ Gotos
 *** Source
 Assuming a Boolean-valued expression ~cond~ and two blocks of code
@@ -588,11 +590,11 @@ argument remains untouched at the call site.
 
 This is what happens in C (pitfall: arrays) and (by defaut) in C++.
 
-+INCLUDE "Template/ByValue.c" src C
+#+INCLUDE: "Templates/ByValue.c" src C
 
 ** Feature: parameter passing by reference
 *** Example
-+INCLUDE "Template/ByRef.c" src C
+#+INCLUDE: "Templates/ByRef.cpp" src cpp
 *** Meaning in the substitution model
 Consider a declaration of the procedure 'swap' together with a number of calls:
 #+begin_example
@@ -644,7 +646,7 @@ site. (pitfall: name capture; side effects)
 
 *** Reminder: References (aka. pointers)
 **** Example
-+INCLUDE "Templates/Pointers.c" src C
+#+INCLUDE: "Templates/Pointers.c" src C
 **** Addresses
 Assume a variable x:
 
@@ -834,7 +836,8 @@ of the function)
 
 The following example shows step-by-step how to transform recursion to
 jumps+stack.
-#+INCLUDE "Final/fact.c" src C
+
+#+INCLUDE: "Final/fact.c" src C
 
 *** Transformation: Tail Recursion ⟶ Loop
 **** Transformation: tail-call elimination
@@ -903,7 +906,7 @@ function wrapper(n:Int)
 The algorithm works by keeping the product of from ~n~ to the desired
 value in the parameter ~acc~.
 
-#+INCLUDE "Final/factTail.c" src C
+#+INCLUDE: "Final/factTail.c" src C
 **** Conclusion
 Tail calls and loops are essentially equivalent: they are two
 different manifestations of the same computing structure.
@@ -925,10 +928,11 @@ Why are imperative languages usually not using GC?
 ** Coupling data and related code
 *** Example: Date
 
-#+INCLUDE "Final/Date.cpp" src cpp
+#+INCLUDE: "Final/Date.cpp" src cpp
 
 **** Translation: object ⟶ records + procedures
-#+INCLUDE "Final/DateRec.cpp" src cpp
+
+#+INCLUDE: "Final/DateRec.cpp" src cpp
 
 **** Note: calling convention
 Objects are, almost always, passed by reference.
@@ -966,13 +970,14 @@ counts the number of days since Jan 1st 2000.
 *** Example
 
 Simple example of inheritance:
-#+INCLUDE "Final/Animals.cpp" src cpp
+
+#+INCLUDE: "Final/Animals.cpp" src cpp
 
 *** Transformation: embed method pointers
 
 The above example gets translated as follows:
 
-#+INCLUDE "Final/AnimalsRec.cpp" src cpp
+#+INCLUDE: "Final/AnimalsRec.cpp" src cpp
 
 **** Question: what happens on line (1)
 
@@ -1397,7 +1402,7 @@ Examples:
 
 *** Example
 
-#+INCLUDE "Lists.hs" src haskell
+#+INCLUDE: "Lists.hs" src haskell
 
 *** Function types
 ~A → B~ corresponds to ~B^A~
@@ -1430,7 +1435,7 @@ arguments, one of type ~A~ and one of type ~B~.
 - +: one can use inheritance to implement sum types, as in the
   following example.
 
-:+INCLUDE "Final/AlgebraicTypes.java" src java
+#+INCLUDE: "Final/AlgebraicTypes.java" src java
 
 *** Remark: the expression problem
 
@@ -2193,7 +2198,8 @@ If ~map~ is lazy, then it depends how much and how ~l2~ is used in the rest of t
    cat /etc/password | grep 'group=admin' | head 
 
 *** Example: Newton-Raphson Square Roots
-#+INCLUDE "Roots.hs" src haskell
+
+#+INCLUDE: "Final/Roots.hs" src haskell
 (This exmaple and the following are taken from _Why functional
 programming matters_ by J. Hughes.)
 *** TODO Example: Game tree
@@ -2202,10 +2208,12 @@ programming matters_ by J. Hughes.)
 First, let us define a spine-strict list.  One can have strict
 structures in Haskell, by annotating constructors with an exclamation
 mark.  For [[file:Strict.hs][example]]:
-#+INCLUDE "Strict.hs" src haskell
+
+#+INCLUDE: "Strict.hs" src haskell
 
 It's possible to recover laziness by introduction of /explicit thunks/:
-#+INCLUDE "Lazy.hs" src haskell
+
+#+INCLUDE: "Final/Lazy.hs" src haskell
 
 *** Lazy to imperative
 What if we want to encode laziness in an imperative language?
@@ -2226,7 +2234,7 @@ explicit memoization.
 
 **** Example: computation of fibonacci numbers
 
-#+INCLUDE "FibMemo.hs" src haskell
+#+INCLUDE: "FibMemo.hs" src haskell
 
 It takes some time to allocate the array. Then computing fib!50 is
 instant. Then computing fib!100000 takes a bit of time. (Compare this
@@ -2272,7 +2280,8 @@ A process is an independent thread of computation. In Haskell, we can
 create new processes using ~Control.Concurrent.forkIO~.
 
 For [[file:Process.hs][example]]:
-#+INCLUDE "Final/Process.hs" src haskell
+
+#+INCLUDE: "Final/Process.hs" src haskell
 
 *** Exercise
 - Run the above example
@@ -2329,7 +2338,8 @@ channels can be created with the ~newChan~ function. (Note that the
 channel is polymorphic, you may need to force the type to that you
 need.)  For [[file:Channel.hs][example]], in the following snippet, two processes
 communicate via a channel (~c~).
-#+INCLUDE "Final/Channel.hs" src haskell
+
+#+INCLUDE: "Final/Channel.hs" src haskell
 
 *** Exercise
 Execute each line of the main function in ghci, guessing what
@@ -2371,7 +2381,8 @@ clients must declare upfront how many tape readers they will need.
 *** Example
 In fact, one can simulate an updatable variable using channels and
 processes. Here is how to do it:
-#+INCLUDE "Final/CSPVariable.hs" src haskell
+
+#+INCLUDE: "Final/CSPVariable.hs" src haskell
 This clearly shows that, /if they are used indiscriminately/, channels
 are no safer than shared memory.
 
@@ -2420,18 +2431,18 @@ Let us write a server which has to manage many clients, each following
 a specific sequential protocol (dialogue). It is convenient to have one process
 handling each client.
 
-#+INCLUDE "Final/Server.hs" src haskell
+#+INCLUDE: "Final/Server.hs" src haskell
 
 This server can be written using explicit continuations, as follows.
 
-#+INCLUDE "Final/ServerWithContinuations.hs" src haskell
+#+INCLUDE: "Final/ServerWithContinuations.hs" src haskell
 
 *** A continuation-based OS
 We now need to implement the concurrency primitives. To do so we must
 implement an operating system --- or at least the part of an operating
 system handling processes and communication between them.
 
-#+INCLUDE "Final/RuntimeSystem.hs" src haskell
+#+INCLUDE: "Final/RuntimeSystem.hs" src haskell
 
 Note: In a usual OS, there is a part dedicated to saving/restoring the
 state of each process.  Here, we did it by taking advantage of
@@ -2605,9 +2616,11 @@ something is a solution, the system will find the solutions for you.
     compiler" for logic programming yet.
   + restricted to very specific domains
 ** Example: family tree
-#+INCLUDE "Final/Family.curry" src curry
+
+#+INCLUDE: "Final/Family.curry" src curry
 ** Example: Map coloring
-#+INCLUDE "Final/Map.curry" src curry
+
+#+INCLUDE: "Final/Map.curry" src curry
 ** Notion: ground terms
 The distinction between open/closed extends to arbitrary expressions
 (terms). We say that a term is ground if it has no free variable.
@@ -2635,7 +2648,8 @@ We can turn this around and encode functions as their graphs.
 
 In the following [[file:Lists.curry][example]], we see transform the List functions append
 and reverse to relations.
-#+INCLUDE "Final/Lists.curry" src curry
+
+#+INCLUDE: "Final/Lists.curry" src curry
 
 ** Unification
 
@@ -2734,9 +2748,9 @@ analysis:
 | t = x                             | restart with x = t                                              |
 
 In code:
-#+INCLUDE "Final/Unify.hs" src haskell
-*** (✪) Implementing unification in an imperative language
 
+#+INCLUDE: "Final/Unify.hs" src haskell
+*** (✪) Implementing unification in an imperative language
 A possible way to implement unification, using side effects is the
 following. Each occurence of a meta-variable should be represented by
 a reference to the meta-variable. When the unification algorithm gets
