@@ -34,7 +34,7 @@
 
 \setlength{\parskip}{2pt}
 
-\newcommand{\examtime}{8:00, March 15th, 2014  (Location:Maskin)}
+\newcommand{\examtime}{Afternoon, August 29th, 2014  (Location:V)}
 \newcommand{\points}[1]{\marginpar{\bf #1 points}}
 \noindent
 \begin{tabular}{lr}
@@ -224,40 +224,56 @@ Remark: In particular you may NOT use recursion (directly) in your definitions.
    \end{minted}
 }
 \newpage
-\section{Continuations and Closures}
+\section{Closures}
 
-Replace lambda abstractions by explicit closures in the following
-code.
-\begin{minted}{haskell}
-f # x = f x
+Transform the following code to use explicit closures for the
+\texttt{Region} type.
 
-data Tree a = Leaf | Bin (Tree a) a (Tree a)
+\begin{minted}{Haskell}
+data Point = Point Float Float
+type Region = Point -> Bool
 
-traverseC :: Tree Int -> (Int -> Int) -> Int
-traverseC Leaf k = k 0
-traverseC (Bin l x r) k =
-  traverseC l # \tl ->
-  traverseC r # \tr ->
-  k (tl + x + tr)
+(.+.) :: Point -> Point -> Point
+Point x1 y1 .+. Point x2 y2 = Point (x1 + x2) (y1 + y2)
 
-traverse t = traverseC t (\x -> x)
+opposite :: Point -> Point
+opposite (Point x y) = Point (negate x) (negate y)
+
+(.-.) :: Point -> Point -> Point
+p1 .-. p2 = p1 .+. opposite p2
+
+norm2 :: Point -> Float
+norm2 (Point x y) = x*x + y*y
+
+outside :: (Point -> Bool) -> Point -> Bool
+outside r p = not (r p)
+
+(∩) :: Region -> Region -> (Point -> Bool)
+r1 ∩ r2 = \p -> r1 p && r2 p
+
+withinRange :: Float -> Point -> (Point -> Bool)
+withinRange range p1 p2 = norm2 (p1 .-. p2) <= range * range
 \end{minted}
 
 \answer{
   \begin{minted}{haskell}
-data Closure = Id
-             | K1 (Tree Int) Int Closure
-             | K2 Int Int Closure
+data Region = Outside Region
+            | Intersect Region Region
+            | Within Float Point
 
-ap :: Closure -> Int -> Int
-ap Id x = x
-ap (K2 tl x k) tr = ap k (tl + x + tr)
-ap (K1 r x k) tl = traverseC r # K2 tl x k
+apply :: Region -> Point -> Bool
+apply (Outside r) p       = not (apply r p)
+apply (Intersect r1 r2) p = r1 p && r2 p
+apply (Within range p1) p2 = norm2 (p1 .-. p2) <= range * range
 
-traverseC Leaf k = ap k 0
-traverseC (Bin l x r) k = traverseC l # K1
+outside :: Region -> Region
+outside r = Outside r
 
-traverse t = traverseC t Id
+(∩) :: Region -> Region -> Region
+r1 ∩ r2 = Intersect r1 r2
+
+withinRange :: Float -> Point -> Region
+withinRange range p1 p2 = Within range p1 p2
   \end{minted}
 }
 \newpage
