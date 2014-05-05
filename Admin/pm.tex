@@ -1,0 +1,159 @@
+\documentclass[oneside,11pt]{article}
+\usepackage[paper=a4paper,margin=25mm,bottom=40mm]{geometry}
+\usepackage{times}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\pagestyle{fancy}
+\setlength{\parindent}{0mm}
+\rhead{}
+\chead{}
+\lhead{\includegraphics{ChalmGUtextsvEng.pdf}}
+\lfoot{
+\sf \small
+\begin{tabular}[b]{lr}
+CHALMERS TEKNISKA HÖGSKOLA AB\\
+GÖTEBORGS UNIVERSITET\\
+\textit{Data- och informationsteknik}\\
+412 96 Göteborg\\
+Telefon: 031-772 10 00 (CTH) / 031-786 00 00 (GU)
+\end{tabular}
+}
+\cfoot{}
+\rfoot{\includegraphics{ChalmGUmarke.pdf}}
+
+
+\begin{document}
+
+{
+\vspace{1cm}
+\huge
+DAT121/DIT331 Programming Paradigms VT 2014
+\vspace{1cm}
+}
+
+{\bf
+\begin{tabular}[t]{ll}
+Examiner and Course-Responsible: & Jean-Philippe Bernardy\\
+Course Assistants: & Nikita Frolov, Dan Rosén
+\end{tabular}
+}
+\hrule
+
+\section*{Course content}
+
+This course provides an overview of common programming paradigms,
+including imperative, object-oriented, logic, concurrent, and
+functional programming, and discusses the fundamental concepts
+underlying the design, definition, and implementation of modern
+computer languages. Students get practical experience with languages
+that exemplify a particular paradigm.
+
+The course contains:
+\begin{itemize}
+\item an introduction by example to each paradigm;
+\item theoretical and practical studies of transformations between
+  paradigms
+\end{itemize}
+
+Examples of such transformations include:
+\begin{itemize}
+  \item introduction/removal of jumps/loops,
+  \item introduction/removal of recursion/stack,
+  \item introduction/removal of higher order functions/closures
+  \item introduction/removal of processes/continuations,
+  \item introduction/removal of explicit search.
+\end{itemize}
+
+\section*{Learning outcomes}
+
+\begin{description}
+
+\item[Knowledge and understanding]
+    After completion of the course the student is expected to be able to
+  \begin{itemize}
+  \item Explain and contrast the principles of different paradigms both conceptually and in terms of particular language features.
+  \item Know the relationship between mainstream programming languages, the features they implement, and the paradigms they support.
+  \end{itemize}
+
+\item[Skills and abilities]
+    After completion of the course the student is expected to be able to
+  \begin{itemize}
+  \item Write small idiomatic programs in languages that represent different paradigms.
+  \item Read programs written idiomatically in a given paradigm, and translate (encode) them into a language that does not support the paradigm directly.
+  \item Read non-idiomatic programs (that use an encoding), and re-write them in their idiomatic paradigm.
+  \end{itemize}
+
+\item[Judgement and approach]
+    After completion of the course the student is expected to be able to
+  \begin{itemize}
+  \item Evaluate and apply the styles and strategies that characterize different paradigm and assess their suitability for solving a given problem.
+  \item Recognize the paradigms at the core of programs, regardless of shallow/accidental implementation choices. 
+  \end{itemize}
+\end{description}
+
+\section*{Course structure}
+The course consists of a lectures introducing the contents, and
+exercise sessions where students consolidate their understanding and
+skills.
+\section*{Examinations forms}
+The course is examined by an individual written examination, carried
+out in examination hall 8:30, March 15th, 2014
+
+There are 5 questions, each worth 12 points. The total sum is 60
+points.
+
+\textbf{Chalmers:}
+24 points is required to pass (grade 3), 36 points is required for
+grade 4, and 48 points is required for grade 5.
+
+\textbf{GU:}
+24 points is required to pass (grade G) and 42 points is
+required for grade VG.
+
+Permitted aids: pen and blank paper.
+
+\section*{Course literature}
+Lecture notes on the web page.
+\section*{Schedule}
+
+\begin{center}
+\begin{tabular}{rrllll}
+Week & Start date & Lecture 1 & Lecture 2 & Exercises & TAs\\
+\hline
+1 & 0120 & Intr & IP 1 & EX 1 & Ina + Nik\\
+2 & 0127 & IP 2 & OO & EX 2 & Nik + Ina\\
+3 & 0203 & FP 1 & No lecture ($\ast$) & No exercise ($\ast$) & \\
+4 & 0210 & FP 2 & FP 3 & EX 3 & Ina + Dan\\
+5 & 0217 & CP 1 & CP 2 & EX 4 & Nik + Dan\\
+6 & 0224 & LP 1 & LP 2 & EX 5 & Dan + Ina\\
+7 & 0303 & Review & Guest Lecture? & EX 6 & Dan + Nik\\
+\end{tabular}
+\end{center}
+
+($\ast$): Charm Days
+
+See table below for detail of contents.
+
+\begin{center}
+\begin{tabular}{ll}
+Abbr & Contents\\
+\hline
+Intr & Models of computations; types; abstraction\\
+IP 1 & Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference\\
+IP 2 & Recursion. Substitution model in the presence of recursion, Explicit stack\\
+OO & Inheritance, Interfaces, Notion of co/contra variance\\
+FP 1 & Algebraic Types (Pattern matching, Parametric types, Currification)\\
+FP 2 & HO Abstraction, Polymorphic functions, Translating away HOF (Inlining, Closures)\\
+FP 3 & Explicit state, purity and laziness (+ continuations?)\\
+CP 1 & Resource-managing processes\\
+CP 2 & Explicit continuations\\
+LP 1 & Intro to LP; Unification\\
+LP 2 & Functions to Relations, Search as list of successes\\
+Review & Solutions to (part of) sample exams\\
+\end{tabular}
+\end{center}
+
+%% \section*{Additional information}
+
+
+\end{document}
