@@ -25,8 +25,8 @@
 %\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
 
 %\newcommand{\comment}[1]{}
-\newcommand{\answer}[0]{\paragraph{Answer:}}
-%% \newcommand{\answer}[1]{}
+% \newcommand{\answer}[0]{\paragraph{Answer:}}
+\newcommand{\answer}[1]{}
 \newcommand{\comment}[1]{\marginpar{#1}}
 
 
@@ -58,7 +58,7 @@ Exam in Programming Paradigms}
 \vspace{1cm}
 
 \noindent
-Permitted aids: Pen and paper.
+Permitted aids: Pen and blank paper.
 % English-Swedish or English-other language dictionary.
 
 There are 5 questions, each worth 12 points. The total sum is 60
@@ -98,91 +98,48 @@ grade 4, and 48 points is required for grade 5.
 24 points is required to pass (grade G) and 42 points is
 required for grade VG.
 
-\section{Explicit gotos}
+\section{Recursion and Loops}
 
-Consider the following optimised code for array copy:
+Consider the following C code:
 \begin{verbatim}
-  short *to, *from;
-  int count;
-  ...
-  {
-     /* pre: count > 0 */
-     int n = (count + 7) / 8;
-     switch(count % 8){
-       case 0:	do{     *to++ = *from++;
-       case 7:	        *to++ = *from++;
-       case 6:	        *to++ = *from++;
-       case 5:	        *to++ = *from++;
-       case 4:	        *to++ = *from++;
-       case 3:	        *to++ = *from++;
-       case 2:	        *to++ = *from++;
-       case 1:	        *to++ = *from++;
-                } while (--n > 0);
-     }
+  int s(int n) {
+    int t = 0;
+    while (n /= 0) {
+      t = t+1;
+      if (n & 1 == 0)
+        n = n/2;
+      else
+        n = 3*n + 1;
+    }
+    return t;
   }
 \end{verbatim}
 
-Translate the above snippet to equivalent code that does not use
-\texttt{switch} nor \texttt{while}: use explicit gotos instead.
-Write your answer in a C-like language.
+Convert the above to a functional program, which does not use state (modifyable variables).
 
-Remark: you must retain the optimisation. Do not test the loop
-condition after each copy of a byte.
+Remark: you should use recursion to do so.
 
-Note: You can get partial credit for removing either the switch or the
-while.
-\newpage
-\section{Objects as records}
+Hint: the operator \& translates to \texttt{.\&.}
+\section{Algebraic Types and Objects}
 
-Consider the following class hierarchy written in a Java-like
-language:
-\begin{minted}{java}
-class A {
-  float x;
-  float y;
-};
+Consider the following Haskell code:
+\begin{verbatim}
+data Expr = Const Int | Plus Expr Expr | Mult Expr Expr
 
-class B {
-  int n;
-  // this method is overridable (the default in Java)
-  // in C++ it would be marked 'virtual'
-  void f(A p) {
-    n = n+n;
-  };
+eval (Const x) = x
+eval (Plus x y) = eval x + eval y
+eval (Mult x y) = eval x * eval y
+\end{verbatim}
 
-};
+Translate the code to an object oriented language. 
 
-class C extends B {
-  int m;
-  // the following method overrides f from class B
-  void f(A p) {
-    n = n+n;
-    m = m+n;
-  }
-};
-\end{minted}
+\begin{itemize}
+\item Write an interface corresponding to the declaration of Expr. It should contain a method correspoinding to Eval \points{4}
+\item Write a class for for the Const case. \points{4}
+\item Write a class for for the Plus case. \points{4}
+\end{itemize}
 
-Translate the above classes to records with explicit method pointers.
-Remark: remember to write the code which initialises the explicit
-method pointers. 
-
-\answer{
-\begin{minted}{c}
-    struct A {
-      float x = 0
-      float y = 0
-    }
-    struct B {
-      int n = 0
-      void* f(B* this, A* p) = <BODY1>;
-    }
-    struct C {
-      int n = 0
-      void* f(C* this, A* p) = <BODY2>;
-      int m;
-    }
-\end{minted}
-}
+Hint: you may leave the Mult case out, as it is the same as Plus.
 
 \newpage
 \section{Pattern matching and Higher-Order Abstractions}
@@ -223,13 +180,14 @@ Remark: In particular you may NOT use recursion (directly) in your definitions.
      f x acc = if x > 3 then 7*x + 2 + acc else acc
    \end{minted}
 }
+
 \newpage
 \section{Closures}
 
 Transform the following code to use explicit closures for the
 \texttt{Region} type.
 
-\begin{minted}{Haskell}
+\begin{minted}{haskell}
 data Point = Point Float Float
 type Region = Point -> Bool
 
@@ -248,12 +206,19 @@ norm2 (Point x y) = x*x + y*y
 outside :: (Point -> Bool) -> Point -> Bool
 outside r p = not (r p)
 
-(∩) :: Region -> Region -> (Point -> Bool)
-r1 ∩ r2 = \p -> r1 p && r2 p
+intersect :: Region -> Region -> (Point -> Bool)
+intersect r1 r2 = \p -> r1 p && r2 p
 
 withinRange :: Float -> Point -> (Point -> Bool)
 withinRange range p1 p2 = norm2 (p1 .-. p2) <= range * range
 \end{minted}
+
+\begin{itemize}
+\item Create a data type containing a case for each of the operation defined on a \texttt{Region} \points{3}
+\item Give the type of a function \texttt{Apply} which converts each constructor of the \texttt{Region} data type into a function. \points{3}
+\item Give its definition \points{3}
+\item Give the new code for each operation, by reference to the constructors of \texttt{Region} \points{3}
+\end{itemize}
 
 \answer{
   \begin{minted}{haskell}
@@ -269,75 +234,63 @@ apply (Within range p1) p2 = norm2 (p1 .-. p2) <= range * range
 outside :: Region -> Region
 outside r = Outside r
 
-(∩) :: Region -> Region -> Region
-r1 ∩ r2 = Intersect r1 r2
+intersect :: Region -> Region -> Region
+intersect r1 r2 = Intersect r1 r2
 
 withinRange :: Float -> Point -> Region
 withinRange range p1 p2 = Within range p1 p2
   \end{minted}
 }
+
 \newpage
-\section{Unification}
+\section{Functions to Relations}
 
-The following implementation of the unification algorithm contains two mistakes. Hint: they are within the code of 'unify'.
-\begin{itemize}
-\item In which lines(s) of the unify function do the mistake occur?
-  \points{4}
-\item Explain each of the mistakes. \points{4}
-\item Write a correct version of the algorithm. You need only write
-  the lines that need to be changed. Be explicit about where the
-  correct code should go or what it should replace. \points{4}
-\end{itemize}
-
-
-
+Consider the following Haskell code:
 \begin{minted}{haskell}
-    both f (x,y) = (f x, f y)
-    data Term = Con String [Term] -- the terms are the arguments to the constant
-              | Var Int -- metavariable
-      deriving Eq
-(1) unify :: [(Term,Term)] -> Substitution -> Maybe Substitution
-(2) unify [] s = Just s -- Base case
-(3) unify ((t,t'):ts) s | t == t' = unify ts s
-(4) unify ((Con f as,Con g bs):ts) s
-(5)   | length as == length bs = unify (zip as bs ++ ts) s
-(6)   | otherwise = Nothing -- Clash
-(7) unify ((Var x,t):ts) s = unify (map (both (applySubst (x ==> t))) ts) (s +> (x,t))
-(8) unify ((t, Var x):ts) s = unify ((Var x, t):ts) s -- Re-orient
+data Nat = Zero | Suc Nat
+
+fib :: Nat -> Nat
+fib Zero = Zero
+fib (Suc Zero) = (Suc Zero)
+fib (Suc (Suc n)) = fib (Suc n) + fib n
+
+(+) :: Nat -> Nat -> Nat
+Zero + n = n
+Suc n + m = Suc (n + m)
 \end{minted}
 
+Translate the function \texttt{fib} to a relation \texttt{fibo}, such that
+\begin{verbatim}
+       fibo x y      is equivalent to      fib x == y
+       plus x y z    is equivalent to      x + y == z
+\end{verbatim}
 
-For completeness here is the code for management of substitutions.
+\begin{enumerate}
+\item Write the type of the relations \texttt{fibo} and
+  \texttt{plus}. \points 6
+\item Write their code. \points 6
+\end{enumerate}
 
-\begin{minted}{haskell}
-type Substitution = Map Int Term
+Remark: you cannot use any other helper function in your answer, only
+constructors and relations. The types should be written in Curry or
+Haskell-like syntax.
 
--- | Identity (nothing is substituted)
-idSubst = M.empty
 
--- | Add an "assignment" to a substitution
-(+>) :: Substitution -> (Int, Term) -> Substitution
-s +> (x,t) = M.insert x t (M.map (applySubst (x ==> t)) s)
-
--- | Single substitution
-(==>) :: Int -> Term -> Substitution
-x ==> t = M.singleton x t
-
--- | Apply a substitution to a term
-applySubst :: Substitution -> Term -> Term
-applySubst f (Var i) = case M.lookup i f of
-                          Nothing -> Var i
-                          Just t -> t
-applySubst f (Con c xs) = Con c (map (applySubst f) xs)
-\end{minted}
+You may write the code in Curry syntax or Prolog syntax. 
 
 \answer{
-  \begin{itemize}
-  \item The errors are in lines 4 and 7.
-  \item 4. One needs to check equality of f and g
-        7. One must add the occurs check.
-  \item if (x `elems` varsOf t) then Nothing else ...
-  \end{itemize}
-}
+\begin{minted}{haskell}
+    fibo :: Nat -> Nat -> Success
+    fibo Zero Zero = success
+    fibo (Suc Zero) (Suc Zero) = success
+    fibo (Suc (Suc n)) m = fibo (Suc n) a &
+                           fibo n b &
+                           plus a b m
+      where a b free
 
+    plus :: Nat -> Nat -> Nat -> Success
+    plus Zero m n = m =:= n
+    plus (Suc m) n (Suc p) = plus m n p
+  \end{minted}
+}
 \end{document}
