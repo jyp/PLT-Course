@@ -203,19 +203,19 @@ p1 .-. p2 = p1 .+. opposite p2
 norm2 :: Point -> Float
 norm2 (Point x y) = x*x + y*y
 
-outside :: (Point -> Bool) -> Point -> Bool
-outside r p = not (r p)
+outside :: Region -> Region
+outside r = \p -> not (r p)
 
-intersect :: Region -> Region -> (Point -> Bool)
-intersect r1 r2 = \p -> r1 p && r2 p
+intersect :: Region -> Region -> Region
+intersect r1 r2 p = r1 p && r2 p
 
-withinRange :: Float -> Point -> (Point -> Bool)
+withinRange :: Float -> Point -> Region
 withinRange range p1 p2 = norm2 (p1 .-. p2) <= range * range
 \end{minted}
 
 \begin{itemize}
-\item Create a data type containing a case for each of the operation defined on a \texttt{Region} \points{3}
-\item Give the type of a function \texttt{Apply} which converts each constructor of the \texttt{Region} data type into a function. \points{3}
+\item Create a data type containing a constructor for each operation defined on a \texttt{Region} \points{3}
+\item Give the type of a function \texttt{apply} which converts each constructor of the \texttt{Region} data type into a function. \points{3}
 \item Give its definition \points{3}
 \item Give the new code for each operation, by reference to the constructors of \texttt{Region} \points{3}
 \end{itemize}
