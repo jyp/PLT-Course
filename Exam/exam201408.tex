@@ -53,12 +53,12 @@ Exam in Programming Paradigms}
 \noindent
 \examtime{}.\\
 \begin{tabular}{ll}
-\textbf{Examiner:} & Jean-Philippe Bernardy
+\textbf{Examiner:} & Jean-Philippe Bernardy \\
+\textbf{Permitted aids:} & Pen and blank paper.
 \end{tabular}
 \vspace{1cm}
 
 \noindent
-Permitted aids: Pen and blank paper.
 % English-Swedish or English-other language dictionary.
 
 There are 5 questions, each worth 12 points. The total sum is 60
@@ -104,7 +104,7 @@ Consider the following C code:
 \begin{verbatim}
   int s(int n) {
     int t = 0;
-    while (n /= 0) {
+    while (n != 1) {
       t = t+1;
       if (n & 1 == 0)
         n = n/2;
@@ -119,7 +119,7 @@ Convert the above to a functional program, which does not use state (modifyable 
 
 Remark: you should use recursion to do so.
 
-Hint: the operator \& translates to \texttt{.\&.}
+Hint: the operator \texttt{\&} translates to \texttt{.\&.} in Haskell.
 \section{Algebraic Types and Objects}
 
 Consider the following Haskell code:
@@ -134,12 +134,12 @@ eval (Mult x y) = eval x * eval y
 Translate the code to an object oriented language. 
 
 \begin{itemize}
-\item Write an interface corresponding to the declaration of Expr. It should contain a method correspoinding to Eval \points{4}
-\item Write a class for for the Const case. \points{4}
-\item Write a class for for the Plus case. \points{4}
+\item Write an interface corresponding to the declaration of Expr. It should contain a method correspoinding to \texttt{eval} \points{4}
+\item Write a class for for the \texttt{Const} case. \points{4}
+\item Write a class for for the \texttt{Plus} case. \points{4}
 \end{itemize}
 
-Hint: you may leave the Mult case out, as it is the same as Plus.
+Hint: you may leave the \texttt{Mult} case out, as it is the same as \texttt{Plus}.
 
 \newpage
 \section{Pattern matching and Higher-Order Abstractions}
@@ -184,9 +184,7 @@ Remark: In particular you may NOT use recursion (directly) in your definitions.
 \newpage
 \section{Closures}
 
-Transform the following code to use explicit closures for the
-\texttt{Region} type.
-
+Consider the following piece of Haskell code.
 \begin{minted}{haskell}
 data Point = Point Float Float
 type Region = Point -> Bool
@@ -213,11 +211,14 @@ withinRange :: Float -> Point -> Region
 withinRange range p1 p2 = norm2 (p1 .-. p2) <= range * range
 \end{minted}
 
+Transform the above code to use explicit closures for the
+\texttt{Region} type.
+
 \begin{itemize}
-\item Create a data type containing a constructor for each operation defined on a \texttt{Region} \points{3}
-\item Give the type of a function \texttt{apply} which converts each constructor of the \texttt{Region} data type into a function. \points{3}
+\item Create a data type containing a constructor for each operation constructing a \texttt{Region} \points{3}
+\item Give the type of a function \texttt{apply} which converts each constructor of the \texttt{Region} data type into a function (\texttt{Point -> Bool}). \points{3}
 \item Give its definition \points{3}
-\item Give the new code for each operation, by reference to the constructors of \texttt{Region} \points{3}
+\item Give the new code for each operation, by referencing to the constructors of the new \texttt{Region} data type \points{3}
 \end{itemize}
 
 \answer{
@@ -274,9 +275,6 @@ Translate the function \texttt{fib} to a relation \texttt{fibo}, such that
 Remark: you cannot use any other helper function in your answer, only
 constructors and relations. The types should be written in Curry or
 Haskell-like syntax.
-
-
-You may write the code in Curry syntax or Prolog syntax. 
 
 \answer{
 \begin{minted}{haskell}
