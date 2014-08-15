@@ -25,8 +25,8 @@
 %\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
 
 %\newcommand{\comment}[1]{}
-% \newcommand{\answer}[0]{\paragraph{Answer:}}
-\newcommand{\answer}[1]{}
+\newcommand{\answer}[0]{\paragraph{Answer:}}
+% \newcommand{\answer}[1]{}
 \newcommand{\comment}[1]{\marginpar{#1}}
 
 
@@ -101,7 +101,7 @@ required for grade VG.
 \section{Recursion and Loops}
 
 Consider the following C code:
-\begin{verbatim}
+\begin{minted}{c}
   int s(int n) {
     int t = 0;
     while (n != 1) {
@@ -113,13 +113,23 @@ Consider the following C code:
     }
     return t;
   }
-\end{verbatim}
+\end{minted}
 
 Convert the above to a functional program, which does not use state (modifiable variables).
 
 Remark: you should use recursion to do so.
 
 Hint: the operator \texttt{\&} translates to \texttt{.\&.} in Haskell.
+
+\answer{
+  \begin{minted}{haskell}
+s 1 t = t
+s n t = if n .&. 1
+          then s (n/2)   (t+1)
+          else s (3*n+1) (t+1)
+  \end{minted}
+}
+
 \section{Algebraic Types and Objects}
 
 Consider the following Haskell code:
@@ -140,7 +150,21 @@ Translate the code to an object oriented language.
 \end{itemize}
 
 Hint: you may leave the \texttt{Mult} case out, as it is the same as \texttt{Plus}.
+\answer{
+interface Expr {
+  int eval();
+}
 
+class Const implements Expr {
+  int value;
+  int eval() {return value;}
+}
+
+class Plus implements Expr {
+  Expr l; Expr r;
+  int eval() {return r.eval() + r.eval();}
+}
+}
 \newpage
 \section{Pattern matching and Higher-Order Abstractions}
 
