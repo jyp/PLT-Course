@@ -2,10 +2,13 @@ module Compil where
 
 import qualified Machine as M
 import Lang1 (Op(..))
+import Memory
+import qualified Lang1 as M
+import Lang3
 
 ip = Var M.ipLoc
 
-compilExpr :: Int -> Expr -> (M.MLoc, [M.Instruction], Int)
+compilExpr :: Int -> Expr -> (Ident, [M.Instruction], Int)
 compilExpr m0 (Const 0) = ("_zero",[],m0)
 compilExpr m0 (Const 1) = ("_one",[],m0)
 compilExpr m0 (Const x) = (show m0,[M.Load x $ show m0],m0+1)
@@ -29,7 +32,7 @@ compileInstr m0 (If x i1 i2) =
   let (xloc,xcode,m1) = compilExpr m0 (Neg x)
       (i1code,m2) = compileInstr m1 i1
       -- midCode = [M.Load (length i2code+1) m2, M.BinOp M.Add 0 m2 0]; m3 = m2+1
-      (midCode,m3) = compileInstr m2 (Assign ipLoc $ Bin Add ip (Const $ length i2code+2))
+      (midCode,m3) = compileInstr m2 (Assign M.ipLoc $ Bin Add ip (Const $ length i2code+2))
       (i2code,m4) = compileInstr m3 i2
   in (xcode++[M.RelJump xloc (length (i1code++midCode))]++i1code++midCode++i2code,m4)
 
