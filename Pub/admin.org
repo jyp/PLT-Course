@@ -54,7 +54,7 @@ https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q
 |    4 |   0209 | FP 1       | FP 2           | EX 3             | Ina + Dan |
 |    5 |   0216 | FP 3       | CP 1           | EX 4             | Nik + Dan |
 |    6 |   0222 | CP 2       | LP 1           | EX 5             | Dan + Ina |
-|    7 |   0302 | LP 2       | Reboot         | EX 6             | Dan + Nik |
+|    7 |   0302 | LP 2       | Review         | EX 6             | Dan + Nik |
 
   (∗): Charm Days
 
@@ -73,9 +73,9 @@ See table below for detail of contents.
 | CP 2   | Explicit continuations                                                                   |
 | LP 1   | Intro to LP; Unification                                                                 |
 | LP 2   | Functions to Relations, Search as list of successes                                      |
-| Reboot | Models of computations, formally                                                         |
+| Review | Correction of some old exam                                                              |
 | EX 1   | Exercises: marked with @1 in file:All.pdf                                                |
-| EX 2   | Exercises: marked with @2 in file:All.pdf                                               |
+| EX 2   | Exercises: marked with @2 in file:All.pdf                                                |
 | EX 3   | Exercises marked with @3 in file:All.pdf                                                 |
 | EX 4   | Exercises marked with @4 in file:All.pdf                                                 |
 | EX 5   | Exercises marked with @5 in file:All.pdf                                                 |
