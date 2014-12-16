@@ -1,7 +1,5 @@
 * Models of computations; substition model
 NamesAbstractionSubstitution.hs
-
-
 * Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference
 InsertionSort
 LoopsToGoto
@@ -29,7 +27,7 @@ file:HOTExplicitClosure.hs
 file:ExplicitClosure.hs
 file:ExplicitClosure.java
 ** TODO file:ExplicitClosure.cpp
-* purity, continuations, explicit state, and laziness
+* Purity; Continuations and effects
 file:ContinuationsStack.hs
 file:ContinueAccum.hs
 file:ContinueState.hs

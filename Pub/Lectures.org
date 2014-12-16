@@ -2,7 +2,7 @@
 #+EMAIL: bernardy@chalmers.se
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="pp.css" />
 
-* What is a "programming paradigm"?
+* ✪ What is a "programming paradigm"?
 ** Definition
 
 Paradigm: "A philosophical and theoretical framework of a scientific

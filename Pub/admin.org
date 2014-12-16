@@ -27,12 +27,9 @@ This document is generated from an org-mode file.
   - Exercise tutor
   - Room: EDIT 5453
   - E-mail: danr (chalmers.se)
-+ Inari Listenmaa (retired)
-  - Exercise tutor
-  - Room: EDIT 6461
-  - E-mail: inari (chalmers.se)
 * Schedule
 ** On TimeEdit:
+(LAST YEAR)
 https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q5Y61Y5.html
 ** <<Weekly Schedule>>:
 
@@ -49,15 +46,15 @@ https://se.timeedit.net/web/chalmers/db1/public/ri157XQQ708Z50Qv87003gZ6y6Y7008Q
   - Dan: Tue: 13.15 (moved on 28/1 and 4/2 to Friday 13.15)
 ** <<Timetable>>
 
-| Week | Starts | Lecture 1 | Lecture 2      | Exercises       | TAs       |
-|------+--------+-----------+----------------+-----------------+-----------|
-|    1 |   0120 | Intr      | IP 1           | EX 1            | Ina + Nik |
-|    2 |   0127 | IP 2      | OO             | EX 2            | Nik + Ina |
-|    3 |   0203 | FP 1      | No lecture (∗) | No exercise (∗) |           |
-|    4 |   0210 | FP 2      | FP 3           | EX 3            | Ina + Dan |
-|    5 |   0217 | CP 1      | CP 2           | EX 4            | Nik + Dan |
-|    6 |   0224 | LP 1      | LP 2           | EX 5            | Dan + Ina |
-|    7 |   0303 | Review    | Guest Lecture? | EX 6            | Dan + Nik |
+| Week | Starts | Lecture 1  | Lecture 2      | Exercises        | TAs       |
+|------+--------+------------+----------------+------------------+-----------|
+|    1 |   0119 | No lecture | Intro          | EX 1             | Ina + Nik |
+|    2 |   0127 | IP 1       | IP 2           | EX 2             | Nik + Ina |
+|    3 |   0202 | OO         | No lecture (∗) | No exercises (∗) |           |
+|    4 |   0209 | FP 1       | FP 2           | EX 3             | Ina + Dan |
+|    5 |   0216 | FP 3       | CP 1           | EX 4             | Nik + Dan |
+|    6 |   0222 | CP 2       | LP 1           | EX 5             | Dan + Ina |
+|    7 |   0302 | LP 2       | Reboot         | EX 6             | Dan + Nik |
 
   (∗): Charm Days
 
@@ -65,20 +62,20 @@ See table below for detail of contents.
 
 | Abbr   | Contents                                                                                 |
 |--------+------------------------------------------------------------------------------------------|
-| Intr   | Models of computations; types; abstraction                                               |
-| IP 1  | Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference |
+| Intro  | Models of computations; types; abstraction                                               |
+| IP 1   | Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference |
 | IP 2   | Recursion. Substitution model in the presence of recursion, Explicit stack               |
 | OO     | Inheritance, Interfaces, Notion of co/contra variance                                    |
 | FP 1   | Algebraic Types (Pattern matching, Parametric types, Currification)                      |
 | FP 2   | HO Abstraction, Polymorphic functions, Translating away HOF (Inlining, Closures)         |
-| FP 3   | Explicit state, purity and laziness (+ continuations?)                                   |
-| CP 1   | Resource-managing processes                                                              |
+| FP 3   | Continuations and effects. Purity and laziness.                                          |
+| CP 1   | Processes, channels, Resource-managing processes                                         |
 | CP 2   | Explicit continuations                                                                   |
 | LP 1   | Intro to LP; Unification                                                                 |
 | LP 2   | Functions to Relations, Search as list of successes                                      |
-| Review | Solutions to (part of) sample exams                                                      |
+| Reboot | Models of computations, formally                                                         |
 | EX 1   | Exercises: marked with @1 in file:All.pdf                                                |
-| EX 2   | Exercises:  marked with @2 in file:All.pdf                                               |
+| EX 2   | Exercises: marked with @2 in file:All.pdf                                               |
 | EX 3   | Exercises marked with @3 in file:All.pdf                                                 |
 | EX 4   | Exercises marked with @4 in file:All.pdf                                                 |
 | EX 5   | Exercises marked with @5 in file:All.pdf                                                 |
