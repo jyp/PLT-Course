@@ -34,10 +34,10 @@ data Op = Add | Sub | Mul | And | Or | Gt | Eq | Neq
   deriving (Show,Eq)
 
 data Instruction = BinOp Op Address Address Address --  arithmetic or logical operation
-                 | Halt
+                 | Halt -- stop the machine
+                 | Print Address -- print the contents of a given memory location
                  | Load Int Address             --  load a constant to memory
                  | RelJump Address Int          --  relative jump if the given memory location is not zero
-                 | Print Address
   deriving (Show,Eq)
 
 applyOp :: Op -> Int -> Int -> Int
@@ -74,3 +74,21 @@ run Machine {..} = do
       in run $ Machine {memory = write memory [(ipLoc,newIp)] ,..}
   where instr = code !! ip
         ip = look memory ipLoc
+
+initMemory :: Memory
+initMemory = [(ipLoc,0)]
+
+exCalc = Machine [BinOp Sub "z" "x" "y", Halt] [(ipLoc,0),("x",1000),("y",10)] 
+exLoop = Machine
+         [Load 0 "zero"
+         ,Load 1 "one"
+         ,Load 1000 "counter"
+         ,Print "counter"
+         ,BinOp Sub "counter" "one" "counter"
+         ,BinOp Neq "counter" "zero" "cond"
+         ,RelJump "cond" (-4)
+         ,Halt]
+         initMemory
+
+main :: IO ()
+main = run exLoop
