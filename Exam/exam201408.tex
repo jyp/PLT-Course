@@ -151,19 +151,16 @@ Translate the code to an object oriented language.
 
 Hint: you may leave the \texttt{Mult} case out, as it is the same as \texttt{Plus}.
 \answer{
-interface Expr {
-  int eval();
-}
+  \begin{minted}{java}
+    interface Expr { int eval(); }
 
-class Const implements Expr {
-  int value;
-  int eval() {return value;}
-}
+    class Const implements Expr { int value; int eval() {return
+        value;} }
 
-class Plus implements Expr {
-  Expr l; Expr r;
-  int eval() {return r.eval() + r.eval();}
-}
+    class Plus implements Expr { Expr l; Expr r; int eval() {return
+        r.eval() + r.eval();} 
+    }
+\end{minted}
 }
 \newpage
 \section{Pattern matching and Higher-Order Abstractions}

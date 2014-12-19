@@ -1,5 +1,7 @@
 * Models of computations; substition model
-NamesAbstractionSubstitution.hs
+file:NamesAbstractionSubstitution.hs
+file:VM.hs
+file:Fun.hs
 * Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference
 InsertionSort
 LoopsToGoto
