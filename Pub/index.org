@@ -4,30 +4,12 @@
 
 
 * Announcements
-- <2014-06-02 mån> Answers to last March's exam can be found here: file:OldExams/exam201403.pdf
-- <2014-03-06 tor> Answers to last August's exam can be found here: file:exam201308.pdf
-- <2014-03-04 tis> Answers to all corrected exercises can be found here: file:All.pdf
-- <2014-03-03 mån> Next lecture (Wednesday) is replaced by an exercise session where
-  students will work on the exam from last August.
-- <2014-02-26 Wed> Next monday's lecture will be about the lambda
-  calculus.  Sample examination problems can be found in the directory
-  file:OldExams
-- <2014-02-20 Thu> Nikita forgot about the correction session this morning. Apologies!
-  You can still get your solutions corrected by coming to Nikita's office hours
-  or arranging another time of your convenience by emailing him.
-- <2014-02-10 Mon> Exercises for session 3. are ready
-- <2014-02-03 Mon> Answers for the first to exercise sheets are available.
-- <2014-02-01 Sat> Find the 'live-coding' templates [[file:Templates][here]], and the
-  final states [[file:Final][here]].
-- <2014-01-30 Thu> From now on, the 2nd exercise session
-  (wed. 15.15-17.00) is CANCELED
-- <2014-01-28 Tue> The exercise session of Thu. Jan 30th will start at
-  9 o'clock instead of 8 o'clock!
-- <2014-01-20 Mon> Course begins
-- <2014-01-15 Wed> Exercises for sessions 1. and 2. are ready.
+- The Course begins on Wednesday January 21st. Note that there is no
+  lecture on the Monday of that week.
 
 * Course material and organisation
  - [[file:Lectures.org][Lecture notes]]
+ - [[file:Templates/Summary.org][Code templates]]
  - [[file:All.pdf][Exercises]]
  - [[file:admin.org][Administrative and organisational info]]
-
+ - [[file:OldExams][Old exams]]
