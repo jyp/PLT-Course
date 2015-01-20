@@ -28,7 +28,13 @@ look mem addr = case lookup addr mem of
   Just x -> x
 
 write :: Memory -> [(Address,Int)] -> Memory
-write mem upds = nubBy ((==) `on` fst) $ upds ++ mem
+write mem [] = mem
+write mem ((addr,val):upds) = write (update mem addr val) upds
+
+update :: Memory -> Address -> Int -> Memory
+update []          addr val = [(addr,val)]
+update ((a,x):axs) addr val | a == addr = (addr,val):axs
+                            | otherwise = (a,x):update axs addr val
 
 data Op = Add | Sub | Mul | And | Or | Gt | Eq | Neq
   deriving (Show,Eq)
