@@ -1,6 +1,13 @@
 
+import  Prelude hiding (pi)
 
-area = 30 * 30 * 3.141592 - 20 * 20 * 3.141592
+pi = 3.141592
+
+diskArea r = r * r * pi
+
+ringArea r1 r2 = diskArea r2 - diskArea r1
+
+area = ringArea 20 30
 
 -- what can be named?
 -- what can be abstracted over?
