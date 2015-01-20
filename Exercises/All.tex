@@ -31,8 +31,293 @@
 
 \begin{document}
 
+
 \title{Programming Paradigms: Exercises}
 \maketitle
+
+\DeactivateAnswers
+\DeactivateAnswers{}
+
+\section{Abstract machines}
+
+These questions are about the von Neumann-machine and the interpreter for the
+functional language from the first lecture. To solve these exercises,
+edit the files and load them into the Haskell REPL (Read-Eval Print Loop) \verb~ghci~.
+
+\subsection{Virtual Imperative Machine}
+
+\question{*} Make sure you can run the examples given in the file \verb~VM.hs~.
+
+\question{*} What does the example loop program below do?
+
+\begin{minted}{haskell}
+    exLoop = Machine
+             [Load 0 "zero"
+             ,Load 1 "one"
+             ,Load 1000 "counter"
+             ,Print "counter"
+             ,BinOp Sub "counter" "one" "counter"
+             ,BinOp Neq "counter" "zero" "cond"
+             ,RelJump "cond" (-4)
+             ,Halt]
+             initMemory
+\end{minted}
+
+Express it in some language with imperative features of your choice (e.g. C(++), Java(Script), Python, ...).
+
+\begin{ans}
+A faithful rendering of the program:
+\begin{minted}{c}
+int zero = 0;
+int one  = 1;
+int counter = 1000;
+loop:
+printf("%d\n",counter);
+counter = counter - one;
+int cond = counter != zero;
+if (cond) goto loop;
+\end{minted}
+Using more idiomatic C:
+\begin{minted}{c}
+int counter = 1000;
+while (counter != 0) {
+  printf("%d\n",counter);
+  counter--;
+}
+\end{minted}
+\end{ans}
+
+\question{*}
+  How do you multiply two numbers without using \verb~Mul~?
+
+\begin{ans}
+  By using \verb~Add~ and a jump.
+\end{ans}
+
+\question{*}
+  How do you formulate an if-statement in the language?
+  Translate this snippet that prints the maximum of two numbers.
+  Run it with the memory initialized for the variables \verb~x~, \verb~y~, etc:
+
+\begin{minted}{c}
+if (x > y) {
+  print(x);
+} else {
+  print(y);
+}
+\end{minted}
+
+\question{*}
+  How do you calculate the absolute value of a number?
+
+\begin{ans}
+  Check if the value is greater than zero.
+  If it isn't, subtract it from zero.
+\end{ans}
+
+\question{**} Make a function that loops a program forever.
+ It takes a program as input and it returns another program
+ that runs the input program forever.
+
+ An appropriate type of the loop is:
+
+\begin{minted}{haskell}
+loop :: [Instruction] -> [Instruction]
+\end{minted}
+
+
+The following program should print \verb~1~ indefinitely:
+\begin{minted}{haskell}
+exOnes = Machine (loop [Print "one"]) [("ipLoc",0),("one",1)]
+\end{minted}
+(press Ctrl+C in \verb~ghci~ to stop it!)
+
+The following Haskell functions are helpful:
+\begin{minted}{haskell}
+(++)   :: [a] -> [a] -> [a] -- xs ++ ys concatenates the two lists xs and ys
+length :: [a] -> Int        -- length of a list (to calculate the jump offset)
+\end{minted}
+
+ Use your loop constructor to print the infinite sequence of triangle numbers 0, 1, 3, 6, 10, ...
+ (calculated as 0, 0+1, 0+1+2, 0+1+2+3, ...).
+
+\begin{ans}
+\begin{minted}{haskell}
+loop :: [Instruction] -> [Instruction]
+loop instr =
+  instr ++
+  [ Load 1 "_always"
+  , RelJump "_always" (- (length instr + 2))
+  ]
+
+exTriangle = Machine
+    ([ Load 0 "counter"
+     , Load 0 "inc"
+     , Load 1 "one"
+     ] ++
+     loop
+       [ Print "counter"
+       , BinOp Add "inc" "one" "inc"
+       , BinOp Add "counter" "inc" "counter"
+       ])
+    initMemory
+\end{minted}
+\end{ans}
+
+\question{**}
+  Make a program builder function for if statements with greater-than.
+  This amounts to making a function with the following type:
+
+\begin{minted}{haskell}
+ifGt :: Address -> Address -> [Instruction] -> [Instruction]
+                                            -> [Instruction]
+\end{minted}
+
+  Thus a call to \verb~ifeq addr1 addr2 ins1 ins2~ checks if
+  the value in \verb~addr1~ is greater than the one in \verb~addr2~.
+  If it is, it runs the instructions \verb~ins1~, otherwise \verb~ins2~.
+
+  Test your implementation by making a program that prints the maximum of three numbers.
+
+\begin{ans}
+\begin{minted}{haskell}
+-- A slightly more generic version
+ifThenElse :: Op -> Address -> Address ->
+  [Instruction] -> [Instruction] -> [Instruction]
+ifThenElse op addr1 addr2 true_ins false_ins =
+  [ BinOp op addr1 addr2 "_cond"
+  , RelJump "_cond" (length false_ins + 2)
+  ]
+  ++ false_ins ++
+  [ Load 1 "_always"
+  , RelJump "_always" (length true_ins) ]
+  ++ true_ins
+
+ifGt :: Address -> Address ->
+  [Instruction] -> [Instruction] -> [Instruction]
+ifGt = ifThenElse Gt
+
+exGreatest x y z = Machine
+  (ifGt "x" "y"
+    (ifGt "x" "z"
+      [Print "x"]
+      (ifGt "y" "z" [Print "y"] [Print "z"]))
+    (ifGt "y" "z" [Print "y"] [Print "z"])
+   ++ [Halt])
+  [(ipLoc,0), ("x",x), ("y",y), ("z",z)]
+\end{minted}
+\end{ans}
+
+
+\subsection{Functional Language}
+
+\question{*}
+  A)
+  What \verb~Value~ does \verb~eval (Lam "x" (Var "x"))~ evaluate to?
+  You cannot print this value in \verb~ghci~, but which value is it?
+
+\begin{ans}
+\begin{minted}{haskell}
+  eval (Lam "x" (Var "x"))
+= Fun (\ v -> eval (subst "x" v (Var "x")))
+= Fun (\ v -> eval (Val v))
+= Fun (\ v -> v)
+\end{minted}
+\end{ans}
+
+ B)
+ What happens, step by step, in the evaluation of
+
+   \verb~eval (App (Lam "x" (Var "x")) (Val (Number 1)))~?
+
+\begin{ans}
+\begin{minted}{haskell}
+  eval (App (Lam "x" (Var "x")) (Val (Number 1)))
+= let Fun f' = eval (App (Lam "x" (Var "x")))
+                              in f' (eval (Val (Number 1)))
+= let Fun f' = Fun (\ x -> x) in f' (eval (Val (Number 1)))
+= let Fun f' = Fun (\ x -> x) in f' (Number 1)
+= (\ x -> x) (Number 1)
+= Number 1
+\end{minted}
+\end{ans}
+
+\question{*} Make sure you can run the examples given in the file \verb~Fun.hs~.
+
+\question{*} Import the \verb~max~ function from Haskell using \verb~Bin~, and
+  use it to write a lambda term that calculates the maximum of three numbers.
+
+\begin{ans}
+\begin{minted}{haskell}
+max' = Bin max
+max3 = Lam "x" $ Lam "y" $ Lam "z" $
+         max' (Var "x") (max' (Var "y") (Var "z"))
+\end{minted}
+\end{ans}
+
+\question{**}
+  Add an if-then-else construct to the language where false is represented with
+  the number zero.
+
+  Add the constructor \verb~IfThenElse Expr Expr Expr~ to the \verb~Expr~-datatype,
+  with the evaluation semantics that \verb~IfThenElse p t f~ means the expression \verb~p~ is evaluated,
+  and if it is nonzero evaluates \verb~t~, otherwise \verb~f~.
+
+  Import the \verb~>~ function (greater-than) from Haskell using \verb~Bin~
+  and the interpretation of true and false as above,
+  and use it and your \verb~IfThenElse~-construct to write a lambda term that
+  calculates the maximum of three numbers.
+
+\begin{ans}
+\begin{minted}{haskell}
+
+eval e0 = case e0 of
+  IfThenElse p t f ->
+    case eval p of
+      Number 0 -> eval f
+      _        -> eval t
+  ...
+
+subst what for e0 = case e0 of
+  IfThenElse p t f ->
+    IfThenElse (subst what for p) (subst what for t)
+                                  (subst what for f)
+  ...
+
+gt = Bin (\ x y -> if x > y then 1 else 0)
+
+max3' = Lam "x" $ Lam "y" $ Lam "z" $
+  IfThenElse (gt (Var "x") (Var "y"))
+    (IfThenElse (gt (Var "x") (Var "z"))
+      (Var "x")
+      (Var "z"))
+    (IfThenElse (gt (Var "y") (Var "z"))
+      (Var "y")
+      (Var "z"))
+\end{minted}
+\end{ans}
+
+\question{***}
+  Show that the \verb~Bin~ constructor is redundant by making an equivalent function
+  that does to use it:
+
+\begin{minted}{haskell}
+  bin :: Op -> Expr -> Expr -> Expr
+\end{minted}
+
+  Hint: Use \verb~Val~.
+
+\begin{ans}
+\begin{minted}{haskell}
+bin :: Op -> Expr -> Expr -> Expr
+bin op e1 e2
+  = Val (Fun (\ (Number x) ->
+           Fun (\ (Number y) ->
+             Number (x `op` y))))
+  @@ e1 @@ e2
+\end{minted}
+\end{ans}
+
 
 \section{Generalities}
 
