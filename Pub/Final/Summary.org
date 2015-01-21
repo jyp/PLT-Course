@@ -1,14 +1,14 @@
 * Models of computations; substition model
-file:NamesAbstractionSubstitution.hs
-file:VM.hs
-file:Fun.hs
+- file:NamesAbstractionSubstitution.hs
+- file:VM.hs
+- file:Fun.hs
 * Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference
-InsertionSort
-LoopsToGoto
+file:InsertionSort.c
+file:LoopsToGoto.c
 
-Pointers
-ByRef
-ByValue
+file:../Templates/Pointers.c
+file:ByRefAsVonNeumann.cpp
+file:ByValueAsSubstModel.cpp
 * Recursion. Substitution model in the presence of recursion, Explicit stack
 fact
 factTail
