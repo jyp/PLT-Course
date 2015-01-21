@@ -31,8 +31,293 @@
 
 \begin{document}
 
+
 \title{Programming Paradigms: Exercises}
 \maketitle
+
+\DeactivateAnswers
+\DeactivateAnswers{}
+
+\section{Abstract machines}
+
+These questions are about the von Neumann-machine and the interpreter for the
+functional language from the first lecture. To solve these exercises,
+edit the files and load them into the Haskell REPL (Read-Eval Print Loop) \verb~ghci~.
+
+\subsection{Virtual Imperative Machine}
+
+\question{*} Make sure you can run the examples given in the file \verb~VM.hs~.
+
+\question{*} What does the example loop program below do?
+
+\begin{minted}{haskell}
+    exLoop = Machine
+             [Load 0 "zero"
+             ,Load 1 "one"
+             ,Load 1000 "counter"
+             ,Print "counter"
+             ,BinOp Sub "counter" "one" "counter"
+             ,BinOp Neq "counter" "zero" "cond"
+             ,RelJump "cond" (-4)
+             ,Halt]
+             initMemory
+\end{minted}
+
+Express it in some language with imperative features of your choice (e.g. C(++), Java(Script), Python, ...).
+
+\begin{ans}
+A faithful rendering of the program:
+\begin{minted}{c}
+int zero = 0;
+int one  = 1;
+int counter = 1000;
+loop:
+printf("%d\n",counter);
+counter = counter - one;
+int cond = counter != zero;
+if (cond) goto loop;
+\end{minted}
+Using more idiomatic C:
+\begin{minted}{c}
+int counter = 1000;
+while (counter != 0) {
+  printf("%d\n",counter);
+  counter--;
+}
+\end{minted}
+\end{ans}
+
+\question{*}
+  How do you multiply two numbers without using \verb~Mul~?
+
+\begin{ans}
+  By using \verb~Add~ and a jump.
+\end{ans}
+
+\question{*}
+  How do you formulate an if-statement in the language?
+  Translate this snippet that prints the maximum of two numbers.
+  Run it with the memory initialized for the variables \verb~x~, \verb~y~, etc:
+
+\begin{minted}{c}
+if (x > y) {
+  print(x);
+} else {
+  print(y);
+}
+\end{minted}
+
+\question{*}
+  How do you calculate the absolute value of a number?
+
+\begin{ans}
+  Check if the value is greater than zero.
+  If it isn't, subtract it from zero.
+\end{ans}
+
+\question{**} Make a function that loops a program forever.
+ It takes a program as input and it returns another program
+ that runs the input program forever.
+
+ An appropriate type of the loop is:
+
+\begin{minted}{haskell}
+loop :: [Instruction] -> [Instruction]
+\end{minted}
+
+
+The following program should print \verb~1~ indefinitely:
+\begin{minted}{haskell}
+exOnes = Machine (loop [Print "one"]) [("ipLoc",0),("one",1)]
+\end{minted}
+(press Ctrl+C in \verb~ghci~ to stop it!)
+
+The following Haskell functions are helpful:
+\begin{minted}{haskell}
+(++)   :: [a] -> [a] -> [a] -- xs ++ ys concatenates the two lists xs and ys
+length :: [a] -> Int        -- length of a list (to calculate the jump offset)
+\end{minted}
+
+ Use your loop constructor to print the infinite sequence of triangle numbers 0, 1, 3, 6, 10, ...
+ (calculated as 0, 0+1, 0+1+2, 0+1+2+3, ...).
+
+\begin{ans}
+\begin{minted}{haskell}
+loop :: [Instruction] -> [Instruction]
+loop instr =
+  instr ++
+  [ Load 1 "_always"
+  , RelJump "_always" (- (length instr + 2))
+  ]
+
+exTriangle = Machine
+    ([ Load 0 "counter"
+     , Load 0 "inc"
+     , Load 1 "one"
+     ] ++
+     loop
+       [ Print "counter"
+       , BinOp Add "inc" "one" "inc"
+       , BinOp Add "counter" "inc" "counter"
+       ])
+    initMemory
+\end{minted}
+\end{ans}
+
+\question{**}
+  Make a program builder function for if statements with greater-than.
+  This amounts to making a function with the following type:
+
+\begin{minted}{haskell}
+ifGt :: Address -> Address -> [Instruction] -> [Instruction]
+                                            -> [Instruction]
+\end{minted}
+
+  Thus a call to \verb~ifeq addr1 addr2 ins1 ins2~ checks if
+  the value in \verb~addr1~ is greater than the one in \verb~addr2~.
+  If it is, it runs the instructions \verb~ins1~, otherwise \verb~ins2~.
+
+  Test your implementation by making a program that prints the maximum of three numbers.
+
+\begin{ans}
+\begin{minted}{haskell}
+-- A slightly more generic version
+ifThenElse :: Op -> Address -> Address ->
+  [Instruction] -> [Instruction] -> [Instruction]
+ifThenElse op addr1 addr2 true_ins false_ins =
+  [ BinOp op addr1 addr2 "_cond"
+  , RelJump "_cond" (length false_ins + 2)
+  ]
+  ++ false_ins ++
+  [ Load 1 "_always"
+  , RelJump "_always" (length true_ins) ]
+  ++ true_ins
+
+ifGt :: Address -> Address ->
+  [Instruction] -> [Instruction] -> [Instruction]
+ifGt = ifThenElse Gt
+
+exGreatest x y z = Machine
+  (ifGt "x" "y"
+    (ifGt "x" "z"
+      [Print "x"]
+      (ifGt "y" "z" [Print "y"] [Print "z"]))
+    (ifGt "y" "z" [Print "y"] [Print "z"])
+   ++ [Halt])
+  [(ipLoc,0), ("x",x), ("y",y), ("z",z)]
+\end{minted}
+\end{ans}
+
+
+\subsection{Functional Language}
+
+\question{*}
+  A)
+  What \verb~Value~ does \verb~eval (Lam "x" (Var "x"))~ evaluate to?
+  You cannot print this value in \verb~ghci~, but which value is it?
+
+\begin{ans}
+\begin{minted}{haskell}
+  eval (Lam "x" (Var "x"))
+= Fun (\ v -> eval (subst "x" v (Var "x")))
+= Fun (\ v -> eval (Val v))
+= Fun (\ v -> v)
+\end{minted}
+\end{ans}
+
+ B)
+ What happens, step by step, in the evaluation of
+
+   \verb~eval (App (Lam "x" (Var "x")) (Val (Number 1)))~?
+
+\begin{ans}
+\begin{minted}{haskell}
+  eval (App (Lam "x" (Var "x")) (Val (Number 1)))
+= let Fun f' = eval (App (Lam "x" (Var "x")))
+                              in f' (eval (Val (Number 1)))
+= let Fun f' = Fun (\ x -> x) in f' (eval (Val (Number 1)))
+= let Fun f' = Fun (\ x -> x) in f' (Number 1)
+= (\ x -> x) (Number 1)
+= Number 1
+\end{minted}
+\end{ans}
+
+\question{*} Make sure you can run the examples given in the file \verb~Fun.hs~.
+
+\question{*} Import the \verb~max~ function from Haskell using \verb~Bin~, and
+  use it to write a lambda term that calculates the maximum of three numbers.
+
+\begin{ans}
+\begin{minted}{haskell}
+max' = Bin max
+max3 = Lam "x" $ Lam "y" $ Lam "z" $
+         max' (Var "x") (max' (Var "y") (Var "z"))
+\end{minted}
+\end{ans}
+
+\question{**}
+  Add an if-then-else construct to the language where false is represented with
+  the number zero.
+
+  Add the constructor \verb~IfThenElse Expr Expr Expr~ to the \verb~Expr~-datatype,
+  with the evaluation semantics that \verb~IfThenElse p t f~ means the expression \verb~p~ is evaluated,
+  and if it is nonzero evaluates \verb~t~, otherwise \verb~f~.
+
+  Import the \verb~>~ function (greater-than) from Haskell using \verb~Bin~
+  and the interpretation of true and false as above,
+  and use it and your \verb~IfThenElse~-construct to write a lambda term that
+  calculates the maximum of three numbers.
+
+\begin{ans}
+\begin{minted}{haskell}
+
+eval e0 = case e0 of
+  IfThenElse p t f ->
+    case eval p of
+      Number 0 -> eval f
+      _        -> eval t
+  ...
+
+subst what for e0 = case e0 of
+  IfThenElse p t f ->
+    IfThenElse (subst what for p) (subst what for t)
+                                  (subst what for f)
+  ...
+
+gt = Bin (\ x y -> if x > y then 1 else 0)
+
+max3' = Lam "x" $ Lam "y" $ Lam "z" $
+  IfThenElse (gt (Var "x") (Var "y"))
+    (IfThenElse (gt (Var "x") (Var "z"))
+      (Var "x")
+      (Var "z"))
+    (IfThenElse (gt (Var "y") (Var "z"))
+      (Var "y")
+      (Var "z"))
+\end{minted}
+\end{ans}
+
+\question{***}
+  Show that the \verb~Bin~ constructor is redundant by making an equivalent function
+  that does to use it:
+
+\begin{minted}{haskell}
+  bin :: Op -> Expr -> Expr -> Expr
+\end{minted}
+
+  Hint: Use \verb~Val~.
+
+\begin{ans}
+\begin{minted}{haskell}
+bin :: Op -> Expr -> Expr -> Expr
+bin op e1 e2
+  = Val (Fun (\ (Number x) ->
+           Fun (\ (Number y) ->
+             Number (x `op` y))))
+  @@ e1 @@ e2
+\end{minted}
+\end{ans}
+
 
 \section{Generalities}
 
@@ -53,7 +338,7 @@ which is supported by this language?
 
 \subsection{Types}
 
-\question{*,@1} Give a meaningful type to the following values.
+\question{*,@2} Give a meaningful type to the following values.
 
 \begin{enumerate}
 \item 4
@@ -69,7 +354,7 @@ which is supported by this language?
 \item derivative
 \end{enumerate}
 
-\begin{ex}{**,@1}
+\begin{ex}{**,@2}
 Explain the meaning of the following types. (Hint: what
 kind of values can inhabit those types?)
 
@@ -185,7 +470,7 @@ Explain the behaviour of the algorithm for the arrays
 {\it A} = \{87, 503, 512\} and {\it B} = \{61, 154, 170, 275, 426, 509,
   612, 653, 677, 703, 765, 897, 908\}.
 
-\question{**,@1}
+\question{**,@2}
 
 Implement the above-mentioned algorithm without using
 {\it gotos} in a programming language of your choice. Check your
@@ -196,7 +481,7 @@ implementation with the {\it A} and {\it B} from the previous question.
 \end{ans}
 
 \subsection{Control flow statements to gotos}
-\question{*,@1}
+\question{*,@2}
 
 Translate the following \textbf{for} loop with explicit gotos:
 \begin{minted}{c}
@@ -227,7 +512,7 @@ Translate the following \textbf{foreach} loop with explicit gotos:
 \question{*}
 Translate the do/while construct.
 
-\question{*,@1}
+\question{*,@2}
 Translate the switch/case construct.
 
 (If you want to make sure your translation is correct you should check the
@@ -288,7 +573,7 @@ Write a recursive pre-order traversal of the above tree.
   \inputminted[firstline=20,lastline=26]{c}{dan/trav/trav.c}
 \end{ans}
 
-\question{*,@1}
+\question{*,@2}
 Write a swap function using call by reference.
 
 \begin{ans}
@@ -302,7 +587,7 @@ In C++ syntax:
 \end{minted}
 \end{ans}
 
-\question{*,@1}
+\question{*,@2}
 Write a swap function using call by value.
 
 \begin{ans}
@@ -366,7 +651,7 @@ f(y);
  in C"... Not a very clean semantics.
 \end{ans}
 
-\question{**,@1} Write down pros and cons of using call by reference
+\question{**,@2} Write down pros and cons of using call by reference
 vs. call by value. (Ease of use, performance, ...)
 
 \begin{ans}
@@ -490,7 +775,7 @@ see
 
 
 \subsection{From recursion to explicit stack}
-\begin{ex}{**,@2}
+\begin{ex}{**,@3}
 
 Consider the following tree data structure:
 \inputminted[firstline=4,lastline=9]{c}{dan/trav/trav.c}
@@ -554,7 +839,7 @@ possible to recover the arguments of the caller from the arguments of
 the call. Use this property to avoid using the stack for these
 arguments.
 
-\question{**,@2}
+\question{**,@3}
 Consider the Ackerman function:
 \begin{minted}{c}
 int a(int m, int n) {
@@ -649,7 +934,7 @@ struct IntegerAdditiveMonoid : Monoid {
 
 \subsection{Explicit method pointers}
 
-\question{*,@2} Translate the above code to a C-like language, using
+\question{*,@3} Translate the above code to a C-like language, using
 explicit method pointers. Store the method pointers directly in the
 object.  (Hint: you can simply consider the interface as a class
 without fields.)
@@ -754,7 +1039,7 @@ Compilation failed: 2 error(s), 0 warnings
 \end{verbatim}
 
 
-\question{*,@2} What if the method \textsf{op} \textit{would} compile?
+\question{*,@3} What if the method \textsf{op} \textit{would} compile?
 Define objects \textsf{a,b}, of appropriate types, so that
 \textsf{a.op(b)}, if is run, would result in a run-time error.
 
@@ -771,7 +1056,7 @@ error: method op() not found
 
 \end{ans}
 
-\question{*,@2} What if the method \textsf{id} would compile? Could you
+\question{*,@3} What if the method \textsf{id} would compile? Could you
 construct a similar run-time error? (Hint: do the translation job if
 the answer is not obvious to you.)
 
@@ -786,7 +1071,7 @@ error: method id() not found
 \end{verbatim}
 \end{ans}
 
-\question{**,@2} Explain the error messages in terms of co-/contra-/nonvariance.
+\question{**,@3} Explain the error messages in terms of co-/contra-/nonvariance.
 
 \begin{ans}
   In an interface implementation, types should be covariant, because the users
@@ -927,20 +1212,20 @@ Either\,C\,D)\] and \[Either (Either (A,C)\, (B,D))\,(Either (A,D)\,(B,C))\].
   \inputminted[firstline=3]{haskell}{fp/Ex50.hs}
 \end{ans}
 
-\question{*,@4} define an algebraic type for arithmetic expressions (+, *, ...)
+\question{*,@5} define an algebraic type for arithmetic expressions (+, *, ...)
 
 \begin{ans}
   \inputminted[firstline=3,lastline=7]{haskell}{fp/Ex51and52.hs}
 \end{ans}
 
-\question{*,@4} Define a simple interpreter for the above type; that
+\question{*,@5} Define a simple interpreter for the above type; that
 is given an expression, compute its value.
 
 \begin{ans}
   \inputminted[firstline=9,lastline=15]{haskell}{fp/Ex51and52.hs}
 \end{ans}
 
-\question{*,@4} Translate the above 2 structures to an OO language. (Hint: One
+\question{*,@5} Translate the above 2 structures to an OO language. (Hint: One
 class corresponds to leaves, one to branching.)
 
 \begin{ans}
@@ -949,7 +1234,7 @@ class corresponds to leaves, one to branching.)
   \inputminted[]{java}{fp/Ex53/Empty.java}
 \end{ans}
 
-\question{*,@4} Translate the interpreter to an OO
+\question{*,@5} Translate the interpreter to an OO
 language. You are not allowed to use 'instanceof'
 
 \begin{ans}
@@ -960,7 +1245,7 @@ language. You are not allowed to use 'instanceof'
   \inputminted[firstline=3]{java}{fp/Ex53to55/Var.java}
 \end{ans}
 
-\question{*,@4} Translate the interpreter to an OO language. You must use
+\question{*,@5} Translate the interpreter to an OO language. You must use
 'instanceof'.
 
 \begin{ans}
@@ -969,7 +1254,7 @@ language. You are not allowed to use 'instanceof'
 
 \subsection{Currification and partial application}
 
-\question{*,@4} Define a function \texttt{f} following this spec: given a
+\question{*,@5} Define a function \texttt{f} following this spec: given a
 integer, return it unchanged if it is greater than zero, and zero
 otherwise. (The type must be \texttt{Int → Int}.)
 
@@ -977,13 +1262,13 @@ otherwise. (The type must be \texttt{Int → Int}.)
   \inputminted[firstline=7,lastline=9]{haskell}{fp/Ex56to59.hs}
 \end{ans}
 
-\question{*,@4} Assuming a function max : \texttt{(Int × Int) → Int}, define the function \texttt{f}.
+\question{*,@5} Assuming a function max : \texttt{(Int × Int) → Int}, define the function \texttt{f}.
 
 \begin{ans}
   \inputminted[firstline=15,lastline=16]{haskell}{fp/Ex56to59.hs}
 \end{ans}
 
-\question{*,@4} Define a function \texttt{max'}, by currifying the function \texttt{max}.
+\question{*,@5} Define a function \texttt{max'}, by currifying the function \texttt{max}.
 
 \begin{ans}
   \inputminted[firstline=19,lastline=20]{haskell}{fp/Ex56to59.hs}
@@ -1000,7 +1285,7 @@ otherwise. (The type must be \texttt{Int → Int}.)
 Assume the \texttt{filter}, \texttt{map}, \texttt{foldr} functions as in the Haskell prelude. \texttt{f
 } comes from the previous section.
 
-\question{*,@4} For each of the following
+\question{*,@5} For each of the following
 expressions, remove occurences of the higher-order functions by
 inlining them.
 \begin{minted}{haskell}
@@ -1022,7 +1307,7 @@ for (i=0;i<sizeof(a);i++)
   if (a[i].grade >= 24)
      *b++ = a[i];
 \end{minted}
-\begin{ex}{*,@3}
+\begin{ex}{*,@4}
   How would the same algorithm be naturally expressed in a functional
   language? (Use functions from the Haskell prelude to shorten your code)
 \end{ex}
@@ -1105,7 +1390,7 @@ test2 xs = foldr (*) 1 xs
   \inputminted[firstline=4]{haskell}{fp/Ex70to71.hs}
 \end{ans}
 
-\begin{ex}{**\correctedLastYear 4,@4}
+\begin{ex}{**\correctedLastYear 4,@5}
   Add the following lines to the above program and repeat the above 2
   exercises.
 \begin{minted}{haskell}
@@ -1168,7 +1453,7 @@ not use arrays instead of lists). (Hint: write this one as a recursive program).
 
 Consider a binary tree structure with integer values in the nodes.
 
-\question{*\correctedLastYear 4,@4} In the Java version, write a function that replaces each
+\question{*\correctedLastYear 4,@5} In the Java version, write a function that replaces each
 element with its index in preorder traversal of the tree.
 
 \begin{ans}
@@ -1187,7 +1472,7 @@ setState newState = \s -> (newState,())
 
 
 
-\question{**\correctedLastYear 4,@4} Translate the function above to Haskell thinking of it
+\question{**\correctedLastYear 4,@5} Translate the function above to Haskell thinking of it
 as an imperative algorithm. You should use \emph{IP} from the lecture notes.
 What is the ``state of the world'' in this case?
 
@@ -1201,7 +1486,7 @@ usage of \emph{IP}.
 
 
 \subsection{Laziness}
-There are no lazy languages that permit mutation.  \question{*** \correctedLastYear 5,@4} Why not?
+There are no lazy languages that permit mutation.  \question{*** \correctedLastYear 5,@5} Why not?
 
 \subsubsection{Lazy Dynamic Programming}
 
@@ -1303,7 +1588,7 @@ the \verb!sieve! function also works given the {\em infinite} list
 \verb![2..]!---the output should be the {\em infinite} list of all
 prime numbers.
 
-\begin{ex}{*\correctedLastYear5,@4}
+\begin{ex}{*\correctedLastYear5,@5}
 How would you find the first 100 prime numbers?
 \begin{ans}
   \begin{minted}{haskell}
@@ -1316,7 +1601,7 @@ Hint: start by answering the following questions on a simpler
 algorithm, for example the function \textsf{enumFrom} which generates
 the infinite list of numbers starting at a given one.
 
-\begin{ex}{*\correctedLastYear5,@4} Translate \textsf{sieve} to use explicit thunks.
+\begin{ex}{*\correctedLastYear5,@5} Translate \textsf{sieve} to use explicit thunks.
   \begin{ans}
     \inputminted{haskell}{Sieve1.hs}
   \end{ans}
@@ -1339,7 +1624,7 @@ You know what's coming...
 \inputminted{java}{#1}
 }
 
-\begin{ex}{**\correctedLastYear5,@4}
+\begin{ex}{**\correctedLastYear5,@5}
   Write a version of lazy sieve in imperative (or OO)
 language.
 \begin{ans}
@@ -1364,25 +1649,25 @@ you see.
 
 \subsection{Channels and Processes}
 
-\begin{ex}{*\correctedLastYear5,@5}
+\begin{ex}{*\correctedLastYear5,@6}
   Write a process that manages a bank account. It has a channel for
   queries; which can be deposits and withdrawals. The answer is posted
   to a channel that comes with the query.  (Note: you cannot use
   references to store any state -- see variable-managing process for inspiration)
 \end{ex}
 
-\begin{ex}{*,@5}
+\begin{ex}{*,@6}
   Write a client for the above process that move ``money'' from an
   account to another. (``transaction'')
 \end{ex}
 
-\begin{ex}{*,@5}
+\begin{ex}{*,@6}
   Assume that withdrawals/deposits can fail. (For example if there is
   too much/litte on the account). Modify the server process
   accordingly.
 \end{ex}
 
-\begin{ex}{**\correctedLastYear5,@5}
+\begin{ex}{**\correctedLastYear5,@6}
   Is the total amount of money a constant of your system? (Consider
   that transactions may fail in the ``middle''.) How can you ensure
   that it is?  Write the corresponding code.
@@ -1420,7 +1705,7 @@ session connection = do
    placeOrder items address
 \end{minted}
 
-\begin{ex}{*\correctedLastYear6,@6}
+\begin{ex}{*\correctedLastYear6,@7}
   What is the purpose, and type of the webForm primitive?
 \end{ex}
 
@@ -1431,7 +1716,7 @@ session connection = do
   \end{minted}
 \end{ans}
 
-\begin{ex}{**\correctedLastYear6,@6}
+\begin{ex}{**\correctedLastYear6,@7}
   Transform the type of webForm to take a continuation.
 \end{ex}
 
@@ -1441,7 +1726,7 @@ session connection = do
   \end{minted}
 \end{ans}
 
-\begin{ex}{**\correctedLastYear6,@6}
+\begin{ex}{**\correctedLastYear6,@7}
   Break the above code into continuations, linked by the webForm primitive.
 \end{ex}
 
@@ -1455,7 +1740,7 @@ session connection = do
   \end{minted}
 \end{ans}
 
-\begin{ex}{***\correctedLastYear6,@6}
+\begin{ex}{***\correctedLastYear6,@7}
   Outline what the webForm function should do. Discuss in particular
   what happens if the user presses the ``back'' button in their
   browser.
@@ -1526,7 +1811,7 @@ In this section, exercises are sometimes formulated both in Prolog and Curry syn
 \providecommand{\Curry}{{\tiny Curry}}
 \subsection{Metavariables and unification}
 
-\begin{ex}{*,@6}
+\begin{ex}{*,@7}
 What is the result of each of the following unifications?
 Try to come up with the result without using the prolog/curry interpreter!
 
@@ -1649,7 +1934,7 @@ toList (D (head:rest) tail) (head':otherTail)
 Given that representation for lists, it is possible to perform concatenation by
 doing unification only!
 
-\begin{ex}{**\correctedLastYear6,@6}
+\begin{ex}{**\correctedLastYear6,@7}
 Write a predicate dconcat to concatenate two difference lists, without
 using the direct representation.
 
@@ -1753,7 +2038,7 @@ ancestor x y = ancestor x z & parent z y
   where z free
 \end{minted}
 
-\begin{question}{*,@7}
+\begin{question}{*,@8}
 Convert the program from relational to functional style. That is,
 write a function \texttt{ancestors} that returns all the ancestors of
 a given person.  More precisely, given a person \texttt{c}, construct the
