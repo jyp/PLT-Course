@@ -9,7 +9,7 @@
 
 * Course material and organisation
  - [[file:Lectures.org][Lecture notes]]
- - [[file:Templates/Summary.org][Code templates]]
+ - [[file:Templates/Summary.org][Code templates]] (and [[Final/Summary.org][Final versions]])
  - [[file:All.pdf][Exercises]]
  - [[file:admin.org][Administrative and organisational info]]
  - [[file:OldExams][Old exams]]

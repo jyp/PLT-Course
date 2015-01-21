@@ -33,11 +33,16 @@ write mem upds = nubBy ((==) `on` fst) $ upds ++ mem
 data Op = Add | Sub | Mul | And | Or | Gt | Eq | Neq
   deriving (Show,Eq)
 
-data Instruction = BinOp Op Address Address Address --  arithmetic or logical operation
-                 | Halt -- stop the machine
-                 | Print Address -- print the contents of a given memory location
-                 | Load Int Address             --  load a constant to memory
-                 | RelJump Address Int          --  relative jump if the given memory location is not zero
+data Instruction = BinOp Op Address Address Address
+                   --  arithmetic or logical operation
+                 | Halt
+                   -- stop the machine
+                 | Print Address
+                   -- print the contents of a given memory location
+                 | Load Int Address
+                   --  load a constant to memory
+                 | RelJump Address Int
+                   --  relative jump if the given memory location is not zero
   deriving (Show,Eq)
 
 applyOp :: Op -> Int -> Int -> Int
@@ -66,7 +71,9 @@ run Machine {..} = do
     BinOp op source1 source2 target ->
       run $ Machine
         code
-        (write memory [(ipLoc,ip+1),(target, applyOp op (look memory source1) (look memory source2))] )
+        (write memory [(ipLoc,ip+1),
+                       (target, applyOp op (look memory source1)
+                                           (look memory source2))])
     RelJump source offset ->
       let newIp = case look memory source of
                         0 -> ip + 1
@@ -78,7 +85,7 @@ run Machine {..} = do
 initMemory :: Memory
 initMemory = [(ipLoc,0)]
 
-exCalc = Machine [BinOp Sub "z" "x" "y", Halt] [(ipLoc,0),("x",1000),("y",10)] 
+exCalc = Machine [BinOp Sub "z" "x" "y", Halt] [(ipLoc,0),("x",1000),("y",10)]
 exLoop = Machine
          [Load 0 "zero"
          ,Load 1 "one"

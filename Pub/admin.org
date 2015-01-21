@@ -98,9 +98,7 @@ file:All.pdf file each week: exercises may have been updated.
 - I prefer to have interaction during the lectures, so feel free to
   interrupt me.
 ** <<Exercises>>
-- 2 groups (go to only 1 session).
-- Find out which is your group by using [[file:GroupAssignment.hs][this Haskell program]], unless
-  this clashes with another course. See [[Weekly Schedule]] for times.
+*** Wednesday Session
 - You will be working on exercises during the session, with the help of the TAs.
   + To be able to follow what is going on, bring a printout of the
     questions.
@@ -111,6 +109,11 @@ file:All.pdf file each week: exercises may have been updated.
     each session.
 - On thursday, a TA will go through (the most important) exercises
   seen during the week.
+*** Thursday Session
+- You will be working on a question in the size of an exam question
+- TA will grade your answer, so you will get an exam-style assessment
+  before the exam
+- Grades will be collected for statistics
 * Reading material
 + Unfortunately, I do not know of a single textbook covering all the
   material in a suitable way. Therefore, [[file:Lectures.org][the lecture notes]] are the "master"

@@ -1,0 +1,53 @@
+* Models of computations; substition model
+file:NamesAbstractionSubstitution.hs
+file:VM.hs
+file:Fun.hs
+* Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference
+InsertionSort
+LoopsToGoto
+
+Pointers
+ByRef
+ByValue
+* Recursion. Substitution model in the presence of recursion, Explicit stack
+fact
+factTail
+hanoi
+* Inheritance, Interfaces
+Date
+DateRec
+Animals
+AnimalsRec
+
+* Algebraic Types (Pattern matching, Parametric types, Currification)
+file:AlgebraicTypes.hs
+file:AlgebraicTypes.java
+* HO Abstraction, Polymorphic functions, Closures
+file:Fold.hs
+file:HOT.hs
+file:HOTExplicitClosure.hs
+file:ExplicitClosure.hs
+file:ExplicitClosure.java
+** TODO file:ExplicitClosure.cpp
+* Purity; Continuations and effects
+file:ContinuationsStack.hs
+file:ContinueAccum.hs
+file:ContinueState.hs
+file:Roots.hs
+file:Lazy.hs
+* Resource-managing processes
+file:Process.hs
+file:ConcurrentIORef.hs
+file:CSPVariable.hs
+file:RPCServer.hs
+* Concurency to continuatinos
+file:Server.hs
+file:ServerWithContinuations.hs
+file:RuntimeSystem.hs
+* Intro to Logic Prog.; Unification
+file:Family.curry
+file:Map.curry
+file:Unify.hs
+* Functions to Relations, Search as list of successes
+file:Lists.curry
+
