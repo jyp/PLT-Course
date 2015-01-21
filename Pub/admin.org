@@ -165,20 +165,21 @@ Note in particular that exercises are integral part of the course material.
 
 * Course evaluation
 
-For an overview of the process, see [[http://www.chalmers.se/insidan/SV/utbildning-och-forskning/grundutbildning/undervisningsstod-for/kursutvarderingar][here]].
+For an overview of the process, see here:
+http://www.chalmers.se/insidan/SV/utbildning-och-forskning/grundutbildning/kurs/kursutvardering
 
-** Designated representatives:
-| Name                     | email (at student.chalmers.se) |
-|--------------------------+--------------------------------|
-| SARAR INNAB              | innab                          |
-| ERIK JOHANNESEN          | joherx                         |
-| NIKLAS JOHANSSON MIGLAVS | miglav                         |
-| DANIEL LARSSON           | dalars                         |
+** Volunteer course representatives:
+
+| Name                | email (student.chalmers.se) | Affiliation |
+|---------------------+-----------------------------+-------------|
+| Johan Becker        | johbec                      | Chalmers?   |
+| Samuel Berger       | bergers                     | Chalmers?   |
+| Jean-Philippe Green | jgreen                      | Chalmers?   |
+| Gregor Ulm          | gregor.ulm (gmail)          | GU          |
+
 ** Evaluation Meeting 1
-Only Erik was present at the meeting.
-** Evaluation Meeting 2
 
-Niklas and Erik were present at the meeting.
+** Evaluation Meeting 2
 
 Items:
 *** Changes in the course since last year (History).
@@ -199,17 +200,15 @@ Items:
 - Publish the complete code for exercise answers
 **** TODO new in 2015 (plans)
 - Introduce the substitution model in the first lecture; when explaining
-abstraction and naming.
+abstraction and naming. (DONE)
 
 - Show the final step in the closure-conv + cps style (gotos + stack)
-  - Move laziness to the next lecture.
-- Clarify in the schedule which parts of the lecture notes are relevant.
-
-*** Study climate (communication, level of workload, tutorials)
+- Move laziness to the next lecture.
+- (TODO) Clarify in the schedule which parts of the lecture notes are relevant.
 - What is the purpose of each exercise session. This wasn't very clear.
 - It should be made clear to everyone that the (wednesdays) exercise
   sessions are about working on exercises with the help of the TA.
-*** Problematic course items; can resources be used better?
-- Not so easy to find which part of the lecture notes correspond to the lectures
 
+*** Study climate (communication, level of workload, tutorials)
+*** Problematic course items; can resources be used better?
 *** Course-specific questions in questionnaire; other material for final meeting?
