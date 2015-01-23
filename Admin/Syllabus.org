@@ -89,13 +89,13 @@ occasions (including the ordinary examination occasion) during a time
 of at least one year from the last time the course was given.
 
 
-* Grading scale
+* Grading scale (GU)
 
 The grading scale comprises Fail, (U), Pass (G) and Pass with
 Distinction (VG).
 
 Pass requires a mark of 40% on the exam, and Pass with Distinction
-requires a mark of 70%.
+requires a mark of 60%.
 
 * Course evaluation
 
@@ -104,6 +104,7 @@ course between teachers and student representatives. Further, an
 anonymous questionnaire can be used to ensure written information. The
 outcome of the evaluations serves to improve the course by indicating
 which parts could be added, improved, changed or removed
-10. Additional information
 
-The instruction language is English. 
+* Additional information
+
+The instruction language is English.
