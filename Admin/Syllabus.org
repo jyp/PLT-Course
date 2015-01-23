@@ -2,31 +2,27 @@
 
 The requirements for the course is to have successfully completed a
 first year studies within the subject Computer Science or
-equivalent. In particuar, 
+equivalent. In particular,
 
-  - Knowlegde of elementary data structures (Lists, Stacks, Queues)
+  - Knowledge of elementary data structures (Lists, Stacks, Queues)
 
   - Fluency in least one imperative or object-oriented programming
     language is required (eg. Java or C).
 
-  - Basic experience with one functional programming language (eg.
-    LISP, ML, or Haskell)
-    
+  - Fluency in the Haskell language.
 
 are required.
 
 
 * Course content
 
-This course provides an overview of common programming paradigms,
-including imperative, object-oriented, logic, concurrent, and
-functional programming, and discusses the fundamental concepts
-underlying the design, definition, and implementation of modern
-computer languages. Students get practical experience with languages
-that exemplify a particular paradigm.
+This course discusses the fundamental concepts underlying the design,
+definition, and implementation of modern computer languages typical of
+common programming paradigms, including imperative, object-oriented,
+logic, concurrent, and functional.
 
 The course contains:
-- an introduction by example to each paradigm;
+- a formal introduction to each paradigm;
 - theoretical and practical studies of transformations between
   paradigms. Examples of such transformations include:
   - introduction/removal of jumps/loops,
@@ -35,10 +31,16 @@ The course contains:
   - introduction/removal of processes/continuations,
   - introduction/removal of explicit search.
 
+In most cases, the Haskell programming language is used as a vehicle
+for expressing those transformations.
+
 * Outcomes
 
 ** Knowledge and understanding
 After completion of the course the student is expected to be able to
+
+- Explain the meaning of programming language features in terms of
+  their operational or denotational interpretation
 - Explain and contrast the principles of different paradigms both
   conceptually and in terms of particular language features.
 - Know the relationship between mainstream programming languages, the
@@ -55,21 +57,22 @@ After completion of the course the student is expected to be able to
   them in their idiomatic paradigm.
 
 ** Judgement and approach
-After completion of the course the student is expected to be able to 
-- Evaluate and apply the styles and strategies that characterize
-  different paradigm and assess their suitability for solving a given
-  problem.
+After completion of the course the student is expected to be able to
 - Recognize the paradigms at the core of programs, regardless of
   shallow/accidental implementation choices.
 
 
 * Assessment
 
-The course is examined by an individual written examination, carried
-out in examination hall.
+The course examination has two elements:
+
+- an individual written examination, carried out in examination hall
+- a series of exercises carried out on computer.
 
 Students are asked
-- to demonstrate the expected "knowledge and understanding" by answering questions testing those.
+
+- to demonstrate the expected "knowledge and understanding" by
+  answering questions testing those.
 - to transcode small programs from a paradigm to another, directly
   testing the "skills and abilities" listed above.
 
