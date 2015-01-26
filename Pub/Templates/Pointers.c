@@ -6,6 +6,7 @@ int y = 888;
 int* p = &x;
 
 int main () {
-  printf("%x\n", (unsigned int) &p);
+  printf("%lx\n", (long) &p);
   printf("%d\n", *p);
+  return 0;
 }

@@ -4,12 +4,13 @@
 
 
 * Announcements
+- <2015-01-21 ons> There is NO EXERCISE SESSION on Thursday 22nd
 - The Course begins on Wednesday January 21st. Note that there is no
   lecture on the Monday of that week.
 
 * Course material and organisation
  - [[file:Lectures.org][Lecture notes]]
- - [[file:Templates/Summary.org][Code templates]]
+ - [[file:Final/Summary.org][Live coding snippets]] (and [[file:Templates/Summary.org][templates]])
  - [[file:All.pdf][Exercises]]
  - [[file:admin.org][Administrative and organisational info]]
  - [[file:OldExams][Old exams]]

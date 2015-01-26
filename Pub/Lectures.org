@@ -916,7 +916,7 @@ value in the parameter ~acc~.
 Tail calls and loops are essentially equivalent: they are two
 different manifestations of the same computing structure.
 *** Other example: Tour de Hanoi
-file:Templates/hanoi.c
+file:Templates/Hanoi.c
 * ✪ Interlude: Garbage Collection
 aka. Automatic memory management
 The memory is freed automatically for you! (Magic!?)
@@ -1587,8 +1587,6 @@ of higher-order functions. There are however to problems with this:
    higher-order functions.)
 
 *** Transformation: Defunctionalisation (explicit <<closures>>)
-file:Template/ExplicitClosures.hs
-file:Final/ExplicitClosures.hs
 **** Example
 - Source
 #+begin_src haskell
@@ -1667,6 +1665,9 @@ Corresponding haskell code:
 
 Hence the proverb: "Objects are Poor Man's closures."
 
+**** Other Example
+file:Templates/ExplicitClosure.hs
+file:Final/ExplicitClosure.hs
 ** Purity and its Consequences
 Did you know that side effects...
  - are a common source of bugs?
@@ -1936,7 +1937,6 @@ changes will result in.
 *** TODO Downsides of purity
 - Can be difficult to engineer efficient pure algorithms
 ** Continuations
-source code: file:Final/Continuations.hs
 *** What is a continuation?
 A continuation is a part of the program /execution/ that will take
 place after some given point. That is, a continuation can be
@@ -1995,7 +1995,7 @@ Target:
 : fact n k = fact (n-1) $ \fn ->
 :            k (n * fn)  -- Mult. closure
 :
-: test = fact id 12 -- the test function is not transformed.
+: test = fact 12 id -- the test function is not transformed.
 
 (Here, there is no side-effect occuring, so the type of side-effect
 can be abstract)
@@ -2025,14 +2025,24 @@ Let us fix ~eff~ to be ~Int~, as in the example.
 
 (We start with an empty stack)
 
-*** Application: accumulator side effect
-file:Template/ContinueAccum.hs
+See also file:Final/ContinuationsStack.hs
+*** TODO Application: accumulator side effect
+Consider this tree traversal function (which returns just the unit type)
+file:Templates/ContinueAccum.hs
+
+Let's convert it to use continuations.
+Then we can use the effect type to record all the elements seen (which
+effectively flattens the tree)
+
+file:Final/ContinueAccum.hs
+
+(Note that the naive flattening function has bad time behaviour)
 ** TODO State
-Using continuation we can implement get and put.
+We can set the effect to a general transformation a state.  This
+effectively means that we can simulate imperative programming in pure
+functional programs.
 
-file:Template/ContinueState.hs
-
-The 
+file:Final/ContinueState.hs
 
 ** ✪ The State Monad
 

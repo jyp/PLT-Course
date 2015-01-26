@@ -76,6 +76,7 @@ htmlAll = do
   html "Schedule"
   html "admin"
   html "Lectures"
+  html "Final/Summary"
 
 action = do
   exercises True "All.pdf"

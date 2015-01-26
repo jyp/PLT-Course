@@ -1,32 +1,42 @@
+* Aim
+
+This course aims to:
+- introduce the students to programming language design, semantics and
+  implementation;
+- teach the meaning of the most important programming language
+  constructions, by interpretation or translation into other, more
+  basic constructions.
+- provide the stuents with tools to work with the paradigm of their
+  choice, regardless of the programming language that they use;
+
 * Entry requirements
 
 The requirements for the course is to have successfully completed a
 first year studies within the subject Computer Science or
-equivalent. In particuar, 
+equivalent. In particular,
 
-  - Knowlegde of elementary data structures (Lists, Stacks, Queues)
+  - Knowledge of elementary data structures (Lists, Stacks, Queues)
+    (DAT037)
 
-  - Fluency in least one imperative or object-oriented programming
+  - Knowledge of least one imperative or object-oriented programming
     language is required (eg. Java or C).
+    (EDA481 or DAT043)
 
-  - Basic experience with one functional programming language (eg.
-    LISP, ML, or Haskell)
-    
+  - Fluency in the Haskell language.
+    (TDA555)
 
 are required.
 
 
 * Course content
 
-This course provides an overview of common programming paradigms,
-including imperative, object-oriented, logic, concurrent, and
-functional programming, and discusses the fundamental concepts
-underlying the design, definition, and implementation of modern
-computer languages. Students get practical experience with languages
-that exemplify a particular paradigm.
+This course discusses the fundamental concepts underlying the design,
+definition, and implementation of modern computer languages typical of
+common programming paradigms, including imperative, object-oriented,
+logic, concurrent, and functional.
 
 The course contains:
-- an introduction by example to each paradigm;
+- a formal introduction to each paradigm;
 - theoretical and practical studies of transformations between
   paradigms. Examples of such transformations include:
   - introduction/removal of jumps/loops,
@@ -35,10 +45,16 @@ The course contains:
   - introduction/removal of processes/continuations,
   - introduction/removal of explicit search.
 
+In most cases, the Haskell programming language is used as a vehicle
+for expressing those transformations.
+
 * Outcomes
 
 ** Knowledge and understanding
 After completion of the course the student is expected to be able to
+
+- Explain the meaning of programming language features in terms of
+  their operational or denotational interpretation
 - Explain and contrast the principles of different paradigms both
   conceptually and in terms of particular language features.
 - Know the relationship between mainstream programming languages, the
@@ -55,21 +71,22 @@ After completion of the course the student is expected to be able to
   them in their idiomatic paradigm.
 
 ** Judgement and approach
-After completion of the course the student is expected to be able to 
-- Evaluate and apply the styles and strategies that characterize
-  different paradigm and assess their suitability for solving a given
-  problem.
+After completion of the course the student is expected to be able to
 - Recognize the paradigms at the core of programs, regardless of
   shallow/accidental implementation choices.
 
 
 * Assessment
 
-The course is examined by an individual written examination, carried
-out in examination hall.
+The course examination has two elements:
+
+- an individual written examination, carried out in examination hall
+- a series of exercises carried out on computer.
 
 Students are asked
-- to demonstrate the expected "knowledge and understanding" by answering questions testing those.
+
+- to demonstrate the expected "knowledge and understanding" by
+  answering questions testing those.
 - to transcode small programs from a paradigm to another, directly
   testing the "skills and abilities" listed above.
 
@@ -86,13 +103,13 @@ occasions (including the ordinary examination occasion) during a time
 of at least one year from the last time the course was given.
 
 
-* Grading scale
+* Grading scale (GU)
 
 The grading scale comprises Fail, (U), Pass (G) and Pass with
 Distinction (VG).
 
 Pass requires a mark of 40% on the exam, and Pass with Distinction
-requires a mark of 70%.
+requires a mark of 60%.
 
 * Course evaluation
 
@@ -101,6 +118,7 @@ course between teachers and student representatives. Further, an
 anonymous questionnaire can be used to ensure written information. The
 outcome of the evaluations serves to improve the course by indicating
 which parts could be added, improved, changed or removed
-10. Additional information
 
-The instruction language is English. 
+* Additional information
+
+The instruction language is English.

@@ -41,18 +41,18 @@ https://se.timeedit.net/web/chalmers/db1/public/ri1X50gQ9560YvQQ05Z6870Y0Zy60073
 + Office hours:
   - JP: Mon: 13.15
   - Nik: ??
-  - Dan: ??
+  - Dan: Tue 11:00, room 5453
 ** <<Timetable>>
 
-| Week | Starts | Lecture 1  | Lecture 2      | Exercises        | TAs |
-|------+--------+------------+----------------+------------------+-----|
-|    1 |   0119 | No lecture | Intro          | EX 1             | Dan |
-|    2 |   0127 | IP 1       | IP 2           | EX 2             | ?   |
-|    3 |   0202 | OO         | No lecture (∗) | No exercises (∗) |     |
-|    4 |   0209 | FP 1       | FP 2           | EX 3             | ?   |
-|    5 |   0216 | FP 3       | CP 1           | EX 4             | ?   |
-|    6 |   0222 | CP 2       | LP 1           | EX 5             | ?   |
-|    7 |   0302 | LP 2       | Review         | EX 6             | ?   |
+| Week | Starts | Lecture 1  | Lecture 2      | Exercises (1)    | Exercises (2) | TAs |
+|------+--------+------------+----------------+------------------+---------------+-----|
+|    1 |   0119 | No lecture | Intro          | EX 1             | (No session)  | Dan |
+|    2 |   0127 | IP 1       | IP 2           | EX 2             |               | ?   |
+|    3 |   0202 | OO         | No lecture (∗) | No exercises (∗) |               |     |
+|    4 |   0209 | FP 1       | FP 2           | EX 3             |               | ?   |
+|    5 |   0216 | FP 3       | CP 1           | EX 4             |               | ?   |
+|    6 |   0222 | CP 2       | LP 1           | EX 5             |               | ?   |
+|    7 |   0302 | LP 2       | Reboot         | EX 6             |               | ?   |
 
   (∗): Charm Days
 
@@ -71,9 +71,9 @@ See table below for detail of contents.
 | CP 2   | Explicit continuations                                                                   |
 | LP 1   | Intro to LP; Unification                                                                 |
 | LP 2   | Functions to Relations, Search as list of successes                                      |
-| Review | Correction of some old exam                                                              |
-| EX 1   | Exercises: marked with @1 in file:All.pdf                                                |
-| EX 2   | Exercises: marked with @2 in file:All.pdf                                                |
+| Reboot |                                                                                          |
+| EX 1   | Exercises marked with @1 in file:All.pdf                                                |
+| EX 2   | Exercises marked with @2 in file:All.pdf                                                |
 | EX 3   | Exercises marked with @3 in file:All.pdf                                                 |
 | EX 4   | Exercises marked with @4 in file:All.pdf                                                 |
 | EX 5   | Exercises marked with @5 in file:All.pdf                                                 |
@@ -98,9 +98,7 @@ file:All.pdf file each week: exercises may have been updated.
 - I prefer to have interaction during the lectures, so feel free to
   interrupt me.
 ** <<Exercises>>
-- 2 groups (go to only 1 session).
-- Find out which is your group by using [[file:GroupAssignment.hs][this Haskell program]], unless
-  this clashes with another course. See [[Weekly Schedule]] for times.
+*** Wednesday Session
 - You will be working on exercises during the session, with the help of the TAs.
   + To be able to follow what is going on, bring a printout of the
     questions.
@@ -111,6 +109,11 @@ file:All.pdf file each week: exercises may have been updated.
     each session.
 - On thursday, a TA will go through (the most important) exercises
   seen during the week.
+*** Thursday Session
+- You will be working on a question in the size of an exam question
+- TA will grade your answer, so you will get an exam-style assessment
+  before the exam
+- Grades will be collected for statistics
 * Reading material
 + Unfortunately, I do not know of a single textbook covering all the
   material in a suitable way. Therefore, [[file:Lectures.org][the lecture notes]] are the "master"
@@ -162,20 +165,21 @@ Note in particular that exercises are integral part of the course material.
 
 * Course evaluation
 
-For an overview of the process, see [[http://www.chalmers.se/insidan/SV/utbildning-och-forskning/grundutbildning/undervisningsstod-for/kursutvarderingar][here]].
+For an overview of the process, see here:
+http://www.chalmers.se/insidan/SV/utbildning-och-forskning/grundutbildning/kurs/kursutvardering
 
-** Designated representatives:
-| Name                     | email (at student.chalmers.se) |
-|--------------------------+--------------------------------|
-| SARAR INNAB              | innab                          |
-| ERIK JOHANNESEN          | joherx                         |
-| NIKLAS JOHANSSON MIGLAVS | miglav                         |
-| DANIEL LARSSON           | dalars                         |
+** Volunteer course representatives:
+
+| Name                | email (student.chalmers.se) | Affiliation |
+|---------------------+-----------------------------+-------------|
+| Johan Becker        | johbec                      | Chalmers?   |
+| Samuel Berger       | bergers                     | Chalmers?   |
+| Jean-Philippe Green | jgreen                      | Chalmers?   |
+| Gregor Ulm          | gregor.ulm (gmail)          | GU          |
+
 ** Evaluation Meeting 1
-Only Erik was present at the meeting.
-** Evaluation Meeting 2
 
-Niklas and Erik were present at the meeting.
+** Evaluation Meeting 2
 
 Items:
 *** Changes in the course since last year (History).
@@ -196,17 +200,15 @@ Items:
 - Publish the complete code for exercise answers
 **** TODO new in 2015 (plans)
 - Introduce the substitution model in the first lecture; when explaining
-abstraction and naming.
+abstraction and naming. (DONE)
 
 - Show the final step in the closure-conv + cps style (gotos + stack)
-  - Move laziness to the next lecture.
-- Clarify in the schedule which parts of the lecture notes are relevant.
-
-*** Study climate (communication, level of workload, tutorials)
+- Move laziness to the next lecture.
+- (TODO) Clarify in the schedule which parts of the lecture notes are relevant.
 - What is the purpose of each exercise session. This wasn't very clear.
 - It should be made clear to everyone that the (wednesdays) exercise
   sessions are about working on exercises with the help of the TA.
-*** Problematic course items; can resources be used better?
-- Not so easy to find which part of the lecture notes correspond to the lectures
 
+*** Study climate (communication, level of workload, tutorials)
+*** Problematic course items; can resources be used better?
 *** Course-specific questions in questionnaire; other material for final meeting?
