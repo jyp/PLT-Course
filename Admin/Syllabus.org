@@ -1,3 +1,14 @@
+* Aim
+
+This course aims to:
+- introduce the students to programming language design, semantics and
+  implementation;
+- teach the meaning of the most important programming language
+  constructions, by interpretation or translation into other, more
+  basic constructions.
+- provide the stuents with tools to work with the paradigm of their
+  choice, regardless of the programming language that they use;
+
 * Entry requirements
 
 The requirements for the course is to have successfully completed a
@@ -5,11 +16,14 @@ first year studies within the subject Computer Science or
 equivalent. In particular,
 
   - Knowledge of elementary data structures (Lists, Stacks, Queues)
+    (DAT037)
 
-  - Fluency in least one imperative or object-oriented programming
+  - Knowledge of least one imperative or object-oriented programming
     language is required (eg. Java or C).
+    (EDA481 or DAT043)
 
   - Fluency in the Haskell language.
+    (TDA555)
 
 are required.
 

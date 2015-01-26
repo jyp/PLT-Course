@@ -281,7 +281,11 @@ Example:
 area r = let r2 = r * r in r * pi
 
 ringArea r1 r2 = area r2 - area r2
-*** Teaser: Higher-order abstraction
+
+To avoid this, evaluate the arguments first!
+**** Programmatically
+file:Final/Fun.hs
+*** ✪ Teaser: Higher-order abstraction
 
 Will be revisited when we see functional programming.
 
@@ -337,7 +341,8 @@ Ingredients:
 4. if too hard, then goto 2.
 
 (cf. cookbook... for beginner cooks :)
-
+*** Programmatically
+file:Final/VM.hs
 *** Model: Turing machine
 An idealised version of the von Neumann computer is the "Turing
 Machine" (invented by Alan Turing).  The memory of the turing machine
@@ -352,11 +357,11 @@ or write a symbol (bit) at the current position.
 This extremely idealised machine is interesting from a theoretical
 viewpoint, because it is at least powerful as the von Neumann
 computer, while being even simpler. Furthermore, any computer (and any
-programming interface built on top of it) can be reduced to a turing
+programming interface built on top of it) can be reduced to a Turing
 machine.
 
 A programming language is said to be "Turing-complete" if one can do
-as much as a Turing machine.
+as much as a Turing machine in it.
 
 ** Example: Sorting
 *** Feature: GOTO
@@ -431,8 +436,8 @@ present the above program as a procedure.
 #+end_example
 
 *** Extra reading
-It has not always been clear that GOTO was a bad idea. Dijkstra had to
-battle against goto! See:
+It has not always been clear that GOTO was a bad idea. Dijkstra is
+perhaps the famous opponent of GOTO:
 
 [[http://portal.acm.org/citation.cfm%3Fid%3D362947][GOTO statement considered harmful]], E. G. Dijkstra
 

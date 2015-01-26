@@ -7,6 +7,6 @@ int* p = &x;
 
 int main () {
   printf("%lx\n", (long) &p);
-  printf("%d\n", *(p+1));
+  printf("%d\n", *p);
   return 0;
 }
