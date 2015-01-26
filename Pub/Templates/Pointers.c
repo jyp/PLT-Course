@@ -7,5 +7,5 @@ int* p = &x;
 
 int main () {
   printf("%x\n", (unsigned int) &p);
-  printf("%d\n", *(p+1));
+  printf("%d\n", *p);
 }
