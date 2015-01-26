@@ -51,7 +51,7 @@ https://se.timeedit.net/web/chalmers/db1/public/ri1X50gQ9560YvQQ05Z6870Y0Zy60073
 |    3 |   0202 | OO         | No lecture (∗) | No exercises (∗) |               |     |
 |    4 |   0209 | FP 1       | FP 2           | EX 3             |               | ?   |
 |    5 |   0216 | FP 3       | CP 1           | EX 4             |               | ?   |
-|    6 |   0222 | CP 2       | LP 1           | EX 5             |               | ?   |
+|    6 |   0223 | CP 2       | LP 1           | EX 5             |               | ?   |
 |    7 |   0302 | LP 2       | Reboot         | EX 6             |               | ?   |
 
   (∗): Charm Days
