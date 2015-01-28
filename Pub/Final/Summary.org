@@ -15,10 +15,10 @@ file:fact.c
 file:factTail.c
 file:hanoi.c
 * Inheritance, Interfaces
-Date
-DateRec
-Animals
-AnimalsRec
+file:Date.cpp
+file:DateRec.cpp
+file:Animals.cpp
+file:AnimalsRec.cpp
 
 * Algebraic Types (Pattern matching, Parametric types, Currification)
 file:AlgebraicTypes.hs

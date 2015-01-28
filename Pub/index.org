@@ -4,7 +4,7 @@
 
 
 * Announcements
-- <2015-01-27 tis> This week's exercises are available [[all:All.pdf][(here)]]
+- <2015-01-27 tis> This week's exercises are available [[file:All.pdf][(here)]]
 - <2015-01-21 ons> There is NO EXERCISE SESSION on Thursday 22nd
 - The Course begins on Wednesday January 21st. Note that there is no
   lecture on the Monday of that week.
