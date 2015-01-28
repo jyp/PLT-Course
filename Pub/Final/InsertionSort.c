@@ -21,7 +21,6 @@ void sort (int a[], int n) {
   i++;
   goto loop;
  loopEnd:
-  i = i;
 }
 
 int input[9] = {34,23,435,124,5,4,1235,123,4};

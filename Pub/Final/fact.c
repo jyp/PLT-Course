@@ -24,6 +24,14 @@ void pop() {
   s = s->next;
 }
 
+// original
+int fact1 (int x) {
+  if (x == 1)
+    return x;
+  else
+    return x * fact1(x-1);
+}
+
 // make order of eval. explicit
 int fact2 (int x) {
   int tmp;
@@ -117,7 +125,8 @@ int fact7 (int x) {
 // 1. pre-work: make order of evaluation explicit
 // 2. put result in a var
 // 3.a use the stack instead of argument
-// 3.b prologue/epilogue (push 1st stack frame)
+// 3.b return address on the stack
+// 3.c prologue/epilogue (push 1st stack frame)
 // 4. transform the call into gotos
 // 6. encode translate computed goto
 

@@ -10,6 +10,7 @@ file:../Templates/Pointers.c
 file:ByRefAsVonNeumann.cpp
 file:ByValueAsSubstModel.cpp
 * Recursion. Substitution model in the presence of recursion, Explicit stack
+file:../Templates/Fib.hs
 file:fact.c
 file:factTail.c
 file:hanoi.c
