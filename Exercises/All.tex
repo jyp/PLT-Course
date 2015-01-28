@@ -338,7 +338,7 @@ which is supported by this language?
 
 \subsection{Types}
 
-\question{*,@2} Give a meaningful type to the following values.
+\question{*} Give a meaningful type to the following values.
 
 \begin{enumerate}
 \item 4
@@ -354,7 +354,7 @@ which is supported by this language?
 \item derivative
 \end{enumerate}
 
-\begin{ex}{**,@2}
+\begin{ex}{**}
 Explain the meaning of the following types. (Hint: what
 kind of values can inhabit those types?)
 
@@ -573,7 +573,7 @@ Write a recursive pre-order traversal of the above tree.
   \inputminted[firstline=20,lastline=26]{c}{dan/trav/trav.c}
 \end{ans}
 
-\question{*,@2}
+\question{*}
 Write a swap function using call by reference.
 
 \begin{ans}
@@ -587,7 +587,7 @@ In C++ syntax:
 \end{minted}
 \end{ans}
 
-\question{*,@2}
+\question{*}
 Write a swap function using call by value.
 
 \begin{ans}
@@ -651,7 +651,7 @@ f(y);
  in C"... Not a very clean semantics.
 \end{ans}
 
-\question{**,@2} Write down pros and cons of using call by reference
+\question{**} Write down pros and cons of using call by reference
 vs. call by value. (Ease of use, performance, ...)
 
 \begin{ans}
@@ -775,7 +775,7 @@ see
 
 
 \subsection{From recursion to explicit stack}
-\begin{ex}{**,@3}
+\begin{ex}{**,@2}
 
 Consider the following tree data structure:
 \inputminted[firstline=4,lastline=9]{c}{dan/trav/trav.c}
@@ -934,7 +934,7 @@ struct IntegerAdditiveMonoid : Monoid {
 
 \subsection{Explicit method pointers}
 
-\question{*,@3} Translate the above code to a C-like language, using
+\question{*} Translate the above code to a C-like language, using
 explicit method pointers. Store the method pointers directly in the
 object.  (Hint: you can simply consider the interface as a class
 without fields.)
@@ -1039,7 +1039,7 @@ Compilation failed: 2 error(s), 0 warnings
 \end{verbatim}
 
 
-\question{*,@3} What if the method \textsf{op} \textit{would} compile?
+\question{*} What if the method \textsf{op} \textit{would} compile?
 Define objects \textsf{a,b}, of appropriate types, so that
 \textsf{a.op(b)}, if is run, would result in a run-time error.
 
@@ -1056,7 +1056,7 @@ error: method op() not found
 
 \end{ans}
 
-\question{*,@3} What if the method \textsf{id} would compile? Could you
+\question{*} What if the method \textsf{id} would compile? Could you
 construct a similar run-time error? (Hint: do the translation job if
 the answer is not obvious to you.)
 
@@ -1071,7 +1071,7 @@ error: method id() not found
 \end{verbatim}
 \end{ans}
 
-\question{**,@3} Explain the error messages in terms of co-/contra-/nonvariance.
+\question{**} Explain the error messages in terms of co-/contra-/nonvariance.
 
 \begin{ans}
   In an interface implementation, types should be covariant, because the users
