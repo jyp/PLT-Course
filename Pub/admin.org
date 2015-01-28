@@ -37,10 +37,10 @@ https://se.timeedit.net/web/chalmers/db1/public/ri1X50gQ9560YvQQ05Z6870Y0Zy60073
 + Exercises (1)
    - Wed 13.15
 + Exercises (2)
-   - Thu 8.00
+   - Thu 9.00
 + Office hours:
   - JP: Mon: 13.15
-  - Nik: Thu 13.15
+  - Nik: Thu 15.15
   - Dan: Tue 11:00, room 5453
 ** <<Timetable>>
 
