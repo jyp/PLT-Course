@@ -282,7 +282,8 @@ area r = let r2 = r * r in r * pi
 
 ringArea r1 r2 = area r2 - area r2
 
-To avoid this, evaluate the arguments first!
+To avoid name-capture (or any kind of side-effect) evaluate the
+arguments first!
 **** Programmatically
 file:Final/Fun.hs
 *** ✪ Teaser: Higher-order abstraction
@@ -466,6 +467,8 @@ test:
   goto test
 done:
 #+end_example
+
+
 
 Note in passing that such a job is typically performed by a C (or
 Java...) compiler. Indeed, the computer code has no notion of loop, it
@@ -729,15 +732,17 @@ them somewhere else in the code); and so one must wonder whether
 inlining will duplicate the side-effects associated with these
 arguments.
 
-In the by-value case, even if there were side effects in the arguments, inlining will not
-duplicate them since we have to first copy their value to a temporary
-variable.
+In the by-value case, even if there were side effects in the
+arguments, inlining will not duplicate them since we have to first
+copy their value to a temporary variable.
 
 In the by-reference case, the situation is more complex. In most
 cases, the argument won't have a side effect since it must be a memory
 location. If the argument is an effectful expression computing a
 memory location, then we must use the translation to pointers before
 inlining.
+
+To be safe: evaluate the arguments before inlining.
 ** Transformation: Procedures ⟶ Gotos & Variables
 Source:
 #+begin_example
@@ -830,9 +835,10 @@ The translation of a call then becomes:
     parameters on a stack;
   2. push the return address;
   3. goto the procedure's code.
+  4. pop
 
 ... and the translation of the procedure/function must access its
-parameters on the stack.
+parameters/return address on the stack.
 
 (note that the result may remain a global: it is not used in the body
 of the function)
