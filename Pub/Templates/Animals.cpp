@@ -18,7 +18,7 @@ void test2(Animal a) {
   a.sound();
 }
 
-main() {
+int main() {
   Animal a; //TODO: Test on the derived class
   // test(&a);
   // test2(a);
