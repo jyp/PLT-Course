@@ -4,6 +4,8 @@
 
 
 * Announcements
+- <2015-02-02 Mon> Due to CHARM, the exercise session of Thursday Feb 5th is CANCELED
+- <2015-01-28 Wed> As of today, Thursday's exercise sessions are starting at 9.00
 - <2015-01-27 tis> This week's exercises are available [[file:All.pdf][(here)]]
 - <2015-01-21 ons> There is NO EXERCISE SESSION on Thursday 22nd
 - The Course begins on Wednesday January 21st. Note that there is no
