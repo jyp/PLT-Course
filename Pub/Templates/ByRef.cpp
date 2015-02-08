@@ -1,4 +1,4 @@
-
+#include <stdio.h>
 
 void updateOrNot(int &y) {
   y = 12;
@@ -7,6 +7,7 @@ void updateOrNot(int &y) {
 int main(void) {
   int x = 56;
   updateOrNot(x);
+  printf("%d\n",x);
   return x;
 }
 

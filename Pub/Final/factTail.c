@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 
 struct stack{ 
@@ -36,31 +37,31 @@ int fact1 (int x,int y) {
 // make order of eval. explicit
 
 int fact2 (int x,int y) {
-  if (x == 1) 
+  if (x == 1)
     return y;
   else {
     y = y*x;
     x = x-1;
-    return fact2(x,y);               
+    return fact2(x,y);
   }
 }
 
 // put result in a global var
 int result;
 
-void fact3 (int x,int y) {  
-  if (x == 1) 
+void fact3 (int x,int y) {
+  if (x == 1)
     result = y;
-  else {    
-    fact3(x-1,y*x);               
+  else {
+    fact3(x-1,y*x);
   }
 }
 
 // put arguments on a stack
-void fact4() {  
-  if (s->x == 1) 
+void fact4() {
+  if (s->x == 1)
     result = s->y;
-  else {    
+  else {
     push(s->x-1,s->y*s->x,0);
     fact4();
     pop();
@@ -73,7 +74,7 @@ int stop = 1;
 // put the return address on the stack and do the jumps by hand
 void fact5() {
   fact5:
-  if (s->x == 1) 
+  if (s->x == 1)
     result = s->y;
   else {
     push(s->x-1,s->y*s->x,label1);
@@ -82,7 +83,7 @@ void fact5() {
     pop();
   }
   
-  if (s->ret == label1) 
+  if (s->ret == label1)
     goto label1;
 }
 
@@ -91,17 +92,17 @@ void fact5() {
 
 void fact6() {
   fact6:
-  if (s->x == 1) 
+  if (s->x == 1)
     result = s->y;
   else {
     s->y = s->y*s->x;
-    s->x = s->x-1; 
+    s->x = s->x-1;
     goto fact6;
   label1:
     ;
   }
   
-  if (s->ret == label1) 
+  if (s->ret == label1)
     goto label1;
 }
 
@@ -114,19 +115,31 @@ void fact7() {
     s->y = s->y*s->x;
     s->x = s->x-1; 
     goto fact7;
-  label1:
-    ;
   }
 }
 
 //note now there is max 1 frame in the stack
+// return the result as for a normal function.
 
-// recreate a loop and return the result as for a normal function.
 int fact8(int x) {
-  int y=1;
+  int y = 1;
+  start:
+  if (x == 1)
+    result = y;
+  else {
+    y = y*x;
+    x = x-1;
+    goto start;
+  }
+  return y;
+}
+
+// recreate a loop
+int fact9(int x) {
+  int y = 1;
   while (x /= 1) {
     y = y*x;
-    x = x-1; 
+    x = x-1;
   }
   return y;
 }
@@ -143,6 +156,8 @@ int main(){
   push(5,1,stop); fact6(); pop(); printf("%d\n",result);
   push(5,1,stop); fact7(); pop(); printf("%d\n",result);
   printf("%d\n",fact8(5));
+  printf("%d\n",fact9(5));
+  return 0;
 }
 
 

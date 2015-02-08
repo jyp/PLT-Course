@@ -7,7 +7,7 @@ void copy (int a[], int b[], int n) {
   a[i] = b[i];
   if ((i>0)) goto loop;
  end:
-  0;
+  ;
 }
 
 int input[9] = {34,23,435,124,5,4,1235,123,4};

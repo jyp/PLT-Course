@@ -10,14 +10,15 @@ file:../Templates/Pointers.c
 file:ByRefAsVonNeumann.cpp
 file:ByValueAsSubstModel.cpp
 * Recursion. Substitution model in the presence of recursion, Explicit stack
+file:../Templates/Fib.hs
 file:fact.c
 file:factTail.c
 file:hanoi.c
 * Inheritance, Interfaces
-Date
-DateRec
-Animals
-AnimalsRec
+file:Date.cpp
+file:DateRec.cpp
+file:Animals.cpp
+file:AnimalsRec.cpp
 
 * Algebraic Types (Pattern matching, Parametric types, Currification)
 file:AlgebraicTypes.hs

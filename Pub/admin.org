@@ -37,47 +37,52 @@ https://se.timeedit.net/web/chalmers/db1/public/ri1X50gQ9560YvQQ05Z6870Y0Zy60073
 + Exercises (1)
    - Wed 13.15
 + Exercises (2)
-   - Thu 8.00
+   - Thu 9.00
 + Office hours:
   - JP: Mon: 13.15
-  - Nik: ??
+  - Nik: Thu 15.15
   - Dan: Tue 11:00, room 5453
 ** <<Timetable>>
 
 | Week | Starts | Lecture 1  | Lecture 2      | Exercises (1)    | Exercises (2) | TAs |
 |------+--------+------------+----------------+------------------+---------------+-----|
 |    1 |   0119 | No lecture | Intro          | EX 1             | (No session)  | Dan |
-|    2 |   0127 | IP 1       | IP 2           | EX 2             |               | ?   |
+|    2 |   0127 | IP 1       | IP 2           | EX 2             |               | Nik |
 |    3 |   0202 | OO         | No lecture (∗) | No exercises (∗) |               |     |
 |    4 |   0209 | FP 1       | FP 2           | EX 3             |               | ?   |
 |    5 |   0216 | FP 3       | CP 1           | EX 4             |               | ?   |
-|    6 |   0222 | CP 2       | LP 1           | EX 5             |               | ?   |
-|    7 |   0302 | LP 2       | Reboot         | EX 6             |               | ?   |
+|    6 |   0223 | CP 2       | LP 1           | EX 5             |               | ?   |
+|    7 |   0302 | LP 2       | Ljunglöf       | EX 6             |               | ?   |
 
   (∗): Charm Days
 
 See table below for detail of contents.
 
-| Abbr   | Contents                                                                                 |
-|--------+------------------------------------------------------------------------------------------|
-| Intro  | Models of computations; types; abstraction                                               |
-| IP 1   | Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference |
-| IP 2   | Recursion. Substitution model in the presence of recursion, Explicit stack               |
-| OO     | Inheritance, Interfaces, Notion of co/contra variance                                    |
-| FP 1   | Algebraic Types (Pattern matching, Parametric types, Currification)                      |
-| FP 2   | HO Abstraction, Polymorphic functions, Translating away HOF (Inlining, Closures)         |
-| FP 3   | Continuations and effects. Purity and laziness.                                          |
-| CP 1   | Processes, channels, Resource-managing processes                                         |
-| CP 2   | Explicit continuations                                                                   |
-| LP 1   | Intro to LP; Unification                                                                 |
-| LP 2   | Functions to Relations, Search as list of successes                                      |
-| Reboot |                                                                                          |
-| EX 1   | Exercises marked with @1 in file:All.pdf                                                |
-| EX 2   | Exercises marked with @2 in file:All.pdf                                                |
-| EX 3   | Exercises marked with @3 in file:All.pdf                                                 |
-| EX 4   | Exercises marked with @4 in file:All.pdf                                                 |
-| EX 5   | Exercises marked with @5 in file:All.pdf                                                 |
-| EX 6   | ?                                                                                        |
+| Abbr     | Contents                                                                                 |
+|----------+------------------------------------------------------------------------------------------|
+| Intro    | Models of computations; types; abstraction                                               |
+| IP 1     | Goto ↔ Loops, Inlining procedures, Procedures → Gotos, Pointers and passing by reference |
+| IP 2     | Recursion. Substitution model in the presence of recursion, Explicit stack               |
+| OO       | Inheritance, Interfaces, Notion of co/contra variance                                    |
+| FP 1     | Algebraic Types (Pattern matching, Parametric types, Currification)                      |
+| FP 2     | HO Abstraction, Polymorphic functions, Translating away HOF (Inlining, Closures)         |
+| FP 3     | Continuations and effects. Purity and laziness.                                          |
+| CP 1     | Processes, channels, Resource-managing processes                                         |
+| CP 2     | Explicit continuations                                                                   |
+| LP 1     | Intro to LP; Unification                                                                 |
+| LP 2     | Functions to Relations, Search as list of successes                                      |
+| Reboot   |                                                                                          |
+| Ljunglöf | Peter Ljunglöf's Guestt lecture (∗∗)                                                     |
+| EX 1     | Exercises marked with @1 in file:All.pdf                                                 |
+| EX 2     | Exercises marked with @2 in file:All.pdf                                                 |
+| EX 3     | Exercises marked with @3 in file:All.pdf                                                 |
+| EX 4     | Exercises marked with @4 in file:All.pdf                                                 |
+| EX 5     | Exercises marked with @5 in file:All.pdf                                                 |
+| EX 6     | ?                                                                                        |
+
+  (∗∗): Peter Ljunglöf will show how to write a natural language
+  grammar in Prolog, which will give an automatic recursive-descent
+  parser
 
 Note: the contents of each exercise session is about the topics
 covered in the two previous lectures. Remember to re-fetch the
@@ -172,13 +177,13 @@ http://www.chalmers.se/insidan/SV/utbildning-och-forskning/grundutbildning/kurs/
 
 | Name                | email (student.chalmers.se) | Affiliation |
 |---------------------+-----------------------------+-------------|
-| Johan Becker        | johbec                      | Chalmers?   |
-| Samuel Berger       | bergers                     | Chalmers?   |
-| Jean-Philippe Green | jgreen                      | Chalmers?   |
+| Johan Becker        | johbec                      | Chalmers    |
+| Samuel Berger       | bergers                     | Chalmers    |
+| Jean-Philippe Green | jgreen                      | Chalmers    |
 | Gregor Ulm          | gregor.ulm (gmail)          | GU          |
 
 ** Evaluation Meeting 1
-
+All representatives were present and have signalled them to the class.
 ** Evaluation Meeting 2
 
 Items:
