@@ -1,6 +1,7 @@
 {-# LANGUAGE TypeOperators #-}
 module AlgebraicTypes where
 
+import Control.Applicative
 import Prelude hiding (sum, reverse)
 
 -- Example of parametric type
@@ -8,8 +9,10 @@ type MyList a = [a]
 
 -- Product
 data a * b = Pair a b
+  deriving (Eq,Show)
 -- type a * b = (a,b)
 data One = Unit
+  deriving (Eq,Show)
 
 -- ex.
 type Point = Float * Float
@@ -20,7 +23,9 @@ type Rectangle = Point * Point
 
 -- Sum
 data a + b = Inl a | Inr b
+  deriving (Eq,Show)
 data Zero
+  deriving (Eq,Show)
 
 -- ex.
 -- type Animal = Cat + Dog
@@ -50,6 +55,23 @@ g (Inr (Pair y z)) = (Pair (Inr y) z)
   
 test1 :: ((a + b)*c)  ≅  ((a*c) + (b*c))
 test1 = (f,g)
+
+prop_fg :: ((Int * Int) + (Int * Int)) -> Bool
+prop_fg x = f (g x) == x
+
+prop_gf :: (Int + Int) * Int -> Bool
+prop_gf x = g (f x) == x
+
+instance Eq Zero where
+  x == y = error "magic"
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (a * b) where
+  arbitrary = Pair <$> arbitrary <*> arbitrary
+instance Arbitrary One where arbitrary = return Unit
+instance (Arbitrary a, Arbitrary b) => Arbitrary (a + b) where
+  arbitrary = do
+    oneof [Inl <$> arbitrary,Inr <$> arbitrary]
+
 
 {-
 Check that the functions are inverses:
