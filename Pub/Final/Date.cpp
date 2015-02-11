@@ -6,6 +6,19 @@ private:
   // invariant: month >= 1 && month <= 12 && ... day ...
 
 public:
+  void check_invariant() {
+    // (in reality this should be more clever)
+    if (month <= 12 && month >=1 && day >= 1) //; day <= number_of_days_in(month);
+      {
+        // OK
+      } else {
+      // if we come here it means that the class breaks its own
+      // invariant. That is: is is badly implemented.
+      
+      // throw badly_implemented_class;
+    }
+  }
+
   void shiftBy(int days) {
     day += days;
     // in reality this should be more clever
