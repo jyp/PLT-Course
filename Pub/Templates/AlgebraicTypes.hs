@@ -50,7 +50,7 @@ type a ≅ b = (a -> b, b -> a)
 
 -- 1. substitution model: Just expand the List equation
 
--- 2. (For the brave) use the algebraic model. ie. solve the equation and do Taylor series expansion.)
+-- 2. (For the brave) use the algebraic/combinatorial model. ie. solve the equation and do Taylor series expansion.)
 
 -- 3. operational (von Neumann): Need an indirection
 

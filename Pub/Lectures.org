@@ -1211,6 +1211,10 @@ Adapt the translation of interfaces to use method tables.
 ** Forward reference: ``objects are poor man's [[closures]]''
  Note the similarity between objects and closures: they are both
  encoded as state/environment + function. pointer.
+
+In particular, in the [[http://en.wikipedia.org/wiki/Observer_pattern][Observer pattern]], the Observer interface can be
+advantageously replaced by a function, making registerObserver a
+higher-order function.
 ** TODO Traits; Objects as fix-points (✪)
 * Functional programming
 ** A bit of syntax
@@ -1547,6 +1551,9 @@ file:Final/HOT.hs
 ** Meaning of Higher-Order functions
 Remark that 1st order Haskell programs are easy to translate to C.
 
+That is, a function /returning/ a function (say of type ~f : Int -> Int
+-> Int~) can be transformed into a simple function of two
+arguments using the (de)currification isomorphism seem above.
 *** Transformation: Inlining higher-order functions
 We can use the substitution model to see the meaning of higher-order abstraction.
 
@@ -1588,9 +1595,11 @@ Inlining/the substition model can be used in real programs to get rid
 of higher-order functions. There are however to problems with this:
 
 1. explosion of the code size
-2. maybe impossible! (e.g. if the code of the function arguments is
+2. maybe impossible!
+   - in presence of recursion (infinite programs)
+   - or if the code of the function arguments is
    not available.  That is, if we want to make a library of
-   higher-order functions.)
+   higher-order functions.
 
 *** Transformation: Defunctionalisation (explicit <<closures>>)
 **** Example
