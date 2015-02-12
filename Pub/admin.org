@@ -183,7 +183,7 @@ http://www.chalmers.se/insidan/SV/utbildning-och-forskning/grundutbildning/kurs/
 | Gregor Ulm          | gregor.ulm (gmail)          | GU          |
 
 ** Evaluation Meeting 1
-All representatives were present and have signalled them to the class.
+All representatives were present and have signalled themselves to the class.
 ** Evaluation Meeting 2
 
 Items:
@@ -208,12 +208,31 @@ Items:
 abstraction and naming. (DONE)
 
 - Show the final step in the closure-conv + cps style (gotos + stack)
-- Move laziness to the next lecture.
+- Move laziness to the next lecture. (DONE)
 - (TODO) Clarify in the schedule which parts of the lecture notes are relevant.
 - What is the purpose of each exercise session. This wasn't very clear.
 - It should be made clear to everyone that the (wednesdays) exercise
   sessions are about working on exercises with the help of the TA.
-
+**** 2016
+- Labs/Mandatory exercises
 *** Study climate (communication, level of workload, tutorials)
+- Lecture notes are good and comprehensive
+- TA very helpful
+- Good constructive alignment (exam ~ course)
+- Workload is adequate. Adding extra material for labs is not necessary.
 *** Problematic course items; can resources be used better?
+- The information meeting (Programming paradigms/Concurrent
+  programming) was biased, which may explain low attendance this year.
+- Paradigms course helps digital construction course.
+- The time slot 8.00-10.00 problematic from an attendance perspective
+  * This time slot should be replaced by a mandatory lab.
+- It would be good to have a self-evaluation test to check if the
+  requirements are met before taking the course.
+- It would be useful to add a refresher in Haskell as a 1st lecture
+
+Exercise sheet:
+- It would be nice to have an html in addition to a pdf
+- Could be good to have a separate file with just the solutions
+
 *** Course-specific questions in questionnaire; other material for final meeting?
+
