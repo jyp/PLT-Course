@@ -1,6 +1,6 @@
 module Fold where
 
-import Prelude hiding (sum,product,map,filter)
+import Prelude hiding (sum,product,map,filter,foldl,foldr)
 
 
 sum [] = 0
