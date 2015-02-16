@@ -1996,6 +1996,9 @@ gotos.
 In essence, this translation is a way to explaine GOTOs only in terms
 of 'functional' features; that is, in terms of the substitution model.
 
+A functional program written with explicit continuations is said to be
+in "continuation-passing style" (CPS).
+
 *** Example
 Source:
 : fact :: Int -> Int
@@ -2041,7 +2044,7 @@ Let us fix ~eff~ to be ~Int~, as in the example.
 (We start with an empty stack)
 
 See also file:Final/ContinuationsStack.hs
-*** TODO Application: accumulator side effect
+*** Application: accumulator side effect
 Consider this tree traversal function (which returns just the unit type)
 file:Templates/ContinueAccum.hs
 
