@@ -1210,20 +1210,20 @@ Either\,C\,D)\] and \[Either (Either (A,C)\, (B,D))\,(Either (A,D)\,(B,C))\].
   \inputminted[firstline=3]{haskell}{fp/Ex50.hs}
 \end{ans}
 
-\question{*,@5} define an algebraic type for arithmetic expressions (+, *, ...)
+\question{*,@3} define an algebraic type for arithmetic expressions (+, *, ...)
 
 \begin{ans}
   \inputminted[firstline=3,lastline=7]{haskell}{fp/Ex51and52.hs}
 \end{ans}
 
-\question{*,@5} Define a simple interpreter for the above type; that
+\question{*,@3} Define a simple interpreter for the above type; that
 is given an expression, compute its value.
 
 \begin{ans}
   \inputminted[firstline=9,lastline=15]{haskell}{fp/Ex51and52.hs}
 \end{ans}
 
-\question{*,@5} Translate the above 2 structures to an OO language. (Hint: One
+\question{*,@3} Translate the above 2 structures to an OO language. (Hint: One
 class corresponds to leaves, one to branching.)
 
 \begin{ans}
@@ -1231,10 +1231,8 @@ class corresponds to leaves, one to branching.)
   \inputminted[]{java}{fp/Ex53/Branch.java}
   \inputminted[]{java}{fp/Ex53/Empty.java}
 \end{ans}
-\DeactivateAnswers
-\DeactivateAnswers{}
 
-\question{*,@5} Translate the interpreter to an OO
+\question{*,@3} Translate the interpreter to an OO
 language. You are not allowed to use 'instanceof'
 
 \begin{ans}
@@ -1307,7 +1305,7 @@ for (i=0;i<sizeof(a);i++)
   if (a[i].grade >= 24)
      *b++ = a[i];
 \end{minted}
-\begin{ex}{*,@4}
+\begin{ex}{*,@3}
   How would the same algorithm be naturally expressed in a functional
   language? (Use functions from the Haskell prelude to shorten your code)
 \end{ex}
@@ -1448,6 +1446,10 @@ example parameter, such as $(>= 0)$, etc.
 \question{**} Write a version of sieve in imperative (or OO) language,
 by translation of the answer to the previous exercise. (eg. you can
 not use arrays instead of lists). (Hint: write this one as a recursive program).
+
+
+\DeactivateAnswers
+\DeactivateAnswers{}
 
 \subsection{Explicit state}
 
