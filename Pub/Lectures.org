@@ -1996,6 +1996,9 @@ gotos.
 In essence, this translation is a way to explaine GOTOs only in terms
 of 'functional' features; that is, in terms of the substitution model.
 
+A functional program written with explicit continuations is said to be
+in "continuation-passing style" (CPS).
+
 *** Example
 Source:
 : fact :: Int -> Int
@@ -2041,7 +2044,7 @@ Let us fix ~eff~ to be ~Int~, as in the example.
 (We start with an empty stack)
 
 See also file:Final/ContinuationsStack.hs
-*** TODO Application: accumulator side effect
+*** Application: accumulator side effect
 Consider this tree traversal function (which returns just the unit type)
 file:Templates/ContinueAccum.hs
 
@@ -2052,10 +2055,49 @@ effectively flattens the tree)
 file:Final/ContinueAccum.hs
 
 (Note that the naive flattening function has bad time behaviour)
-** TODO State
+** State
 We can set the effect to a general transformation a state.  This
 effectively means that we can simulate imperative programming in pure
 functional programs.
+
+Let's say we want to implement the effectful functions ~get~ and ~set~,
+which update a memory cell (of an arbitrary type ~s~):
+
+# get :: s
+# set :: s -> ()
+
+If we write the whole program in CPS, then the types become:
+
+# get :: (s -> eff) -> eff
+# set :: s -> (() -> eff) -> eff
+
+... for some arbitrary effect type ~eff~. Let us now pose ~eff~ to be
+a transformation of our memory cell:
+
+# eff = s -> s
+
+We are left to inhabit the following types:
+
+# get :: (s -> (s -> s)) -> (s -> s)
+# set :: s -> (() -> (s -> s)) -> (s -> s)
+
+We proceed:
+
+# get :: (s -> (s -> s)) -> (s -> s)
+# get k currentState = k currentState currentState
+
+The first argument of ~k~ is what the ~get~ function conceptually
+returns; the second argument is the new state of the cell after
+~get~. Because ~get~ does not modify it, we simply forward the current
+state.
+
+# set :: s -> (() -> (s -> s)) -> (s -> s)
+# set newState k currentState = k () newState
+
+The first argument of ~k~ is what the ~set~ function conceptually
+returns (unit); the second argument is the new state of the cell after
+~set~. Because ~set~ changes the state to ~newState~, that is what we
+pass.
 
 file:Final/ContinueState.hs
 

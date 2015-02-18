@@ -41,7 +41,7 @@ file:Process.hs
 file:ConcurrentIORef.hs
 file:CSPVariable.hs
 file:RPCServer.hs
-* Concurency to continuatinos
+* Concurency to continuations
 file:Server.hs
 file:ServerWithContinuations.hs
 file:RuntimeSystem.hs

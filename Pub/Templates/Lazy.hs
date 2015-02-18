@@ -1,4 +1,4 @@
-import Prelude hiding (filter)
+import Prelude hiding (filter, enumFrom)
 
 
 data SList a = Nil | Cons a !(SList a)
@@ -16,12 +16,12 @@ data LList a
 -- xs is evaluated to a value; but it is a function, and so its body
 -- is not evaluated (yet).
 
-instance Show a => Show (LList a) where
+instance Show a => Show (SList a) where
 
 
-enumFromm :: Int -> LList Int
-enumFromm n = undefined
+enumFrom :: Int -> SList Int
+enumFrom n = undefined
 
 -- One more example:
-filter :: (a -> Bool) -> LList a -> LList a
+filter :: (a -> Bool) -> SList a -> SList a
 filter = undefined
