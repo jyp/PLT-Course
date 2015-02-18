@@ -1463,29 +1463,28 @@ element with its index in preorder traversal of the tree.
   \inputminted[]{java}{fp/Ex78/Preorder.java}
 \end{ans}
 
-Here is how to get and set the ``state of the world'' using \emph{IP} from the lecture notes.
-\begin{minted}{haskell}
-getState :: IP State
-getState = \s -> (s,s)
-
-setState :: State -> IP ()
-setState newState = \s -> (newState,())
-\end{minted}
-
-
+% Here is how to get and set the ``state of the world'' using \emph{IP} from the lecture notes.
+% \begin{minted}{haskell}
+% getState :: IP State
+% getState = \s -> (s,s)
+%
+% setState :: State -> IP ()
+% setState newState = \s -> (newState,())
+% \end{minted}
 
 \question{**\correctedLastYear 4} Translate the function above to Haskell thinking of it
-as an imperative algorithm. You should use \emph{IP} from the lecture notes.
+as an imperative algorithm.
+Use \verb!State! from the \emph{ContinueState} lecture.
+% You should use \emph{IP} from the lecture notes.
 What is the ``state of the world'' in this case?
 
-\begin{ans}
-  \inputminted[]{haskell}{fp/Ex79.hs}
-\end{ans}
+% \begin{ans}
+%   \inputminted[]{haskell}{fp/Ex79.hs}
+% \end{ans}
 
-\question{*\correctedLastYear 4} Rewrite the Haskell version, in such a way that passing
-``state of the world'' is made visible as such, that is, eliminate your
-usage of \emph{IP}.
-
+\question{*\correctedLastYear 4} Rewrite the Haskell version, in such a way that
+the continuations are made visible, i.e. eliminate your
+usage of \verb!State!.
 
 \subsection{Laziness}
 There are no lazy languages that permit mutation.  \question{*** \correctedLastYear 5,@4} Why not?
