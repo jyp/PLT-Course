@@ -8,7 +8,7 @@ increment n v = do
   writeIORef v (x+1)
   increment (n-1) v
 
-main = do 
+main = do
   v <- newIORef 0
   forkIO $ increment 10000 v
   increment 10000 v
