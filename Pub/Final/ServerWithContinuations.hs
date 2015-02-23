@@ -1,4 +1,4 @@
-import Text.Groom -- switch to pretty-show package?
+import Text.Show.Pretty -- switch to pretty-show package?
 import RuntimeSystem
 
 data Connect = Connect Chan Chan
@@ -51,6 +51,6 @@ mainFunction k =
   writeChan i "Holy Grail" $
   k
 
-main = putStrLn $ groom $ mainFunction die initialState
+main = putStrLn $ ppShow $ mainFunction die initialState
 
 
