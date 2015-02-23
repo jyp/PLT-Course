@@ -1210,20 +1210,20 @@ Either\,C\,D)\] and \[Either (Either (A,C)\, (B,D))\,(Either (A,D)\,(B,C))\].
   \inputminted[firstline=3]{haskell}{fp/Ex50.hs}
 \end{ans}
 
-\question{*,@5} define an algebraic type for arithmetic expressions (+, *, ...)
+\question{*,@3} define an algebraic type for arithmetic expressions (+, *, ...)
 
 \begin{ans}
   \inputminted[firstline=3,lastline=7]{haskell}{fp/Ex51and52.hs}
 \end{ans}
 
-\question{*,@5} Define a simple interpreter for the above type; that
+\question{*,@3} Define a simple interpreter for the above type; that
 is given an expression, compute its value.
 
 \begin{ans}
   \inputminted[firstline=9,lastline=15]{haskell}{fp/Ex51and52.hs}
 \end{ans}
 
-\question{*,@5} Translate the above 2 structures to an OO language. (Hint: One
+\question{*,@3} Translate the above 2 structures to an OO language. (Hint: One
 class corresponds to leaves, one to branching.)
 
 \begin{ans}
@@ -1231,10 +1231,8 @@ class corresponds to leaves, one to branching.)
   \inputminted[]{java}{fp/Ex53/Branch.java}
   \inputminted[]{java}{fp/Ex53/Empty.java}
 \end{ans}
-\DeactivateAnswers
-\DeactivateAnswers{}
 
-\question{*,@5} Translate the interpreter to an OO
+\question{*,@3} Translate the interpreter to an OO
 language. You are not allowed to use 'instanceof'
 
 \begin{ans}
@@ -1245,7 +1243,7 @@ language. You are not allowed to use 'instanceof'
   \inputminted[firstline=3]{java}{fp/Ex53to55/Var.java}
 \end{ans}
 
-\question{*,@5} Translate the interpreter to an OO language. You must use
+\question{*} Translate the interpreter to an OO language. You must use
 'instanceof'.
 
 \begin{ans}
@@ -1254,7 +1252,7 @@ language. You are not allowed to use 'instanceof'
 
 \subsection{Currification and partial application}
 
-\question{*,@5} Define a function \texttt{f} following this spec: given a
+\question{*} Define a function \texttt{f} following this spec: given a
 integer, return it unchanged if it is greater than zero, and zero
 otherwise. (The type must be \texttt{Int → Int}.)
 
@@ -1262,13 +1260,13 @@ otherwise. (The type must be \texttt{Int → Int}.)
   \inputminted[firstline=7,lastline=9]{haskell}{fp/Ex56to59.hs}
 \end{ans}
 
-\question{*,@5} Assuming a function max : \texttt{(Int × Int) → Int}, define the function \texttt{f}.
+\question{*} Assuming a function max : \texttt{(Int × Int) → Int}, define the function \texttt{f}.
 
 \begin{ans}
   \inputminted[firstline=15,lastline=16]{haskell}{fp/Ex56to59.hs}
 \end{ans}
 
-\question{*,@5} Define a function \texttt{max'}, by currifying the function \texttt{max}.
+\question{*} Define a function \texttt{max'}, by currifying the function \texttt{max}.
 
 \begin{ans}
   \inputminted[firstline=19,lastline=20]{haskell}{fp/Ex56to59.hs}
@@ -1285,7 +1283,7 @@ otherwise. (The type must be \texttt{Int → Int}.)
 Assume the \texttt{filter}, \texttt{map}, \texttt{foldr} functions as in the Haskell prelude. \texttt{f
 } comes from the previous section.
 
-\question{*,@5} For each of the following
+\question{*} For each of the following
 expressions, remove occurences of the higher-order functions by
 inlining them.
 \begin{minted}{haskell}
@@ -1307,7 +1305,7 @@ for (i=0;i<sizeof(a);i++)
   if (a[i].grade >= 24)
      *b++ = a[i];
 \end{minted}
-\begin{ex}{*,@4}
+\begin{ex}{*,@3}
   How would the same algorithm be naturally expressed in a functional
   language? (Use functions from the Haskell prelude to shorten your code)
 \end{ex}
@@ -1390,7 +1388,7 @@ test2 xs = foldr (*) 1 xs
   \inputminted[firstline=4]{haskell}{fp/Ex70to71.hs}
 \end{ans}
 
-\begin{ex}{**\correctedLastYear 4,@5}
+\begin{ex}{**\correctedLastYear 4}
   Add the following lines to the above program and repeat the above 2
   exercises.
 \begin{minted}{haskell}
@@ -1449,11 +1447,15 @@ example parameter, such as $(>= 0)$, etc.
 by translation of the answer to the previous exercise. (eg. you can
 not use arrays instead of lists). (Hint: write this one as a recursive program).
 
+
+\DeactivateAnswers
+\DeactivateAnswers{}
+
 \subsection{Explicit state}
 
 Consider a binary tree structure with integer values in the nodes.
 
-\question{*\correctedLastYear 4,@5} In the Java version, write a function that replaces each
+\question{*\correctedLastYear 4} In the Java version, write a function that replaces each
 element with its index in preorder traversal of the tree.
 
 \begin{ans}
@@ -1461,32 +1463,31 @@ element with its index in preorder traversal of the tree.
   \inputminted[]{java}{fp/Ex78/Preorder.java}
 \end{ans}
 
-Here is how to get and set the ``state of the world'' using \emph{IP} from the lecture notes.
-\begin{minted}{haskell}
-getState :: IP State
-getState = \s -> (s,s)
+% Here is how to get and set the ``state of the world'' using \emph{IP} from the lecture notes.
+% \begin{minted}{haskell}
+% getState :: IP State
+% getState = \s -> (s,s)
+%
+% setState :: State -> IP ()
+% setState newState = \s -> (newState,())
+% \end{minted}
 
-setState :: State -> IP ()
-setState newState = \s -> (newState,())
-\end{minted}
-
-
-
-\question{**\correctedLastYear 4,@5} Translate the function above to Haskell thinking of it
-as an imperative algorithm. You should use \emph{IP} from the lecture notes.
+\question{**\correctedLastYear 4} Translate the function above to Haskell thinking of it
+as an imperative algorithm.
+Use \verb!State! from the \emph{ContinueState} lecture.
+% You should use \emph{IP} from the lecture notes.
 What is the ``state of the world'' in this case?
 
-\begin{ans}
-  \inputminted[]{haskell}{fp/Ex79.hs}
-\end{ans}
+% \begin{ans}
+%   \inputminted[]{haskell}{fp/Ex79.hs}
+% \end{ans}
 
-\question{*\correctedLastYear 4} Rewrite the Haskell version, in such a way that passing
-``state of the world'' is made visible as such, that is, eliminate your
-usage of \emph{IP}.
-
+\question{*\correctedLastYear 4} Rewrite the Haskell version, in such a way that
+the continuations are made visible, i.e. eliminate your
+usage of \verb!State!.
 
 \subsection{Laziness}
-There are no lazy languages that permit mutation.  \question{*** \correctedLastYear 5,@5} Why not?
+There are no lazy languages that permit mutation.  \question{*** \correctedLastYear 5,@4} Why not?
 
 \subsubsection{Lazy Dynamic Programming}
 
@@ -1538,7 +1539,7 @@ lazy logical disjunction operator? Test it.
 
 \question{-} Can you write the Floyd-Warshall algorithm in it?
 
-\question{**} Repeat the above steps with the algorithm to compute the
+\question{**,@4} Repeat the above steps with the algorithm to compute the
 least edit distance. \url{http://en.wikipedia.org/wiki/Levenshtein_distance}
 
 \begin{verbatim}
@@ -1588,7 +1589,7 @@ the \verb!sieve! function also works given the {\em infinite} list
 \verb![2..]!---the output should be the {\em infinite} list of all
 prime numbers.
 
-\begin{ex}{*\correctedLastYear5,@5}
+\begin{ex}{*\correctedLastYear5}
 How would you find the first 100 prime numbers?
 \begin{ans}
   \begin{minted}{haskell}
@@ -1601,7 +1602,7 @@ Hint: start by answering the following questions on a simpler
 algorithm, for example the function \textsf{enumFrom} which generates
 the infinite list of numbers starting at a given one.
 
-\begin{ex}{*\correctedLastYear5,@5} Translate \textsf{sieve} to use explicit thunks.
+\begin{ex}{*\correctedLastYear5,@4} Translate \textsf{sieve} to use explicit thunks.
   \begin{ans}
     \inputminted{haskell}{Sieve1.hs}
   \end{ans}
@@ -1624,7 +1625,7 @@ You know what's coming...
 \inputminted{java}{#1}
 }
 
-\begin{ex}{**\correctedLastYear5,@5}
+\begin{ex}{**\correctedLastYear5,@4}
   Write a version of lazy sieve in imperative (or OO)
 language.
 \begin{ans}
