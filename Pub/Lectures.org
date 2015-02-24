@@ -2519,7 +2519,7 @@ entities. The statement can be true, false, or undecided. Examples:
 - p(x) terminates
 
 ** Notion: Free variables, open and closed propositions
-A variable is a variable (an unknown) which is not bound by any
+A free variable is a variable (an unknown) which is not bound by any
 quantifier. Examples:
 
 - Socrates, 1235, John Hughes, cos: are not variables (they are fixed
@@ -2536,15 +2536,15 @@ one /free/ variable in it.
 In the context of logic programming, a free variable is often called a
 /meta-variable/.
 
-Remarks: 
+Remarks:
 - A closed proposition which can be proved ("is true") is called a
   /Theorem/.
-- In mathematics, sometimes the quantifiers are omitted. You can read:
+- In mathematics, universal quantifiers are sometimes omitted. You can read:
   "sin² x + cos² x == 1 is a Theorem". What is meant is "∀x. sin² x +
   cos² x == 1 is a Theorem".
 
 The idea of logic programming is to specify values by propositions
-that they have to satisfy. 
+that they have to satisfy.
 
 ** Curry
 In this lecture I use the [[http://en.wikipedia.org/wiki/Curry_(programming_language)][Curry]] syntax. 
@@ -2587,7 +2587,11 @@ f = ... x ... x ....
 *** Interpreter
 Install either PAKCS or [[http://www-ps.informatik.uni-kiel.de/kics2/][KiCS2]]:
 
-- PAKCS
+- KiCS2
+  + More straightforward to install, at least on Linux. See the
+    instructions [[http://www-ps.informatik.uni-kiel.de/kics2/download/][here]].
+
+- PAKCS (not recommended)
   + MacOS (tested on Lion) install instructions:
     - Install Haskell platform
     - For some reason the Haskell platform seems confused with the
@@ -2616,9 +2620,6 @@ Install either PAKCS or [[http://www-ps.informatik.uni-kiel.de/kics2/][KiCS2]]:
      :  :l Family.curry  
   + The [[http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi][web interface of PAKCS]] can also be used for small examples.
 
-- KiCS2
-  + More straightforward to install, at least on Linux. See the
-    instructions [[http://www-ps.informatik.uni-kiel.de/kics2/download/][here]].
 
 ** Paradigm
 
@@ -2630,15 +2631,15 @@ something is a solution, the system will find the solutions for you.
   + Y = f(X) is replaced by r(X,Y)
   + if X and Y are known, r(X,Y) is a testable proposition
 - Provide a number of facts (axioms/rules)
-- Let the computer search for an assignment of variables that make
-  some statement true (proof)
+- Let the computer search for an assignment of values to free
+  variables that make some statement true (proof)
 
 
 - Main benefit: Invertible programs
   + if X known, Y is computed (f(X))
   + if Y known, X is computed (f-1(Y))
   + Compute both directions with one piece of code
-  + Very cool!!!! (parser/pretty-printer, compiler/decompiler...)
+  + Very cool! (parser/pretty-printer, compiler/decompiler...)
 - Sadly, often inefficient
   + Performance of functions inverted using the above recipe can be
     terrible.
@@ -2658,7 +2659,13 @@ The distinction between open/closed extends to arbitrary expressions
 Note that in other paradigms, have been working with ground terms
 only: a variable was always bound 'somewhere'.
 ** Transformation: Functions to relations
-From "classic" math: a function is a graph:
+Programming even simple programs using logic programming can be
+challenging.  Fortunately, there is a receipe to transform any
+functional program to a logic program, by transforming every function
+into a relation.
+
+In math, functions are often represented by their graph; that
+is, by there underlying relation.
 
 :  f : A → B
 
@@ -2709,7 +2716,7 @@ We can get a grip on unification by examining a few examples:
   yields x = a, xs = [b,c].
 
 
-Unification can work on arbitrary data structures. 
+Unification can work on arbitrary data structures.
 Given:
 : data Tree = Leaf Int | Bin Tree Tree
 
@@ -2781,7 +2788,7 @@ In code:
 
 #+INCLUDE: "Final/Unify.hs" src haskell
 *** (✪) Implementing unification in an imperative language
-A possible way to implement unification, using side effects is the
+A possible way to implement unification by using side effects is the
 following. Each occurence of a meta-variable should be represented by
 a reference to the meta-variable. When the unification algorithm gets
 a constraint of the form
