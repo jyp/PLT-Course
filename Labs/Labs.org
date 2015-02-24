@@ -1,0 +1,25 @@
+* Lab 1
+** Make an interpreter for a Pascal-Like imperative language
+- Simplifications: no arrays, all arguments passed by value, ?
+- Can be implemented using imperative features
+
+** Make an interpreter for a pure functional language
+- Lambda abstractions
+- Lets
+- Support for lists
+- Can be implemented using functions
+
+* Lab 2
+
+** Implement an erathosthenes sieve in C using staged filterers
+- Start with the usual Haskell implementation
+- Make thunks explicit
+- Make closures explicit
+- Transate it to Java/C/C++
+
+** Implement a chat server in C using contiuations.
+- Implement a simple chat server in Concurrent Haskell
+- Make continuations explicit
+- Make closures explicit
+- Transate it to C (or C++)
+- Implement a runtime system for it

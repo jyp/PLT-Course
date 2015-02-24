@@ -16,8 +16,7 @@ data System = ...
 -- The state of the system will be a list of ready processes and a
 -- list of ready channels.
 
--- | Type of a process. (Here, only a transformation of the system)
-type Process = System -> System
+type Process = ...
 
 -- | Initial state: no channel, no process.
 initialState = undefined
@@ -44,22 +43,22 @@ unblockChannels :: [ChanelState] -> ([ChanelState],[Process])
 ----------------------
 -- System calls
 
-forkIO :: MyIO () -> MyIO ()
+forkIO :: CP () -> CP ()
 forkIO p k s = undefined
 
 -- | Write a message to a channel, and continue with 'k'
-writeChan :: Chan -> String -> MyIO ()
+writeChan :: Chan -> String -> CP ()
 writeChan c msg k s = undefined
 
 
 -- | Read a message from a channel, and continue with 'k'
 -- here the continuation depends on the result
-readChan :: Chan -> MyIO Message
+readChan :: Chan -> CP Message
 readChan c k s = undefined
 
 -- | Create a new channel and continue with 'k'
 -- (again there is a dependency)
-newChan :: MyIO Chan
+newChan :: CP Chan
 newChan k (System ps chs) = undefined
 
 die :: () -> Process

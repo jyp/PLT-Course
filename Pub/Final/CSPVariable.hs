@@ -9,7 +9,6 @@ handler :: Variable a -> a -> IO ()
 handler v a = do
   command <- readChan v
   case command of
-    Kill -> return ()
     Set a' -> handler v a'
     Get c -> do 
       writeChan c a
