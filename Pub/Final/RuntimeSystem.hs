@@ -1,102 +1,105 @@
 module RuntimeSystem where
 
-type ChannelIdentifier = Int 
+type CP x = (x -> Effect) -> Effect
+type Effect = Process
+
+type ChannelIdentifier = Int
 type Chan = ChannelIdentifier
 
 type Message = String
 
 instance Show (a -> b) where
-    show f = "<function>"
+    show _ = "<function>"
 
-data ChanelState = ChanelState {
-      chanelMessages :: [Message], -- messages pending
-      chanelListeners :: [Message -> Process] -- processes blocked on the chanel
-    } deriving Show
+data ChannelState = ChannelState 
+                    { channelMessages :: [Message] --pending messages
+                    , channelListeners :: [Message -> Process] -- blocked processes
+                    }
+-- The state of a channel will be a list of messages and a list of listeners.
 -- INVARIANT: if the system is blocked, then either list is empty
 
-data System = System {
-      readyProcesses :: [Process],
-      channels :: [ChanelState]
-    } deriving Show
+data System = System { processes :: [Process]
+                     , channels :: [ChannelState]
+                     }
+-- The state of the system will be a list of ready processes and a
+-- list of ready channels.
 
--- | Type of a process. (Here, only a transformation of the system)
 type Process = System -> System
 
 -- | Initial state: no channel, no process.
+initialState :: System
 initialState = System [] []
+
+writeChan :: Chan -> String -> (() -> Process) -> System -> System
+writeChan c msg k s = scheduler $
+                      updateChan c (addMessage msg) $
+                      addProcess (k ()) $
+                      s
+
+readChan :: Chan -> (Message -> Process) -> System -> System
+readChan c k s = scheduler $
+                 updateChan c (addListener k) $
+                 s
+
+newChan :: (Chan -> Process) -> System -> System
+newChan k (System ms chs) =
+  scheduler $
+  addProcess (k (length chs)) $
+  (System ms (chs++[ChannelState [] []]))
+
+forkCP :: ((() -> Process) -> Process) -> (() -> Process) -> System -> System
+forkCP spawned k s = scheduler $
+                     addProcess (spawned $ \() -> terminate) $
+                     addProcess (k ()) $
+                     s
+
+terminate :: System -> System
+terminate = scheduler
 
 ------------------------------------------------
 -- Scheduler
-
 scheduler :: System -> System
 scheduler = simpleScheduler . unblockSystem
 
 -- Trivial scheduler: run the 1st ready process in the list.
+simpleScheduler :: System -> System
 simpleScheduler (System []     chans) = System [] chans     -- no ready to run process: system blocked
 simpleScheduler (System (p:ps) chans) = p (System ps chans) -- run the 1st ready process
 
 -- | Wake up listeners on a channel, as much as possible. 
 -- Return new channel state, and woken up processes.
-unblockListersOnAChannel :: ChanelState -> (ChanelState,[Process])
-unblockListersOnAChannel (ChanelState [] ws) = (ChanelState [] ws,[])
-unblockListersOnAChannel (ChanelState ms []) = (ChanelState ms [],[])
-unblockListersOnAChannel (ChanelState (m:ms) (w:ws)) = (ch,w m:ps)
-   where (ch,ps) = unblockListersOnAChannel (ChanelState ms ws)
+unblockListersOnAChannel :: ChannelState -> (ChannelState,[Process])
+unblockListersOnAChannel (ChannelState [] ws) = (ChannelState [] ws,[])
+unblockListersOnAChannel (ChannelState ms []) = (ChannelState ms [],[])
+unblockListersOnAChannel (ChannelState (m:ms) (w:ws)) = (ch,w m:ps)
+   where (ch,ps) = unblockListersOnAChannel (ChannelState ms ws)
 
 
 unblockSystem :: System -> System
 unblockSystem (System ps chs) = (System (ps'++ps) chs')
     where (chs',ps') = unblockChannels chs
 
-unblockChannels :: [ChanelState] -> ([ChanelState],[Process])
+unblockChannels :: [ChannelState] -> ([ChannelState],[Process])
 unblockChannels chs = (chs',concat ps)
     where (chs',ps) = unzip $ map unblockListersOnAChannel chs
 
 
-----------------------
--- System calls
-
-fork :: (Process -> Process) -> Process -> (System -> System)
-fork p k s = scheduler $ addProcess (p die) $ addProcess k $ s
-
--- | Write a message to a channel, and continue with 'k'
-writeChan :: Chan -> String -> Process -> Process
-writeChan c msg k s = scheduler $ 
-                      updateChan c (addMessage msg) $
-                      addProcess k $ s
-
-
--- | Read a message from a channel, and continue with 'k'
--- here the continuation depends on the result
-readChan :: Chan -> (Message -> Process) -> Process
-readChan c k s = scheduler $ updateChan c (addListener k) $ s
-
--- | Create a new channel and continue with 'k'
--- (again there is a dependency)
-newChan :: (Chan -> Process) -> Process
-newChan k (System ps chs) = scheduler $ addProcess (k ch) $ (System ps (chs ++ [ChanelState [] []]))
-   where ch = length chs
-
-die :: Process
-    -- System -> System
-die = scheduler -- just go back to the scheduler to see if there is more work to do.
-
-
+--------------------------
 -- helpers
 
 -- | Add a messeage to a channel
-addMessage m (ChanelState ms ws) = ChanelState (ms++[m]) ws
-
--- | Add a listener to a channel
-addListener k (ChanelState ms ks) = ChanelState ms (k:ks)
+addMessage :: Message -> ChannelState -> ChannelState
+addMessage m (ChannelState ms ws) = ChannelState (ms++[m]) ws
 
 -- | Update a given channel in the system
-updateChan :: Chan -> (ChanelState -> ChanelState) -> System -> System
-updateChan c f (System ps chs) = System ps (left++f ch:right) 
+updateChan :: Chan -> (ChannelState -> ChannelState) -> System -> System
+updateChan c f (System ps chs) = System ps (left++f ch:right)
     where (left,ch:right) = splitAt c chs
+
+-- | Add a listener to a channel
+addListener k (ChannelState ms ks) = ChannelState ms (k:ks)
 
 -- | Add a process
 addProcess p (System ps chs) = System (p:ps) chs
-
 
 

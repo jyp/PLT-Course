@@ -1,56 +1,68 @@
-import Text.Groom -- switch to pretty-show package?
+module Server where
+
 import RuntimeSystem
 
-data Connect = Connect Chan Chan
--- We only support transmission of Strings here
+-- For simplicity the queries and replies we will just be strings.
+type Reply = String
+type Request = String
+
+-- Each connection to a client is implemented by a pair of channels:
+-- one for queries and one for replies.
+data Connection = Connect (Chan) (Chan)
+
+
 
 ------------------------------------------
 -- Server code:
 
+handleClient :: Chan -> Chan -> CP ()
 handleClient input output k = 
-  writeChan output "User name:" (
-  readChan input ( \name ->
-  writeChan output "Password:" (
-  readChan input ( \pass -> 
-  (case name == "King Arthur" && pass == "Holy Grail"  of
-     False -> writeChan output "Incorrect login or password" k
-     True  -> writeChan output "You shall pass!" k)
-  ))))
-  
+  writeChan output "Username:" ( \_ ->
+  readChan input (\username ->
+  writeChan output "Password:" (\_ ->
+  readChan input (\pass ->
+  (case username == "bernardy" && pass == "123" of
+    True -> writeChan output "Welcome to the server"
+    False -> writeChan output "Password or username incorrect") (\_ ->
+  k ())))))
 
-server c k = 
-  readChan c (\chs ->
-  let [d1,d2] = chs 
-      input  = read [d1]
+server :: Chan -> (() -> Effect) -> Effect
+server c k =
+  readChan c $ \[d1,d2] ->
+  let input = read [d1]
       output = read [d2]
-      -- This code differs because we only support string channels
-  in fork (handleClient input output)
-          (server c k))
-    
--------------------------------------------
--- Startup code      
+  -- wait for new connections and spawn client handlers.
+  in forkCP (handleClient input output) $ \_ ->
+  -- then loop...
+  server c k
 
-startServer k = 
+  
+-- -------------------------------------------
+-- -- Startup code 
+
+startServer :: (Chan -> Effect) -> Effect
+startServer k =
   newChan $ \c ->
-  fork (server c) $
+  forkCP (server c) $ \_ ->
   k c
 
--- connect a client; given the server to connect to
-connectClient c k = 
+-- -- connect a new client, given access to the server.
+connectClient :: Chan -> CP Connection
+connectClient c k =
   newChan $ \inp ->
   newChan $ \out ->
-  writeChan c (show inp ++ show out) $
-  k (inp,out)
-  
----------------------------------------------  
--- Test run
-mainFunction k = 
-  startServer $ \ c ->  
-  connectClient c $ \(i,o) -> 
-  writeChan i "King Arthur" $
-  writeChan i "Holy Grail" $
-  k
+  writeChan c (show inp ++ show out) $ \_ ->
+  k (Connect inp out)
 
-main = putStrLn $ groom $ mainFunction die initialState
+-------------------------------------
+-- Test run
+
+-- main = do
+--   s <- startServer
+--   (i,o) <- connectClient s
+--  writeChan ...
+
+-- Exercise: start two clients concurrently.
+
 
 
