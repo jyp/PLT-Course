@@ -4,6 +4,25 @@ data Person = Adolf | Sybilla | Gustaf | Silvia | Victoria | Philip | Madeleine
 parent :: Person -> Person -> Success
 parent Adolf Gustaf = success
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- parents :: Person -> [Person]
 -- grandparent :: Person -> Person -> Success
 -- sibling :: Person -> Person -> Success
