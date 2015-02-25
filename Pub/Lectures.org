@@ -2662,7 +2662,6 @@ Install either PAKCS or [[http://www-ps.informatik.uni-kiel.de/kics2/][KiCS2]]:
      :  :l Family.curry  
   + The [[http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi][web interface of PAKCS]] can also be used for small examples.
 
-
 ** Paradigm
 
 Write a proposition, let the system find values for free variables
