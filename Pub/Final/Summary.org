@@ -47,6 +47,7 @@ file:ServerWithContinuations.hs
 file:RuntimeSystem.hs
 * Intro to Logic Prog.; Unification
 file:Family.curry
+file:UnificationExamples.curry
 file:Map.curry
 file:Unify.hs
 * Functions to Relations, Search as list of successes
