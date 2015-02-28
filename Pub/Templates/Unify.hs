@@ -8,7 +8,7 @@ import Data.Map (Map)
 -- Substitution?
 
 -- Unification
--- unify :: Term -> Term -> Substitution
+-- unify :: (Term,Term) -> Substitution
 
 -- Occurs check
 
@@ -31,3 +31,15 @@ import Data.Map (Map)
 
 -- | Apply a substitution to a term
 -- applySubst :: Substitution -> Term -> Term
+
+------------
+-- Tests
+
+-- term1 = Con "Bin" [Con "Leaf" [Var "x"],
+--                    Var "y"]
+
+-- term2 = Con "Bin" [Con "Leaf" [Con "1"[]],
+--                    Con "Bin" [Con "Leaf" [Var "x"]
+--                              ,Con "Leaf" [Con "Leaf" [Con "3" []]]]]
+
+-- testUnify = unify [(term1,term2)] M.empty

@@ -2,18 +2,31 @@
 
 data Person = Adolf | Sybilla | Gustaf | Silvia | Victoria | Philip | Madeleine
 parent :: Person -> Person -> Success
-
-parents :: Person -> [Person]
-
-grandparent :: Person -> Person -> Success
-
-sibling :: Person -> Person -> Success
-
-cousin :: Person -> Person -> Success
+parent Adolf Gustaf = success
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- parents :: Person -> [Person]
+-- grandparent :: Person -> Person -> Success
+-- sibling :: Person -> Person -> Success
+-- cousin :: Person -> Person -> Success
 
 data Gender = Male | Female
 
@@ -27,12 +40,10 @@ gender Victoria = Male
 gender Philip = Male
 
 
-male :: Person -> Success
-female :: Person -> Success
-
-father :: Person -> Person -> Success
-
-mother :: Person -> Person -> Success
+-- male :: Person -> Success
+-- female :: Person -> Success
+-- father :: Person -> Person -> Success
+-- mother :: Person -> Person -> Success
 
 
 
