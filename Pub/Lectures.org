@@ -3039,7 +3039,7 @@ You can take courses dedicated to specific paradigms
 - Partly covered in the AFP Course
 ** Translations "in the large"
 Courses:
-- Programming Languages
+- Programming Languages (Theory?)
 - Compiler construction Course
 ** Formal study of Syntax, Types
    + Programming Languages Course

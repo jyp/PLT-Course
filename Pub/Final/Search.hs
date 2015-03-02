@@ -15,8 +15,8 @@ uniqVarsOf :: Equation -> [Variable]
 uniqVarsOf (t,ts) = nub $ concatMap varsOf (t:ts)
 
 -- | Invent a fresh variable name
-newName :: Variable -> Int -> (Variable,Term)
-newName x i = (x,Var $ x ++ "_" ++ show i)
+freshRename :: Variable -> Int -> (Variable,Term)
+freshRename x i = (x,Var $ x ++ "_" ++ show i)
 
 -- | Return the (possibly many) solutions to a set of equations.
 -- Arguments:
@@ -31,7 +31,7 @@ solve i eqs (p:ps) s = do  -- Solving the 1st proposition
   let fvs = uniqVarsOf eq -- ! variable name clash !
       i' = i + length fvs
       newVars :: Substitution
-      newVars = M.fromList $ zipWith newName fvs [i..]
+      newVars = M.fromList $ zipWith freshRename fvs [i..]
       lhs = applySubst newVars $ fst eq -- we can prove the lhs
       rhs = map (applySubst newVars) $ snd eq -- as long as we prove all the rhs
   case unify2 lhs p of
@@ -72,15 +72,16 @@ nil = Con "[]" []
 cons x xs = Con ":" [x,xs]
 
 append xs ys zs = Con "append" [xs,ys,zs]
-char c = Con [c] []
-string = foldr cons nil . map char
-recoverString (Con "[]" []) = []
-recoverString (Con ":" [Con [c] [], cs]) = c:recoverString cs
 
 appendEqs :: [Equation]
 appendEqs = [(append nil (Var "ys") (Var "ys"), []),
              (append (cons (Var "x") (Var "xs")) (Var "ys") (cons (Var "x") (Var "zs")),
               [append (Var "xs") (Var "ys") (Var "zs")])]
+
+char c = Con [c] []
+string = foldr cons nil . map char
+recoverString (Con "[]" []) = []
+recoverString (Con ":" [Con [c] [], cs]) = c:recoverString cs
 
 testAppend = [map (fmap recoverString . flip M.lookup sol) ["x","y"] | sol <- sols]
   where sols = solve 0 appendEqs [append (Var "x") (Var "y") (string "hello")] M.empty
