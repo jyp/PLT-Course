@@ -24,15 +24,14 @@ unify :: [(Term,Term)] -> Substitution -> Maybe Substitution
 unify [] s = Just s
 unify ((Con c1 args1,Con c2 args2):constraints) s
   | c1 /= c2 = Nothing
-  | otherwise
-  -- lengths args1 == lengths args2
-  = unify (zip args1 args2++constraints) s
-unify ((Var x,Var x'):constraints) s -- FIX
+  | length args1 == length args2 = unify (zip args1 args2++constraints) s
+  | otherwise = Nothing
+unify ((Var x,Var x'):constraints) s
   | x == x' = unify constraints s
 unify ((Var x,t):constraints) s
   | x `occursIn` t = Nothing
   | otherwise
-  = unify (map (both (applySubst (x==>t) {- (s) FIX -})) constraints) (s +> (x ==> t))
+  = unify (map (both (applySubst (x==>t))) constraints) (s +> (x ==> t))
 unify ((t,Var x):cs) s = unify ((Var x,t):cs) s
 
 term1 = Con "Bin" [Con "Leaf" [Var "x"],
