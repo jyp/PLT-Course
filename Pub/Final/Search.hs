@@ -6,6 +6,7 @@ import Data.List
 
 
 type Equation = (Term,[Term])
+-- Term: (x,[y1,y2,...,yn])
 -- In curry syntax: x = y1 & y2 & ... & yn
 -- In prolog syntax : x :- y1, y2, ... , yn
 type Proposition = Term
