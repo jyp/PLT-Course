@@ -289,6 +289,11 @@ newRef :: IO Reference
 readRef :: Reference -> IO Int
 writeRef :: Reference -> Int -> IO ()
 \end{minted}
+\item Explain what happens during a readRef operation. In particular:
+  \begin{enumerate}
+  \item How many channel(s) are used? \points 1
+  \item For each of the channel(s), how many message(s) are sent?  \points 1
+  \end{enumerate}
 \end{enumerate}
 
 Hint: The channels can transmit any type of information, including
