@@ -10,11 +10,8 @@ type Equation = (Term,[Term])
 -- In prolog syntax : x :- y1, y2, ... , yn
 type Proposition = Term
 
-uniq :: Eq a => [a] -> [a]
-uniq = map head . group
-
 uniqVarsOf :: Equation -> [Variable]
-uniqVarsOf (t,ts) = uniq $ sort $ concatMap varsOf (t:ts)
+uniqVarsOf (t,ts) = nub $ concatMap varsOf (t:ts)
 
 -- | Invent a fresh variable name
 newName :: Variable -> Int -> (Variable,Term)
@@ -27,15 +24,15 @@ newName x i = (x,Var $ x ++ "_" ++ show i)
 -- ps: a set of propositions to satisfy
 -- s: the current substitution
 solve :: Int -> [Equation] -> [Proposition] -> Substitution -> [Substitution]
-solve _i _eqs [] s = [s]
-solve i eqs (p:ps) s = do
-  eq <- eqs
-  let fvs = uniqVarsOf eq
+solve _i _eqs [] s = [s] -- No proposition to solve: done
+solve i eqs (p:ps) s = do  -- Solving the 1st proposition
+  eq <- eqs -- we can try any of the equations to "progress"
+  let fvs = uniqVarsOf eq -- ! variable name clash !
       i' = i + length fvs
       newVars :: Substitution
       newVars = M.fromList $ zipWith newName fvs [i..]
-      lhs = applySubst newVars $ fst eq
-      rhs = map (applySubst newVars) $ snd eq
+      lhs = applySubst newVars $ fst eq -- we can prove the lhs
+      rhs = map (applySubst newVars) $ snd eq -- as long as we prove all the rhs
   case unify2 lhs p of
     Nothing -> []
     Just s' -> solve i' eqs (map (applySubst s') (rhs++ps)) (s +> s')
