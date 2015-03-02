@@ -54,5 +54,7 @@ file:Unify.hs
 file:Lists.curry
 file:Search.hs
 * BONUS
+** Encoding data in the pure lambda calculus
 file:Church.hs
+** A defunctionalised interpreted for the lambda calculus
 file:KAM.hs
