@@ -34,7 +34,7 @@
 
 \setlength{\parskip}{2pt}
 
-\newcommand{\examtime}{Afternoon, August 29th, 2014  (Location:V)}
+\newcommand{\examtime}{Afternoon, TODO  (Location:V)}
 \newcommand{\points}[1]{\marginpar{\bf #1 points}}
 \noindent
 \begin{tabular}{lr}
@@ -161,110 +161,32 @@ static void test(A a, B b) {
 \end{minted}
 }
 
-\section{Loops and recursion}
-Consider the following C code:
-\begin{minted}{c}
-  int s(int n) {
-    int t = 0;
-    while (n != 1) {
-      t = t+1;
-      if (n & 1 == 0)
-        n = n/2;
-      else
-        n = 3*n + 1;
-    }
-    return t;
-  }
-\end{minted}
+\section{Continuations and Recursion}
 
-Convert the above to a functional program, which does not use state (modifiable variables).
-
-Remark: you should use recursion to do so.
-
-Hint: the operator \texttt{\&} translates to \texttt{.\&.} in Haskell.
-
-\answer{
-  \begin{minted}{haskell}
-s 1 t = t
-s n t = if n .&. 1
-          then s (n/2)   (t+1)
-          else s (3*n+1) (t+1)
-  \end{minted}
-}
-
-\section{Algebraic Types and Objects}
-
-Consider the following Haskell code:
+Consider the following function, which computes the fibbonaci number
+of its argument.
 \begin{verbatim}
-data Expr = Const Int | Plus Expr Expr | Mult Expr Expr
-
-eval (Const x) = x
-eval (Plus x y) = eval x + eval y
-eval (Mult x y) = eval x * eval y
+fib :: Int -> Int
+fib 0 = 1
+fib 1 = 1
+fib n = fib (n-1) + fib (n-2)
 \end{verbatim}
 
-Translate the code to an object oriented language. 
+\begin{enumerate}
+\item How many non-tail calls to fib does the above function contain?
+  \points{2}
+\item True or false: a tail-call needs stack space to be
+  implemented. \points{2}
+\item Translate the above function to use explicit continuations.
+  \\ Remark: Assume an ambient type of effects called Effect.
+  \begin{enumerate}
+  \item  Write the type of the translated fib function. \points {2}
+  \item  Write the body of the translated fib function. \points {4}
+  \end{enumerate}
+\item How many non-tail calls to fib does the (correctly) translated function
+  contain? \points{2}
+\end{enumerate}
 
-\begin{itemize}
-\item Write an interface corresponding to the declaration of Expr. It should contain a method corresponding to \texttt{eval} \points{4}
-\item Write a class for for the \texttt{Const} case. \points{4}
-\item Write a class for for the \texttt{Plus} case. \points{4}
-\end{itemize}
-
-Hint: you may leave the \texttt{Mult} case out, as it is the same as \texttt{Plus}.
-\answer{
-  \begin{minted}{java}
-    interface Expr { int eval(); }
-
-    class Const implements Expr { int value; int eval() {return
-        value;} }
-
-    class Plus implements Expr { Expr l; Expr r; int eval() {return
-        r.eval() + r.eval();} 
-    }
-\end{minted}
-}
-\newpage
-\section{Pattern matching and Higher-Order Abstractions}
-
-Consider the following code:
-\begin{minted}{haskell}
-
-foobar :: [Int] -> Int
-foobar []     = 0
-foobar (x:xs)
-  | x > 20     = (5*x-20) + foobar xs
-  | otherwise = foobar xs
-
-sum [] = 0
-sum (x:xs) = x + sum xs
-
-map f [] = []
-map f (x:xs) = (f x) : (map f xs)
-
-filter f [] = []
-filter f (x:xs) = if f x then x:(filter f xs) else filter f xs
-
-fold k f [] = k
-fold k f (x:xs) = f x (fold k f xs)
-\end{minted}
-
-\begin{itemize}
-  \item Express the function \texttt{foobar} in terms of \texttt{sum}, \texttt{map} and \texttt{filter}.\points {6}
-  \item Express the function \texttt{foobar} in terms of \texttt{fold} ONLY.\points {6}
-\end{itemize}
-
-Remark: In particular you may NOT use recursion (directly) in your definitions.
-
-\answer{
-  \begin{minted}{haskell}
-  foobar = sum . map (\x -> 7*x+2) . filter (>3)
-  foobar = fold 0 f where
-     f x acc = if x > 3 then 7*x + 2 + acc else acc
-   \end{minted}
-}
-
-\newpage
 \section{Closures}
 
 Consider the following piece of Haskell code.
@@ -326,52 +248,117 @@ withinRange range p1 p2 = Within range p1 p2
   \end{minted}
 }
 
-\newpage
-\section{Functions to Relations}
+\section{State-Management Process}
+Assume a language without pointers nor variables, but support for
+concurrency. In particular, assume primitives for creating processes
+and channels, and primitives for reading and writing to to
+channels. For example C++-style:
 
-Consider the following Haskell code:
+\begin{minted}{cpp}
+Chan<A> newChan();
+A readChan(Chan<A> c);
+void writeChan(Chan<A> c,A x);
+void forkProcess(*void());
+\end{minted}
+or Haskell-style:
 \begin{minted}{haskell}
-data Nat = Zero | Suc Nat
-
-fib :: Nat -> Nat
-fib Zero = Zero
-fib (Suc Zero) = (Suc Zero)
-fib (Suc (Suc n)) = fib (Suc n) + fib n
-
-(+) :: Nat -> Nat -> Nat
-Zero + n = n
-Suc n + m = Suc (n + m)
+newChan :: IO (Chan a)
+readChan :: Chan a -> IO a
+writeChan :: Chan a -> a -> IO ()
+forkProcess :: IO () -> IO ()
 \end{minted}
 
-Translate the function \texttt{fib} to a relation \texttt{fibo}, such that
-\begin{verbatim}
-       fibo x y      is equivalent to      fib x == y
-       plus x y z    is equivalent to      x + y == z
-\end{verbatim}
+Your task is to simulate references to mutable variables using the
+above primitives. This can be done be using a process that manages the
+variable state.
 
 \begin{enumerate}
-\item Write the type of the relations \texttt{fibo} and
-  \texttt{plus}. \points 6
-\item Write their code. \points 6
+\item Define the representation for a variable of type ``reference to
+  Integer''. Name this type \texttt{Reference}. \points 3
+\item Write the code for the process that manages the variable state. \points 4
+\item Write the code for primitives to create, read and write references. \points 3
+Their type should be:
+\begin{minted}{cpp}
+Reference newRef();
+int readRef(Reference);
+void writeRef(Reference, int);
+\end{minted}
+or Haskell-style:
+\begin{minted}{haskell}
+newRef :: IO Reference
+readRef :: Reference -> IO Int
+writeRef :: Reference -> Int -> IO ()
+\end{minted}
 \end{enumerate}
 
-Remark: you cannot use any other helper function in your answer, only
-constructors and relations. The types should be written in Curry or
-Haskell-like syntax.
+Hint: The channels can transmit any type of information, including
+references to channels.
+
+Remark: You can use either a functional or imperative language to
+write your answer, however you may not use any global variable nor
+primitive reference types in it.
 
 \answer{
-\begin{minted}{haskell}
-    fibo :: Nat -> Nat -> Success
-    fibo Zero Zero = success
-    fibo (Suc Zero) (Suc Zero) = success
-    fibo (Suc (Suc n)) m = fibo (Suc n) a &
-                           fibo n b &
-                           plus a b m
-      where a b free
+\begin{minted}{haskell}    
+data Command a = Get (Chan a) | Set a
+type Variable a = Chan (Command a)
 
-    plus :: Nat -> Nat -> Nat -> Success
-    plus Zero m n = m =:= n
-    plus (Suc m) n (Suc p) = plus m n p
-  \end{minted}
+handler :: Variable a -> a -> IO ()
+handler v a = do
+  command <- readChan v
+  case command of
+    Set a' -> handler v a'
+    Get c -> do 
+      writeChan c a
+      handler v a
+
+newVariable :: a -> IO (Variable a)
+newVariable a = do
+  c <- newChan
+  forkIO (handler c a)
+  return c
+
+get :: Variable a -> IO a
+get v = do
+  c <- newChan
+  writeChan v (Get c)
+  readChan c
+  
+set :: Variable a -> a -> IO ()
+set v a = do
+  writeChan v (Set a)
+\end{minted}
 }
+
+\section{Unification}
+
+\begin{minted}{haskell}
+    both f (x,y) = (f x, f y)
+    data Term = Con String [Term] -- the terms are the arguments to the constant
+              | Var Int -- metavariable
+      deriving Eq
+(1) unify :: [(Term,Term)] -> Substitution -> Maybe Substitution
+(2) unify [] s = Just s -- Base case
+(3) unify ((t,t'):ts) s | t == t' = unify ts s
+(4) unify ((Con f as,Con g bs):ts) s
+(5)   | f == g && length as == length bs = unify (zip as bs ++ ts) s
+(6)   | otherwise = Nothing -- Clash
+(7) unify ((Var x,t):ts) s = unify (map (both (applySubst (x ==> t))) ts) (s +> (x,t))
+(8) unify ((t, Var x):ts) s = unify ((Var x, t):ts) s -- Re-orient
+\end{minted}
+
+The above algorithm for unification does not perform the occurs test.
+
+\begin{enumerate}
+\item Give an example of a unification constraints which fails if the
+  occurs test is enabled \points{3}
+\item Explain a solution of your example, assuming the occurs test is
+  disabled \points{3}
+\item The occurs test can be added by adding a single line in the
+  above algorithm. Between which lines should the test be added?
+  \points{2}
+\item Write the line in question. (You may assume standard
+  Term-manipulation functions.) \points{4}
+\end{enumerate}
+
 \end{document}

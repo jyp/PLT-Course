@@ -2662,7 +2662,6 @@ Install either PAKCS or [[http://www-ps.informatik.uni-kiel.de/kics2/][KiCS2]]:
      :  :l Family.curry  
   + The [[http://www-ps.informatik.uni-kiel.de/~mh/pakcs/curryinput_c2p.cgi][web interface of PAKCS]] can also be used for small examples.
 
-
 ** Paradigm
 
 Write a proposition, let the system find values for free variables
@@ -2693,7 +2692,16 @@ something is a solution, the system will find the solutions for you.
 #+INCLUDE: "Final/Family.curry" src curry
 ** Example: Map coloring
 
+We can search for a coloring of the map of the provinces of south sweden.
+
+file:700px-Sverigekarta-Landskap_Text.svg.png
+
 #+INCLUDE: "Final/Map.curry" src curry
+
+We merely encode the neighboring relation, and require that neighbors
+have different colors. Then we can let the search process look for a
+solution.
+
 ** Notion: ground terms
 The distinction between open/closed extends to arbitrary expressions
 (terms). We say that a term is ground if it has no free variable.

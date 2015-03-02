@@ -1,3 +1,18 @@
+
+
+
+
+-- inside :: x -> [x] -> [x]
+-- inside x (x':xs) ()
+
+
+
+
+
+
+
+
+
 {-
 -- Source:
 append0 :: [a] -> [a] -> [a]
@@ -6,7 +21,7 @@ append0 (x:xs) ys = x : append0 xs ys
 -}
 
 -- How can we transform the above in a relation?
-append :: [a] -> [a] -> [a] -> Success
+-- append :: [a] -> [a] -> [a] -> Success
 
 
 
