@@ -2862,7 +2862,8 @@ an actual value, the "update" has no effect on the results obtained.
 
 *** (✪) Reading
 Wikipedia has a [[http://en.wikipedia.org/wiki/Unification_(computer_science)][good article]] on unification.
-** Understanding relations
+** Transformation: Relations to Functions
+Understanding relations
 Relations are sometimes (often) not functions. There can be no
 solution to an equation, and sometimes there can be more than one.
 *** Backtracking
@@ -2978,7 +2979,9 @@ comprehension.
 
 Each free variable must range over its possible values.
 
-*** Implementations
+** Search in general
+file:Final/Search
+*** Other Implementations
 Here we have barely touched the possible ways to implement logic
 programming.  For example, Curry uses 'narrowing' instead of
 backtracking searches. This is more efficient and allows to mix logic
