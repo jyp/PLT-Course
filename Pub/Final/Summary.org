@@ -52,3 +52,6 @@ file:Unify.hs
 * Functions to Relations, Search as list of successes
 file:Lists.curry
 file:Search.hs
+* BONUS
+file:Church.hs
+file:KAM.hs

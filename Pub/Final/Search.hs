@@ -5,7 +5,9 @@ import qualified Data.Map as M
 import Data.List
 
 
-type Equation = (Term,[Term]) -- x = y3 & y2 & ... & yn
+type Equation = (Term,[Term])
+-- In curry syntax: x = y1 & y2 & ... & yn
+-- In prolog syntax : x :- y1, y2, ... , yn
 type Proposition = Term
 
 uniq :: Eq a => [a] -> [a]
@@ -14,9 +16,16 @@ uniq = map head . group
 uniqVarsOf :: Equation -> [Variable]
 uniqVarsOf (t,ts) = uniq $ sort $ concatMap varsOf (t:ts)
 
+-- | Invent a fresh variable name
 newName :: Variable -> Int -> (Variable,Term)
 newName x i = (x,Var $ x ++ "_" ++ show i)
 
+-- | Return the (possibly many) solutions to a set of equations.
+-- Arguments:
+-- i: current integer to get a fresh variable name
+-- eqs: the equations to solve
+-- ps: a set of propositions to satisfy
+-- s: the current substitution
 solve :: Int -> [Equation] -> [Proposition] -> Substitution -> [Substitution]
 solve _i _eqs [] s = [s]
 solve i eqs (p:ps) s = do
@@ -31,6 +40,9 @@ solve i eqs (p:ps) s = do
     Nothing -> []
     Just s' -> solve i' eqs (map (applySubst s') (rhs++ps)) (s +> s')
 
+
+------------------------------------------------------------------------------
+--- Test: south sweden map
 colors = ["Red","Green","Blue"]
 
 neighbourEqs :: [Equation]
@@ -54,6 +66,10 @@ southSweden = (ssw,
               n "bohus" "dals"])
   where n x y = Con "neighbour" [Var x,Var y]
 
+testSSW = head $ solve 0 (southSweden:neighbourEqs) [ssw] M.empty
+
+-----------------------------------------------------------------------------
+--- Test: append function
 nil = Con "[]" []
 cons x xs = Con ":" [x,xs]
 
@@ -65,9 +81,8 @@ recoverString (Con ":" [Con [c] [], cs]) = c:recoverString cs
 
 appendEqs :: [Equation]
 appendEqs = [(append nil (Var "ys") (Var "ys"), []),
-             (append (cons (Var "x") (Var "xs")) (Var "ys") (cons (Var "x") (Var "zs")), [append (Var "xs") (Var "ys") (Var "zs")])]
-
-testSSW = head $ solve 0 (southSweden:neighbourEqs) [ssw] M.empty
+             (append (cons (Var "x") (Var "xs")) (Var "ys") (cons (Var "x") (Var "zs")),
+              [append (Var "xs") (Var "ys") (Var "zs")])]
 
 testAppend = [map (fmap recoverString . flip M.lookup sol) ["x","y"] | sol <- sols]
   where sols = solve 0 appendEqs [append (Var "x") (Var "y") (string "hello")] M.empty
