@@ -28,7 +28,7 @@ file:HOT.hs
 file:HOTExplicitClosure.hs
 file:ExplicitClosure.hs
 file:ExplicitClosure.java
-** TODO file:ExplicitClosure.cpp
+** ✪ TODO file:ExplicitClosure.cpp
 * Purity; Continuations and effects
 file:ContinuationsStack.hs
 file:ContinueAccum.hs
