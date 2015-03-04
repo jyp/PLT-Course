@@ -2981,6 +2981,16 @@ Each free variable must range over its possible values.
 
 ** Search in general
 file:Final/Search
+
+Note that our interpreter does not support unification as a
+relation, but we can define it as follows:
+
+unify(x,x) = success
+
+or in prolog syntax
+
+unify(X,X).
+
 *** Other Implementations
 Here we have barely touched the possible ways to implement logic
 programming.  For example, Curry uses 'narrowing' instead of
