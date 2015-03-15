@@ -176,7 +176,7 @@ fib n = fib (n-1) + fib (n-2)
 \item How many non-tail calls to fib does the above function contain?
   \points{2}
 \item True or false: a tail-call needs stack space to be
-  implemented. \points{2}
+  implemented. Justify your answer. \points{2}
 \item Translate the above function to use explicit continuations.
   \\ Remark: Assume an ambient type of effects called Effect.
   \begin{enumerate}
@@ -350,6 +350,25 @@ set v a = do
 (6)   | otherwise = Nothing -- Clash
 (7) unify ((Var x,t):ts) s = unify (map (both (applySubst (x ==> t))) ts) (s +> (x,t))
 (8) unify ((t, Var x):ts) s = unify ((Var x, t):ts) s -- Re-orient
+
+-------------------------------------
+-- Helper functions: Substitution
+
+-- | Add an "assignment" to a substitution
+(+>) :: Substitution -> Substitution -> Substitution
+bigS +> smallS = M.union (applySubst smallS `fmap` bigS) smallS
+
+-- | Single substitution
+(==>) :: String -> Term -> Substitution
+x ==> t = M.singleton x t
+
+-- | Apply a substitution to a term
+applySubst :: Substitution -> Term -> Term
+applySubst s (Var x) = case M.lookup x s of
+  Nothing -> Var x
+  Just t -> t
+applySubst s (Con cname args) = Con cname (map (applySubst s) args)
+
 \end{minted}
 
 The above algorithm for unification does not perform the occurs test.
@@ -357,13 +376,13 @@ The above algorithm for unification does not perform the occurs test.
 \begin{enumerate}
 \item Give an example of a unification constraints which fails if the
   occurs test is enabled \points{3}
-\item Explain a solution of your example, assuming the occurs test is
-  disabled \points{3}
+\item Give and explain a solution (substitution) of your example,
+  assuming the occurs test is disabled \points{3}
 \item The occurs test can be added by adding a single line in the
   above algorithm. Between which lines should the test be added?
-  \points{2}
+  \points{3}
 \item Write the line in question. (You may assume standard
-  Term-manipulation functions.) \points{4}
+  Term-manipulation functions.) \points{3}
 \end{enumerate}
 
 \end{document}
