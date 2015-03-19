@@ -63,7 +63,7 @@ tex = do
                 "--batch", 
                 "--eval", "(setq org-export-headline-levels 2)",
                 "--visit=Lectures.org",
-                "--funcall", "org-export-as-pdf"]
+                "--funcall", "org-latex-export-to-pdf"]
 
 pub = system ["rsync", "--chmod=a+r", "-r", ".",
           "bernardy@remote11.chalmers.se:/chalmers/users/bernardy/www/www.cse.chalmers.se/pp/" -- Correct url.
