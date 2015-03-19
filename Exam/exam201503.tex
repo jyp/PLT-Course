@@ -127,7 +127,7 @@ class C extends B {
 };
 
 static void test(A a, B b) {
-  B.f(a);
+  b.f(a);
 }
 \end{minted}
 
@@ -144,6 +144,8 @@ static void test(A a, B b) {
 \end{itemize}
 
 \answer{
+\begin{itemize}
+\item 
 \begin{minted}{c}
     struct A {
       float x = 0
@@ -151,16 +153,29 @@ static void test(A a, B b) {
     }
     struct B {
       int n = 0
-      void* f(B* this, A* p) = <BODY1>;
+      void* f(B* this, A* p) = B_f;
     }
     struct C {
       int n = 0
-      void* f(C* this, A* p) = <BODY2>;
+      void* f(C* this, A* p) = C_f;
       int m;
     }
 \end{minted}
+\item
+\begin{minted}{c}
+void test(A* a, B* b) {
+  b->f(b,a);
 }
-
+\end{minted}
+\item
+\begin{minted}{c}
+void test(A* a, B b) {
+  B_f(b,a);
+}
+\end{minted}
+\end{itemize}
+}
+\newpage
 \section{Continuations and Recursion}
 
 Consider the following function, which computes the fibbonaci number
@@ -187,6 +202,14 @@ fib n = fib (n-1) + fib (n-2)
   contain? \points{2}
 \end{enumerate}
 
+\answer{
+  \begin{enumerate}
+  \item 0 
+  \item 
+  \end{enumerate}
+}
+
+\newpage
 \section{Closures}
 
 Consider the following piece of Haskell code.
@@ -247,7 +270,7 @@ withinRange :: Float -> Point -> Region
 withinRange range p1 p2 = Within range p1 p2
   \end{minted}
 }
-
+\newpage
 \section{State-Management Process}
 Assume a language without pointers nor variables, but support for
 concurrency. In particular, assume primitives for creating processes
