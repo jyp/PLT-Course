@@ -204,8 +204,18 @@ fib n = fib (n-1) + fib (n-2)
 
 \answer{
   \begin{enumerate}
-  \item 0 
+  \item 2
+  \item False. None of the data saved on the stack will be used after a tail call returns.
   \item 
+\begin{minted}{haskell}
+fib :: Int -> (Int -> eff) -> eff
+fib 0 k = k 1
+fib 1 k = k 1
+fib n k = fib (n-1) $ \x ->
+          fib (n-2) $ \y ->
+          k (x+y)
+\end{minted}
+\item 0
   \end{enumerate}
 }
 
@@ -408,4 +418,15 @@ The above algorithm for unification does not perform the occurs test.
   Term-manipulation functions.) \points{3}
 \end{enumerate}
 
+\answer{
+  \begin{enumerate}
+  \item Cons 0 x == x
+  \item Cons 0 (Cons 0 ...)
+  \item 6/7
+  \item 
+    \begin{minted}{haskell}
+      unify ((Var x,t):ts) s | x `occursIn` t = Nothing
+    \end{minted}
+  \end{enumerate}
+}
 \end{document}
