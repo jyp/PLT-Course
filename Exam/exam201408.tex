@@ -250,7 +250,7 @@ data Region = Outside Region
 
 apply :: Region -> Point -> Bool
 apply (Outside r) p       = not (apply r p)
-apply (Intersect r1 r2) p = r1 p && r2 p
+apply (Intersect r1 r2) p = apply r1 p && apply r2 p
 apply (Within range p1) p2 = norm2 (p1 .-. p2) <= range * range
 
 outside :: Region -> Region
