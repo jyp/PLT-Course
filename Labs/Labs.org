@@ -1,13 +1,29 @@
+I think these should be in separate labs. The more deadlines, the better.
+
 * Lab 1
 ** Make an interpreter for a Pascal-Like imperative language
 - Simplifications: no arrays, all arguments passed by value, ?
 - Can be implemented using imperative features
+
+This is similar to lab2 in PL course: http://www.cse.chalmers.se/edu/year/2015/course/DAT151/laborations/lab2/lab2.html
+
+However, I imagine a very simple interpreted could be
+explained in the lecture.
+A parser could be supplied to the students for a richer language, with
+some "advanced" features like for, while, if-then-else, or even function
+calls.
+Then there are two reasonable tasks:
+1) extend the interpreter to evaluate these "advanced" features
+2) make a source-to-source pass that replaces these "features" with
+   gotos/global variables/etc.
 
 ** Make an interpreter for a pure functional language
 - Lambda abstractions
 - Lets
 - Support for lists
 - Can be implemented using functions
+
+This is similar to lab4 in PL course: http://www.cse.chalmers.se/edu/year/2015/course/DAT151/laborations/lab4/lab4.html
 
 * Lab 2
 
@@ -21,5 +37,15 @@
 - Implement a simple chat server in Concurrent Haskell
 - Make continuations explicit
 - Make closures explicit
-- Transate it to C (or C++)
+- Translate it to C (or C++)
 - Implement a runtime system for it
+
+I think both these ideas are good. We should make sure that there are not
+too many functions to closure convert, or otherwise it will get too boring.
+
+Other ideas:
+
+** Interpreter/source-to-source pass for a stack-based language (!)
+
+** Type inference for some superset of SLTC using logic programming.
+
