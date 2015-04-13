@@ -1,0 +1,111 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage{minted}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\usepackage{pgf, tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{arrows}
+
+
+\newcommand{\Blue}[1]{\color{blue}#1\color{black}\xspace}
+
+\usepackage{array}
+% This is needed because raggedright in table elements redefines \\:
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\let\PBS=\PreserveBackslash
+
+%%%%%%%%%%%%%%
+\newcommand{\solution}[1] {}
+%\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
+
+%\newcommand{\comment}[1]{}
+\newcommand{\answer}[0]{\paragraph{Answer:}}
+% \newcommand{\answer}[1]{}
+\newcommand{\comment}[1]{\marginpar{#1}}
+
+
+\begin{document}
+
+\section{Lazy Dynamic Programming}
+
+Consider the following code:
+
+\begin{minted}{haskell}
+fib 0 = 0
+fib 1 = 1
+fib n = fibs ! (n-1) + fibs ! (n-2)
+
+fibs = listArray (0,100) (map fib [0..100])
+\end{minted}
+
+And the following session:
+
+\begin{verbatim}
+b1 of 1] Compiling Fib              ( Fib.hs, interpreted )
+Ok, modules loaded: Fib.
+*Fib> fibs ! 5
+5
+*Fib> fibs ! 5
+5
+\end{verbatim}
+
+1) Which invocations are made to \verb!fib! in the first
+   call to \verb~!~?
+
+2) Which invocations are made to \verb!fib! in the second
+   call to \verb~!~?
+
+Now, consider this careless version:
+
+\begin{minted}{haskell}
+fib2 0 = 0
+fib2 1 = 1
+fib2 n = fib2 (n-1) + fib2 ! (n-2)
+
+fibs2 = listArray (0,100) (map fib2 [0..100])
+\end{minted}
+
+Assuming the same session as before (but to \verb!fibs2! instead of \verb!fibs!),
+
+3) Which invocations are made to \verb!fib2! in the first call to \verb~!~?
+
+4) Which invocations are made to \verb!fib2! in the second call to \verb~!~?
+
+\pagebreak
+
+\section{Explicit Thunks}
+
+Consider this code with explicit thunks:
+
+\begin{minted}{haskell}
+type Thunk a = () -> a
+
+force :: Thunk a -> a
+force k = k ()
+
+delay :: a -> Thunk a
+delay x = \ () -> x
+
+data LazyTree = Empty | Branch !(Thunk LazyTree) Int !(Thunk LazyTree)
+
+mirrorTree :: LazyTree -> LazyTree
+mirrorTree Empty = Empty
+mirrorTree (Branch l x r)
+  = Branch (delay $ mirrorTree (force r)) x (delay $ mirrorTree (force l))
+
+numberTree :: Int -> LazyTree
+numberTree i = Branch (delay $ numberTree (i-1)) i (delay $ numberTree (i+1))
+\end{minted}
+
+1) What is the corresponding program without explicit \verb!Thunk!s?
+
+2) Remove the uses of higher-order functions in the program by turning
+   them into explicit closures.
+
+\end{document}
