@@ -25,8 +25,8 @@
 %\newcommand{\solution}[1] {\textbf{Solutions:}\\ #1}
 
 %\newcommand{\comment}[1]{}
-\newcommand{\answer}[0]{\paragraph{Answer:}}
-% \newcommand{\answer}[1]{}
+%% \newcommand{\answer}[0]{\paragraph{Answer:}}
+\newcommand{\answer}[1]{}
 \newcommand{\comment}[1]{\marginpar{#1}}
 
 
@@ -101,7 +101,7 @@ required for grade VG.
 
 \section{Substitution Model and Closures}
 
-The following interpreter for a simple functional language is missing
+The following evaluator for a simple functional language is missing
 two lines. Your task is to fill the gap and explain the implementation
 mechanism.
 
@@ -112,7 +112,6 @@ data Expr = Val Value
           | App Expr Expr
           | Lam String Expr
           | Var String
-
 data Value = Fun (Value -> Value)
            | Number Int
 
@@ -122,7 +121,7 @@ eval e0 = case e0 of
   Lam x e -> -- (2)
   Val x -> x
   Bin op e1 e2 -> let (Number x,Number y) = (eval e1,eval e2)
-                    in Number $ op x y
+                    in Number (op x y)
 
 subst :: String -> Value -> Expr -> Expr
 subst what for e0 = case e0 of
@@ -145,14 +144,14 @@ subst what for e0 = case e0 of
   evaluation of \texttt{f} is going to yield the expected constructor?
    \points{2}
 
-\item Write the for \texttt{(1)}. Hint: you may assume the condition
+\item Write the code for \texttt{(1)}. Hint: you may assume the condition
   stated at the previous point. \points{3}
 
 \item Consider the code to write in place of \texttt{(2)}, which
-  evaluates a lambda abstraction to a a closure. What constructor
+  evaluates a lambda abstraction ($\lambda$\texttt{x}. \texttt{e}) to a closure. What constructor
   should you return? \points{1}
 
-\item What is the representation of a closure that you use in this
+\item What is the representation of a closure used in this
   case? \points{2}
 
 \item Write the code for \texttt{(2)}. Hint: use the auxilliary
@@ -166,8 +165,8 @@ subst what for e0 = case e0 of
 \item Input program well-typed
 \item \texttt{let Fun f' = eval f in f' (eval e)}
 \item Fun
-\item a Haskell closure (we depend on the underlying host language
-  mechanism to evaluate functions).
+\item a Haskell function (or a Haskell closure). We depend on the
+  underlying host language mechanism to evaluate functions.
 \item \texttt{Fun (\v -> eval (subst x v e))}
 \end{enumerate}
 }
@@ -242,12 +241,12 @@ replaced, and others are to be completely deleted (no replacement).
 
 \begin{enumerate}
 \item Which is the goto that corresponts to the tail call? Give the
-  line number. \points{2}
+  line number.\points{2}
 \item What are the line(s) that must be simply deleted?  \points{2}
 \item One more line may be left in the code, but may also be
   deleted. Which one? \points{2}
 \item Which line has to be replaced? \points{2}
-\item What is the code replacing the above line? \points{4}
+\item What is the code replacing that line? \points{4}
 
 \end{enumerate}
 
@@ -268,21 +267,21 @@ replaced, and others are to be completely deleted (no replacement).
 \end{enumerate}
 
 }
-
+\newpage
 \section{Algebraic Data Types and Objects}
 Consider the following Haskell code:
-\begin{verbatim}
+\begin{minted}{haskell}
 data Expr = Const Int | Plus Expr Expr | Mult Expr Expr
 
 eval (Const x) = x
 eval (Plus x y) = eval x + eval y
 eval (Mult x y) = eval x * eval y
-\end{verbatim}
+\end{minted}
 
 Translate the code to an object oriented language. 
 
 \begin{itemize}
-\item Write an interface corresponding to the declaration of Expr. It should contain a method corresponding to \texttt{eval} \points{4}
+\item Write an interface corresponding to the declaration of \texttt{Expr}. It should contain a method corresponding to \texttt{eval} \points{4}
 \item Write a class for for the \texttt{Const} case. \points{4}
 \item Write a class for for the \texttt{Plus} case. \points{4}
 \end{itemize}
@@ -301,6 +300,7 @@ Hint: you may leave the \texttt{Mult} case out, as it is the same as \texttt{Plu
 \end{minted}
 }
 
+\newpage
 \section{State-Management Process}
 Assume a language without pointers nor variables, but support for
 concurrency. In particular, assume primitives for creating processes
@@ -342,7 +342,7 @@ newRef :: IO Reference
 readRef :: Reference -> IO Int
 writeRef :: Reference -> Int -> IO ()
 \end{minted}
-\item Explain what happens during a readRef operation. In particular:
+\item Explain what happens during a \texttt{readRef} operation. In particular:
   \begin{enumerate}
   \item How many channel(s) are used? \points 1
   \item For each of the channel(s), how many message(s) are sent?  \points 1
