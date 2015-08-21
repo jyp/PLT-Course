@@ -140,9 +140,9 @@ subst what for e0 = case e0 of
 
 \item Consider the code to write in place of \texttt{(1)}, which is
   evaluating the application of a function \texttt{f} to an argument
-  \texttt{e}. Under which condition can you assume that the recursive
-  evaluation of \texttt{f} is going to yield the expected constructor?
-   \points{2}
+  \texttt{e}. In order to yield the expected constructor for the recursive
+  evaluation of \texttt{f}, the input expression must satisfy a certain well-formedness condition.
+  State this condition. \points{2}
 
 \item Write the code for \texttt{(1)}. Hint: you may assume the condition
   stated at the previous point. \points{3}
@@ -151,8 +151,8 @@ subst what for e0 = case e0 of
   evaluates a lambda abstraction ($\lambda$\texttt{x}. \texttt{e}) to a closure. What constructor
   should you return? \points{1}
 
-\item What is the representation of a closure used in this
-  case? \points{2}
+\item Which Haskell mechanism is used to represent the created
+  closure. \points{2}
 
 \item Write the code for \texttt{(2)}. Hint: use the auxilliary
   \texttt{subst} function. \points{3}
@@ -172,6 +172,39 @@ subst what for e0 = case e0 of
 }
 
 \newpage
+\section{Algebraic Data Types and Objects}
+Consider the following Haskell code:
+\begin{minted}{haskell}
+data Expr = Const Int | Plus Expr Expr | Mult Expr Expr
+
+eval (Const x) = x
+eval (Plus x y) = eval x + eval y
+eval (Mult x y) = eval x * eval y
+\end{minted}
+
+Translate the code to an object oriented language. 
+
+\begin{itemize}
+\item Write an interface corresponding to the declaration of \texttt{Expr}. It should contain a method corresponding to \texttt{eval} \points{4}
+\item Write a class for for the \texttt{Const} case. \points{4}
+\item Write a class for for the \texttt{Plus} case. \points{4}
+\end{itemize}
+
+Hint: you may leave the \texttt{Mult} case out, as it is the same as \texttt{Plus}.
+\answer{
+  \begin{minted}{java}
+    interface Expr { int eval(); }
+
+    class Const implements Expr { int value; int eval() {return
+        value;} }
+
+    class Plus implements Expr { Expr l; Expr r; int eval() {return
+        r.eval() + r.eval();} 
+    }
+\end{minted}
+}
+
+\newpage
 
 \section{Explicit Stacks, Recursion}
 
@@ -181,14 +214,15 @@ Consider the following program, solving the Hanoi towers problem:
   void hanoi(int n,int s,int i,int d) {
     if (n>0) {
       hanoi(n-1,s,d,i);
-      move(s,d);
+      move_disk(s,d);
       hanoi(n-1,i,s,d);
     }
   }
 \end{minted}
 
 
-Here is an implementation of it, which uses an explicit stack:
+Here is an equivalent implementation of it, but using an explicit
+stack:
 
 \begin{minted}{c}
 struct stack {
@@ -242,64 +276,32 @@ replaced, and others are to be completely deleted (no replacement).
 \begin{enumerate}
 \item Which is the goto that corresponts to the tail call? Give the
   line number.\points{2}
-\item What are the line(s) that must be simply deleted?  \points{2}
-\item One more line may be left in the code, but may also be
-  deleted. Which one? \points{2}
-\item Which line has to be replaced? \points{2}
+
+\item Which line has to be replaced? \points{3}
 \item What is the code replacing that line? \points{4}
+\item What are the line(s) that can be simply deleted? Remark: there
+  are some lines that can be kept while not changing the meaning of
+  the code. List them anyway.  \points{3}
 
 \end{enumerate}
 
 \answer{
 \begin{enumerate}
 \item 10
-\item 12
-\item 15
 \item 9
-
+\item
+Replacement:
 \begin{minted}{c}
   stk->n = stk -> n-1;
   int tmp = stk->s;
   stk->s = stk -> i;
   stk->i = tmp;
 \end{minted}
+\item 11, 12, 15
 
 \end{enumerate}
 
 }
-\newpage
-\section{Algebraic Data Types and Objects}
-Consider the following Haskell code:
-\begin{minted}{haskell}
-data Expr = Const Int | Plus Expr Expr | Mult Expr Expr
-
-eval (Const x) = x
-eval (Plus x y) = eval x + eval y
-eval (Mult x y) = eval x * eval y
-\end{minted}
-
-Translate the code to an object oriented language. 
-
-\begin{itemize}
-\item Write an interface corresponding to the declaration of \texttt{Expr}. It should contain a method corresponding to \texttt{eval} \points{4}
-\item Write a class for for the \texttt{Const} case. \points{4}
-\item Write a class for for the \texttt{Plus} case. \points{4}
-\end{itemize}
-
-Hint: you may leave the \texttt{Mult} case out, as it is the same as \texttt{Plus}.
-\answer{
-  \begin{minted}{java}
-    interface Expr { int eval(); }
-
-    class Const implements Expr { int value; int eval() {return
-        value;} }
-
-    class Plus implements Expr { Expr l; Expr r; int eval() {return
-        r.eval() + r.eval();} 
-    }
-\end{minted}
-}
-
 \newpage
 \section{State-Management Process}
 Assume a language without pointers nor variables, but support for
