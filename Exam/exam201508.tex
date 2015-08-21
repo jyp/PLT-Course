@@ -152,7 +152,7 @@ subst what for e0 = case e0 of
   should you return? \points{1}
 
 \item Which Haskell mechanism is used to represent the created
-  closure. \points{2}
+  closure? \points{2}
 
 \item Write the code for \texttt{(2)}. Hint: use the auxilliary
   \texttt{subst} function. \points{3}
@@ -182,7 +182,7 @@ eval (Plus x y) = eval x + eval y
 eval (Mult x y) = eval x * eval y
 \end{minted}
 
-Translate the code to an object oriented language. 
+Translate the code to an object oriented language.
 
 \begin{itemize}
 \item Write an interface corresponding to the declaration of \texttt{Expr}. It should contain a method corresponding to \texttt{eval} \points{4}
@@ -199,7 +199,7 @@ Hint: you may leave the \texttt{Mult} case out, as it is the same as \texttt{Plu
         value;} }
 
     class Plus implements Expr { Expr l; Expr r; int eval() {return
-        r.eval() + r.eval();} 
+        r.eval() + r.eval();}
     }
 \end{minted}
 }
