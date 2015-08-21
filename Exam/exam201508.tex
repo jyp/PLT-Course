@@ -391,14 +391,18 @@ set v a = do
 }
 
 \newpage
-\section{Relations to lists of successes}
+\section{Relations to lists of satisfying results}
 
 Consider the Curry program
 \begin{verbatim}
 ancestor a c = a =:= c
-ancestor a c = (parent a x & ancestor x c) 
+ancestor a c = (parent a x & ancestor x c)
 \end{verbatim}
-
+or the equivalent Prolog program
+\begin{verbatim}
+ancestor(A,A).
+ancestor(A,C) :- parent(A,X), ancestor(X,C).
+\end{verbatim}
 
 
 Convert the program from relational to functional style. That is,
@@ -411,15 +415,15 @@ To do so, you may assume that you have at your disposal a function
 \texttt{parent x c} is true.
 
 \begin{enumerate}
-\item Write the type of the \emph{function} \texttt{parents}.
-\item Write the type of the \emph{function} \texttt{ancestors}.
-\item Write the body of the \emph{function} \texttt{ancestors}.
+\item Write the type of the \emph{function} \texttt{parents}. \points{3}
+\item Write the type of the \emph{function} \texttt{ancestors}.\points{3}
+\item Write the body of the \emph{function} \texttt{ancestors}.\points{6}
 \end{enumerate}
 
 
 Hint:
 \begin{itemize}
-\item Remember that \texttt{|} stands for logical disjunction and
+\item Remember that in Curry, \texttt{|} stands for logical disjunction and
   \texttt{\&} stands for logical conjunction.
 \end{itemize}
 
